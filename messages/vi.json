@@ -1,0 +1,9 @@
+{
+  "Login": {
+    "welcome": "Đăng nhập",
+    "username": "Tên đăng nhập",
+    "password": "Mật khẩu",
+    "forgot": "Quên mật khẩu?",
+    "login": "Đăng nhập"
+  }
+}

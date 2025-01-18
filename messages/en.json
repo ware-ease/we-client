@@ -1,0 +1,9 @@
+{
+  "Login": {
+    "welcome": "Welcome back",
+    "username": "Username",
+    "password": "Password",
+    "forgot": "Forgot password?",
+    "login": "Login"
+  }
+}

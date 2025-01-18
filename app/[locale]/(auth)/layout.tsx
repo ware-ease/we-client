@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import '../globals.css';
+import '../../globals.css';
 
 export default function AuthLayout({
   children,
@@ -11,10 +11,8 @@ export default function AuthLayout({
       <Image
         src='/login.svg'
         alt=''
-        objectFit='cover'
-        objectPosition='center'
         fill
-        className='-z-10'
+        className='-z-10 object-cover object-center'
       />
       <div className='w-[50vw] h-screen relative'></div>
       <div className='flex justify-center items-center w-[50vw]'>
