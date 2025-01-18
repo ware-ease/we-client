@@ -1,4 +1,9 @@
 {
+  "Languages": {
+    "this": "en",
+    "en": "English",
+    "vi": "Vietnamese"
+  },
   "Login": {
     "welcome": "Welcome back",
     "username": "Username",

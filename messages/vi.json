@@ -1,4 +1,9 @@
 {
+  "Languages": {
+    "this": "vi",
+    "en": "Tiếng Anh",
+    "vi": "Tiếng Việt"
+  },
   "Login": {
     "welcome": "Đăng nhập",
     "username": "Tên đăng nhập",
