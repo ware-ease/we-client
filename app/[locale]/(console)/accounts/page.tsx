@@ -138,17 +138,15 @@ export default async function Accounts() {
   const data = await getData();
 
   return (
-    <div>
-      <div className='flex flex-col p-8 gap-6'>
+    <div className='flex flex-col max-h-full'>
+      <div className='flex flex-col p-4 gap-6 max-h-full'>
         <div className='mb-6'>
           <div className='text-4xl font-semibold text-primary'>
             Accounts Management
           </div>
           <div></div>
         </div>
-        <div>
-          <DataTable columns={columns} data={data} />
-        </div>
+        <DataTable columns={columns} data={data} />
       </div>
     </div>
   );

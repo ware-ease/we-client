@@ -36,14 +36,14 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 11, // Fixed page size to exactly 12 rows
+        pageSize: 10, // Fixed page size to exactly 10 rows
       },
     },
   });
 
   return (
-    <div>
-      <div className='rounded-md border'>
+    <div className='flex flex-col'>
+      <div className='flex flex-col rounded-md border'>
         <div className='flex p-5 border-b-[1px] w-full justify-between'>
           <div className='flex w-[50%]'>
             <Input className='w-1/3 mr-4' />
@@ -53,8 +53,8 @@ export function DataTable<TData, TValue>({
             <Button className='w-[24%]'>Add</Button>
           </div>
         </div>
-        <div className='overflow-y-auto max-h-[60vh]'>
-          <Table className='relative'>
+        <div className='overflow-auto max-h-[58vh]'>
+          <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
