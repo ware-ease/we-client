@@ -1,5 +1,5 @@
 'use client';
-import { Home, LogOut, Settings, UsersRound } from 'lucide-react';
+import { Home, LogOut, PackageOpen, Settings, UsersRound } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -47,9 +47,16 @@ export function AppSidebar() {
   ];
 
   return (
-    <Sidebar className='max-h-full text-white text-3xl'>
+    <Sidebar collapsible='icon' className='max-h-full text-white text-3xl'>
       <SidebarHeader className='flex justify-center items-center py-6 pt-10'>
-        WareEase
+        <SidebarMenu className='items-center'>
+          <SidebarMenuItem>
+            <SidebarMenuButton className='flex items-center space-x-2 px-4 text-xl !bg-transparent !cursor-default'>
+              <PackageOpen className='!size-8 group-data-[collapsible=icon]:!size-4' />
+              <span className='text-2xl'>WareEase</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

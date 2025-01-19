@@ -1,6 +1,7 @@
-import { SidebarProvider, SidebarTrigger } from '@/app/_components/SideBar';
+import { SidebarProvider } from '@/app/_components/SideBar';
 import '../../globals.css';
 import { AppSidebar } from '@/app/_components/AppSidebar';
+import Nav from '@/app/_components/Nav';
 
 export default function ConsoleLayout({
   children,
@@ -20,9 +21,7 @@ export default function ConsoleLayout({
     <SidebarProvider className='flex w-screen h-screen max-w-screen max-h-screen'>
       <AppSidebar />
       <div className='flex flex-col w-full'>
-        <div className='flex w-full h-12 flex-grow-1 items-center'>
-          <SidebarTrigger className='p-5' />
-        </div>
+        <Nav />
         <div className='w-full max-h-[100%]'>{children}</div>
       </div>
     </SidebarProvider>
