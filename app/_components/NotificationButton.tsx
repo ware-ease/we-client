@@ -3,7 +3,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from './DropdownMenu';
+} from './shadcn-base/DropdownMenu';
 import { Bell } from 'lucide-react';
 import { NotificationCard } from './NotificationCard';
 

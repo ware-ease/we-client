@@ -9,7 +9,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from './SideBar';
+} from './shadcn-base/SideBar';
 import { Link } from '@/i18n/routing';
 import { useCurrentLanguage } from '@/lib/useCurrentLanguage';
 import { usePathname } from 'next/navigation';

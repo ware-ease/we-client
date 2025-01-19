@@ -1,7 +1,7 @@
 import React from 'react';
-import { SidebarTrigger } from './SideBar';
+import { SidebarTrigger } from './shadcn-base/SideBar';
 import LanguageSelector from './LanguageSelector';
-import { Avatar, AvatarFallback, AvatarImage } from './Avatar';
+import { Avatar, AvatarFallback, AvatarImage } from './shadcn-base/Avatar';
 import NotificationButton from './NotificationButton';
 
 const Nav = () => {

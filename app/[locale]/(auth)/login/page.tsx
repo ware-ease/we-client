@@ -1,5 +1,5 @@
-import { Button } from '@/app/_components/Button';
-import { Input } from '@/app/_components/Input';
+import { Button } from '@/app/_components/shadcn-base/Button';
+import { Input } from '@/app/_components/shadcn-base/Input';
 import { useTranslations } from 'next-intl';
 import React from 'react';
 import LanguageSelector from '@/app/_components/LanguageSelector';
