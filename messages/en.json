@@ -4,11 +4,33 @@
     "en": "English",
     "vi": "Vietnamese"
   },
+  "Sidebar": {
+    "dashboard": "Dashboard",
+    "accounts": "Accounts",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
   "Login": {
     "welcome": "Welcome back",
     "username": "Username",
     "password": "Password",
     "forgot": "Forgot password?",
     "login": "Login"
+  },
+  "Management": {
+    "create": "Add",
+    "update": "Edit",
+    "delete": "Delete",
+    "actions": "Actions",
+    "search": "Search",
+    "filter": "Filter",
+    "Pagination": {
+      "selectedRows": "row(s) selected.",
+      "rowsPerPage": "Rows per page",
+      "page": "Page"
+    }
+  },
+  "Accounts": {
+    "title": "Accounts Management"
   }
 }

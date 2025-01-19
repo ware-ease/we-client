@@ -19,6 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/app/_components/Table';
+import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -47,10 +48,14 @@ export function DataTable<TData, TValue>({
         <div className='flex p-5 border-b-[1px] w-full justify-between'>
           <div className='flex w-[50%]'>
             <Input className='w-1/3 mr-4' />
-            <Button className='w-[16%]'>Filter</Button>
+            <Button className='w-[16%]'>
+              <TranslatedMessage tKey='Management.filter' />
+            </Button>
           </div>
           <div className='flex w-[50%] justify-end'>
-            <Button className='w-[24%]'>Add</Button>
+            <Button className='w-[24%]'>
+              <TranslatedMessage tKey='Management.create' />
+            </Button>
           </div>
         </div>
         <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>

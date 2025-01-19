@@ -13,36 +13,38 @@ import {
 import { Link } from '@/i18n/routing';
 import { useCurrentLanguage } from '@/lib/useCurrentLanguage';
 import { usePathname } from 'next/navigation';
-
-const items = [
-  {
-    title: 'Dashboard',
-    url: '/dashboard',
-    icon: Home,
-  },
-  {
-    title: 'Accounts',
-    url: '/accounts',
-    icon: UsersRound,
-  },
-];
-
-const botItems = [
-  {
-    title: 'Settings',
-    url: '/settings',
-    icon: Settings,
-  },
-  {
-    title: 'Log out',
-    url: '/logout',
-    icon: LogOut,
-  },
-];
+import { useTranslations } from 'next-intl';
 
 export function AppSidebar() {
   const lang = useCurrentLanguage();
   const pathname = usePathname();
+  const t = useTranslations();
+
+  const items = [
+    {
+      title: t('Sidebar.dashboard'),
+      url: '/dashboard',
+      icon: Home,
+    },
+    {
+      title: t('Sidebar.accounts'),
+      url: '/accounts',
+      icon: UsersRound,
+    },
+  ];
+
+  const botItems = [
+    {
+      title: t('Sidebar.settings'),
+      url: '/settings',
+      icon: Settings,
+    },
+    {
+      title: t('Sidebar.logout'),
+      url: '/logout',
+      icon: LogOut,
+    },
+  ];
 
   return (
     <Sidebar className='max-h-full text-white text-3xl'>

@@ -4,11 +4,33 @@
     "en": "Tiếng Anh",
     "vi": "Tiếng Việt"
   },
+  "Sidebar": {
+    "dashboard": "Bảng điều khiển",
+    "accounts": "Quản lý tài khoản",
+    "settings": "Cài đặt",
+    "logout": "Đăng xuất"
+  },
   "Login": {
     "welcome": "Đăng nhập",
     "username": "Tên đăng nhập",
     "password": "Mật khẩu",
     "forgot": "Quên mật khẩu?",
     "login": "Đăng nhập"
+  },
+  "Management": {
+    "create": "Thêm",
+    "update": "Sửa",
+    "delete": "Xóa",
+    "actions": "Hành động",
+    "search": "Tìm kiếm",
+    "filter": "Bộ lọc",
+    "Pagination": {
+      "selectedRows": "số hàng đã chọn.",
+      "rowsPerPage": "Số hàng mỗi trang",
+      "page": "Trang"
+    }
+  },
+  "Accounts": {
+    "title": "Quản lý tài khoản"
   }
 }

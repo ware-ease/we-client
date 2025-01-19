@@ -1,5 +1,6 @@
 import { Payment, columns } from './Columns';
 import { DataTable } from './DataTable';
+import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 
 async function getData(): Promise<Payment[]> {
   // Fetch data from your API here.
@@ -142,7 +143,7 @@ export default async function Accounts() {
       <div className='flex flex-col p-4 gap-6 max-h-full'>
         <div className='mb-6'>
           <div className='text-4xl font-semibold text-primary'>
-            Accounts Management
+            <TranslatedMessage tKey='Accounts.title' />
           </div>
           <div></div>
         </div>
