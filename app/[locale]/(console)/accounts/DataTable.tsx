@@ -53,7 +53,7 @@ export function DataTable<TData, TValue>({
             <Button className='w-[24%]'>Add</Button>
           </div>
         </div>
-        <div className='overflow-auto max-h-[58vh]'>
+        <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

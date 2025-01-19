@@ -19,7 +19,7 @@ export default function ConsoleLayout({
     // </div>
     <SidebarProvider className='flex w-screen h-screen max-w-screen max-h-screen'>
       <AppSidebar />
-      <div className='flex flex-col w-full justify-between'>
+      <div className='flex flex-col w-full'>
         <div className='flex w-full h-12 flex-grow-1 items-center'>
           <SidebarTrigger className='p-5' />
         </div>
