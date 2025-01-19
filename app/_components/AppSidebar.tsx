@@ -1,3 +1,4 @@
+'use client';
 import { Home, LogOut, Settings, UsersRound } from 'lucide-react';
 import {
   Sidebar,
@@ -11,6 +12,7 @@ import {
 } from './SideBar';
 import { Link } from '@/i18n/routing';
 import { useCurrentLanguage } from '@/lib/useCurrentLanguage';
+import { usePathname } from 'next/navigation';
 
 const items = [
   {
@@ -40,6 +42,7 @@ const botItems = [
 
 export function AppSidebar() {
   const lang = useCurrentLanguage();
+  const pathname = usePathname();
 
   return (
     <Sidebar className='max-h-full text-white text-3xl'>
@@ -50,20 +53,22 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem className='my-2' key={item.title}>
-                  <SidebarMenuButton>
-                    <Link
-                      className='flex items-center space-x-2 px-2'
-                      href={item.url}
-                      locale={lang}
-                    >
-                      <item.icon className='size-4' />
-                      <span className='text-md'>{item.title}</span>
+              {items.map((item) => {
+                const isActive = pathname.slice(3) === item.url;
+                return (
+                  <SidebarMenuItem className='my-2' key={item.title}>
+                    <Link href={item.url} locale={lang}>
+                      <SidebarMenuButton
+                        isActive={isActive}
+                        className='flex items-center space-x-2 px-4'
+                      >
+                        <item.icon className='size-4' />
+                        <span className='text-md'>{item.title}</span>
+                      </SidebarMenuButton>
                     </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -71,20 +76,22 @@ export function AppSidebar() {
       <SidebarGroup className='mb-4'>
         <SidebarGroupContent>
           <SidebarMenu>
-            {botItems.map((item) => (
-              <SidebarMenuItem className='my-2' key={item.title}>
-                <SidebarMenuButton>
-                  <Link
-                    className='flex items-center space-x-2 px-2'
-                    href={item.url}
-                    locale={lang}
-                  >
-                    <item.icon className='size-4' />
-                    <span className='text-md'>{item.title}</span>
+            {botItems.map((item) => {
+              const isActive = pathname.slice(3) === item.url;
+              return (
+                <SidebarMenuItem className='my-2' key={item.title}>
+                  <Link href={item.url} locale={lang}>
+                    <SidebarMenuButton
+                      isActive={isActive}
+                      className='flex items-center space-x-2 px-4'
+                    >
+                      <item.icon className='size-4' />
+                      <span className='text-md'>{item.title}</span>
+                    </SidebarMenuButton>
                   </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+                </SidebarMenuItem>
+              );
+            })}
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
