@@ -5,6 +5,8 @@ import {
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from '@tanstack/react-table';
 
@@ -20,6 +22,8 @@ import {
   TableRow,
 } from '@/app/_components/shadcn-base/Table';
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { useState } from 'react';
+import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -30,15 +34,22 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
     initialState: {
       pagination: {
         pageSize: 10, // Fixed page size to exactly 10 rows
       },
+    },
+    state: {
+      sorting,
     },
   });
 
@@ -66,12 +77,42 @@ export function DataTable<TData, TValue>({
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
+                        <div className='flex cursor-default text-black w-full'>
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                          <div className='cursor-pointer ml-1'>
+                            {header.column.getCanSort() ? (
+                              header.column.getNextSortingOrder() === 'asc' ? (
+                                <ArrowUpNarrowWide
+                                  className='text-black'
+                                  size={20}
+                                  onClick={() =>
+                                    header.column.toggleSorting(false, true)
+                                  }
+                                />
+                              ) : header.column.getNextSortingOrder() ===
+                                'desc' ? (
+                                <ArrowDownWideNarrow
+                                  className='text-black'
+                                  size={20}
+                                  onClick={() =>
+                                    header.column.toggleSorting(true, true)
+                                  }
+                                />
+                              ) : (
+                                <X
+                                  className='text-black'
+                                  size={20}
+                                  onClick={() => header.column.toggleSorting()}
+                                />
+                              )
+                            ) : undefined}
+                          </div>
+                        </div>
                       </TableHead>
                     );
                   })}

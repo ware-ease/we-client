@@ -1,13 +1,31 @@
-import { Payment, columns } from './Columns';
+import { Account, columns } from './Columns';
 import { DataTable } from './DataTable';
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 
-async function getData(): Promise<Payment[]> {
+async function getData(): Promise<Account[]> {
   // Fetch data from your API here.
   return [
     {
       id: '728ed52f',
-      amount: 100,
+      amount: 3,
+      status: 'success',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 7,
+      status: 'success',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 8,
+      status: 'pending',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 125,
       status: 'pending',
       email: 'm@example.com',
     },
@@ -38,7 +56,31 @@ async function getData(): Promise<Payment[]> {
     {
       id: '728ed52f',
       amount: 100,
+      status: 'success',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 'failed',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
       status: 'pending',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 90,
+      status: 'pending',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 'failed',
       email: 'm@example.com',
     },
     {
@@ -50,6 +92,24 @@ async function getData(): Promise<Payment[]> {
     {
       id: '728ed52f',
       amount: 100,
+      status: 'failed',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 100,
+      status: 'pending',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 20,
+      status: 'failed',
+      email: 'm@example.com',
+    },
+    {
+      id: '728ed52f',
+      amount: 5,
       status: 'pending',
       email: 'm@example.com',
     },
@@ -61,67 +121,7 @@ async function getData(): Promise<Payment[]> {
     },
     {
       id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
+      amount: 70,
       status: 'pending',
       email: 'm@example.com',
     },
