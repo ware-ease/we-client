@@ -1,8 +1,8 @@
 import React from 'react';
 import { SidebarTrigger } from './shadcn-base/SideBar';
 import LanguageSelector from './LanguageSelector';
-import { Avatar, AvatarFallback, AvatarImage } from './shadcn-base/Avatar';
 import NotificationButton from './NotificationButton';
+import AvatarButton from './AvatarButton';
 
 const Nav = () => {
   // const t = useTranslations();
@@ -13,10 +13,7 @@ const Nav = () => {
       <div className='flex items-center h-full mr-6 space-x-2'>
         <LanguageSelector size={20} />
         <NotificationButton size={20} />
-        <Avatar className='h-9 w-9'>
-          <AvatarImage src='https://github.com/shadcn.png' />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <AvatarButton />
       </div>
     </div>
   );
