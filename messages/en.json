@@ -7,6 +7,14 @@
   "Sidebar": {
     "dashboard": "Dashboard",
     "accounts": "Accounts",
+    "customers": "Customers",
+    "suppliers": "Suppliers",
+    "warehouses": "Warehouses",
+    "warehouse": "Warehouse",
+    "staffs": "Warehouse staffs",
+    "goods": "Goods",
+    "import": "Goods receipt",
+    "export": "Goods issue",
     "settings": "Settings",
     "logout": "Logout"
   },

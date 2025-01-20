@@ -7,6 +7,14 @@
   "Sidebar": {
     "dashboard": "Bảng điều khiển",
     "accounts": "Quản lý tài khoản",
+    "customers": "Khách hàng",
+    "suppliers": "Nhà cung cấp",
+    "warehouses": "Quản lý các kho",
+    "warehouse": "Kho",
+    "staffs": "Quản lý nhân viên kho",
+    "goods": "Quản lý hàng hóa",
+    "import": "Nhập kho",
+    "export": "Xuất kho",
     "settings": "Cài đặt",
     "logout": "Đăng xuất"
   },

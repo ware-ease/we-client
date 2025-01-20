@@ -1,5 +1,16 @@
 'use client';
-import { Home, LogOut, PackageOpen, Settings, UsersRound } from 'lucide-react';
+import {
+  Boxes,
+  Home,
+  LogOut,
+  PackageMinus,
+  PackageOpen,
+  PackagePlus,
+  Settings,
+  UserRoundPen,
+  UsersRound,
+  Warehouse,
+} from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -31,6 +42,46 @@ export function AppSidebar() {
       url: '/accounts',
       icon: UsersRound,
     },
+    {
+      title: t('Sidebar.suppliers'),
+      url: '/suppliers',
+      icon: UsersRound,
+    },
+    {
+      title: t('Sidebar.customers'),
+      url: '/customers',
+      icon: UsersRound,
+    },
+    {
+      title: t('Sidebar.warehouses'),
+      url: '/warehouses',
+      icon: Warehouse,
+    },
+    {
+      title: t('Sidebar.warehouse'),
+      url: '/warehouse',
+      icon: Warehouse,
+    },
+    {
+      title: t('Sidebar.staffs'),
+      url: '/staffs',
+      icon: UserRoundPen,
+    },
+    {
+      title: t('Sidebar.goods'),
+      url: '/goods',
+      icon: Boxes,
+    },
+    {
+      title: t('Sidebar.import'),
+      url: '/receipt',
+      icon: PackagePlus,
+    },
+    {
+      title: t('Sidebar.export'),
+      url: '/issue',
+      icon: PackageMinus,
+    },
   ];
 
   const botItems = [
@@ -58,7 +109,11 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent
+        style={{
+          scrollbarColor: 'hsl(212, 18%, 20%) transparent',
+        }}
+      >
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>

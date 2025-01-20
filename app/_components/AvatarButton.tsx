@@ -18,7 +18,7 @@ const AvatarButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='outline-none hover:opacity-90 px-2 rounded-full'>
-        <Avatar className='h-9 w-9'>
+        <Avatar className='h-9 w-9 select-none'>
           <AvatarImage src='https://github.com/shadcn.png' />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
