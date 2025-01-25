@@ -40,5 +40,14 @@
   },
   "Accounts": {
     "title": "Accounts Management"
+  },
+  "Settings": {
+    "title": "Settings",
+    "account": "Account",
+    "profile": "Personal Information",
+    "avatar": "Profile Picture",
+    "change": "Click to change",
+    "remove": "Remove",
+    "update": "Update"
   }
 }

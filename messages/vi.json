@@ -40,5 +40,14 @@
   },
   "Accounts": {
     "title": "Quản lý tài khoản"
+  },
+  "Settings": {
+    "title": "Cài đặt",
+    "account": "Tài khoản",
+    "profile": "Thông tin cá nhân",
+    "avatar": "Ảnh đại diện",
+    "change": "Ấn để thay đổi",
+    "remove": "Xóa ảnh",
+    "update": "Cập nhật"
   }
 }
