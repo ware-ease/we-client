@@ -4,6 +4,12 @@
     "en": "English",
     "vi": "Vietnamese"
   },
+  "Toast": {
+    "loading": "Loading...",
+    "uploading": "Uploading...",
+    "success": "Success!",
+    "error": "Something went wrong!"
+  },
   "Sidebar": {
     "dashboard": "Dashboard",
     "accounts": "Accounts",

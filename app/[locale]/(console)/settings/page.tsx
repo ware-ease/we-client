@@ -21,6 +21,7 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@/app/_components/shadcn-base/RadioGroup';
+import { ToastContainer, toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { ChangeEvent, useState } from 'react';
 
@@ -50,29 +51,55 @@ const Settings = () => {
   const handleAvatarChangeConfirm = async () => {
     if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file!);
-    formData.append('upload_preset', 'wareease_avatar_unsigned');
+    const toastId = toast.loading(t('Toast.uploading'));
 
-    const response = await fetch(
-      process.env.NEXT_PUBLIC_CLOUDINARY_URL as string,
-      {
-        method: 'POST',
-        body: formData,
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'wareease_avatar_unsigned');
+
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_CLOUDINARY_URL as string,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok)
+        throw new Error(/*data.error?.message ||*/ t('Toast.error'));
+
+      setAvatar(data.secure_url);
+
+      toast.update(toastId, {
+        render: t('Toast.success'),
+        type: 'success',
+        isLoading: false,
+        autoClose: 3000,
+      });
+
+      if (preview) {
+        setAvatar(preview);
+        setPreview(null);
       }
-    );
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : t('Toast.error');
 
-    const data = await response.json();
-    setAvatar(data.secure_url);
-    //TODO: Add toast and apply API here
-    if (preview) {
-      setAvatar(preview);
-      setPreview(null);
+      toast.update(toastId, {
+        render: `${errorMessage}`,
+        type: 'error',
+        isLoading: false,
+        autoClose: 3000,
+      });
     }
   };
 
   return (
     <div className='flex flex-col'>
+      <ToastContainer />
       <div className='flex flex-col p-4 gap-6'>
         <div className='text-4xl font-semibold text-primary'>
           <div>{t('Settings.title')}</div>

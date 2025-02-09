@@ -4,6 +4,12 @@
     "en": "Tiếng Anh",
     "vi": "Tiếng Việt"
   },
+  "Toast": {
+    "loading": "Đang thực hiện...",
+    "uploading": "Đang tải lên...",
+    "success": "Thành công!",
+    "error": "Có lỗi xảy ra!"
+  },
   "Sidebar": {
     "dashboard": "Bảng điều khiển",
     "accounts": "Quản lý tài khoản",
