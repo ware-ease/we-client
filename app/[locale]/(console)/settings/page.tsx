@@ -21,7 +21,7 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@/app/_components/shadcn-base/RadioGroup';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { ChangeEvent, useState } from 'react';
 
@@ -68,9 +68,6 @@ const Settings = () => {
 
       const data = await response.json();
 
-      if (!response.ok)
-        throw new Error(/*data.error?.message ||*/ t('Toast.error'));
-
       setAvatar(data.secure_url);
 
       toast.update(toastId, {
@@ -84,9 +81,8 @@ const Settings = () => {
         setAvatar(preview);
         setPreview(null);
       }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : t('Toast.error');
+    } catch {
+      const errorMessage = t('Toast.error');
 
       toast.update(toastId, {
         render: `${errorMessage}`,
@@ -99,7 +95,6 @@ const Settings = () => {
 
   return (
     <div className='flex flex-col'>
-      <ToastContainer />
       <div className='flex flex-col p-4 gap-6'>
         <div className='text-4xl font-semibold text-primary'>
           <div>{t('Settings.title')}</div>

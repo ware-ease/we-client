@@ -6,6 +6,7 @@ import { routing } from '@/i18n/routing';
 import { Inter } from 'next/font/google';
 // import { Roboto } from 'next/font/google';
 import '../globals.css';
+import { ToastContainer } from 'react-toastify';
 
 export const metadata: Metadata = {
   title: 'WareEase',
@@ -40,6 +41,7 @@ export default async function RootLayout({
     <html lang={locale} className={inter.className}>
       <body>
         <NextIntlClientProvider messages={messages}>
+          <ToastContainer />
           {children}
         </NextIntlClientProvider>
       </body>
