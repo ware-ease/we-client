@@ -55,6 +55,9 @@
     "avatar": "Ảnh đại diện",
     "change": "Ấn để thay đổi",
     "remove": "Xóa ảnh",
-    "update": "Cập nhật"
+    "update": "Cập nhật",
+    "upload": "Tải lên hình ảnh mới",
+    "choose": "Chọn hình ảnh từ thư viện của bạn.",
+    "cancel": "Hủy"
   }
 }

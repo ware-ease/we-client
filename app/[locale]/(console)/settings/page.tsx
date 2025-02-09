@@ -1,9 +1,20 @@
+'use client';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '@/app/_components/shadcn-base/Avatar';
 import { Button } from '@/app/_components/shadcn-base/Button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/app/_components/shadcn-base/Dialog';
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { Label } from '@/app/_components/shadcn-base/Label';
 import {
@@ -11,9 +22,35 @@ import {
   RadioGroupItem,
 } from '@/app/_components/shadcn-base/RadioGroup';
 import { useTranslations } from 'next-intl';
+import { ChangeEvent, useState } from 'react';
 
 const Settings = () => {
   const t = useTranslations();
+
+  const [avatar, setAvatar] = useState<string>('https://github.com/shadcn.png');
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const handleAvatarChangeClick = () => {
+    setPreview(avatar);
+  };
+
+  const handleAvatarUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAvatarChangeConfirm = () => {
+    if (preview) {
+      setAvatar(preview);
+      setPreview(null);
+    }
+  };
 
   return (
     <div className='flex flex-col'>
@@ -32,13 +69,51 @@ const Settings = () => {
                   {t('Settings.avatar')}
                 </div>
                 <Avatar className='size-16 hover:cursor-pointer'>
-                  <AvatarImage src='https://github.com/shadcn.png' />
+                  <AvatarImage src={avatar} />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <div className='flex flex-col justify-center ml-6'>
-                  <div className='hover:font-semibold hover:cursor-pointer'>
-                    {t('Settings.change')}
-                  </div>
+                  <Dialog onOpenChange={handleAvatarChangeClick}>
+                    <DialogTrigger asChild>
+                      <div className='hover:font-semibold hover:cursor-pointer'>
+                        {t('Settings.change')}
+                      </div>
+                    </DialogTrigger>
+                    <DialogContent className='max-w-md'>
+                      <DialogHeader>
+                        <DialogTitle>{t('Settings.upload')}</DialogTitle>
+                        <DialogDescription>
+                          {t('Settings.choose')}
+                        </DialogDescription>
+                      </DialogHeader>
+                      {preview && (
+                        <div className='flex justify-center my-2'>
+                          <Avatar className='size-40'>
+                            <AvatarImage src={preview} />
+                            <AvatarFallback>CN</AvatarFallback>
+                          </Avatar>
+                        </div>
+                      )}
+                      <Input
+                        className='w-96'
+                        type='file'
+                        accept='image/*'
+                        onChange={handleAvatarUpload}
+                      />
+                      <DialogFooter className='justify-end'>
+                        <DialogClose asChild>
+                          <Button variant='secondary'>
+                            {t('Settings.cancel')}
+                          </Button>
+                        </DialogClose>
+                        <DialogClose asChild>
+                          <Button onClick={handleAvatarChangeConfirm}>
+                            {t('Settings.update')}
+                          </Button>
+                        </DialogClose>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
                   <div className='hover:font-bold hover:cursor-pointer text-red-500 font-semibold'>
                     {t('Settings.remove')}
                   </div>

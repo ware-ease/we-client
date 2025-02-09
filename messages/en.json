@@ -55,6 +55,9 @@
     "avatar": "Profile Picture",
     "change": "Click to change",
     "remove": "Remove",
-    "update": "Update"
+    "update": "Update",
+    "upload": "Upload a photo",
+    "choose": "Choose a photo from your library.",
+    "cancel": "Cancel"
   }
 }
