@@ -29,6 +29,7 @@ const Settings = () => {
 
   const [avatar, setAvatar] = useState<string>('https://github.com/shadcn.png');
   const [preview, setPreview] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
 
   const handleAvatarChangeClick = () => {
     setPreview(avatar);
@@ -42,10 +43,28 @@ const Settings = () => {
         setPreview(reader.result as string);
       };
       reader.readAsDataURL(file);
+      setFile(file);
     }
   };
 
-  const handleAvatarChangeConfirm = () => {
+  const handleAvatarChangeConfirm = async () => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('file', file!);
+    formData.append('upload_preset', 'wareease_avatar_unsigned');
+
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_CLOUDINARY_URL as string,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    const data = await response.json();
+    setAvatar(data.secure_url);
+    //TODO: Add toast and apply API here
     if (preview) {
       setAvatar(preview);
       setPreview(null);
