@@ -57,6 +57,8 @@
     "phone": "Số điện thoại",
     "address": "Địa chỉ",
     "sex": "Giới tính",
+    "male": "Nam",
+    "female": "Nữ",
     "nation": "Quốc tịch",
     "avatar": "Ảnh đại diện",
     "change": "Ấn để thay đổi",

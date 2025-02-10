@@ -57,6 +57,8 @@
     "phone": "Phone",
     "address": "Address",
     "sex": "Gender",
+    "male": "Male",
+    "female": "Female",
     "nation": "Nationality",
     "avatar": "Profile Picture",
     "change": "Click to change",

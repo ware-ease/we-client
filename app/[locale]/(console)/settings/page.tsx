@@ -148,7 +148,7 @@ const Settings = () => {
                           value='option-one'
                           id='option-one'
                         />
-                        <Label htmlFor='option-one'>Nam</Label>
+                        <Label htmlFor='option-one'>{t('Settings.male')}</Label>
                       </div>
                       <div className='flex items-center space-x-2'>
                         <RadioGroupItem
@@ -156,7 +156,9 @@ const Settings = () => {
                           value='option-two'
                           id='option-two'
                         />
-                        <Label htmlFor='option-two'>Nữ</Label>
+                        <Label htmlFor='option-two'>
+                          {t('Settings.female')}
+                        </Label>
                       </div>
                     </RadioGroup>
                   </div>
