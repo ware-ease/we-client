@@ -1,6 +1,6 @@
 'use client';
-
 import { ColumnDef } from '@tanstack/react-table';
+import { Pencil } from 'lucide-react';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -24,7 +24,7 @@ export const columns: ColumnDef<Account>[] = [
   },
   {
     accessorKey: 'amount',
-    header: () => <div className='text-right w-full'>Amount</div>,
+    header: 'Amount',
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue('amount'));
       const formatted = new Intl.NumberFormat('en-US', {
@@ -32,9 +32,21 @@ export const columns: ColumnDef<Account>[] = [
         currency: 'USD',
       }).format(amount);
 
-      return <div className='text-right font-medium'>{formatted}</div>;
+      return <div className='font-medium'>{formatted}</div>;
     },
     sortingFn: 'alphanumeric',
     sortDescFirst: false,
+  },
+  {
+    accessorKey: 'actions',
+    header: () => <div className='text-right w-full'>Actions</div>,
+    enableSorting: false,
+    cell: ({}) => {
+      return (
+        <div className='flex justify-end'>
+          <Pencil className='text-yellow-500 h-4 w-4 hover:cursor-pointer' />
+        </div>
+      );
+    },
   },
 ];
