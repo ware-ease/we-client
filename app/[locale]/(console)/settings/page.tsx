@@ -235,7 +235,7 @@ const Settings = () => {
                           {t('Settings.remove')}
                         </div>
                       }
-                      confirmBgColor='bg-red-500'
+                      confirmBgColor='bg-red-500 hover:bg-red-800'
                       confirmText={t('Settings.remove')}
                     />
                   </div>
