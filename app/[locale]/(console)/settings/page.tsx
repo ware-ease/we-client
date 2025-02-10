@@ -214,13 +214,16 @@ const Settings = () => {
 
                         <DialogFooter className='justify-end'>
                           <DialogClose asChild>
-                            <Button variant='secondary'>
-                              {t('Settings.cancel')}
+                            <Button
+                              variant='secondary'
+                              className='hover:bg-slate-200'
+                            >
+                              {t('Dialog.cancel')}
                             </Button>
                           </DialogClose>
                           <DialogClose asChild>
                             <Button onClick={handleAvatarChangeConfirm}>
-                              {t('Settings.update')}
+                              {t('Dialog.yes.update')}
                             </Button>
                           </DialogClose>
                         </DialogFooter>

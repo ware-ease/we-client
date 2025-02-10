@@ -1,6 +1,6 @@
 'use client';
+import UpdateAccountDialog from '@/app/_components/UpdateAccountDialog';
 import { ColumnDef } from '@tanstack/react-table';
-import { Pencil } from 'lucide-react';
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -41,10 +41,10 @@ export const columns: ColumnDef<Account>[] = [
     accessorKey: 'actions',
     header: () => <div className='text-right w-full'>Actions</div>,
     enableSorting: false,
-    cell: ({}) => {
+    cell: ({ row }) => {
       return (
         <div className='flex justify-end'>
-          <Pencil className='text-yellow-500 h-4 w-4 hover:cursor-pointer' />
+          <UpdateAccountDialog account={row.original} />
         </div>
       );
     },

@@ -42,7 +42,9 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 
         <DialogFooter className='justify-end'>
           <DialogClose asChild>
-            <Button variant='secondary'>{t('Settings.cancel')}</Button>
+            <Button variant='secondary' className='hover:bg-slate-200'>
+              {t('Settings.cancel')}
+            </Button>
           </DialogClose>
           <DialogClose asChild>
             <Button className={confirmBgColor} onClick={onConfirm}>

@@ -1,28 +1,4 @@
 {
-  "Home": {
-    "home": "Trang chủ",
-    "warehouse": "Quản lý kho hàng",
-    "goods": "Quản lý hàng hóa",
-    "goodsTitle": "Theo dõi và quản lý danh sách sản phẩm trong kho",
-    "warehousing": "Nhập kho",
-    "warehousingTitle": "Quản lý việc nhập hàng hóa vào kho",
-    "out": "Xuất kho",
-    "outTitle": "Quản lý việc xuất hàng hóa ra khỏi kho",
-    "other": "Khác",
-    "hr": "Nhân sự",
-    "tasks": "Quản lý công việc",
-    "tasksTitle": "Quản lý danh sách công việc cần thực hiện, đã thực hiện",
-    "leave": "Quản lý ngày nghỉ",
-    "leaveTitle": "Cán bộ nhân viên đăng ký nghỉ theo quy định",
-    "attendance": "Bảng công",
-    "attendanceTitle": "Thông tin công việc cá nhân của nhân viên",
-    "payroll": "Phiếu lương",
-    "payrollTitle": "Thông tin lương, thưởng theo kỳ công",
-    "inventory": "Kiểm kê kho",
-    "inventoryTitle": "Quản lý số lượng và tình trạng hàng tồn kho",
-    "report": "Báo cáo kho",
-    "reportTitle": "Xem báo cáo tổng quan về tình trạng kho hàng"
-  },
   "Languages": {
     "this": "vi",
     "en": "Tiếng Anh",
@@ -93,5 +69,45 @@
     "upload": "Tải lên hình ảnh mới",
     "choose": "Chọn hình ảnh từ thư viện của bạn.",
     "cancel": "Hủy"
+  },
+  "Dialog": {
+    "title": {
+      "accountUpdate": "Chỉnh sửa tài khoản này",
+      "accountCreate": "Thêm tài khoản mới"
+    },
+    "description": {},
+    "cancel": "Hủy",
+    "yes": {
+      "confirm": "Xác nhận",
+      "remove": "Xóa",
+      "update": "Cập nhật",
+      "delete": "Xóa",
+      "create": "Thêm",
+      "yes": "Đồng ý"
+    }
+  },
+  "Home": {
+    "home": "Trang chủ",
+    "warehouse": "Quản lý kho hàng",
+    "goods": "Quản lý hàng hóa",
+    "goodsTitle": "Theo dõi và quản lý danh sách sản phẩm trong kho",
+    "warehousing": "Nhập kho",
+    "warehousingTitle": "Quản lý việc nhập hàng hóa vào kho",
+    "out": "Xuất kho",
+    "outTitle": "Quản lý việc xuất hàng hóa ra khỏi kho",
+    "other": "Khác",
+    "hr": "Nhân sự",
+    "tasks": "Quản lý công việc",
+    "tasksTitle": "Quản lý danh sách công việc cần thực hiện, đã thực hiện",
+    "leave": "Quản lý ngày nghỉ",
+    "leaveTitle": "Cán bộ nhân viên đăng ký nghỉ theo quy định",
+    "attendance": "Bảng công",
+    "attendanceTitle": "Thông tin công việc cá nhân của nhân viên",
+    "payroll": "Phiếu lương",
+    "payrollTitle": "Thông tin lương, thưởng theo kỳ công",
+    "inventory": "Kiểm kê kho",
+    "inventoryTitle": "Quản lý số lượng và tình trạng hàng tồn kho",
+    "report": "Báo cáo kho",
+    "reportTitle": "Xem báo cáo tổng quan về tình trạng kho hàng"
   }
 }

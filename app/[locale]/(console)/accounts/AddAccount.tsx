@@ -16,10 +16,13 @@ import {
   RadioGroupItem,
 } from '@/app/_components/shadcn-base/RadioGroup';
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const AddAccountDialog = () => {
+  const t = useTranslations();
+
   const [formData, setFormData] = useState({
     userName: '',
     password: '',
@@ -74,12 +77,12 @@ const AddAccountDialog = () => {
       >
         <DialogHeader>
           <DialogTitle className='text-xl font-semibold text-gray-800'>
-            Add New Account
+            {t('Dialog.title.accountCreate')}
           </DialogTitle>
         </DialogHeader>
         <div className='grid grid-cols-2 gap-6'>
           <div>
-            <Label htmlFor='userName'>User Name</Label>
+            <Label htmlFor='userName'>{t('Login.username')}</Label>
             <Input
               id='userName'
               name='userName'
@@ -89,18 +92,18 @@ const AddAccountDialog = () => {
             />
           </div>
           <div>
-            <Label htmlFor='password'>Password</Label>
+            <Label htmlFor='password'>{t('Login.password')}</Label>
             <Input
               id='password'
               name='password'
               type='password'
               value={formData.password}
               onChange={handleInputChange}
-              required
+              disabled
             />
           </div>
           <div>
-            <Label htmlFor='email'>Email</Label>
+            <Label htmlFor='email'>{t('Settings.email')}</Label>
             <Input
               id='email'
               name='email'
@@ -111,7 +114,7 @@ const AddAccountDialog = () => {
             />
           </div>
           <div>
-            <Label htmlFor='firstName'>First Name</Label>
+            <Label htmlFor='firstName'>{t('Settings.firstname')}</Label>
             <Input
               id='firstName'
               name='firstName'
@@ -121,7 +124,7 @@ const AddAccountDialog = () => {
             />
           </div>
           <div>
-            <Label htmlFor='lastName'>Last Name</Label>
+            <Label htmlFor='lastName'>{t('Settings.lastname')}</Label>
             <Input
               id='lastName'
               name='lastName'
@@ -131,7 +134,7 @@ const AddAccountDialog = () => {
             />
           </div>
           <div>
-            <Label htmlFor='phone'>Phone</Label>
+            <Label htmlFor='phone'>{t('Settings.phone')}</Label>
             <Input
               id='phone'
               name='phone'
@@ -141,7 +144,7 @@ const AddAccountDialog = () => {
             />
           </div>
           <div className='col-span-2'>
-            <Label htmlFor='address'>Address</Label>
+            <Label htmlFor='address'>{t('Settings.address')}</Label>
             <Input
               id='address'
               name='address'
@@ -150,7 +153,7 @@ const AddAccountDialog = () => {
             />
           </div>
           <div>
-            <Label>Sex</Label>
+            <Label>{t('Settings.sex')}</Label>
             <RadioGroup
               className='flex space-x-4'
               value={formData.sex}
@@ -160,16 +163,16 @@ const AddAccountDialog = () => {
             >
               <div className='flex items-center space-x-2'>
                 <RadioGroupItem value='male' id='male' />
-                <Label htmlFor='male'>Male</Label>
+                <Label htmlFor='male'>{t('Settings.male')}</Label>
               </div>
               <div className='flex items-center space-x-2'>
                 <RadioGroupItem value='female' id='female' />
-                <Label htmlFor='female'>Female</Label>
+                <Label htmlFor='female'>{t('Settings.female')}</Label>
               </div>
             </RadioGroup>
           </div>
           <div>
-            <Label htmlFor='nationality'>Nationality</Label>
+            <Label htmlFor='nationality'>{t('Settings.nation')}</Label>
             <Input
               id='nationality'
               name='nationality'
@@ -180,12 +183,15 @@ const AddAccountDialog = () => {
         </div>
         <DialogFooter className='mt-6 flex justify-end space-x-4'>
           <DialogClose asChild>
-            <Button variant='secondary' className='px-4 py-2'>
-              Cancel
+            <Button
+              variant='secondary'
+              className='px-4 py-2 hover:bg-slate-200'
+            >
+              {t('Dialog.cancel')}
             </Button>
           </DialogClose>
           <Button className='px-4 py-2 rounded-lg' onClick={handleSubmit}>
-            Add
+            {t('Dialog.yes.create')}
           </Button>
         </DialogFooter>
       </DialogContent>
