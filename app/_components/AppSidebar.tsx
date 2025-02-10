@@ -1,15 +1,16 @@
 'use client';
 import {
-  Boxes,
+  // Boxes,
   Home,
+  LayoutDashboardIcon,
   LogOut,
-  PackageMinus,
+  // PackageMinus,
   PackageOpen,
-  PackagePlus,
+  // PackagePlus,
   Settings,
-  UserRoundPen,
+  // UserRoundPen,
   UsersRound,
-  Warehouse,
+  // Warehouse,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -33,55 +34,60 @@ export function AppSidebar() {
 
   const items = [
     {
+      title: t('Home.home'),
+      url: '/home',
+      icon: Home,
+    },
+    {
       title: t('Sidebar.dashboard'),
       url: '/dashboard',
-      icon: Home,
+      icon: LayoutDashboardIcon,
     },
     {
       title: t('Sidebar.accounts'),
       url: '/accounts',
       icon: UsersRound,
     },
-    {
-      title: t('Sidebar.suppliers'),
-      url: '/suppliers',
-      icon: UsersRound,
-    },
-    {
-      title: t('Sidebar.customers'),
-      url: '/customers',
-      icon: UsersRound,
-    },
-    {
-      title: t('Sidebar.warehouses'),
-      url: '/warehouses',
-      icon: Warehouse,
-    },
-    {
-      title: t('Sidebar.warehouse'),
-      url: '/warehouse',
-      icon: Warehouse,
-    },
-    {
-      title: t('Sidebar.staffs'),
-      url: '/staffs',
-      icon: UserRoundPen,
-    },
-    {
-      title: t('Sidebar.goods'),
-      url: '/goods',
-      icon: Boxes,
-    },
-    {
-      title: t('Sidebar.import'),
-      url: '/receipt',
-      icon: PackagePlus,
-    },
-    {
-      title: t('Sidebar.export'),
-      url: '/issue',
-      icon: PackageMinus,
-    },
+    // {
+    //   title: t('Sidebar.suppliers'),
+    //   url: '/suppliers',
+    //   icon: UsersRound,
+    // },
+    // {
+    //   title: t('Sidebar.customers'),
+    //   url: '/customers',
+    //   icon: UsersRound,
+    // },
+    // {
+    //   title: t('Sidebar.warehouses'),
+    //   url: '/warehouses',
+    //   icon: Warehouse,
+    // },
+    // {
+    //   title: t('Sidebar.warehouse'),
+    //   url: '/warehouse',
+    //   icon: Warehouse,
+    // },
+    // {
+    //   title: t('Sidebar.staffs'),
+    //   url: '/staffs',
+    //   icon: UserRoundPen,
+    // },
+    // {
+    //   title: t('Sidebar.goods'),
+    //   url: '/goods',
+    //   icon: Boxes,
+    // },
+    // {
+    //   title: t('Sidebar.import'),
+    //   url: '/receipt',
+    //   icon: PackagePlus,
+    // },
+    // {
+    //   title: t('Sidebar.export'),
+    //   url: '/issue',
+    //   icon: PackageMinus,
+    // },
   ];
 
   const botItems = [
