@@ -1,11 +1,45 @@
+'use client';
 import { Button } from '@/app/_components/shadcn-base/Button';
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { useTranslations } from 'next-intl';
-import React from 'react';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import React, { useState } from 'react';
 import LanguageSelector from '@/app/_components/LanguageSelector';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const t = useTranslations();
+  const router = useRouter();
+
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+
+  const loginMutation = useMutation({
+    mutationFn: (loginCredentials: unknown) => {
+      return axios({
+        method: 'post',
+        url: 'https://dummyjson.com/auth/login',
+        data: loginCredentials,
+      });
+    },
+    onSuccess: () => {
+      toast.success(t('Toast.success'), {
+        autoClose: 3000,
+      });
+      router.push(`/${t('Languages.this')}/dashboard`);
+    },
+    onError: () => {
+      toast.error(t('Toast.error'), {
+        autoClose: 3000,
+      });
+    },
+  });
+
+  const handleLoginClick = async () => {
+    loginMutation.mutate({ username, password });
+  };
 
   return (
     <div>
@@ -23,6 +57,8 @@ const Login = () => {
             <Input
               className='w-96 rounded-xl h-12 bg-white bg-opacity-95 md:text-md'
               placeholder='Enter your username'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className='flex flex-col gap-[0.25rem]'>
@@ -31,13 +67,19 @@ const Login = () => {
               className='w-96 rounded-xl h-12 bg-white bg-opacity-95 md:text-md'
               type='password'
               placeholder='Enter your password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <div className='flex justify-end w-full'>
             <div>{t('Login.forgot')}</div>
           </div>
           <div className='flex justify-center gap-4 w-full'>
-            <Button className='font-semibold w-full rounded-xl h-12 text-md'>
+            <Button
+              className='font-semibold w-full rounded-xl h-12 text-md'
+              onClick={() => handleLoginClick()}
+              disabled={loginMutation.isPending}
+            >
               {t('Login.login')}
             </Button>
           </div>

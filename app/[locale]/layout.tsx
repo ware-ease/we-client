@@ -7,6 +7,7 @@ import { Inter } from 'next/font/google';
 // import { Roboto } from 'next/font/google';
 import '../globals.css';
 import { ToastContainer } from 'react-toastify';
+import ReactQueryProvider from '@/app/_components/providers/ReactQueryProvider';
 
 export const metadata: Metadata = {
   title: 'WareEase',
@@ -40,10 +41,12 @@ export default async function RootLayout({
   return (
     <html lang={locale} className={inter.className}>
       <body>
-        <NextIntlClientProvider messages={messages}>
-          <ToastContainer />
-          {children}
-        </NextIntlClientProvider>
+        <ReactQueryProvider>
+          <NextIntlClientProvider messages={messages}>
+            <ToastContainer />
+            {children}
+          </NextIntlClientProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

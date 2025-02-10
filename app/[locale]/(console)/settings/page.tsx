@@ -197,19 +197,20 @@ const Settings = () => {
                           </DialogDescription>
                         </DialogHeader>
                         {preview && (
-                          <div className='flex justify-center my-2'>
+                          <div className='flex flex-col items-center gap-6 justify-center mt-2'>
                             <Avatar className='size-40'>
                               <AvatarImage src={preview} />
                               <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
+                            <Input
+                              className='w-96'
+                              type='file'
+                              accept='image/*'
+                              onChange={handleAvatarUpload}
+                            />
                           </div>
                         )}
-                        <Input
-                          className='w-96'
-                          type='file'
-                          accept='image/*'
-                          onChange={handleAvatarUpload}
-                        />
+
                         <DialogFooter className='justify-end'>
                           <DialogClose asChild>
                             <Button variant='secondary'>
