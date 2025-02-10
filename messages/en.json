@@ -1,4 +1,28 @@
 {
+  "Home": {
+    "home": "Home",
+    "warehouse": "Warehouse Management",
+    "goods": "Goods Management",
+    "goodsTitle": "Track and manage inventory product listings",
+    "warehousing": "Warehousing",
+    "warehousingTitle": "Manage the import of goods into the warehouse",
+    "out": "Stock Out",
+    "outTitle": "Manage goods leaving the warehouse",
+    "other": "Other",
+    "hr": "Human Resources",
+    "tasks": "Task Management",
+    "tasksTitle": "Manage lists of tasks to be completed and completed tasks",
+    "leave": "Leave Management",
+    "leaveTitle": "Employees register for leave in accordance with regulations",
+    "attendance": "Attendance Records",
+    "attendanceTitle": "Personal work information of employees",
+    "payroll": "Payroll",
+    "payrollTitle": "Salary and bonus information by payroll period",
+    "inventory": "Inventory",
+    "inventoryTitle": "Manage stock quantity and conditions",
+    "report": "Warehouse Report",
+    "reportTitle": "View summary reports of warehouse status"
+  },
   "Languages": {
     "this": "en",
     "en": "English",
