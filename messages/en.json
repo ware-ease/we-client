@@ -87,6 +87,8 @@
     "avatar": "Profile Picture",
     "change": "Click to change",
     "remove": "Remove",
+    "removeAvatar": "Remove Avatar",
+    "removeAvatarDescription": "Are you sure you want to remove your avatar?",
     "update": "Update",
     "upload": "Upload a photo",
     "choose": "Choose a photo from your library.",

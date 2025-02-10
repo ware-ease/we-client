@@ -24,6 +24,7 @@ import {
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { ChangeEvent, useState } from 'react';
+import ConfirmDialog from '@/app/_components/ConfirmDialog';
 
 const Settings = () => {
   const t = useTranslations();
@@ -225,9 +226,18 @@ const Settings = () => {
                         </DialogFooter>
                       </DialogContent>
                     </Dialog>
-                    <div className='hover:font-bold hover:cursor-pointer text-red-500 font-semibold'>
-                      {t('Settings.remove')}
-                    </div>
+                    <ConfirmDialog
+                      title={t('Settings.removeAvatar')}
+                      description={t('Settings.removeAvatarDescription')}
+                      onConfirm={() => {}}
+                      triggerElement={
+                        <div className='hover:font-bold hover:cursor-pointer text-red-500 font-semibold'>
+                          {t('Settings.remove')}
+                        </div>
+                      }
+                      confirmBgColor='bg-red-500'
+                      confirmText={t('Settings.remove')}
+                    />
                   </div>
                 </div>
               </div>

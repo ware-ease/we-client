@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   Dialog,
   DialogClose,
@@ -16,22 +16,24 @@ type ConfirmDialogProps = {
   onConfirm: () => void;
   title: string;
   description: string;
+  triggerElement: ReactNode;
+  confirmText: string;
+  confirmBgColor: string;
 };
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   onConfirm,
   title,
   description,
+  triggerElement,
+  confirmText,
+  confirmBgColor,
 }) => {
   const t = useTranslations();
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <div className='hover:font-semibold hover:cursor-pointer'>
-          {t('Settings.change')}
-        </div>
-      </DialogTrigger>
+      <DialogTrigger asChild>{triggerElement}</DialogTrigger>
       <DialogContent className='max-w-md'>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -43,7 +45,9 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             <Button variant='secondary'>{t('Settings.cancel')}</Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button onClick={onConfirm}>{t('Settings.update')}</Button>
+            <Button className={confirmBgColor} onClick={onConfirm}>
+              {confirmText}
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

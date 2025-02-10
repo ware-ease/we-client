@@ -87,6 +87,8 @@
     "avatar": "Ảnh đại diện",
     "change": "Ấn để thay đổi",
     "remove": "Xóa ảnh",
+    "removeAvatar": "Xóa ảnh đại diện",
+    "removeAvatarDescription": "Bạn có chắc chắn muốn xóa ảnh đại diện không?",
     "update": "Cập nhật",
     "upload": "Tải lên hình ảnh mới",
     "choose": "Chọn hình ảnh từ thư viện của bạn.",
