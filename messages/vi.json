@@ -19,6 +19,7 @@
     "warehouse": "Kho",
     "staffs": "Quản lý nhân viên kho",
     "goods": "Quản lý hàng hóa",
+    "products": "Quản lý sản phẩm",
     "import": "Nhập kho",
     "export": "Xuất kho",
     "settings": "Cài đặt",
@@ -46,6 +47,9 @@
   },
   "Accounts": {
     "title": "Quản lý tài khoản"
+  },
+  "Products": {
+    "title": "Quản lý sản phẩm"
   },
   "Settings": {
     "title": "Cài đặt",

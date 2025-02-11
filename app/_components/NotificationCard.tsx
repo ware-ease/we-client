@@ -1,6 +1,6 @@
 import { BellRing, Check } from 'lucide-react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/utils';
 import { Button } from './shadcn-base/Button';
 import {
   Card,

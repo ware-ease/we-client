@@ -9,7 +9,7 @@ import {
 } from './shadcn-base/DropdownMenu';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
-import { useCurrentLanguage } from '@/lib/useCurrentLanguage';
+import { useCurrentLanguage } from '@/lib/hooks/useCurrentLanguage';
 
 const AvatarButton = () => {
   const lang = useCurrentLanguage();

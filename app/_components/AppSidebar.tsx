@@ -1,6 +1,6 @@
 'use client';
 import {
-  // Boxes,
+  Boxes,
   Home,
   LayoutDashboardIcon,
   LogOut,
@@ -23,7 +23,7 @@ import {
   SidebarMenuItem,
 } from './shadcn-base/SideBar';
 import { Link } from '@/i18n/routing';
-import { useCurrentLanguage } from '@/lib/useCurrentLanguage';
+import { useCurrentLanguage } from '@/lib/hooks/useCurrentLanguage';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
@@ -78,6 +78,11 @@ export function AppSidebar() {
     //   url: '/goods',
     //   icon: Boxes,
     // },
+    {
+      title: t('Sidebar.products'),
+      url: '/products',
+      icon: Boxes,
+    },
     // {
     //   title: t('Sidebar.import'),
     //   url: '/receipt',

@@ -19,6 +19,7 @@
     "warehouse": "Warehouse",
     "staffs": "Warehouse staffs",
     "goods": "Goods",
+    "products": "Products",
     "import": "Goods receipt",
     "export": "Goods issue",
     "settings": "Settings",
@@ -46,6 +47,9 @@
   },
   "Accounts": {
     "title": "Accounts Management"
+  },
+  "Products": {
+    "title": "Products Management"
   },
   "Settings": {
     "title": "Settings",
