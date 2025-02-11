@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+'use client';
 import { Button } from '@/app/_components/shadcn-base/Button';
 import {
   Dialog,
@@ -10,12 +10,28 @@ import {
   DialogTrigger,
 } from '@/app/_components/shadcn-base/Dialog';
 import { Input } from '@/app/_components/shadcn-base/Input';
+import { Label } from '@/app/_components/shadcn-base/Label';
+import {
+  RadioGroup,
+  RadioGroupItem,
+} from '@/app/_components/shadcn-base/RadioGroup';
 import { Pencil } from 'lucide-react';
-import { Account } from '../[locale]/(console)/accounts/Columns';
 import { useTranslations } from 'next-intl';
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { Account } from '../[locale]/(console)/accounts/Columns';
 
 type UpdateAccountDialogProps = {
-  account: Account;
+  account: Account & {
+    userName?: string;
+    password?: string;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    address?: string;
+    sex?: 'male' | 'female';
+    nationality?: string;
+  };
 };
 
 const UpdateAccountDialog: React.FC<UpdateAccountDialogProps> = ({
@@ -23,11 +39,37 @@ const UpdateAccountDialog: React.FC<UpdateAccountDialogProps> = ({
 }) => {
   const t = useTranslations();
 
-  const [email, setEmail] = useState<string>(account.email);
+  const [formData, setFormData] = useState({
+    userName: account.userName || '',
+    password: account.password || '',
+    email: account.email || '',
+    firstName: account.firstName || '',
+    lastName: account.lastName || '',
+    phone: account.phone || '',
+    address: account.address || '',
+    sex: account.sex || 'male',
+    nationality: account.nationality || '',
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleUpdateClick = () => {
-    //TODO: API here
-    console.log(email);
+    if (
+      !formData.userName ||
+      !formData.email ||
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.phone
+    ) {
+      toast.error('Please fill in all required fields.');
+      return;
+    }
+
+    console.log('Updated account data:', formData);
+    toast.success('Account updated successfully!');
   };
 
   return (
@@ -52,12 +94,102 @@ const UpdateAccountDialog: React.FC<UpdateAccountDialogProps> = ({
           </DialogHeader>
           <div className='grid grid-cols-2 gap-6'>
             <div>
+              <Label htmlFor='userName'>{t('Login.username')}</Label>
+              <Input
+                id='userName'
+                name='userName'
+                value={formData.userName}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor='password'>{t('Login.password')}</Label>
+              <Input
+                id='password'
+                name='password'
+                type='password'
+                value={formData.password}
+                onChange={handleInputChange}
+                disabled
+              />
+            </div>
+            <div>
+              <Label htmlFor='email'>{t('Settings.email')}</Label>
               <Input
                 id='email'
                 name='email'
-                value={account.email}
-                onChange={(e) => setEmail(e.target.value)}
+                type='email'
+                value={formData.email}
+                onChange={handleInputChange}
                 required
+              />
+            </div>
+            <div>
+              <Label htmlFor='firstName'>{t('Settings.firstname')}</Label>
+              <Input
+                id='firstName'
+                name='firstName'
+                value={formData.firstName}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor='lastName'>{t('Settings.lastname')}</Label>
+              <Input
+                id='lastName'
+                name='lastName'
+                value={formData.lastName}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor='phone'>{t('Settings.phone')}</Label>
+              <Input
+                id='phone'
+                name='phone'
+                value={formData.phone}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            <div className='col-span-2'>
+              <Label htmlFor='address'>{t('Settings.address')}</Label>
+              <Input
+                id='address'
+                name='address'
+                value={formData.address}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <Label>{t('Settings.sex')}</Label>
+              <RadioGroup
+                className='flex space-x-4'
+                value={formData.sex}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, sex: value as 'male' | 'female' })
+                }
+              >
+                <div className='flex items-center space-x-2'>
+                  <RadioGroupItem value='male' id='male' />
+                  <Label htmlFor='male'>{t('Settings.male')}</Label>
+                </div>
+                <div className='flex items-center space-x-2'>
+                  <RadioGroupItem value='female' id='female' />
+                  <Label htmlFor='female'>{t('Settings.female')}</Label>
+                </div>
+              </RadioGroup>
+            </div>
+            <div>
+              <Label htmlFor='nationality'>{t('Settings.nation')}</Label>
+              <Input
+                id='nationality'
+                name='nationality'
+                value={formData.nationality}
+                onChange={handleInputChange}
               />
             </div>
           </div>
@@ -72,7 +204,7 @@ const UpdateAccountDialog: React.FC<UpdateAccountDialogProps> = ({
             </DialogClose>
             <Button
               className='px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600'
-              onClick={() => handleUpdateClick()}
+              onClick={handleUpdateClick}
             >
               {t('Dialog.yes.update')}
             </Button>
