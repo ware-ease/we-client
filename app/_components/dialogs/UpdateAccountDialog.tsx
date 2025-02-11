@@ -15,7 +15,7 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@/app/_components/shadcn-base/RadioGroup';
-import { Pencil } from 'lucide-react';
+import { Edit } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -76,7 +76,7 @@ const UpdateAccountDialog: React.FC<UpdateAccountDialogProps> = ({
     <div className='flex justify-end'>
       <Dialog>
         <DialogTrigger asChild>
-          <Pencil className='text-yellow-600 h-4 w-4 hover:cursor-pointer' />
+          <Edit className='text-yellow-600 h-4 w-4 hover:cursor-pointer' />
         </DialogTrigger>
         <DialogContent
           className='flex flex-col w-full max-w-4xl p-6 m-4 bg-white rounded-lg shadow-lg border border-gray-200 overflow-auto'
