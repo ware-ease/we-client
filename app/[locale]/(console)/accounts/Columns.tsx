@@ -1,5 +1,5 @@
 'use client';
-import UpdateAccountDialog from '@/app/_components/UpdateAccountDialog';
+import UpdateAccountDialog from '@/app/_components/dialogs/UpdateAccountDialog';
 import { ColumnDef } from '@tanstack/react-table';
 
 // This type is used to define the shape of our data.

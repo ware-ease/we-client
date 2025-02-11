@@ -19,7 +19,7 @@ import { Pencil } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { Account } from '../[locale]/(console)/accounts/Columns';
+import { Account } from '../../[locale]/(console)/accounts/Columns';
 
 type UpdateAccountDialogProps = {
   account: Account & {
