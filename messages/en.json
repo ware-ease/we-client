@@ -72,7 +72,8 @@
     "update": "Update",
     "upload": "Upload a photo",
     "choose": "Choose a photo from your library.",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "confirmPassword": "Confirm"
   },
   "Dialog": {
     "title": {

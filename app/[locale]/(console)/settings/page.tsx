@@ -106,40 +106,40 @@ const Settings = () => {
               <div className='p-4 text-xl text-primary border-b-2'>
                 <div>{t('Settings.profile')}</div>
               </div>
-              <div className='flex justify-between relative'>
-                <div className='w-3/4 p-4 flex flex-col gap-3'>
+              <div className='flex justify-between relative px-4'>
+                <div className='w-1/2 p-4 flex flex-col gap-3'>
                   <div className='flex'>
-                    <div className='flex items-center w-1/5'>
+                    <div className='flex items-center w-2/5'>
                       {t('Settings.lastname')}
                     </div>
-                    <Input className='border-gray-300 w-2/5' />
+                    <Input className='border-gray-300 w-3/5' />
                   </div>
                   <div className='flex'>
-                    <div className='flex items-center w-1/5'>
+                    <div className='flex items-center w-2/5'>
                       {t('Settings.firstname')}
                     </div>
-                    <Input className='border-gray-300 w-2/5' />
+                    <Input className='border-gray-300 w-3/5' />
                   </div>
                   <div className='flex'>
-                    <div className='flex items-center w-1/5'>
+                    <div className='flex items-center w-2/5'>
                       {t('Settings.email')}
                     </div>
-                    <Input className='border-gray-300 w-2/5' />
+                    <Input className='border-gray-300 w-3/5' />
                   </div>
                   <div className='flex'>
-                    <div className='flex items-center w-1/5'>
+                    <div className='flex items-center w-2/5'>
                       {t('Settings.phone')}
                     </div>
-                    <Input className='border-gray-300 w-2/5' />
+                    <Input className='border-gray-300 w-3/5' />
                   </div>
                   <div className='flex'>
-                    <div className='flex items-center w-1/5'>
+                    <div className='flex items-center w-2/5'>
                       {t('Settings.address')}
                     </div>
-                    <Input className='border-gray-300 w-2/5' />
+                    <Input className='border-gray-300 w-3/5' />
                   </div>
                   <div className='flex py-2'>
-                    <div className='flex items-center w-1/5'>
+                    <div className='flex items-center w-2/5'>
                       {t('Settings.sex')}
                     </div>
                     <RadioGroup className='flex' defaultValue='option-one'>
@@ -164,26 +164,26 @@ const Settings = () => {
                     </RadioGroup>
                   </div>
                   <div className='flex'>
-                    <div className='flex items-center w-1/5'>
+                    <div className='flex items-center w-2/5'>
                       {t('Settings.nation')}
                     </div>
-                    <Input className='border-gray-300 w-2/5' />
+                    <Input className='border-gray-300 w-3/5' />
                   </div>
-                  <div className='w-3/5 text-right'>
+                  <div className='w-full pt-3 text-right'>
                     <Button className='bg-green-700 hover:bg-green-950'>
                       {t('Settings.update')}
                     </Button>
                   </div>
                 </div>
-                <div className='flex flex-col w-1/4 absolute right-20 py-4 gap-3'>
+                <div className='flex flex-col w-1/4 absolute right-20 items-center py-4 gap-3'>
                   <div className='flex items-center font-semibold'>
                     {t('Settings.avatar')}
                   </div>
-                  <Avatar className='size-48 hover:cursor-pointer'>
+                  <Avatar className='size-60 hover:cursor-pointer'>
                     <AvatarImage src={avatar} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
-                  <div className='flex flex-col justify-center'>
+                  <div className='flex flex-col justify-center items-center'>
                     <Dialog onOpenChange={handleAvatarChangeClick}>
                       <DialogTrigger asChild>
                         <div className='hover:font-semibold hover:cursor-pointer'>
@@ -251,23 +251,38 @@ const Settings = () => {
               <div className='p-4 text-xl text-primary border-b-2'>
                 <div>{t('Settings.account')}</div>
               </div>
-              <div className='p-4 flex flex-col gap-3 w-3/4'>
-                <div className='flex'>
-                  <div className='flex items-center w-1/5'>
-                    {t('Login.username')}
+              <div className='flex px-4'>
+                <div className='p-4 flex flex-col gap-3 w-1/2'>
+                  <div className='flex'>
+                    <div className='flex items-center w-2/5'>
+                      {t('Login.username')}
+                    </div>
+                    <Input className='border-gray-300 w-3/5' />
                   </div>
-                  <Input className='border-gray-300 w-2/5' />
-                </div>
-                <div className='flex'>
-                  <div className='flex items-center w-1/5'>
-                    {t('Login.password')}
+                  <div className='relative h-full w-full'>
+                    <Button className='bg-red-700 hover:bg-red-950 absolute bottom-0 right-0'>
+                      {t('Settings.update')}
+                    </Button>
                   </div>
-                  <Input type='password' className='border-gray-300 w-2/5' />
                 </div>
-                <div className='w-3/5 text-right'>
-                  <Button className='bg-green-700 hover:bg-green-950'>
-                    {t('Settings.update')}
-                  </Button>
+                <div className='p-4 flex flex-col gap-3 w-1/2'>
+                  <div className='flex'>
+                    <div className='flex items-center w-2/5'>
+                      {t('Login.password')}
+                    </div>
+                    <Input className='border-gray-300 w-3/5' />
+                  </div>
+                  <div className='flex'>
+                    <div className='flex items-center w-2/5'>
+                      {t('Settings.confirmPassword')}
+                    </div>
+                    <Input type='password' className='border-gray-300 w-3/5' />
+                  </div>
+                  <div className='w-full text-right'>
+                    <Button className='bg-red-700 hover:bg-red-950'>
+                      {t('Settings.update')}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>

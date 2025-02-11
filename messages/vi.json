@@ -72,7 +72,8 @@
     "update": "Cập nhật",
     "upload": "Tải lên hình ảnh mới",
     "choose": "Chọn hình ảnh từ thư viện của bạn.",
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "confirmPassword": "Xác nhận"
   },
   "Dialog": {
     "title": {
