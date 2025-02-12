@@ -15,66 +15,62 @@ import { ScrollArea } from '@/app/_components/shadcn-base/ScrollArea';
 import { Edit, Plus, SortAsc, SortDesc, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-const Groups = ({ onSelect }: { onSelect: (item: string) => void }) => {
-  const [groups, setGroups] = useState<string[]>([]);
-  const [selectedGroup, setSelectedGroup] = useState('');
+const Accounts = ({ onSelect }: { onSelect: (item: string) => void }) => {
+  const [accounts, setAccounts] = useState<string[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [newGroupName, setNewGroupName] = useState('');
+  const [newAccountName, setNewAccountName] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [groupToDelete, setGroupToDelete] = useState('');
+  const [accountToDelete, setAccountToDelete] = useState('');
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [groupToEdit, setGroupToEdit] = useState('');
-  const [editedGroupName, setEditedGroupName] = useState('');
+  const [accountToEdit, setAccountToEdit] = useState('');
+  const [editedAccountName, setEditedAccountName] = useState('');
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   useEffect(() => {
-    setGroups(['Admin', 'HR', 'Finance', 'IT']);
+    setAccounts(['john.doe', 'jane.smith', 'admin', 'guest']);
   }, []);
 
-  useEffect(() => {
-    if (groups.length > 0) {
-      setSelectedGroup(groups[0]);
-      onSelect(groups[0]);
-    }
-  }, [groups]);
-
-  const filteredGroups = groups
+  const filteredAccounts = accounts
     .filter((item) => item.toLowerCase().includes(searchQuery.toLowerCase()))
     .sort((a, b) =>
       sortOrder === 'asc' ? a.localeCompare(b) : b.localeCompare(a)
     );
 
-  const addGroup = () => {
-    if (newGroupName.trim() && !groups.includes(newGroupName)) {
-      setGroups([...groups, newGroupName]);
-      setNewGroupName('');
+  const addAccount = () => {
+    if (newAccountName.trim() && !accounts.includes(newAccountName)) {
+      setAccounts([...accounts, newAccountName]);
+      setNewAccountName('');
       setIsDialogOpen(false);
     }
   };
 
-  const deleteGroup = () => {
-    setGroups(groups.filter((group) => group !== groupToDelete));
+  const deleteAccount = () => {
+    setAccounts(accounts.filter((account) => account !== accountToDelete));
     setIsDeleteDialogOpen(false);
   };
 
-  const editGroup = () => {
+  const editAccount = () => {
     if (
-      editedGroupName.trim() &&
-      groupToEdit &&
-      editedGroupName !== groupToEdit
+      editedAccountName.trim() &&
+      accountToEdit &&
+      editedAccountName !== accountToEdit
     ) {
-      setGroups(
-        groups.map((group) => (group === groupToEdit ? editedGroupName : group))
+      setAccounts(
+        accounts.map((account) =>
+          account === accountToEdit ? editedAccountName : account
+        )
       );
       setIsEditDialogOpen(false);
     }
   };
+
   return (
     <div>
       <div className='flex items-center gap-2 mb-4'>
         <Input
-          placeholder='Search groups...'
+          placeholder='Search accounts...'
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
@@ -99,61 +95,60 @@ const Groups = ({ onSelect }: { onSelect: (item: string) => void }) => {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent className='w-full max-w-md'>
             <DialogHeader>
-              <DialogTitle>Create New Group</DialogTitle>
+              <DialogTitle>Create New Account</DialogTitle>
             </DialogHeader>
             <div className='space-y-4'>
-              <Label htmlFor='newGroup'>Group Name</Label>
+              <Label htmlFor='newAccount'>Account Name</Label>
               <Input
-                id='newGroup'
-                placeholder='Enter group name'
-                value={newGroupName}
-                onChange={(e) => setNewGroupName(e.target.value)}
+                id='newAccount'
+                placeholder='Enter account name'
+                value={newAccountName}
+                onChange={(e) => setNewAccountName(e.target.value)}
               />
             </div>
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant='secondary'>Cancel</Button>
               </DialogClose>
-              <Button onClick={addGroup}>Create</Button>
+              <Button onClick={addAccount}>Create</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
       <ScrollArea className='h-[575px]'>
-        {filteredGroups.map((group) => (
+        {filteredAccounts.map((account) => (
           <div
-            key={group}
+            key={account}
             className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer w-full ${
-              selectedGroup === group
+              selectedAccount === account
                 ? 'bg-primary text-white'
                 : 'hover:bg-gray-200'
             }`}
             onClick={() => {
-              setSelectedGroup(group);
-              onSelect(group);
+              setSelectedAccount(account);
+              onSelect(account);
             }}
           >
-            <span>{group}</span>
+            <span>{account}</span>
             <div className='flex gap-2'>
               <Button
                 variant='ghost'
                 size='icon'
                 onClick={(e) => {
                   e.stopPropagation();
-                  setGroupToEdit(group);
-                  setEditedGroupName(group);
+                  setAccountToEdit(account);
+                  setEditedAccountName(account);
                   setIsEditDialogOpen(true);
                 }}
               >
                 <Edit className='h-4 w-4 text-blue-500' />
               </Button>
-
               <Button
                 variant='ghost'
                 size='icon'
                 onClick={(e) => {
                   e.stopPropagation();
-                  setGroupToDelete(group);
+                  setAccountToDelete(account);
                   setIsDeleteDialogOpen(true);
                 }}
               >
@@ -164,48 +159,49 @@ const Groups = ({ onSelect }: { onSelect: (item: string) => void }) => {
         ))}
       </ScrollArea>
 
-      {/* Dialog xác nhận xóa */}
+      {/* Dialog xóa */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className='w-full max-w-md'>
           <DialogHeader>
-            <DialogTitle>Delete Group</DialogTitle>
+            <DialogTitle>Delete Account</DialogTitle>
           </DialogHeader>
           <div className='space-y-4'>
             <p>
-              Are you sure you want to delete the group{' '}
-              <span className='font-bold'>{groupToDelete}</span>?
+              Are you sure you want to delete the account{' '}
+              <span className='font-bold'>{accountToDelete}</span>?
             </p>
           </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant='secondary'>Cancel</Button>
             </DialogClose>
-            <Button variant='destructive' onClick={deleteGroup}>
+            <Button variant='destructive' onClick={deleteAccount}>
               Delete
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      {/* sua */}
+
+      {/* Dialog chỉnh sửa */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className='w-full max-w-md'>
           <DialogHeader>
-            <DialogTitle>Edit Group</DialogTitle>
+            <DialogTitle>Edit Account</DialogTitle>
           </DialogHeader>
           <div className='space-y-4'>
-            <Label htmlFor='editGroup'>New Group Name</Label>
+            <Label htmlFor='editAccount'>New Account Name</Label>
             <Input
-              id='editGroup'
-              placeholder='Enter new group name'
-              value={editedGroupName}
-              onChange={(e) => setEditedGroupName(e.target.value)}
+              id='editAccount'
+              placeholder='Enter new account name'
+              value={editedAccountName}
+              onChange={(e) => setEditedAccountName(e.target.value)}
             />
           </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant='secondary'>Cancel</Button>
             </DialogClose>
-            <Button onClick={editGroup}>Save Changes</Button>
+            <Button onClick={editAccount}>Save Changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -213,4 +209,4 @@ const Groups = ({ onSelect }: { onSelect: (item: string) => void }) => {
   );
 };
 
-export default Groups;
+export default Accounts;
