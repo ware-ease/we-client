@@ -24,7 +24,7 @@ import {
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';
-import AddAccountDialog from '../../../_components/dialogs/AddAccount';
+import AddAccountDialog from '../../../_components/dialogs/AddAccountDialog';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

@@ -3,10 +3,10 @@
 import { Button } from '@/app/_components/shadcn-base/Button';
 import { List, Users } from 'lucide-react';
 import { useState } from 'react';
-import Accounts from '../account/page';
-import Groups from '../groups/page';
+import Accounts from './Accounts';
 import { columns } from './Columns';
 import { DataTable } from './DataTable';
+import Groups from './Gourps';
 
 const data = [
   {
@@ -34,7 +34,7 @@ const Permissions = () => {
   const [selectedItem, setSelectedItem] = useState('');
 
   return (
-    <div className='flex h-screen p-6 bg-gray-100'>
+    <div className='flex p-6 bg-gray-100'>
       <div className='w-1/4 bg-white shadow-lg rounded-lg p-4'>
         <div className='flex gap-2 mb-4'>
           <Button

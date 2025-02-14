@@ -65,8 +65,8 @@ export function DataTable<TData extends { page: string }, TValue>({
         <div className='flex p-5 border-b-[1px] w-full justify-between'>
           <div className='flex w-[50%]'>
             <Input
-              className='w-1/3 mr-4'
-              placeholder='Search...'
+              className='w-2/4 mr-4'
+              placeholder='Search permissions...'
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
             />
