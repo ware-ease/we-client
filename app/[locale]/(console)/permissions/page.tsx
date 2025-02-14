@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Accounts from './Accounts';
 import { columns } from './Columns';
 import { DataTable } from './DataTable';
-import Groups from './Gourps';
+import Groups from './Groups';
 
 const data = [
   {

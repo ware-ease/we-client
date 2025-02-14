@@ -115,7 +115,7 @@ const Accounts = ({ onSelect }: { onSelect: (item: string) => void }) => {
           </DialogContent>
         </Dialog>
       </div>
-      <ScrollArea className='h-[575px]'>
+      <ScrollArea className='h-full'>
         {filteredAccounts.map((account) => (
           <div
             key={account}

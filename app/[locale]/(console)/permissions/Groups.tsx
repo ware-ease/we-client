@@ -79,7 +79,7 @@ const Groups = ({ onSelect }: { onSelect: (item: string) => void }) => {
   };
 
   return (
-    <div>
+    <div className='overflow-y'>
       <div className='flex items-center gap-2 mb-4'>
         <Input
           placeholder='Search groups...'
@@ -105,7 +105,7 @@ const Groups = ({ onSelect }: { onSelect: (item: string) => void }) => {
           <Plus className='h-5 w-5' />
         </Button>
       </div>
-      <ScrollArea className='h-[575px]'>
+      <ScrollArea className='h-full'>
         {filteredGroups.map((group) => (
           <div
             key={group}
