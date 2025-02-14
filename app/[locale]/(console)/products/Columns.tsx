@@ -4,29 +4,39 @@ import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Product>[] = [
   {
-    accessorKey: 'status',
-    header: 'Status',
+    accessorKey: 'id',
+    header: 'ID',
     sortingFn: 'text',
   },
   {
-    accessorKey: 'email',
-    header: 'Email',
-    enableSorting: false,
+    accessorKey: 'sku',
+    header: 'SKU',
+    sortingFn: 'text',
   },
   {
-    accessorKey: 'amount',
-    header: 'Amount',
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('amount'));
-      const formatted = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(amount);
-
-      return <div className='font-medium'>{formatted}</div>;
-    },
-    sortingFn: 'alphanumeric',
-    sortDescFirst: false,
+    accessorKey: 'name',
+    header: 'Name',
+    sortingFn: 'text',
+  },
+  {
+    accessorKey: 'description',
+    header: 'Description',
+    sortingFn: 'text',
+  },
+  {
+    accessorKey: 'category',
+    header: 'Category',
+    sortingFn: 'text',
+  },
+  {
+    accessorKey: 'types',
+    header: 'Types',
+    sortingFn: 'text',
+  },
+  {
+    accessorKey: 'status',
+    header: 'Status',
+    sortingFn: 'text',
   },
   {
     accessorKey: 'actions',

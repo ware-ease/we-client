@@ -24,6 +24,7 @@ import {
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';
+import AddProductDialog from '@/app/_components/dialogs/AddProductDialog';
 // import AddAccountDialog from './AddAccount';
 
 interface DataTableProps<TData, TValue> {
@@ -65,7 +66,7 @@ export function DataTable<TData, TValue>({
             </Button>
           </div>
           <div className='flex w-[50%] justify-end'>
-            {/* <AddAccountDialog /> */}
+            <AddProductDialog />
           </div>
         </div>
         <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>
