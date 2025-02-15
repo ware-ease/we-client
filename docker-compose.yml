@@ -8,6 +8,5 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
-      HOST: 0.0.0.0
     ports:
       - 3000:3000
