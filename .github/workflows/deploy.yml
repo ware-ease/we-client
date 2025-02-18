@@ -13,4 +13,4 @@ jobs:
     steps:
     - name: Send POST request to webhook
       run: |
-        curl -X POST "${{ secrets.WEBHOOK_URL }}"
+        curl -X POST "${{ secrets.WEBHOOK_URL }}" -k
