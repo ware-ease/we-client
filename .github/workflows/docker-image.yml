@@ -19,6 +19,12 @@ jobs:
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Setup .env file
+      run: |
+        echo "NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}" >> .env.local
+        echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> .env.local
+        echo "NEXT_PUBLIC_CLOUDINARY_URL=${{ secrets.NEXT_PUBLIC_CLOUDINARY_URL }}" >> .env.local
     
     - name: Build the Docker image
       uses: docker/build-push-action@v4
