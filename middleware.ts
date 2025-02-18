@@ -1,8 +1,27 @@
 import createMiddleware from 'next-intl/middleware';
 // import { NextRequest, NextResponse } from 'next/server';
 import { routing } from './i18n/routing';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 export default createMiddleware(routing);
+
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  if (pathname === '/' || pathname === '/vi') {
+    const url = req.nextUrl.clone();
+    url.pathname = '/vi/login';
+    return NextResponse.redirect(url);
+  }
+  if (pathname === '/en') {
+    const url = req.nextUrl.clone();
+    url.pathname = '/en/login';
+    return NextResponse.redirect(url);
+  }
+
+  return NextResponse.next();
+}
 
 // const publicRoutes = ['/login'];
 
@@ -49,6 +68,8 @@ export default createMiddleware(routing);
 //     return NextResponse.redirect(new URL('/login', req.url));
 //   }
 // }
+
+// TODO: If have token and access "/", "/en", "/vi", "/login" then redirect to home page.
 
 export const config = {
   matcher: ['/', '/(vi|en)/:path*'], // Keep your internationalized routes
