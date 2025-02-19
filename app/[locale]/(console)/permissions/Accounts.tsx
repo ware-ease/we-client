@@ -29,8 +29,15 @@ const Accounts = ({ onSelect }: { onSelect: (item: string) => void }) => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   useEffect(() => {
-    setAccounts(['john.doe', 'jane.smith', 'admin', 'guest']);
+    setAccounts(['admin', 'john.doe', 'jane.smith', 'guest']);
   }, []);
+
+  useEffect(() => {
+    if (accounts.length > 0) {
+      setSelectedAccount(accounts[0]);
+      onSelect(accounts[0]);
+    }
+  }, [accounts]);
 
   const filteredAccounts = accounts
     .filter((item) => item.toLowerCase().includes(searchQuery.toLowerCase()))
