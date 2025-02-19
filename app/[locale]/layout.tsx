@@ -5,6 +5,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import ReactQueryProvider from '@/app/_components/providers/ReactQueryProvider';
 import { Inter } from 'next/font/google';
+import { ToastContainer } from 'react-toastify';
 // import { Roboto } from 'next/font/google';
 import '../globals.css';
 
@@ -40,6 +41,7 @@ export default async function RootLayout({
       <body>
         <ReactQueryProvider>
           <NextIntlClientProvider messages={messages}>
+            <ToastContainer />
             {children}
           </NextIntlClientProvider>
         </ReactQueryProvider>

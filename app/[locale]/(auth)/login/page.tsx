@@ -18,7 +18,8 @@ const Login = () => {
 
   const loginMutation = useMutation({
     mutationFn: (loginCredentials: unknown) => {
-      return login(loginCredentials);
+      const res = login(loginCredentials);
+      return res;
     },
     onSuccess: () => {
       toast.success(t('Toast.success'), {

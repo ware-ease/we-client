@@ -2,7 +2,6 @@
 import axios from 'axios';
 
 export const baseUrl = process.env.NEXT_PUBLIC_API_URL;
-console.log(baseUrl);
 
 export const axiosGet = (path: string, config: any) =>
   axios.get(baseUrl + path, config);
