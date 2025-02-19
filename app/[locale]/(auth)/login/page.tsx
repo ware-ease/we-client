@@ -3,11 +3,11 @@ import { Button } from '@/app/_components/shadcn-base/Button';
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import React, { useState } from 'react';
 import LanguageSelector from '@/app/_components/LanguageSelector';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import { login } from '@/lib/services/authService';
 
 const Login = () => {
   const t = useTranslations();
@@ -18,11 +18,7 @@ const Login = () => {
 
   const loginMutation = useMutation({
     mutationFn: (loginCredentials: unknown) => {
-      return axios({
-        method: 'post',
-        url: 'https://dummyjson.com/auth/login',
-        data: loginCredentials,
-      });
+      return login(loginCredentials);
     },
     onSuccess: () => {
       toast.success(t('Toast.success'), {

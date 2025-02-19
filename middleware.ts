@@ -4,9 +4,10 @@ import { routing } from './i18n/routing';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export default createMiddleware(routing);
-
 export function middleware(req: NextRequest) {
+  const intlMiddleware = createMiddleware(routing);
+  const response = intlMiddleware(req);
+
   const { pathname } = req.nextUrl;
 
   if (pathname === '/' || pathname === '/vi') {
@@ -20,15 +21,13 @@ export function middleware(req: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  return NextResponse.next();
+  return response;
 }
 
 // const publicRoutes = ['/login'];
 
 // export default async function middleware(req: NextRequest) {
 // Run next-intl middleware first (for localization)
-// const intlMiddleware = createMiddleware(routing);
-// const response = intlMiddleware(req);
 
 // const pathname = req.nextUrl.pathname;
 // const token = req.cookies.get('accessToken')?.value;

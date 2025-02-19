@@ -1,11 +1,24 @@
 import { routing } from '@/i18n/routing';
+import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import ReactQueryProvider from '@/app/_components/providers/ReactQueryProvider';
-import { ToastContainer } from 'react-toastify';
+import { Inter } from 'next/font/google';
+// import { Roboto } from 'next/font/google';
+import '../globals.css';
 
-export default async function LocaleLayout({
+export const metadata: Metadata = {
+  title: 'WareEase',
+};
+
+const inter = Inter({ subsets: ['vietnamese'] });
+// const roboto = Roboto({
+//   weight: '400',
+//   subsets: ['latin'],
+// });
+
+export default async function RootLayout({
   children,
   params,
 }: {
@@ -20,16 +33,17 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
   const messages = await getMessages();
 
   return (
-    <ReactQueryProvider>
-      <NextIntlClientProvider messages={messages}>
-        <ToastContainer />
-        {children}
-      </NextIntlClientProvider>
-    </ReactQueryProvider>
+    <html lang={locale} className={inter.className}>
+      <body>
+        <ReactQueryProvider>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </ReactQueryProvider>
+      </body>
+    </html>
   );
 }
