@@ -4,7 +4,6 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import ReactQueryProvider from '@/app/_components/providers/ReactQueryProvider';
-import { Inter } from 'next/font/google';
 import { ToastContainer } from 'react-toastify';
 // import { Roboto } from 'next/font/google';
 import '../globals.css';
@@ -13,13 +12,7 @@ export const metadata: Metadata = {
   title: 'WareEase',
 };
 
-const inter = Inter({ subsets: ['vietnamese'] });
-// const roboto = Roboto({
-//   weight: '400',
-//   subsets: ['latin'],
-// });
-
-export default async function RootLayout({
+export default async function NotRootLayout({
   children,
   params,
 }: {
@@ -37,15 +30,11 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={inter.className}>
-      <body>
-        <ReactQueryProvider>
-          <NextIntlClientProvider messages={messages}>
-            <ToastContainer />
-            {children}
-          </NextIntlClientProvider>
-        </ReactQueryProvider>
-      </body>
-    </html>
+    <ReactQueryProvider>
+      <NextIntlClientProvider messages={messages}>
+        <ToastContainer />
+        {children}
+      </NextIntlClientProvider>
+    </ReactQueryProvider>
   );
 }

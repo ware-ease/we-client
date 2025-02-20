@@ -10,6 +10,7 @@ import {
   Settings,
   // UserRoundPen,
   UsersRound,
+  Warehouse,
   // Warehouse,
 } from 'lucide-react';
 import {
@@ -58,11 +59,11 @@ export function AppSidebar() {
     //   url: '/customers',
     //   icon: UsersRound,
     // },
-    // {
-    //   title: t('Sidebar.warehouses'),
-    //   url: '/warehouses',
-    //   icon: Warehouse,
-    // },
+    {
+      title: t('Sidebar.warehouses'),
+      url: '/warehouses',
+      icon: Warehouse,
+    },
     // {
     //   title: t('Sidebar.warehouse'),
     //   url: '/warehouse',

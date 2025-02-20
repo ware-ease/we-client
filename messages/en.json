@@ -117,5 +117,10 @@
     "inventoryTitle": "Manage stock quantity and conditions",
     "report": "Warehouse Report",
     "reportTitle": "View summary reports of warehouse status"
+  },
+  "404": {
+    "title": "How did you get here...",
+    "description": "This page isn't exist, or you don't have permission to see it. Let's go",
+    "back": "back!"
   }
 }

@@ -117,5 +117,10 @@
     "inventoryTitle": "Quản lý số lượng và tình trạng hàng tồn kho",
     "report": "Báo cáo kho",
     "reportTitle": "Xem báo cáo tổng quan về tình trạng kho hàng"
+  },
+  "404": {
+    "title": "Sao bạn lại ở đây...",
+    "description": "Trang này không tồn tại hoặc bạn không có quyền xem nó. Hãy quay",
+    "back": "về nhé!"
   }
 }
