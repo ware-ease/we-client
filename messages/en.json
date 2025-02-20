@@ -51,6 +51,9 @@
   "Products": {
     "title": "Products Management"
   },
+  "Warehouses": {
+    "title": "Warehouses Management"
+  },
   "Settings": {
     "title": "Settings",
     "account": "Account",

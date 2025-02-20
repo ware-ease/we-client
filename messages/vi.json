@@ -51,6 +51,9 @@
   "Products": {
     "title": "Quản lý sản phẩm"
   },
+  "Warehouses": {
+    "title": "Quản lý kho"
+  },
   "Settings": {
     "title": "Cài đặt",
     "account": "Tài khoản",

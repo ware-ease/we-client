@@ -8,6 +8,7 @@ import LanguageSelector from '@/app/_components/LanguageSelector';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { login } from '@/lib/services/authService';
+import { LoginRequest } from '@/lib/types/request/login';
 
 const Login = () => {
   const t = useTranslations();
@@ -17,7 +18,7 @@ const Login = () => {
   const [password, setPassword] = useState<string>('');
 
   const loginMutation = useMutation({
-    mutationFn: (loginCredentials: unknown) => {
+    mutationFn: (loginCredentials: LoginRequest) => {
       const res = login(loginCredentials);
       return res;
     },
