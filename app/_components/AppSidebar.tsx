@@ -31,25 +31,37 @@ export function AppSidebar() {
   const pathname = usePathname();
   const t = useTranslations();
 
+  const ensureUniquePath = (base: string, page: string) => {
+    suffixList.forEach((suffix) => {
+      if (base.includes(suffix)) {
+        base = base.substring(0, base.length - suffix.length);
+      }
+    });
+
+    return base.slice(3) + page;
+  };
+
+  const suffixList = ['/dashboard', '/goods', '/receipt', '/issue'];
+
   const warehouseItems = [
     {
       title: t('Sidebar.dashboard'),
-      url: `${pathname.slice(3)}/dashboard`,
+      url: ensureUniquePath(pathname, '/dashboard'),
       icon: LayoutDashboardIcon,
     },
     {
       title: t('Sidebar.goods'),
-      url: `${pathname.slice(3)}/goods`,
+      url: ensureUniquePath(pathname, '/goods'),
       icon: Boxes,
     },
     {
       title: t('Sidebar.import'),
-      url: `${pathname.slice(3)}/receipt`,
+      url: ensureUniquePath(pathname, '/receipt'),
       icon: PackagePlus,
     },
     {
       title: t('Sidebar.export'),
-      url: `${pathname.slice(3)}/issue`,
+      url: ensureUniquePath(pathname, '/issue'),
       icon: PackageMinus,
     },
   ];
