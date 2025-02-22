@@ -13,7 +13,7 @@ import React from 'react';
 
 const WarehouseCard = () => {
   return (
-    <div className='flex border rounded-md hover:border-primary hover:cursor-pointer p-4'>
+    <div className='flex border rounded-md hover:border-primary hover:cursor-pointer p-4 bg-slate-50'>
       <div className='flex px-2'>
         <Warehouse size={72} />
       </div>

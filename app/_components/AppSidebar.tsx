@@ -4,14 +4,12 @@ import {
   Home,
   LayoutDashboardIcon,
   LogOut,
-  // PackageMinus,
+  PackageMinus,
   PackageOpen,
-  // PackagePlus,
+  PackagePlus,
   Settings,
-  // UserRoundPen,
   UsersRound,
   Warehouse,
-  // Warehouse,
 } from 'lucide-react';
 import {
   Sidebar,
@@ -32,6 +30,29 @@ export function AppSidebar() {
   const lang = useCurrentLanguage();
   const pathname = usePathname();
   const t = useTranslations();
+
+  const warehouseItems = [
+    {
+      title: t('Sidebar.dashboard'),
+      url: `${pathname.slice(3)}/dashboard`,
+      icon: LayoutDashboardIcon,
+    },
+    {
+      title: t('Sidebar.goods'),
+      url: `${pathname.slice(3)}/goods`,
+      icon: Boxes,
+    },
+    {
+      title: t('Sidebar.import'),
+      url: `${pathname.slice(3)}/receipt`,
+      icon: PackagePlus,
+    },
+    {
+      title: t('Sidebar.export'),
+      url: `${pathname.slice(3)}/issue`,
+      icon: PackageMinus,
+    },
+  ];
 
   const items = [
     {
@@ -129,22 +150,55 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => {
-                const isActive = pathname.slice(3) === item.url;
-                return (
-                  <SidebarMenuItem className='my-2' key={item.title}>
-                    <Link href={item.url} locale={lang}>
-                      <SidebarMenuButton
-                        isActive={isActive}
-                        className='flex items-center space-x-2 px-4'
-                      >
-                        <item.icon className='size-4' />
-                        <span className='text-md'>{item.title}</span>
+              {pathname.slice(3).includes('/warehouses/') ? (
+                <div className='flex flex-col'>
+                  <SidebarMenuItem className='my-2'>
+                    <Link href='/home' locale={lang}>
+                      <SidebarMenuButton className='flex items-center space-x-2 px-4'>
+                        <Home className='size-4' />
+                        <span className='text-md'>{t('Home.home')}</span>
                       </SidebarMenuButton>
                     </Link>
                   </SidebarMenuItem>
-                );
-              })}
+                  <div className='p-2'>
+                    <div className='p-1 px-3 bg-black rounded-lg overflow-auto max-h-[55vh]'>
+                      {warehouseItems.map((item, index) => {
+                        const isActive = pathname.slice(3).includes(item.url);
+                        return (
+                          <SidebarMenuItem className='my-2' key={index}>
+                            <Link href={item.url} locale={lang}>
+                              <SidebarMenuButton
+                                isActive={isActive}
+                                className='flex items-center space-x-2 px-4 hover:bg-gray-900'
+                              >
+                                <item.icon className='size-4' />
+                                <span className='text-md'>{item.title}</span>
+                              </SidebarMenuButton>
+                            </Link>
+                          </SidebarMenuItem>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                items.map((item, index) => {
+                  const isActive = pathname.slice(3).includes(item.url);
+                  return (
+                    <SidebarMenuItem className='my-2' key={index}>
+                      <Link href={item.url} locale={lang}>
+                        <SidebarMenuButton
+                          isActive={isActive}
+                          className='flex items-center space-x-2 px-4'
+                        >
+                          <item.icon className='size-4' />
+                          <span className='text-md'>{item.title}</span>
+                        </SidebarMenuButton>
+                      </Link>
+                    </SidebarMenuItem>
+                  );
+                })
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
