@@ -24,7 +24,7 @@ import {
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';
-import AddReceiptDialog from '@/app/_components/dialogs/add-receipt/AddReceiptDialog';
+import { Link, usePathname } from '@/i18n/routing';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -36,6 +36,8 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  const pathname = usePathname();
 
   const table = useReactTable({
     data,
@@ -65,7 +67,7 @@ export function DataTable<TData, TValue>({
             </Button>
           </div>
           <div className='flex w-[50%] justify-end'>
-            <AddReceiptDialog />
+            <Link href={`${pathname}/create`}>Thêm</Link>
           </div>
         </div>
         <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>

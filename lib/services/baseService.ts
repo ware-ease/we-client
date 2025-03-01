@@ -3,11 +3,16 @@ import axios from 'axios';
 
 export const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
+const axiosInstance = axios.create({
+  baseURL: baseUrl,
+  withCredentials: true,
+});
+
 export const axiosGet = (path: string, config: any) =>
-  axios.get(baseUrl + path, config);
+  axiosInstance.get(baseUrl + path, config);
 
 export const axiosPost = (path: string, data: any, config: any) =>
-  axios.post(baseUrl + path, data, config);
+  axiosInstance.post(baseUrl + path, data, config);
 
 export const axiosDelete = (path: string, config: any) =>
-  axios.delete(baseUrl + path, config);
+  axiosInstance.delete(baseUrl + path, config);
