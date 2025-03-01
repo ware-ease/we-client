@@ -24,7 +24,7 @@ import {
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';
-import AddReceiptDialog from '@/app/_components/dialogs/add-receipt/AddReceiptDialog';
+import AddAccountDialog from '../../../_components/dialogs/AddAccountDialog';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -65,10 +65,10 @@ export function DataTable<TData, TValue>({
             </Button>
           </div>
           <div className='flex w-[50%] justify-end'>
-            <AddReceiptDialog />
+            <AddAccountDialog />
           </div>
         </div>
-        <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>
+        <div className='overflow-auto min-h-[38vh] max-h-[38vh]'>
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

@@ -10,9 +10,9 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import { Button } from '@/app/_components/shadcn-base/Button';
+// import { Button } from '@/app/_components/shadcn-base/Button';
 import { DataTablePagination } from '@/app/_components/shadcn-base/DataTablePagination';
-import { Input } from '@/app/_components/shadcn-base/Input';
+// import { Input } from '@/app/_components/shadcn-base/Input';
 import {
   Table,
   TableBody,
@@ -21,10 +21,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/app/_components/shadcn-base/Table';
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+// import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';
-import AddReceiptDialog from '@/app/_components/dialogs/add-receipt/AddReceiptDialog';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -57,18 +56,16 @@ export function DataTable<TData, TValue>({
   return (
     <div className='flex flex-col'>
       <div className='flex flex-col rounded-md border'>
-        <div className='flex p-5 border-b-[1px] w-full justify-between'>
-          <div className='flex w-[50%]'>
-            <Input className='w-1/3 mr-4' />
+        {/* <div className='flex p-5 border-b-[1px] w-full justify-between'> */}
+        {/* <div className='flex w-[50%]'> */}
+        {/* <Input className='w-1/3 mr-4' />
             <Button className='w-[16%]'>
               <TranslatedMessage tKey='Management.filter' />
-            </Button>
-          </div>
-          <div className='flex w-[50%] justify-end'>
-            <AddReceiptDialog />
-          </div>
-        </div>
-        <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>
+            </Button> */}
+        {/* </div> */}
+        {/* <div className='flex w-[50%] justify-end'></div> */}
+        {/* </div> */}
+        <div className='overflow-auto min-h-[45vh] max-h-[45vh]'>
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

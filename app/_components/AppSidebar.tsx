@@ -32,6 +32,12 @@ export function AppSidebar() {
   const t = useTranslations();
 
   const ensureUniquePath = (base: string, page: string) => {
+    crudSuffix.forEach((crudSuffix) => {
+      if (base.includes(crudSuffix)) {
+        base = base.substring(0, base.length - 7);
+      }
+    });
+
     suffixList.forEach((suffix) => {
       if (base.includes(suffix)) {
         base = base.substring(0, base.length - suffix.length);
@@ -42,6 +48,8 @@ export function AppSidebar() {
   };
 
   const suffixList = ['/dashboard', '/goods', '/receipt', '/issue'];
+
+  const crudSuffix = ['/create', '/update', '/delete'];
 
   const warehouseItems = [
     {
