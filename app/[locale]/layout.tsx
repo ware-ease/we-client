@@ -7,6 +7,7 @@ import ReactQueryProvider from '@/app/_components/providers/ReactQueryProvider';
 import { ToastContainer } from 'react-toastify';
 // import { Roboto } from 'next/font/google';
 import '../globals.css';
+import { AuthProvider } from '../_components/providers/AuthProvider';
 
 export const metadata: Metadata = {
   title: 'WareEase',
@@ -31,10 +32,12 @@ export default async function NotRootLayout({
 
   return (
     <ReactQueryProvider>
-      <NextIntlClientProvider messages={messages}>
-        <ToastContainer />
-        {children}
-      </NextIntlClientProvider>
+      <AuthProvider>
+        <NextIntlClientProvider messages={messages}>
+          <ToastContainer />
+          {children}
+        </NextIntlClientProvider>
+      </AuthProvider>
     </ReactQueryProvider>
   );
 }

@@ -5,7 +5,7 @@ export const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 const axiosInstance = axios.create({
   baseURL: baseUrl,
-  withCredentials: true,
+  // withCredentials: true,
 });
 
 export const axiosGet = (path: string, config: any) =>

@@ -13,7 +13,7 @@ const inter = Inter({ subsets: ['vietnamese'] });
 //   subsets: ['latin'],
 // });
 
-export default async function NotRootLayout({
+export default async function RootLayout({
   children,
   params,
 }: {
