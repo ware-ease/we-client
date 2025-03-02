@@ -16,6 +16,7 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -46,6 +47,10 @@ export function AppSidebar() {
 
     return base.slice(3) + page;
   };
+
+  // Extract warehouse ID from pathname
+  const pathSegments = pathname.split('/');
+  const warehouseId = pathSegments[3];
 
   const suffixList = ['/dashboard', '/goods', '/receipt', '/issue'];
 
@@ -167,11 +172,12 @@ export function AppSidebar() {
           scrollbarColor: 'hsl(212, 18%, 20%) transparent',
         }}
       >
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {pathname.slice(3).includes('/warehouses/') ? (
-                <div className='flex flex-col'>
+        {pathname.slice(3).includes('/warehouses/') ? (
+          <>
+            {/* Main Home Section */}
+            <SidebarGroup>
+              <SidebarGroupContent>
+                <SidebarMenu>
                   <SidebarMenuItem className='my-2'>
                     <Link href='/home' locale={lang}>
                       <SidebarMenuButton className='flex items-center space-x-2 px-4'>
@@ -180,29 +186,42 @@ export function AppSidebar() {
                       </SidebarMenuButton>
                     </Link>
                   </SidebarMenuItem>
-                  <div className='p-2'>
-                    <div className='p-1 px-3 bg-black rounded-lg overflow-auto max-h-[55vh]'>
-                      {warehouseItems.map((item, index) => {
-                        const isActive = pathname.slice(3).includes(item.url);
-                        return (
-                          <SidebarMenuItem className='my-2' key={index}>
-                            <Link href={item.url} locale={lang}>
-                              <SidebarMenuButton
-                                isActive={isActive}
-                                className='flex items-center space-x-2 px-4 hover:bg-gray-900'
-                              >
-                                <item.icon className='size-4' />
-                                <span className='text-md'>{item.title}</span>
-                              </SidebarMenuButton>
-                            </Link>
-                          </SidebarMenuItem>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                items.map((item, index) => {
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+
+            {/* Warehouse Section */}
+            <SidebarGroup>
+              <SidebarGroupLabel className='text-white'>
+                {warehouseId}
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {warehouseItems.map((item, index) => {
+                    const isActive = pathname.slice(3).includes(item.url);
+                    return (
+                      <SidebarMenuItem className='my-2' key={index}>
+                        <Link href={item.url} locale={lang}>
+                          <SidebarMenuButton
+                            isActive={isActive}
+                            className='flex items-center space-x-2 px-4 hover:bg-gray-900'
+                          >
+                            <item.icon className='size-4' />
+                            <span className='text-md'>{item.title}</span>
+                          </SidebarMenuButton>
+                        </Link>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
+        ) : (
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {items.map((item, index) => {
                   const isActive = pathname.slice(3).includes(item.url);
                   return (
                     <SidebarMenuItem className='my-2' key={index}>
@@ -217,11 +236,11 @@ export function AppSidebar() {
                       </Link>
                     </SidebarMenuItem>
                   );
-                })
-              )}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
       <SidebarGroup className='mb-4'>
         <SidebarGroupContent>
