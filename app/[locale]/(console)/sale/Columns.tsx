@@ -1,6 +1,7 @@
 'use client';
 
-import { Sale } from '@/lib/types/sale';
+import DetailSaleDialog from '@/app/_components/dialogs/DetailSaleDialog';
+import { Sale, SaleDetail } from '@/lib/types/sale';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Sale>[] = [
@@ -39,8 +40,14 @@ export const columns: ColumnDef<Sale>[] = [
     accessorKey: 'actions',
     header: () => <div className='text-right w-full'>Actions</div>,
     enableSorting: false,
-    cell: () => {
-      return <div className='flex justify-end'>...</div>; // Replace with actual action buttons
+    cell: ({ row }) => {
+      const saleDetail: SaleDetail = { ...row.original, items: [] };
+
+      return (
+        <div className='flex justify-end'>
+          <DetailSaleDialog sale={saleDetail} />
+        </div>
+      );
     },
   },
 ];
