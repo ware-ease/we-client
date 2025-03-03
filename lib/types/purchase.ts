@@ -1,5 +1,6 @@
 export type Purchase = {
   id: string;
+  orderNumber: string;
   supplier: string;
   totalAmount: number;
   date: string;
@@ -8,10 +9,11 @@ export type Purchase = {
 
 export type PurchaseDetail = {
   id: string;
+  orderNumber: string;
   supplier: string;
   totalAmount: number;
-  date: string;
   status: string;
+  date: string;
   items: PurchaseItem[];
 };
 
