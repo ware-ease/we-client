@@ -1,11 +1,10 @@
 'use client';
 
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 import { Supplier } from '@/lib/types/supplier';
 import { columns } from './Columns';
 import { DataTable } from './DataTable';
 
-export const data: Supplier[] = [
+const data: Supplier[] = [
   {
     id: '1',
     name: 'ABC Supplies',
@@ -41,12 +40,21 @@ export const data: Supplier[] = [
 ];
 
 const Suppliers = () => {
+  //   const supplierQuery = useQuery({
+  //     queryKey: ['suppliers'],
+  //     queryFn: async () => {
+  //       const res = getSuppliers();
+  //       return res;
+  //     },
+  //   });
+
   return (
     <div className='flex flex-col max-h-full'>
       <div className='flex flex-col p-4 gap-6 max-h-full'>
         <div className='mb-6'>
           <div className='text-4xl font-semibold text-primary'>
-            <TranslatedMessage tKey='Suppliers' />
+            {/* <TranslatedMessage tKey='Suppliers' /> */}
+            Nhà cung cấp
           </div>
           <div></div>
         </div>
