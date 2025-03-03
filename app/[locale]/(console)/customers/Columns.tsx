@@ -1,13 +1,8 @@
 'use client';
 
+import UpdateCustomerDialog from '@/app/_components/dialogs/UpdateCustomerDialog';
+import { Customer } from '@/lib/types/customer';
 import { ColumnDef } from '@tanstack/react-table';
-
-export type Customer = {
-  id: string;
-  name: string;
-  phone: string;
-  status: boolean;
-};
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -37,10 +32,10 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: 'actions',
     header: () => <div className='text-right w-full'>Actions</div>,
     enableSorting: false,
-    cell: ({}) => {
+    cell: ({ row }) => {
       return (
         <div className='flex justify-end'>
-          {/* <UpdateCustomerDialog customer={row.original} /> */}
+          <UpdateCustomerDialog customer={row.original} />
         </div>
       );
     },

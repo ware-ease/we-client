@@ -19,19 +19,21 @@ import { Edit } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
-import { Account } from '../../[locale]/(console)/accounts/Columns';
+
+interface Account {
+  userName?: string;
+  password?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  address?: string;
+  sex?: 'male' | 'female';
+  nationality?: string;
+}
 
 type UpdateAccountDialogProps = {
-  account: Account & {
-    userName?: string;
-    password?: string;
-    firstName?: string;
-    lastName?: string;
-    phone?: string;
-    address?: string;
-    sex?: 'male' | 'female';
-    nationality?: string;
-  };
+  account: Account;
 };
 
 const UpdateAccountDialog: React.FC<UpdateAccountDialogProps> = ({
@@ -203,7 +205,7 @@ const UpdateAccountDialog: React.FC<UpdateAccountDialogProps> = ({
               </Button>
             </DialogClose>
             <Button
-              className='px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600'
+              className='px-4 py-2 rounded-lg'
               onClick={handleUpdateClick}
             >
               {t('Dialog.yes.update')}

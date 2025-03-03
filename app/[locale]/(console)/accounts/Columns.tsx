@@ -1,15 +1,10 @@
 'use client';
 import UpdateAccountDialog from '@/app/_components/dialogs/UpdateAccountDialog';
+import { Account } from '@/lib/types/account';
 import { ColumnDef } from '@tanstack/react-table';
 
 // This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Account = {
-  id: string;
-  amount: number;
-  status: 'pending' | 'processing' | 'success' | 'failed';
-  email: string;
-};
+// You can use a Zod schema here if you want
 
 export const columns: ColumnDef<Account>[] = [
   {
