@@ -48,6 +48,9 @@
   "Accounts": {
     "title": "Quản lý tài khoản"
   },
+  "Customers": {
+    "title": "Quản lý khách hàng"
+  },
   "Products": {
     "title": "Quản lý sản phẩm"
   },
