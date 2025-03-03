@@ -1,33 +1,41 @@
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
-import { Customer, columns } from './Columns';
+import { Customer } from '@/lib/types/customer';
+import { columns } from './Columns';
 import { DataTable } from './DataTable';
 
 async function getData(): Promise<Customer[]> {
-  // Dữ liệu mẫu, sau này có thể thay bằng API call.
   return [
     {
       id: '1',
       name: 'John Doe',
+      email: 'johndoe@example.com',
       phone: '123-456-7890',
-      status: true,
+      address: '123 Main St, New York, NY',
+      status: 'active',
     },
     {
       id: '2',
       name: 'Jane Smith',
+      email: 'janesmith@example.com',
       phone: '098-765-4321',
-      status: false,
+      address: '456 Oak St, Los Angeles, CA',
+      status: 'inactive',
     },
     {
       id: '3',
       name: 'Alice Brown',
+      email: 'alicebrown@example.com',
       phone: '555-123-4567',
-      status: true,
+      address: '789 Maple St, Chicago, IL',
+      status: 'active',
     },
     {
       id: '4',
       name: 'Bob Johnson',
+      email: 'bobjohnson@example.com',
       phone: '444-987-6543',
-      status: false,
+      address: '101 Pine St, Houston, TX',
+      status: 'banned',
     },
   ];
 }

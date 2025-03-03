@@ -1,6 +1,7 @@
-import { Account, columns } from './Columns';
-import { DataTable } from './DataTable';
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { Account } from '@/lib/types/account';
+import { columns } from './Columns';
+import { DataTable } from './DataTable';
 
 async function getData(): Promise<Account[]> {
   // Fetch data from your API here.
