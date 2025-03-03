@@ -7,19 +7,20 @@ import React, { useState } from 'react';
 import LanguageSelector from '@/app/_components/LanguageSelector';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { login } from '@/lib/services/authService';
 import { LoginRequest } from '@/lib/types/request/login';
+import { useAuth } from '@/app/_components/providers/AuthProvider';
 
 const Login = () => {
   const t = useTranslations();
   const router = useRouter();
+  const { handleLogin } = useAuth();
 
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const loginMutation = useMutation({
     mutationFn: (loginCredentials: LoginRequest) => {
-      const res = login(loginCredentials);
+      const res = handleLogin(loginCredentials);
       return res;
     },
     onSuccess: () => {

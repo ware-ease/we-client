@@ -10,16 +10,18 @@ import {
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { useCurrentLanguage } from '@/lib/hooks/useCurrentLanguage';
+import { useAuth } from './providers/AuthProvider';
 
 const AvatarButton = () => {
   const lang = useCurrentLanguage();
   const t = useTranslations();
+  const { currentUser } = useAuth();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='outline-none hover:opacity-90 px-2 rounded-full'>
         <Avatar className='h-9 w-9 select-none'>
-          <AvatarImage src='https://github.com/shadcn.png' />
+          <AvatarImage src={currentUser?.avatarUrl} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
