@@ -1,6 +1,7 @@
 'use client';
 
-import { Purchase } from '@/lib/types/purchase';
+import DetailPurchaseDialog from '@/app/_components/dialogs/DetailPurchaseDialog';
+import { Purchase, PurchaseDetail } from '@/lib/types/purchase';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Purchase>[] = [
@@ -44,8 +45,14 @@ export const columns: ColumnDef<Purchase>[] = [
     accessorKey: 'actions',
     header: () => <div className='text-right w-full'>Actions</div>,
     enableSorting: false,
-    cell: () => {
-      return <div className='flex justify-end'>...</div>;
+    cell: ({ row }) => {
+      const purchaseDetail: PurchaseDetail = { ...row.original, items: [] };
+
+      return (
+        <div className='flex justify-end'>
+          <DetailPurchaseDialog purchase={purchaseDetail} />
+        </div>
+      );
     },
   },
 ];

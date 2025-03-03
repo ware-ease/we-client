@@ -66,7 +66,7 @@ const AddSaleDialog = () => {
       >
         <DialogHeader>
           <DialogTitle className='text-xl font-semibold text-gray-800'>
-            {t('saleCreate')}
+            {t('Sales.saleCreate')}
           </DialogTitle>
         </DialogHeader>
         <div className='grid grid-cols-2 gap-6'>

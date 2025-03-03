@@ -48,6 +48,9 @@
   "Accounts": {
     "title": "Accounts Management"
   },
+  "Customers": {
+    "title": "Customers Management"
+  },
   "Products": {
     "title": "Products Management"
   },
