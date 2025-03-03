@@ -29,7 +29,7 @@ interface DataTableProps<TData, TValue> {
 
 export function DataTable<TData extends { page: string }, TValue>({
   columns,
-  data,
+  data = [],
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [filterText, setFilterText] = useState('');
