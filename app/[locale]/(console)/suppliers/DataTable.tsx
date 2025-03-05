@@ -10,6 +10,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
+import AddSupplierDialog from '@/app/_components/dialogs/AddSupplierDialog';
 import { Button } from '@/app/_components/shadcn-base/Button';
 import { DataTablePagination } from '@/app/_components/shadcn-base/DataTablePagination';
 import { Input } from '@/app/_components/shadcn-base/Input';
@@ -64,7 +65,7 @@ export function DataTable<TData, TValue>({
             </Button>
           </div>
           <div className='flex w-[50%] justify-end'>
-            {/* <AddProductDialog /> */}
+            <AddSupplierDialog />
           </div>
         </div>
         <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>

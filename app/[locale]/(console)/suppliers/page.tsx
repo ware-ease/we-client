@@ -1,8 +1,8 @@
 'use client';
+import { getSuppliers } from '@/lib/services/supplierService';
+import { useQuery } from '@tanstack/react-query';
 import { columns } from './Columns';
 import { DataTable } from './DataTable';
-import { useQuery } from '@tanstack/react-query';
-import { getSuppliers } from '@/lib/services/supplierService';
 
 const Suppliers = () => {
   const { data } = useQuery({
