@@ -11,10 +11,6 @@ import {
 } from '@/app/_components/shadcn-base/Dialog';
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { Label } from '@/app/_components/shadcn-base/Label';
-import {
-  RadioGroup,
-  RadioGroupItem,
-} from '@/app/_components/shadcn-base/RadioGroup';
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -24,15 +20,12 @@ const AddProductDialog = () => {
   const t = useTranslations();
 
   const [formData, setFormData] = useState({
-    userName: '',
-    password: '',
-    email: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    address: '',
-    sex: 'male',
-    nationality: '',
+    name: '',
+    barcode: '',
+    sku: '',
+    categoryId: '',
+    unitId: '',
+    brandId: '',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,22 +34,13 @@ const AddProductDialog = () => {
   };
 
   const handleSubmit = () => {
-    // Perform validation
-    if (
-      !formData.userName ||
-      !formData.password ||
-      !formData.email ||
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.phone
-    ) {
+    if (!formData.name || !formData.barcode || !formData.sku) {
       toast.error('Please fill in all required fields.');
       return;
     }
 
-    // Submit the form data to your API
-    console.log('Submitted data:', formData);
-    toast.success('Account created successfully!');
+    console.log('Submitted product data:', formData);
+    toast.success('Product created successfully!');
   };
 
   return (
@@ -77,107 +61,87 @@ const AddProductDialog = () => {
       >
         <DialogHeader>
           <DialogTitle className='text-xl font-semibold text-gray-800'>
-            {t('Dialog.title.accountCreate')}
+            {/* {t('Dialog.title.productCreate')} */}
+            Tạo sản phẩm mới
           </DialogTitle>
         </DialogHeader>
         <div className='grid grid-cols-2 gap-6'>
           <div>
-            <Label htmlFor='userName'>{t('Login.username')}</Label>
+            <Label htmlFor='name'>
+              {/* {t('Product.name')} */}
+              Tên sản phẩm
+            </Label>
             <Input
-              id='userName'
-              name='userName'
-              value={formData.userName}
+              id='name'
+              name='name'
+              value={formData.name}
               onChange={handleInputChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor='password'>{t('Login.password')}</Label>
+            <Label htmlFor='barcode'>
+              {/* {t('Product.barcode')} */}
+              Mã vạch
+            </Label>
             <Input
-              id='password'
-              name='password'
-              type='password'
-              value={formData.password}
-              onChange={handleInputChange}
-              disabled
-            />
-          </div>
-          <div>
-            <Label htmlFor='email'>{t('Settings.email')}</Label>
-            <Input
-              id='email'
-              name='email'
-              type='email'
-              value={formData.email}
+              id='barcode'
+              name='barcode'
+              value={formData.barcode}
               onChange={handleInputChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor='firstName'>{t('Settings.firstname')}</Label>
+            <Label htmlFor='sku'>
+              {/* {t('Product.sku')} */}
+              SKU
+            </Label>
             <Input
-              id='firstName'
-              name='firstName'
-              value={formData.firstName}
+              id='sku'
+              name='sku'
+              value={formData.sku}
               onChange={handleInputChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor='lastName'>{t('Settings.lastname')}</Label>
+            <Label htmlFor='categoryId'>
+              {/* {t('Product.category')} */}
+              Danh mục
+            </Label>
             <Input
-              id='lastName'
-              name='lastName'
-              value={formData.lastName}
+              id='categoryId'
+              name='categoryId'
+              value={formData.categoryId}
               onChange={handleInputChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor='phone'>{t('Settings.phone')}</Label>
+            <Label htmlFor='unitId'>
+              {/* {t('Product.unit')} */}
+              Đơn vị đo lường
+            </Label>
             <Input
-              id='phone'
-              name='phone'
-              value={formData.phone}
+              id='unitId'
+              name='unitId'
+              value={formData.unitId}
               onChange={handleInputChange}
               required
             />
           </div>
-          <div className='col-span-2'>
-            <Label htmlFor='address'>{t('Settings.address')}</Label>
-            <Input
-              id='address'
-              name='address'
-              value={formData.address}
-              onChange={handleInputChange}
-            />
-          </div>
           <div>
-            <Label>{t('Settings.sex')}</Label>
-            <RadioGroup
-              className='flex space-x-4'
-              value={formData.sex}
-              onValueChange={(value) =>
-                setFormData({ ...formData, sex: value })
-              }
-            >
-              <div className='flex items-center space-x-2'>
-                <RadioGroupItem value='male' id='male' />
-                <Label htmlFor='male'>{t('Settings.male')}</Label>
-              </div>
-              <div className='flex items-center space-x-2'>
-                <RadioGroupItem value='female' id='female' />
-                <Label htmlFor='female'>{t('Settings.female')}</Label>
-              </div>
-            </RadioGroup>
-          </div>
-          <div>
-            <Label htmlFor='nationality'>{t('Settings.nation')}</Label>
+            <Label htmlFor='brandId'>
+              {/* {t('Product.brand')} */}
+              Hãng
+            </Label>
             <Input
-              id='nationality'
-              name='nationality'
-              value={formData.nationality}
+              id='brandId'
+              name='brandId'
+              value={formData.brandId}
               onChange={handleInputChange}
+              required
             />
           </div>
         </div>
