@@ -12,7 +12,6 @@ export default function Accounts() {
     queryKey: ['accounts'],
     queryFn: getAllAccounts,
   });
-  console.log(data);
 
   if (isLoading) {
     return <p className='text-center text-gray-500'>Loading...</p>;

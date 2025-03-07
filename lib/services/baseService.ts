@@ -14,5 +14,11 @@ export const axiosGet = (path: string, config: any) =>
 export const axiosPost = (path: string, data: any, config: any) =>
   axiosInstance.post(baseUrl + path, data, config);
 
+export const axiosPut = (path: string, data: any, config: any) =>
+  axiosInstance.put(baseUrl + path, data, config);
+
+export const axiosPatch = (path: string, data: any, config: any) =>
+  axiosInstance.patch(baseUrl + path, data, config);
+
 export const axiosDelete = (path: string, config: any) =>
   axiosInstance.delete(baseUrl + path, config);
