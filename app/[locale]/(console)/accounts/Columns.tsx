@@ -1,43 +1,58 @@
-'use client';
 import UpdateAccountDialog from '@/app/_components/dialogs/UpdateAccountDialog';
 import { Account } from '@/lib/types/account';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Account>[] = [
   {
-    accessorKey: 'id',
-    header: 'ID',
+    accessorKey: 'stt',
+    header: 'STT',
+    enableColumnFilter: false,
+    enableSorting: false,
+    cell: ({ row, table }) => {
+      const rowIndex = table
+        .getRowModel()
+        .rows.findIndex((r) => r.id === row.id);
+      return rowIndex + 1;
+    },
   },
   {
     accessorKey: 'username',
     header: 'Username',
+    cell: ({ row }) => row.original.username || 'N/A',
+    filterFn: 'includesString',
   },
   {
     accessorKey: 'email',
     header: 'Email',
+    cell: ({ row }) => row.original.email || 'N/A',
+    filterFn: 'includesString',
   },
   {
-    accessorKey: 'profile.firstName',
+    accessorKey: 'firstName',
     header: 'First Name',
     cell: ({ row }) => row.original.profile?.firstName || 'N/A',
+    filterFn: 'includesString',
   },
   {
-    accessorKey: 'profile.lastName',
+    accessorKey: 'lastName',
     header: 'Last Name',
     cell: ({ row }) => row.original.profile?.lastName || 'N/A',
+    filterFn: 'includesString',
   },
   {
-    accessorKey: 'profile.nationality',
+    accessorKey: 'nationality',
     header: 'Nationality',
     cell: ({ row }) => row.original.profile?.nationality || 'N/A',
+    filterFn: 'includesString',
   },
   {
-    accessorKey: 'profile.phone',
+    accessorKey: 'phone',
     header: 'Phone',
     cell: ({ row }) => row.original.profile?.phone || 'N/A',
+    filterFn: 'includesString',
   },
   {
-    accessorKey: 'profile.sex',
+    accessorKey: 'sex',
     header: 'Sex',
     cell: ({ row }) => {
       const sex = row.original.profile?.sex;
@@ -50,6 +65,12 @@ export const columns: ColumnDef<Account>[] = [
           {sex ? 'Male' : 'Female'}
         </span>
       );
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (filterValue === 'all') return true;
+      return filterValue === 'male'
+        ? row.original.profile?.sex === true
+        : row.original.profile?.sex === false;
     },
   },
 
@@ -67,6 +88,7 @@ export const columns: ColumnDef<Account>[] = [
     accessorKey: 'actions',
     header: () => <div className='text-right w-full'>Actions</div>,
     enableSorting: false,
+    enableColumnFilter: false,
     cell: ({ row }) => (
       <div className='flex justify-end'>
         <UpdateAccountDialog account={row.original} />

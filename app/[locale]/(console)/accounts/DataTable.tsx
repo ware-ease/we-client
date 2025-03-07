@@ -4,6 +4,8 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
@@ -22,6 +24,7 @@ import {
   TableRow,
 } from '@/app/_components/shadcn-base/Table';
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { rankItem } from '@tanstack/match-sorter-utils';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';
 import AddAccountDialog from '../../../_components/dialogs/AddAccountDialog';
@@ -36,6 +39,10 @@ export function DataTable<TData, TValue>({
   data = [],
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = useState<string>('');
+  const [columnFilters, setColumnFilters] = useState<
+    { id: string; value: unknown }[]
+  >([]);
 
   const table = useReactTable({
     data,
@@ -43,24 +50,41 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
     onSortingChange: setSorting,
-    initialState: {
-      pagination: {
-        pageSize: 10, // Fixed page size to exactly 10 rows
-      },
+    // Lọc dữ liệu toàn bộ bảng (Global Filter)
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: (row, columnId, filterValue) => {
+      return rankItem(String(row.getValue(columnId)), filterValue).passed;
     },
+
+    // Lọc dữ liệu theo từng cột (Column Filters)
+    onColumnFiltersChange: setColumnFilters,
     state: {
       sorting,
+      globalFilter,
+      columnFilters,
     },
+
+    // Lọc theo sub-rows nếu có
+    filterFromLeafRows: true,
+    maxLeafRowFilterDepth: 0, // Chỉ lọc dữ liệu cha, không lọc con
   });
 
   return (
     <div className='flex flex-col'>
       <div className='flex flex-col rounded-md border'>
+        {/* Thanh Tìm Kiếm */}
         <div className='flex p-5 border-b-[1px] w-full justify-between'>
           <div className='flex w-[50%]'>
-            <Input className='w-1/3 mr-4' />
-            <Button className='w-[16%]'>
+            <Input
+              className='w-1/3 mr-4'
+              placeholder='Search accounts...'
+              value={globalFilter}
+              onChange={(e) => setGlobalFilter(e.target.value)}
+            />
+            <Button className='w-[16%]' onClick={() => setGlobalFilter('')}>
               <TranslatedMessage tKey='Management.filter' />
             </Button>
           </div>
@@ -68,6 +92,8 @@ export function DataTable<TData, TValue>({
             <AddAccountDialog />
           </div>
         </div>
+
+        {/* Bảng dữ liệu */}
         <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>
           <Table>
             <TableHeader>
@@ -112,6 +138,27 @@ export function DataTable<TData, TValue>({
                             ) : undefined}
                           </div>
                         </div>
+
+                        {/* Ô nhập filter cho từng cột */}
+                        {header.column.getCanFilter() &&
+                        header.column.columnDef.enableColumnFilter !== false ? (
+                          <Input
+                            className='mt-2 w-full'
+                            placeholder={`Filter ${header.column.id}`}
+                            value={
+                              (table
+                                .getState()
+                                .columnFilters.find(
+                                  (f) => f.id === header.column.id
+                                )?.value as string) || ''
+                            }
+                            onChange={(e) =>
+                              table
+                                .getColumn(header.column.id)
+                                ?.setFilterValue(e.target.value)
+                            }
+                          />
+                        ) : null}
                       </TableHead>
                     );
                   })}
@@ -148,6 +195,8 @@ export function DataTable<TData, TValue>({
             </TableBody>
           </Table>
         </div>
+
+        {/* Phân trang */}
         <div className='p-2 border-t-[1px]'>
           <DataTablePagination table={table} />
         </div>
