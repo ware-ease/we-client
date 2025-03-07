@@ -10,7 +10,7 @@ const Dashboard = () => {
       {permissions?.map((p, index) => (
         <div key={index}>{p.key}</div>
       ))}
-      <>{currentUser?.firstName}</>
+      <>{currentUser?.profile.firstName}</>
     </div>
   );
 };

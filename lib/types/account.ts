@@ -7,7 +7,7 @@ export type Profile = {
   address: string;
   sex: boolean;
   nationality: string;
-  avatarUrl: string | null;
+  avatarUrl: string;
 };
 
 export type Group = {
@@ -20,17 +20,8 @@ export type Account = {
   id: string;
   username: string;
   email: string;
-  profile?: Profile;
+  profile: Profile;
   groups: Group[];
   permissions: any[];
   warehouses: any[];
-};
-
-export type User = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  username: string;
-  avatarUrl: string;
 };
