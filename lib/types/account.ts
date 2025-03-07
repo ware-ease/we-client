@@ -1,8 +1,29 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type Profile = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  address: string;
+  sex: boolean;
+  nationality: string;
+  avatarUrl: string | null;
+};
+
+export type Group = {
+  id: string;
+  name: string;
+  permissions: any;
+};
+
 export type Account = {
   id: string;
-  amount: number;
-  status: 'pending' | 'processing' | 'success' | 'failed';
+  username: string;
   email: string;
+  profile?: Profile;
+  groups: Group[];
+  permissions: any[];
+  warehouses: any[];
 };
 
 export type User = {

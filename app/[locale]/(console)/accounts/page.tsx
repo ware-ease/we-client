@@ -1,143 +1,27 @@
+'use client';
+
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
-import { Account } from '@/lib/types/account';
+import { getAllAccounts } from '@/lib/services/accountService';
+import { useQuery } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 import { columns } from './Columns';
 import { DataTable } from './DataTable';
 
-async function getData(): Promise<Account[]> {
-  // Fetch data from your API here.
-  return [
-    {
-      id: '728ed52f',
-      amount: 3,
-      status: 'success',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 7,
-      status: 'success',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 8,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 125,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'success',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'failed',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 90,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'failed',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'failed',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 20,
-      status: 'failed',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 5,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 100,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 70,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    {
-      id: '728ed52f',
-      amount: 20,
-      status: 'pending',
-      email: 'm@example.com',
-    },
-    // ...
-  ];
-}
+export default function Accounts() {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['accounts'],
+    queryFn: getAllAccounts,
+  });
+  console.log(data);
 
-export default async function Accounts() {
-  const data = await getData();
+  if (isLoading) {
+    return <p className='text-center text-gray-500'>Loading...</p>;
+  }
+
+  if (isError) {
+    toast.error('Failed to fetch accounts.');
+    return <p className='text-center text-red-500'>Error loading accounts.</p>;
+  }
 
   return (
     <div className='flex flex-col max-h-full'>
@@ -146,9 +30,8 @@ export default async function Accounts() {
           <div className='text-4xl font-semibold text-primary'>
             <TranslatedMessage tKey='Accounts.title' />
           </div>
-          <div></div>
         </div>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={data!} />
       </div>
     </div>
   );
