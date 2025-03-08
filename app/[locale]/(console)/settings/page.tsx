@@ -25,6 +25,7 @@ import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { ChangeEvent, useState } from 'react';
 import ConfirmDialog from '@/app/_components/ConfirmDialog';
+import ChangePassword from './ChangePassword';
 
 const Settings = () => {
   const t = useTranslations();
@@ -247,45 +248,7 @@ const Settings = () => {
             </div>
           </div>
           <div className='flex border-2 rounded-md w-full'>
-            <div className='flex-col w-full'>
-              <div className='p-4 text-xl text-primary border-b-2'>
-                <div>{t('Settings.account')}</div>
-              </div>
-              <div className='flex px-4'>
-                <div className='p-4 flex flex-col gap-3 w-1/2'>
-                  <div className='flex'>
-                    <div className='flex items-center w-2/5'>
-                      {t('Login.username')}
-                    </div>
-                    <Input className='border-gray-300 w-3/5' />
-                  </div>
-                  <div className='relative h-full w-full'>
-                    <Button className='bg-red-700 hover:bg-red-950 absolute bottom-0 right-0'>
-                      {t('Settings.update')}
-                    </Button>
-                  </div>
-                </div>
-                <div className='p-4 flex flex-col gap-3 w-1/2'>
-                  <div className='flex'>
-                    <div className='flex items-center w-2/5'>
-                      {t('Login.password')}
-                    </div>
-                    <Input className='border-gray-300 w-3/5' />
-                  </div>
-                  <div className='flex'>
-                    <div className='flex items-center w-2/5'>
-                      {t('Settings.confirmPassword')}
-                    </div>
-                    <Input type='password' className='border-gray-300 w-3/5' />
-                  </div>
-                  <div className='w-full text-right'>
-                    <Button className='bg-red-700 hover:bg-red-950'>
-                      {t('Settings.update')}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ChangePassword />
           </div>
         </div>
       </div>
