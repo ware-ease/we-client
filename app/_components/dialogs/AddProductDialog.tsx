@@ -15,15 +15,17 @@ import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import ProductTypeComboBox from '../combo-boxes/ProductTypeComboBox';
+import BrandComboBox from '../combo-boxes/BrandComboBox';
+import UnitComboBox from '../combo-boxes/UnitComboBox';
 
 const AddProductDialog = () => {
   const t = useTranslations();
 
   const [formData, setFormData] = useState({
     name: '',
-    barcode: '',
     sku: '',
-    categoryId: '',
+    productTypeId: '',
     unitId: '',
     brandId: '',
   });
@@ -33,12 +35,11 @@ const AddProductDialog = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
-    if (!formData.name || !formData.barcode || !formData.sku) {
-      toast.error('Please fill in all required fields.');
-      return;
-    }
+  const handleSelectChange = (value: string, name: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
+  const handleSubmit = () => {
     console.log('Submitted product data:', formData);
     toast.success('Product created successfully!');
   };
@@ -51,26 +52,22 @@ const AddProductDialog = () => {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className='flex flex-col w-full max-w-4xl p-6 m-4 bg-white rounded-lg shadow-lg border border-gray-200 overflow-auto'
-        style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
+        className='flex flex-col w-full max-w-4xl p-6 m-4 bg-white rounded-lg shadow-lg border border-gray-200 !overflow-visible fixed'
+        // style={{
+        //   position: 'fixed',
+        //   top: '50%',
+        //   left: '50%',
+        //   transform: 'translate(-50%, -50%)',
+        // }}
       >
         <DialogHeader>
           <DialogTitle className='text-xl font-semibold text-gray-800'>
-            {/* {t('Dialog.title.productCreate')} */}
             Tạo sản phẩm mới
           </DialogTitle>
         </DialogHeader>
         <div className='grid grid-cols-2 gap-6'>
           <div>
-            <Label htmlFor='name'>
-              {/* {t('Product.name')} */}
-              Tên sản phẩm
-            </Label>
+            <Label htmlFor='name'>Tên sản phẩm</Label>
             <Input
               id='name'
               name='name'
@@ -80,23 +77,7 @@ const AddProductDialog = () => {
             />
           </div>
           <div>
-            <Label htmlFor='barcode'>
-              {/* {t('Product.barcode')} */}
-              Mã vạch
-            </Label>
-            <Input
-              id='barcode'
-              name='barcode'
-              value={formData.barcode}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor='sku'>
-              {/* {t('Product.sku')} */}
-              SKU
-            </Label>
+            <Label htmlFor='sku'>SKU</Label>
             <Input
               id='sku'
               name='sku'
@@ -105,44 +86,32 @@ const AddProductDialog = () => {
               required
             />
           </div>
-          <div>
-            <Label htmlFor='categoryId'>
-              {/* {t('Product.category')} */}
-              Danh mục
-            </Label>
-            <Input
-              id='categoryId'
-              name='categoryId'
-              value={formData.categoryId}
-              onChange={handleInputChange}
-              required
-            />
+          <div className=''>
+            <Label htmlFor='productTypeId'>Loại sản phẩm</Label>
+            <div className='border-black border rounded-md'>
+              <ProductTypeComboBox
+                value={formData.productTypeId}
+                onChange={(value) => handleSelectChange(value, 'productTypeId')}
+              />
+            </div>
           </div>
           <div>
-            <Label htmlFor='unitId'>
-              {/* {t('Product.unit')} */}
-              Đơn vị đo lường
-            </Label>
-            <Input
-              id='unitId'
-              name='unitId'
-              value={formData.unitId}
-              onChange={handleInputChange}
-              required
-            />
+            <Label htmlFor='unitId'>Đơn vị</Label>
+            <div className='border-black border rounded-md'>
+              <UnitComboBox
+                value={formData.unitId}
+                onChange={(value) => handleSelectChange(value, 'unitId')}
+              />
+            </div>
           </div>
           <div>
-            <Label htmlFor='brandId'>
-              {/* {t('Product.brand')} */}
-              Hãng
-            </Label>
-            <Input
-              id='brandId'
-              name='brandId'
-              value={formData.brandId}
-              onChange={handleInputChange}
-              required
-            />
+            <Label>Hãng</Label>
+            <div className='border-black border rounded-md'>
+              <BrandComboBox
+                value={formData.brandId}
+                onChange={(value) => handleSelectChange(value, 'brandId')}
+              />
+            </div>
           </div>
         </div>
         <DialogFooter className='mt-6 flex justify-end space-x-4'>
