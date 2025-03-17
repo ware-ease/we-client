@@ -17,21 +17,14 @@ import {
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
 
-const products = [
-  { sku: 'XMS01', name: 'Xi măng S1', unit: 'tấn' },
-  { sku: 'SNNPN', name: 'Sơn Nippon', unit: 'thùng 18L' },
-  { sku: 'CTBA', name: 'Cát Bà', unit: 'bao 10kg' },
-];
+const batches = [{ code: 'XM477' }, { code: 'SN346' }, { code: 'CTB11' }];
 
-interface ProductComboBoxProps {
+interface BatchComboBoxProps {
   value: string;
   onChange: (value: string) => void;
 }
 
-const ProductComboBox: React.FC<ProductComboBoxProps> = ({
-  value,
-  onChange,
-}) => {
+const BatchComboBox: React.FC<BatchComboBoxProps> = ({ value, onChange }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
@@ -47,7 +40,7 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
           className='w-full justify-between border-none'
           ref={triggerRef}
         >
-          {value ? products.find((p) => p.sku === value)?.sku : 'Chọn sản phẩm'}
+          {value ? batches.find((p) => p.code === value)?.code : 'Chọn lô'}
           <ChevronsUpDown className='opacity-50 truncate' />
         </Button>
       </PopoverTrigger>
@@ -56,24 +49,24 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
         style={{ width: triggerRef.current?.offsetWidth }}
       >
         <Command>
-          <CommandInput placeholder='Tìm sản phẩm...' className='h-9' />
+          <CommandInput placeholder='Tìm lô...' className='h-9' />
           <CommandList>
-            <CommandEmpty>Không tìm thấy sản phẩm.</CommandEmpty>
+            <CommandEmpty>Không tìm thấy lô.</CommandEmpty>
             <CommandGroup>
-              {products.map((p) => (
+              {batches.map((p) => (
                 <CommandItem
-                  key={p.sku}
-                  value={p.sku}
+                  key={p.code}
+                  value={p.code}
                   onSelect={(currentValue) => {
                     onChange(currentValue === value ? '' : currentValue);
                     setOpen(false);
                   }}
                 >
-                  {p.sku}
+                  {p.code}
                   <Check
                     className={cn(
                       'ml-auto',
-                      value === p.sku ? 'opacity-100' : 'opacity-0'
+                      value === p.code ? 'opacity-100' : 'opacity-0'
                     )}
                   />
                 </CommandItem>
@@ -93,4 +86,4 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
   );
 };
 
-export default ProductComboBox;
+export default BatchComboBox;
