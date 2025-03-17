@@ -1,0 +1,145 @@
+'use client';
+
+import { Button } from '@/app/_components/shadcn-base/Button';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/app/_components/shadcn-base/Dialog';
+import { Input } from '@/app/_components/shadcn-base/Input';
+import { Label } from '@/app/_components/shadcn-base/Label';
+import { Edit, Search, Trash2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+
+const CategoryDialog = () => {
+  const [open, setOpen] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+  const [filteredCategories, setFilteredCategories] = useState(categories);
+  const [newCategory, setNewCategory] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const handleAddCategory = () => {
+    if (!newCategory.trim()) {
+      toast.error('Please enter a valid category name.');
+      return;
+    }
+    const updatedCategories = [...categories, newCategory];
+    setCategories(updatedCategories);
+    setFilteredCategories(updatedCategories);
+    setNewCategory('');
+    setShowForm(false);
+    toast.success('Category added successfully!');
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    setFilteredCategories(
+      categories.filter((category) =>
+        category.toLowerCase().includes(value.toLowerCase())
+      )
+    );
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button className='bg-blue-500 text-white px-4 py-2'>
+          + New Category
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent className='w-full max-w-md bg-white p-6 rounded-lg shadow-lg'>
+        <DialogHeader>
+          <DialogTitle className='text-lg font-semibold'>
+            Manage Categories
+          </DialogTitle>
+        </DialogHeader>
+
+        {showForm ? (
+          <div className='border p-4 rounded-md bg-gray-50'>
+            <Label className='text-red-600'>Category Name*</Label>
+            <Input
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              placeholder='Enter category...'
+              className='mt-1'
+            />
+            <div className='flex justify-end mt-3 space-x-2'>
+              <Button
+                className='bg-blue-500 text-white'
+                onClick={handleAddCategory}
+              >
+                Save and Select
+              </Button>
+              <Button variant='secondary' onClick={() => setShowForm(false)}>
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <Button
+            className='w-full bg-green-500 text-white mb-3'
+            onClick={() => setShowForm(true)}
+          >
+            + New Category
+          </Button>
+        )}
+
+        <div className='relative mb-3'>
+          <Search className='absolute left-3 top-3 text-gray-400 h-4 w-4' />
+          <Input
+            type='text'
+            placeholder='Search category...'
+            value={searchTerm}
+            onChange={handleSearch}
+            className='pl-9'
+          />
+        </div>
+
+        <div className='border rounded-md p-3 max-h-60 overflow-auto'>
+          <h3 className='text-sm font-semibold text-gray-600'>Categories</h3>
+          <ul className='mt-2 space-y-2'>
+            {filteredCategories.length > 0 ? (
+              filteredCategories.map((category, index) => (
+                <li
+                  key={index}
+                  className='flex justify-between items-center p-2 border rounded-md hover:bg-gray-100'
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                >
+                  <span className='text-gray-700'>{category}</span>
+                  {hoveredIndex === index && (
+                    <div className='flex space-x-2'>
+                      <Edit className='text-blue-600 h-4 w-4 cursor-pointer' />
+                      <Trash2 className='text-red-600 h-4 w-4 cursor-pointer' />
+                    </div>
+                  )}
+                </li>
+              ))
+            ) : (
+              <p className='text-gray-500 text-sm text-center'>
+                No categories found.
+              </p>
+            )}
+          </ul>
+        </div>
+
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant='secondary'>Close</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+export default CategoryDialog;
