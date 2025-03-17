@@ -1,3 +1,4 @@
+import CategoryDialog from '@/app/_components/dialogs/CategoryDialog';
 import { Button } from '@/app/_components/shadcn-base/Button';
 import {
   Card,
@@ -27,12 +28,11 @@ const ProductsHome = () => {
               <CardDescription>hiện có trong ứng dụng.</CardDescription>
             </CardHeader>
             <CardFooter>
-              <Link
-                href='/categories'
-                className='hover:cursor-pointer font-semibold text-blue-500'
-              >
-                → Xem chi tiết
-              </Link>
+              <CategoryDialog>
+                <button className='hover:cursor-pointer font-semibold text-blue-500'>
+                  → Xem chi tiết
+                </button>
+              </CategoryDialog>
             </CardFooter>
           </Card>
           <Card className='w-2/5 border-black border-2 drop-shadow-xl'>

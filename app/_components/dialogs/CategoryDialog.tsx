@@ -13,10 +13,14 @@ import {
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { Label } from '@/app/_components/shadcn-base/Label';
 import { Edit, Search, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { toast } from 'react-toastify';
 
-const CategoryDialog = () => {
+interface CategoryDialogProps {
+  children: ReactNode;
+}
+
+const CategoryDialog = ({ children }: CategoryDialogProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [categories, setCategories] = useState<string[]>([]);
@@ -50,11 +54,7 @@ const CategoryDialog = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className='bg-blue-500 text-white px-4 py-2'>
-          + New Category
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
 
       <DialogContent className='w-full max-w-md bg-white p-6 rounded-lg shadow-lg'>
         <DialogHeader>
