@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Profile = {
-  id: string;
   firstName: string;
   lastName: string;
   phone: string;

@@ -16,16 +16,19 @@ import {
   RadioGroupItem,
 } from '@/app/_components/shadcn-base/RadioGroup';
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { createAccount } from '@/lib/services/accountService';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 const AddAccountDialog = () => {
   const t = useTranslations();
+  const queryClient = useQueryClient();
 
+  const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     userName: '',
-    password: '',
     email: '',
     firstName: '',
     lastName: '',
@@ -40,11 +43,10 @@ const AddAccountDialog = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Perform validation
     if (
       !formData.userName ||
-      !formData.password ||
       !formData.email ||
       !formData.firstName ||
       !formData.lastName ||
@@ -54,13 +56,35 @@ const AddAccountDialog = () => {
       return;
     }
 
-    // Submit the form data to your API
-    console.log('Submitted data:', formData);
-    toast.success('Account created successfully!');
+    const accountData = {
+      username: formData.userName,
+      email: formData.email,
+      profile: {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        phone: formData.phone,
+        address: formData.address,
+        sex: formData.sex === 'male',
+        nationality: formData.nationality,
+        avatarUrl: '',
+      },
+    };
+    console.log(accountData);
+
+    try {
+      const newAccount = await createAccount(accountData);
+      console.log('Account created:', newAccount);
+      toast.success('Account created successfully!');
+      setOpen(false);
+      queryClient.invalidateQueries({ queryKey: ['accounts'] });
+    } catch (error) {
+      console.error('Error creating account:', error);
+      toast.error('Failed to create account.');
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className='px-4 py-2 rounded-lg'>
           <TranslatedMessage tKey='Management.create' />
@@ -89,17 +113,6 @@ const AddAccountDialog = () => {
               value={formData.userName}
               onChange={handleInputChange}
               required
-            />
-          </div>
-          <div>
-            <Label htmlFor='password'>{t('Login.password')}</Label>
-            <Input
-              id='password'
-              name='password'
-              type='password'
-              value={formData.password}
-              onChange={handleInputChange}
-              disabled
             />
           </div>
           <div>
@@ -143,6 +156,16 @@ const AddAccountDialog = () => {
               required
             />
           </div>
+
+          <div>
+            <Label htmlFor='nationality'>{t('Settings.nation')}</Label>
+            <Input
+              id='nationality'
+              name='nationality'
+              value={formData.nationality}
+              onChange={handleInputChange}
+            />
+          </div>
           <div className='col-span-2'>
             <Label htmlFor='address'>{t('Settings.address')}</Label>
             <Input
@@ -170,15 +193,6 @@ const AddAccountDialog = () => {
                 <Label htmlFor='female'>{t('Settings.female')}</Label>
               </div>
             </RadioGroup>
-          </div>
-          <div>
-            <Label htmlFor='nationality'>{t('Settings.nation')}</Label>
-            <Input
-              id='nationality'
-              name='nationality'
-              value={formData.nationality}
-              onChange={handleInputChange}
-            />
           </div>
         </div>
         <DialogFooter className='mt-6 flex justify-end space-x-4'>

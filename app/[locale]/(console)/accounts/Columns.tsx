@@ -1,4 +1,3 @@
-import UpdateAccountDialog from '@/app/_components/dialogs/UpdateAccountDialog';
 import { Account } from '@/lib/types/account';
 import { ColumnDef } from '@tanstack/react-table';
 
@@ -84,15 +83,15 @@ export const columns: ColumnDef<Account>[] = [
   //     return <span>{groups}</span>;
   //   },
   // },
-  {
-    accessorKey: 'actions',
-    header: () => <div className='text-right w-full'>Actions</div>,
-    enableSorting: false,
-    enableColumnFilter: false,
-    cell: ({ row }) => (
-      <div className='flex justify-end'>
-        <UpdateAccountDialog account={row.original} />
-      </div>
-    ),
-  },
+  // {
+  //   accessorKey: 'actions',
+  //   header: () => <div className='text-right w-full'>Actions</div>,
+  //   enableSorting: false,
+  //   enableColumnFilter: false,
+  //   cell: ({ row }) => (
+  //     <div className='flex justify-end'>
+  //       <UpdateAccountDialog account={row.original} />
+  //     </div>
+  //   ),
+  // },
 ];
