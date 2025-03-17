@@ -4,9 +4,16 @@ import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Product>[] = [
   {
-    accessorKey: 'id',
-    header: 'ID',
-    sortingFn: 'text',
+    accessorKey: 'stt',
+    header: 'STT',
+    enableColumnFilter: false,
+    enableSorting: false,
+    cell: ({ row, table }) => {
+      const rowIndex = table
+        .getRowModel()
+        .rows.findIndex((r) => r.id === row.id);
+      return rowIndex + 1;
+    },
   },
   {
     accessorKey: 'sku',
@@ -15,32 +22,37 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Tên',
     sortingFn: 'text',
   },
   {
-    accessorKey: 'description',
-    header: 'Description',
+    accessorKey: 'productType',
+    header: 'Loại',
     sortingFn: 'text',
   },
   {
     accessorKey: 'category',
-    header: 'Category',
+    header: 'Danh mục',
     sortingFn: 'text',
   },
   {
-    accessorKey: 'types',
-    header: 'Types',
+    accessorKey: 'unit',
+    header: 'Đơn vị',
+    sortingFn: 'text',
+  },
+  {
+    accessorKey: 'brand',
+    header: 'Hãng',
     sortingFn: 'text',
   },
   {
     accessorKey: 'status',
-    header: 'Status',
+    header: 'Trạng thái',
     sortingFn: 'text',
   },
   {
     accessorKey: 'actions',
-    header: () => <div className='text-right w-full'>Actions</div>,
+    header: () => <div className='text-right w-full'>Hành động</div>,
     enableSorting: false,
     cell: ({}) => {
       return <div className='flex justify-end'></div>;

@@ -127,7 +127,7 @@ export function AppSidebar() {
     // },
     {
       title: t('Sidebar.products'),
-      url: '/products',
+      url: '/products-home',
       icon: Boxes,
     },
     // {

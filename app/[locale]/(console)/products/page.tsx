@@ -1,11 +1,26 @@
+'use client';
 import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
 import React from 'react';
 import { DataTable } from './DataTable';
 import { columns } from './Columns';
-import { Product } from '@/lib/types/product';
+import { useQuery } from '@tanstack/react-query';
+import { getAllProducts } from '@/lib/services/productService';
+import { toast } from 'react-toastify';
 
 const Products = () => {
-  const data: Product[] = [];
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ['accounts'],
+    queryFn: getAllProducts,
+  });
+
+  if (isLoading) {
+    return <p className='text-center text-gray-500'>Loading...</p>;
+  }
+
+  if (isError) {
+    toast.error('Failed to fetch products.');
+    return <p className='text-center text-red-500'>Error loading accounts.</p>;
+  }
 
   return (
     <div className='flex flex-col max-h-full'>
@@ -16,7 +31,7 @@ const Products = () => {
           </div>
           <div></div>
         </div>
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={data!} />
       </div>
     </div>
   );

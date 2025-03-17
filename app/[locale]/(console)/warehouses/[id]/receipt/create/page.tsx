@@ -1,14 +1,13 @@
 import { Input } from '@/app/_components/shadcn-base/Input';
 import React from 'react';
-import { DataTable } from './DataTable';
-import { columns } from './Columns';
 import { RequestComboBox } from './RequestComboBox';
 import { Button } from '@/app/_components/shadcn-base/Button';
+import CustomTable from '@/app/_components/custom-table/CustomTable';
 
 const ReceiptCreate = () => {
   return (
     <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-4'>
-      <div className='flex flex-col w-full justify-between'>
+      <div className='flex flex-col w-full'>
         <div className='flex space-x-20 items-center w-full'>
           <div className='text-4xl font-semibold text-primary'>
             Phiếu nhập kho
@@ -51,12 +50,12 @@ const ReceiptCreate = () => {
           </div>
         </div>
       </div>
-      <div className='flex flex-grow w-full'>
+      <div className=''>
+        <CustomTable />
+      </div>
+      <div className='flex w-full'>
         <div className='grow'></div>
         <Button>Tạo phiếu</Button>
-      </div>
-      <div>
-        <DataTable columns={columns} data={[]} />
       </div>
     </div>
   );
