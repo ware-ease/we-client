@@ -219,6 +219,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
   };
 
   const deleteRow = (index: number) => {
+    //FIXME: fix STT khi them va xoa
     setRows(rows.filter((_, i) => i !== index));
   };
 

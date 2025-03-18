@@ -18,16 +18,35 @@ import { toast } from 'react-toastify';
 import ProductTypeComboBox from '../combo-boxes/ProductTypeComboBox';
 import BrandComboBox from '../combo-boxes/BrandComboBox';
 import UnitComboBox from '../combo-boxes/UnitComboBox';
+import { useMutation } from '@tanstack/react-query';
+import { ProductCreate } from '@/lib/types/request/product';
+import { createProduct } from '@/lib/services/productService';
 
 const AddProductDialog = () => {
   const t = useTranslations();
-
   const [formData, setFormData] = useState({
     name: '',
     sku: '',
     productTypeId: '',
     unitId: '',
     brandId: '',
+  });
+
+  const productCreateMutation = useMutation({
+    mutationFn: (data: ProductCreate) => {
+      const res = createProduct(data);
+      return res;
+    },
+    onSuccess: () => {
+      toast.success(t('Toast.success'), {
+        autoClose: 3000,
+      });
+    },
+    onError: () => {
+      toast.error(t('Toast.error'), {
+        autoClose: 3000,
+      });
+    },
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,9 +58,22 @@ const AddProductDialog = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = () => {
-    console.log('Submitted product data:', formData);
-    toast.success('Product created successfully!');
+  const handleAdd = () => {
+    productCreateMutation.mutate({
+      name: formData.name,
+      sku: formData.sku,
+      imageUrl: '',
+      productTypeId: formData.productTypeId,
+      unitId: formData.unitId,
+      brandId: formData.brandId,
+    });
+    setFormData({
+      name: '',
+      sku: '',
+      productTypeId: '',
+      unitId: '',
+      brandId: '',
+    });
   };
 
   return (
@@ -123,7 +155,7 @@ const AddProductDialog = () => {
               {t('Dialog.cancel')}
             </Button>
           </DialogClose>
-          <Button className='px-4 py-2 rounded-lg' onClick={handleSubmit}>
+          <Button className='px-4 py-2 rounded-lg' onClick={() => handleAdd()}>
             {t('Dialog.yes.create')}
           </Button>
         </DialogFooter>

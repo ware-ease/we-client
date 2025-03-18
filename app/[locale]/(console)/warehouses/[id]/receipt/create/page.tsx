@@ -9,6 +9,7 @@ import CustomTable, {
 
 const ReceiptCreate = () => {
   const [data, setData] = useState<RowData[]>([]);
+
   console.log(data);
 
   return (

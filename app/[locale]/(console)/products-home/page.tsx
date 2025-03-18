@@ -1,4 +1,6 @@
+'use client';
 import CategoryDialog from '@/app/_components/dialogs/CategoryDialog';
+import UnitDialog from '@/app/_components/dialogs/UnitDialog';
 import { Button } from '@/app/_components/shadcn-base/Button';
 import {
   Card,
@@ -8,10 +10,37 @@ import {
   CardTitle,
 } from '@/app/_components/shadcn-base/Card';
 import { Link } from '@/i18n/routing';
+import {
+  getBatchCount,
+  getCategoryCount,
+  getProductCount,
+  getProductTypeCount,
+} from '@/lib/services/productService';
+import { useQuery } from '@tanstack/react-query';
 import { Settings } from 'lucide-react';
 import React from 'react';
 
 const ProductsHome = () => {
+  const { data: productCount } = useQuery({
+    queryKey: ['productCount'],
+    queryFn: getProductCount,
+  });
+
+  const { data: categoryCount } = useQuery({
+    queryKey: ['categoryCount'],
+    queryFn: getCategoryCount,
+  });
+
+  const { data: productTypeCount } = useQuery({
+    queryKey: ['productTypeCount'],
+    queryFn: getProductTypeCount,
+  });
+
+  const { data: batchCount } = useQuery({
+    queryKey: ['batchCount'],
+    queryFn: getBatchCount,
+  });
+
   return (
     <div className='flex flex-col max-h-full'>
       <div className='flex flex-col p-4 gap-6 max-h-full'>
@@ -24,7 +53,7 @@ const ProductsHome = () => {
           <Card className='w-2/5 border-black border-2 drop-shadow-xl'>
             <CardHeader>
               <CardTitle>Danh mục sản phẩm</CardTitle>
-              <div className='text-3xl font-bold'>10</div>
+              <div className='text-3xl font-bold'>{categoryCount ?? 0}</div>
               <CardDescription>hiện có trong ứng dụng.</CardDescription>
             </CardHeader>
             <CardFooter>
@@ -38,7 +67,7 @@ const ProductsHome = () => {
           <Card className='w-2/5 border-black border-2 drop-shadow-xl'>
             <CardHeader>
               <CardTitle>Loại sản phẩm</CardTitle>
-              <div className='text-3xl font-bold'>25</div>
+              <div className='text-3xl font-bold'>{productTypeCount ?? 0}</div>
               <CardDescription>hiện có trong ứng dụng.</CardDescription>
             </CardHeader>
             <CardFooter>
@@ -55,7 +84,7 @@ const ProductsHome = () => {
           <Card className='w-2/5 border-black border-2 drop-shadow-xl'>
             <CardHeader>
               <CardTitle>Sản phẩm</CardTitle>
-              <div className='text-3xl font-bold'>46</div>
+              <div className='text-3xl font-bold'>{productCount ?? 0}</div>
               <CardDescription>hiện có trong ứng dụng.</CardDescription>
             </CardHeader>
             <CardFooter>
@@ -70,7 +99,7 @@ const ProductsHome = () => {
           <Card className='w-2/5 border-black border-2 drop-shadow-xl'>
             <CardHeader>
               <CardTitle>Lô hàng</CardTitle>
-              <div className='text-3xl font-bold'>78</div>
+              <div className='text-3xl font-bold'>{batchCount ?? 0}</div>
               <CardDescription>hiện có trong ứng dụng.</CardDescription>
             </CardHeader>
             <CardFooter>
@@ -91,10 +120,12 @@ const ProductsHome = () => {
             </Button>
           </div>
           <div className='w-2/5'>
-            <Button className='w-full drop-shadow-xl'>
-              <Settings />
-              Đơn vị
-            </Button>
+            <UnitDialog>
+              <Button className='w-full drop-shadow-xl'>
+                <Settings />
+                Đơn vị
+              </Button>
+            </UnitDialog>
           </div>
         </div>
       </div>
