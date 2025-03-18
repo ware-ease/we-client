@@ -7,15 +7,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '../shadcn-base/DropdownMenu';
-import { Link } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { useCurrentLanguage } from '@/lib/hooks/useCurrentLanguage';
 import { useAuth } from '../providers/AuthProvider';
+import { logout } from '@/lib/services/authService';
 
 const AvatarButton = () => {
   const lang = useCurrentLanguage();
   const t = useTranslations();
+  const router = useRouter();
   const { currentUser } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   return (
     <DropdownMenu>
@@ -29,9 +36,9 @@ const AvatarButton = () => {
         <Link href={'settings'} locale={lang}>
           <DropdownMenuItem>{t('Sidebar.settings')}</DropdownMenuItem>
         </Link>
-        <Link href={'logout'} locale={lang}>
+        <div onClick={handleLogout}>
           <DropdownMenuItem>{t('Sidebar.logout')}</DropdownMenuItem>
-        </Link>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

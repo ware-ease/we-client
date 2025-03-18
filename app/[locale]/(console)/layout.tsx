@@ -2,6 +2,7 @@ import { SidebarProvider } from '@/app/_components/shadcn-base/SideBar';
 import '../../globals.css';
 import { AppSidebar } from '@/app/_components/app/AppSidebar';
 import Nav from '@/app/_components/app/Nav';
+import ProtectedRoute from '@/app/_components/app/ProtectedRoute';
 
 export default function ConsoleLayout({
   children,
@@ -19,11 +20,13 @@ export default function ConsoleLayout({
     //   </div>
     // </div>
     <SidebarProvider className='flex w-screen h-screen max-w-screen max-h-screen'>
-      <AppSidebar />
-      <div className='flex flex-col w-full'>
-        <Nav />
-        <div className='w-full max-h-[100%]'>{children}</div>
-      </div>
+      <ProtectedRoute>
+        <AppSidebar />
+        <div className='flex flex-col w-full'>
+          <Nav />
+          <div className='w-full max-h-[100%]'>{children}</div>
+        </div>
+      </ProtectedRoute>
     </SidebarProvider>
   );
 }

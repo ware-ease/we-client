@@ -1,34 +1,49 @@
-import { Button } from '@/app/_components/shadcn-base/Button';
+// import { Button } from '@/app/_components/shadcn-base/Button';
+import { Link } from '@/i18n/routing';
 import {
-  Box,
+  // Box,
   CalendarDays,
   Edit,
   LandPlot,
   MapPin,
-  SquareLibrary,
+  // SquareLibrary,
   Trash2,
   Warehouse,
 } from 'lucide-react';
 import React from 'react';
 
-const WarehouseCard = () => {
+interface WarehouseCardProps {
+  idPath: string;
+  name: string;
+  address: string;
+  area: string;
+  operatedFrom: string;
+}
+
+const WarehouseCard: React.FC<WarehouseCardProps> = ({
+  idPath,
+  name,
+  address,
+  area,
+  operatedFrom,
+}) => {
   return (
-    <div className='flex border rounded-md hover:border-primary hover:cursor-pointer p-4 bg-slate-50'>
+    <div className='flex border rounded-md hover:border-primary p-4 bg-gray-50 hover:bg-gray-100'>
       <div className='flex px-2'>
         <Warehouse size={72} />
       </div>
       <div className='flex flex-col px-4 w-full justify-center'>
-        <div className='text-md text-primary font-semibold'>Kho A</div>
+        <div className='text-md text-primary font-semibold'>{name}</div>
         <div className='text-sm text-gray-700'>
           <div className='flex items-center space-x-1'>
             <MapPin size={14} />
-            <p>Location: Quan 1, Ho Chi Minh City</p>
+            <p>Địa chỉ: {address}</p>
           </div>
         </div>
         <div className='text-sm text-gray-700'>
           <div className='flex items-center space-x-1'>
             <CalendarDays size={14} />
-            <p>Operated from: 20/2/2025</p>
+            <p>Hoạt động từ: {operatedFrom}</p>
           </div>
         </div>
       </div>
@@ -36,33 +51,35 @@ const WarehouseCard = () => {
         <div className='text-sm text-gray-700'>
           <div className='flex items-center space-x-1'>
             <LandPlot size={14} />
-            <p>Area: 2000m²</p>
+            <p>Diện tích: {area}</p>
           </div>
         </div>
-        <div className='text-sm text-gray-700'>
+        {/* <div className='text-sm text-gray-700'>
           <div className='flex items-center space-x-1'>
             <Box size={14} />
-            <p>Max capacity: ~500 ton</p>
+            <p>Sức chứa: khoảng {capacity}</p>
           </div>
-        </div>
-        <div className='text-sm text-gray-700'>
+        </div> */}
+        {/* <div className='text-sm text-gray-700'>
           <div className='flex items-center space-x-1'>
             <SquareLibrary size={14} />
             <p>Number of shelves: 100</p>
           </div>
-        </div>
+        </div> */}
       </div>
-      <div className='flex flex-col px-4 w-full justify-center gap-2'>
+      {/* <div className='flex flex-col px-4 w-full justify-center gap-2'>
         <Button className='text-sm bg-green-600 hover:bg-green-600 w-3/4'>
           Operating
         </Button>
         <Button className='text-sm bg-red-600 hover:bg-red-600 w-3/4'>
           Actions needed!
         </Button>
-      </div>
+      </div> */}
       <div className='flex flex-col justify-between'>
-        <Edit />
-        <Trash2 />
+        <Link href={idPath}>
+          <Edit className='hover:cursor-pointer text-yellow-400' />
+        </Link>
+        <Trash2 className='hover:cursor-pointer text-red-500' />
       </div>
     </div>
   );

@@ -2,13 +2,17 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Account } from '@/lib/types/account';
 import { Permission } from '@/lib/types/permission';
-import { getCurrentUser, login } from '@/lib/services/authService';
+import {
+  getCurrentUser,
+  login,
+  refreshTokens,
+} from '@/lib/services/authService';
 import { getPermissions } from '@/lib/services/permissionService';
 import { LoginRequest } from '@/lib/types/request/login';
 import { AxiosResponse } from 'axios';
 
 type AuthContextType = {
-  currentUser?: Account | undefined;
+  currentUser?: Account | undefined | null;
   permissions?: Permission[];
   handleLogin: (
     loginCredentials: LoginRequest
@@ -19,7 +23,7 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [currentUser, setCurrentUser] = useState<Account | undefined>(
+  const [currentUser, setCurrentUser] = useState<Account | undefined | null>(
     undefined
   );
   const [permissions, setPermissions] = useState<Permission[]>([]);
@@ -30,7 +34,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const userRes = await getCurrentUser();
         setCurrentUser(userRes.data.data);
       } catch {
-        setCurrentUser(undefined);
+        setCurrentUser(null);
+        try {
+          const tokenRes = await refreshTokens();
+          if (tokenRes.status === 200) {
+            const userRes = await getCurrentUser();
+            setCurrentUser(userRes.data.data);
+          }
+        } catch {}
       }
     }
 

@@ -22,15 +22,24 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '../shadcn-base/SideBar';
-import { Link } from '@/i18n/routing';
+import { Link, useRouter } from '@/i18n/routing';
 import { useCurrentLanguage } from '@/lib/hooks/useCurrentLanguage';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useCurrentWarehouse } from '@/lib/hooks/useCurrentWarehouse';
+import { logout } from '@/lib/services/authService';
 
 export function AppSidebar() {
   const lang = useCurrentLanguage();
   const pathname = usePathname();
   const t = useTranslations();
+  const warehouse = useCurrentWarehouse();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
 
   const ensureUniquePath = (base: string, page: string) => {
     crudSuffix.forEach((crudSuffix) => {
@@ -48,9 +57,8 @@ export function AppSidebar() {
     return base.slice(3) + page;
   };
 
-  // Extract warehouse ID from pathname
-  const pathSegments = pathname.split('/');
-  const warehouseId = pathSegments[3];
+  // const pathSegments = pathname.split('/');
+  // const warehouseId = pathSegments[3];
 
   const suffixList = ['/dashboard', '/goods', '/receipt', '/issue'];
 
@@ -148,11 +156,6 @@ export function AppSidebar() {
       url: '/settings',
       icon: Settings,
     },
-    {
-      title: t('Sidebar.logout'),
-      url: '/logout',
-      icon: LogOut,
-    },
   ];
 
   return (
@@ -193,7 +196,7 @@ export function AppSidebar() {
             {/* Warehouse Section */}
             <SidebarGroup>
               <SidebarGroupLabel className='text-white'>
-                {warehouseId}
+                {warehouse?.name}
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
@@ -261,6 +264,14 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               );
             })}
+            <SidebarMenuItem className='my-2'>
+              <div onClick={handleLogout}>
+                <SidebarMenuButton className='flex items-center space-x-2 px-4'>
+                  <LogOut className='size-4' />
+                  <span className='text-md'>Đăng xuất</span>
+                </SidebarMenuButton>
+              </div>
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>
       </SidebarGroup>
