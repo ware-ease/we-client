@@ -34,14 +34,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const userRes = await getCurrentUser();
         setCurrentUser(userRes.data.data);
       } catch {
-        setCurrentUser(null);
+        setCurrentUser(undefined);
         try {
           const tokenRes = await refreshTokens();
           if (tokenRes.status === 200) {
             const userRes = await getCurrentUser();
             setCurrentUser(userRes.data.data);
           }
-        } catch {}
+        } catch {
+          setCurrentUser(null);
+        }
       }
     }
 
