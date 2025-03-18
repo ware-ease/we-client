@@ -16,15 +16,19 @@ import {
   CommandList,
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
-
-const batches = [{ code: 'XM477' }, { code: 'SN346' }, { code: 'CTB11' }];
+import { Batch } from '@/lib/types/batch';
 
 interface BatchComboBoxProps {
   value: string;
   onChange: (value: string) => void;
+  batches: Batch[] | undefined;
 }
 
-const BatchComboBox: React.FC<BatchComboBoxProps> = ({ value, onChange }) => {
+const BatchComboBox: React.FC<BatchComboBoxProps> = ({
+  value,
+  onChange,
+  batches,
+}) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
@@ -40,7 +44,7 @@ const BatchComboBox: React.FC<BatchComboBoxProps> = ({ value, onChange }) => {
           className='w-full justify-between border-none'
           ref={triggerRef}
         >
-          {value ? batches.find((p) => p.code === value)?.code : 'Chọn lô'}
+          {value ? batches?.find((p) => p.id === value)?.code : 'Chọn lô'}
           <ChevronsUpDown className='opacity-50 truncate' />
         </Button>
       </PopoverTrigger>
@@ -53,24 +57,30 @@ const BatchComboBox: React.FC<BatchComboBoxProps> = ({ value, onChange }) => {
           <CommandList>
             <CommandEmpty>Không tìm thấy lô.</CommandEmpty>
             <CommandGroup>
-              {batches.map((p) => (
-                <CommandItem
-                  key={p.code}
-                  value={p.code}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue === value ? '' : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {p.code}
-                  <Check
-                    className={cn(
-                      'ml-auto',
-                      value === p.code ? 'opacity-100' : 'opacity-0'
-                    )}
-                  />
-                </CommandItem>
-              ))}
+              {batches ? (
+                batches.map((p) => (
+                  <CommandItem
+                    key={p.id}
+                    value={p.id}
+                    onSelect={(currentValue) => {
+                      onChange(currentValue === value ? '' : currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    {p.code}
+                    <Check
+                      className={cn(
+                        'ml-auto',
+                        value === p.id ? 'opacity-100' : 'opacity-0'
+                      )}
+                    />
+                  </CommandItem>
+                ))
+              ) : (
+                <div className='flex justify-center items-center h-full w-full py-4'>
+                  <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
+                </div>
+              )}
               <CommandItem
                 className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
                 onSelect={() => handleOnAdd()}

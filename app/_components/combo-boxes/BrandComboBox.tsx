@@ -17,12 +17,8 @@ import {
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
 import ProductTypeDialog from '../dialogs/ProductTypeDialog';
-
-const products = [
-  { sku: 'XMS01', name: 'Xi măng S1', unit: 'tấn' },
-  { sku: 'SNNPN', name: 'Sơn Nippon', unit: 'thùng 18L' },
-  { sku: 'CTBA', name: 'Cát Bà', unit: 'bao 10kg' },
-];
+import { useQuery } from '@tanstack/react-query';
+import { getAllBrands } from '@/lib/services/brandService';
 
 interface BrandComboBoxProps {
   value: string;
@@ -32,6 +28,11 @@ interface BrandComboBoxProps {
 const BrandComboBox: React.FC<BrandComboBoxProps> = ({ value, onChange }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
+
+  const { data: brands } = useQuery({
+    queryKey: ['brands'],
+    queryFn: getAllBrands,
+  });
 
   const handleOnAdd = () => {};
 
@@ -45,7 +46,7 @@ const BrandComboBox: React.FC<BrandComboBoxProps> = ({ value, onChange }) => {
           className='w-full justify-between border-none'
           ref={triggerRef}
         >
-          {value ? products.find((p) => p.sku === value)?.sku : 'Chọn hãng'}
+          {value ? brands?.find((p) => p.id === value)?.name : 'Chọn hãng'}
           <ChevronsUpDown className='opacity-50 truncate' />
         </Button>
       </PopoverTrigger>
@@ -61,24 +62,30 @@ const BrandComboBox: React.FC<BrandComboBoxProps> = ({ value, onChange }) => {
           <CommandList>
             <CommandEmpty>Không tìm thấy hãng.</CommandEmpty>
             <CommandGroup>
-              {products.map((p) => (
-                <CommandItem
-                  key={p.sku}
-                  value={p.sku}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue === value ? '' : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {p.sku}
-                  <Check
-                    className={cn(
-                      'ml-auto',
-                      value === p.sku ? 'opacity-100' : 'opacity-0'
-                    )}
-                  />
-                </CommandItem>
-              ))}
+              {brands ? (
+                brands.map((p) => (
+                  <CommandItem
+                    key={p.id}
+                    value={p.id}
+                    onSelect={(currentValue) => {
+                      onChange(currentValue === value ? '' : currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    {p.name}
+                    <Check
+                      className={cn(
+                        'ml-auto',
+                        value === p.id ? 'opacity-100' : 'opacity-0'
+                      )}
+                    />
+                  </CommandItem>
+                ))
+              ) : (
+                <div className='flex justify-center items-center h-full w-full py-4'>
+                  <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
+                </div>
+              )}
 
               <ProductTypeDialog>
                 <button className='w-full'>

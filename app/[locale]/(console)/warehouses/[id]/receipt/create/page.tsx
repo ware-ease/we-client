@@ -10,7 +10,9 @@ import CustomTable, {
 const ReceiptCreate = () => {
   const [data, setData] = useState<RowData[]>([]);
 
-  console.log(data);
+  const handleSubmit = () => {
+    console.log(data);
+  };
 
   return (
     <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-4'>
@@ -62,7 +64,7 @@ const ReceiptCreate = () => {
       </div>
       <div className='flex w-full'>
         <div className='grow'></div>
-        <Button>Tạo phiếu</Button>
+        <Button onClick={handleSubmit}>Tạo phiếu</Button>
       </div>
     </div>
   );

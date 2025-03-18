@@ -16,21 +16,18 @@ import {
   CommandList,
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
-
-const products = [
-  { sku: 'XMS01', name: 'Xi măng S1', unit: 'tấn' },
-  { sku: 'SNNPN', name: 'Sơn Nippon', unit: 'thùng 18L' },
-  { sku: 'CTBA', name: 'Cát Bà', unit: 'bao 10kg' },
-];
+import { Product } from '@/lib/types/product';
 
 interface ProductComboBoxProps {
   value: string;
   onChange: (value: string) => void;
+  products: Product[] | undefined;
 }
 
 const ProductComboBox: React.FC<ProductComboBoxProps> = ({
   value,
   onChange,
+  products,
 }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -47,7 +44,7 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
           className='w-full justify-between border-none'
           ref={triggerRef}
         >
-          {value ? products.find((p) => p.sku === value)?.sku : 'Chọn sản phẩm'}
+          {value ? products?.find((p) => p.id === value)?.sku : 'Chọn sản phẩm'}
           <ChevronsUpDown className='opacity-50 truncate' />
         </Button>
       </PopoverTrigger>
@@ -60,24 +57,30 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
           <CommandList>
             <CommandEmpty>Không tìm thấy sản phẩm.</CommandEmpty>
             <CommandGroup>
-              {products.map((p) => (
-                <CommandItem
-                  key={p.sku}
-                  value={p.sku}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue === value ? '' : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {p.sku}
-                  <Check
-                    className={cn(
-                      'ml-auto',
-                      value === p.sku ? 'opacity-100' : 'opacity-0'
-                    )}
-                  />
-                </CommandItem>
-              ))}
+              {products ? (
+                products.map((p, index) => (
+                  <CommandItem
+                    key={index}
+                    value={p.id}
+                    onSelect={(currentValue) => {
+                      onChange(currentValue === value ? '' : currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    {p.sku}
+                    <Check
+                      className={cn(
+                        'ml-auto',
+                        value === p.id ? 'opacity-100' : 'opacity-0'
+                      )}
+                    />
+                  </CommandItem>
+                ))
+              ) : (
+                <div className='flex justify-center items-center h-full w-full py-4'>
+                  <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
+                </div>
+              )}
               <CommandItem
                 className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
                 onSelect={() => handleOnAdd()}

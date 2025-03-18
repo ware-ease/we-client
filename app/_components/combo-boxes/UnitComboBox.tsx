@@ -17,12 +17,8 @@ import {
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
 import UnitDialog from '../dialogs/UnitDialog';
-
-const products = [
-  { sku: 'XMS01', name: 'Xi măng S1', unit: 'tấn' },
-  { sku: 'SNNPN', name: 'Sơn Nippon', unit: 'thùng 18L' },
-  { sku: 'CTBA', name: 'Cát Bà', unit: 'bao 10kg' },
-];
+import { useQuery } from '@tanstack/react-query';
+import { getAllUnits } from '@/lib/services/unitService';
 
 interface UnitComboBoxProps {
   value: string;
@@ -32,6 +28,11 @@ interface UnitComboBoxProps {
 const UnitComboBox: React.FC<UnitComboBoxProps> = ({ value, onChange }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
+
+  const { data: units } = useQuery({
+    queryKey: ['units'],
+    queryFn: getAllUnits,
+  });
 
   const handleOnAdd = () => {};
 
@@ -45,7 +46,7 @@ const UnitComboBox: React.FC<UnitComboBoxProps> = ({ value, onChange }) => {
           className='w-full justify-between border-none'
           ref={triggerRef}
         >
-          {value ? products.find((p) => p.unit === value)?.unit : 'Chọn đơn vị'}
+          {value ? units?.find((p) => p.id === value)?.name : 'Chọn đơn vị'}
           <ChevronsUpDown className='opacity-50 truncate' />
         </Button>
       </PopoverTrigger>
@@ -61,24 +62,30 @@ const UnitComboBox: React.FC<UnitComboBoxProps> = ({ value, onChange }) => {
           <CommandList>
             <CommandEmpty>Không tìm thấy đơn vị.</CommandEmpty>
             <CommandGroup>
-              {products.map((p) => (
-                <CommandItem
-                  key={p.unit}
-                  value={p.unit}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue === value ? '' : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {p.unit}
-                  <Check
-                    className={cn(
-                      'ml-auto',
-                      value === p.unit ? 'opacity-100' : 'opacity-0'
-                    )}
-                  />
-                </CommandItem>
-              ))}
+              {units ? (
+                units.map((p) => (
+                  <CommandItem
+                    key={p.id}
+                    value={p.id}
+                    onSelect={(currentValue) => {
+                      onChange(currentValue === value ? '' : currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    {p.name}
+                    <Check
+                      className={cn(
+                        'ml-auto',
+                        value === p.id ? 'opacity-100' : 'opacity-0'
+                      )}
+                    />
+                  </CommandItem>
+                ))
+              ) : (
+                <div className='flex justify-center items-center h-full w-full py-4'>
+                  <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
+                </div>
+              )}
 
               <UnitDialog>
                 <button className='w-full'>

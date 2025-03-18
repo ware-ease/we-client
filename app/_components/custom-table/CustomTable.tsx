@@ -3,8 +3,9 @@
 import React, { ReactNode, useState, useRef, useEffect } from 'react';
 import ProductComboBox from '../combo-boxes/ProductComboBox';
 import { useQuery } from '@tanstack/react-query';
-import { Product } from '@/lib/types/product';
 import BatchComboBox from '../combo-boxes/BatchComboBox';
+import { getAllProducts } from '@/lib/services/productService';
+import { getAllBatches } from '@/lib/services/batchService';
 
 interface Column {
   header: string;
@@ -17,7 +18,7 @@ interface Row {
 }
 
 export interface RowData {
-  id: number;
+  id: string;
   sku: string;
   name: string;
   unit: string;
@@ -26,20 +27,8 @@ export interface RowData {
   note: string;
 }
 
-const fetchProducts = async (): Promise<Product[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve([
-        { sku: 'XMS01', name: 'Xi măng S1', unit: 'tấn' },
-        { sku: 'SNNPN', name: 'Sơn Nippon', unit: 'thùng 18L' },
-        { sku: 'CTBA', name: 'Cát Bà', unit: 'bao 10kg' },
-      ]);
-    }, 1000); // Simulate network delay
-  });
-};
-
 const initialColumns: Column[] = [
-  { header: 'STT', key: 'id', width: 48 },
+  // { header: 'STT', key: 'id', width: 48 },
   { header: 'Mã hàng', key: 'sku', width: 202 },
   { header: 'Tên hàng', key: 'name', width: 200 },
   { header: 'ĐVT', key: 'unit', width: 85 },
@@ -61,12 +50,17 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
 
   const { data: products } = useQuery({
     queryKey: ['products'],
-    queryFn: fetchProducts,
+    queryFn: getAllProducts,
+  });
+
+  const { data: batches } = useQuery({
+    queryKey: ['batches'],
+    queryFn: getAllBatches,
   });
 
   useEffect(() => {
-    const updatedData: RowData[] = rows.map((row, index) => ({
-      id: index + 1,
+    const updatedData: RowData[] = rows.map((row) => ({
+      id: '',
       sku: (row.sku as any).props.value ?? '',
       name: (row.name as any).props.children ?? '',
       unit: (row.unit as any).props.children ?? '',
@@ -82,9 +76,9 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
     setRows((prevRows) => [
       ...prevRows,
       {
-        id: <div className='p-2'>{prevRows.length + 1}</div>,
         sku: (
           <ProductComboBox
+            products={products}
             value=''
             onChange={(value) =>
               handleProductSelect(prevRows.length, 'sku', value)
@@ -101,14 +95,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
             onChange={(e) => handleQuantityChange(rows.length, e.target.value)}
           />
         ),
-        batch: (
-          <BatchComboBox
-            value=''
-            onChange={(value) =>
-              handleBatchSelect(prevRows.length, 'batch', value)
-            }
-          />
-        ),
+        batch: <input type='text' className='w-full p-2' value='' disabled />,
         note: (
           <input
             type='text'
@@ -170,8 +157,12 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
     key: string,
     value: string
   ) => {
-    if (!products) return;
-    const selectedProduct = products.find((p) => p.sku === value);
+    if (!products || !batches) return;
+    const selectedProduct = products.find((p) => p.id === value);
+    console.log(batches);
+    const filteredBatches = batches.filter(
+      (b) => b.productId === selectedProduct?.id
+    );
 
     setRows((prevRows) =>
       prevRows.map((row, index) =>
@@ -180,6 +171,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
               ...row,
               [key]: (
                 <ProductComboBox
+                  products={products}
                   value={value}
                   onChange={(v) => handleProductSelect(rowIndex, key, v)}
                 />
@@ -193,6 +185,15 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
                 <div className='p-2 truncate'>
                   {selectedProduct?.unit || ''}
                 </div>
+              ),
+              batch: (
+                <BatchComboBox
+                  batches={filteredBatches}
+                  value=''
+                  onChange={(batchValue) =>
+                    handleBatchSelect(rowIndex, 'batch', batchValue)
+                  }
+                />
               ),
             }
           : row
@@ -208,6 +209,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
               ...row,
               [key]: (
                 <BatchComboBox
+                  batches={(row.batch as any).props.batches || []}
                   value={value}
                   onChange={(v) => handleBatchSelect(rowIndex, key, v)}
                 />
@@ -307,14 +309,16 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
         </div>
       </div>
 
-      <div className='py-4 flex justify-start'>
-        <button
-          className='bg-blue-500 text-white px-4 py-2 rounded'
-          onClick={addRow}
-        >
-          Thêm dòng
-        </button>
-      </div>
+      {products && batches && (
+        <div className='py-4 flex justify-start'>
+          <button
+            className='bg-blue-500 text-white px-4 py-2 rounded'
+            onClick={addRow}
+          >
+            Thêm dòng
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { Product } from '../types/product';
+import { Product, ProductType } from '../types/product';
 import { ProductCreate } from '../types/request/product';
 import { axiosGet, axiosPost } from './baseService';
 
@@ -31,5 +31,10 @@ export const getCategoryCount = async (): Promise<number> => {
 
 export const getProductTypeCount = async (): Promise<number> => {
   const response = await axiosGet('/product-types/count', {});
+  return response.data.data;
+};
+
+export const getAllProductTypes = async (): Promise<ProductType[]> => {
+  const response = await axiosGet('/product-types', {});
   return response.data.data;
 };
