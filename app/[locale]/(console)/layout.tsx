@@ -1,7 +1,7 @@
 import { SidebarProvider } from '@/app/_components/shadcn-base/SideBar';
 import '../../globals.css';
-import { AppSidebar } from '@/app/_components/AppSidebar';
-import Nav from '@/app/_components/Nav';
+import { AppSidebar } from '@/app/_components/app/AppSidebar';
+import Nav from '@/app/_components/app/Nav';
 
 export default function ConsoleLayout({
   children,

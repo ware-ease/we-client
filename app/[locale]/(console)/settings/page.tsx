@@ -24,7 +24,7 @@ import {
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { ChangeEvent, useState } from 'react';
-import ConfirmDialog from '@/app/_components/ConfirmDialog';
+import ConfirmDialog from '@/app/_components/app/ConfirmDialog';
 import ChangePassword from './ChangePassword';
 
 const Settings = () => {

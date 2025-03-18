@@ -1,4 +1,4 @@
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import WarehousesList from './WarehousesList';
 
 const Warehouses = () => {

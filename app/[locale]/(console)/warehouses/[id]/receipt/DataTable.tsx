@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/app/_components/shadcn-base/Table';
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';
 import { Link, usePathname } from '@/i18n/routing';

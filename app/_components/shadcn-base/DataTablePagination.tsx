@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './Select';
-import { TranslatedMessage } from '../TranslatedMessage';
+import { TranslatedMessage } from '../app/TranslatedMessage';
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>;

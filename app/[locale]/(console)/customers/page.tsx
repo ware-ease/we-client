@@ -1,4 +1,4 @@
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import { Customer } from '@/lib/types/customer';
 import { columns } from './Columns';
 import { DataTable } from './DataTable';

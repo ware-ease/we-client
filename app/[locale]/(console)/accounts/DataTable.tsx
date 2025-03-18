@@ -23,7 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/app/_components/shadcn-base/Table';
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import { rankItem } from '@tanstack/match-sorter-utils';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';

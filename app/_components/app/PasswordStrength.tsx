@@ -1,6 +1,10 @@
 import { cn } from '@/lib/utils/utils';
-import { Popover, PopoverContent, PopoverTrigger } from './shadcn-base/Popover';
-import { Progress } from './shadcn-base/Progress';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../shadcn-base/Popover';
+import { Progress } from '../shadcn-base/Progress';
 
 export const checkPasswordStrength = (password: string) => {
   const lengthCheck = password.length >= 8;

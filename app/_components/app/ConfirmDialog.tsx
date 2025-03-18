@@ -8,9 +8,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from './shadcn-base/Dialog';
+} from '../shadcn-base/Dialog';
 import { useTranslations } from 'next-intl';
-import { Button } from './shadcn-base/Button';
+import { Button } from '../shadcn-base/Button';
 
 type ConfirmDialogProps = {
   onConfirm: () => void;

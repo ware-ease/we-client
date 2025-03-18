@@ -1,7 +1,7 @@
 import { BellRing, Check } from 'lucide-react';
 
 import { cn } from '@/lib/utils/utils';
-import { Button } from './shadcn-base/Button';
+import { Button } from '../shadcn-base/Button';
 import {
   Card,
   CardContent,
@@ -9,7 +9,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from './shadcn-base/Card';
+} from '../shadcn-base/Card';
 
 const notifications = [
   {

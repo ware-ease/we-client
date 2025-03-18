@@ -1,6 +1,6 @@
 'use client';
 
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import { Sale } from '@/lib/types/sale';
 import { columns } from './Columns';
 import { DataTable } from './DataTable';

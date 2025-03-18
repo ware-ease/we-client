@@ -14,7 +14,7 @@ import { Label } from '@/app/_components/shadcn-base/Label';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { TranslatedMessage } from '../TranslatedMessage';
+import { TranslatedMessage } from '../app/TranslatedMessage';
 
 const AddCustomerDialog = () => {
   const t = useTranslations();

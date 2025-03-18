@@ -1,5 +1,5 @@
 'use client';
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import React from 'react';
 import { DataTable } from './DataTable';
 import { columns } from './Columns';

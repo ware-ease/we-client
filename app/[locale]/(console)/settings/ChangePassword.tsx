@@ -1,7 +1,7 @@
 'use client';
 import PasswordStrength, {
   checkPasswordStrength,
-} from '@/app/_components/PasswordStrength';
+} from '@/app/_components/app/PasswordStrength';
 import { Button } from '@/app/_components/shadcn-base/Button';
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { changePassword } from '@/lib/services/accountService';

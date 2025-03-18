@@ -1,6 +1,6 @@
 'use client';
 
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import { getAllAccounts } from '@/lib/services/accountService';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'react-toastify';

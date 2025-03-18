@@ -4,7 +4,7 @@ import { Input } from '@/app/_components/shadcn-base/Input';
 import { useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import LanguageSelector from '@/app/_components/LanguageSelector';
+import LanguageSelector from '@/app/_components/app/LanguageSelector';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { LoginRequest } from '@/lib/types/request/login';

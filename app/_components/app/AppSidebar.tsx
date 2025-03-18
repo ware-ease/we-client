@@ -21,7 +21,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from './shadcn-base/SideBar';
+} from '../shadcn-base/SideBar';
 import { Link } from '@/i18n/routing';
 import { useCurrentLanguage } from '@/lib/hooks/useCurrentLanguage';
 import { usePathname } from 'next/navigation';

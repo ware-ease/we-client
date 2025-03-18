@@ -1,5 +1,5 @@
 import React from 'react';
-import { SidebarTrigger } from './shadcn-base/SideBar';
+import { SidebarTrigger } from '../shadcn-base/SideBar';
 import LanguageSelector from './LanguageSelector';
 import NotificationButton from './NotificationButton';
 import AvatarButton from './AvatarButton';

@@ -15,7 +15,7 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@/app/_components/shadcn-base/RadioGroup';
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import { createAccount } from '@/lib/services/accountService';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';

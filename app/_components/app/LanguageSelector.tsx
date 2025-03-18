@@ -6,7 +6,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from './shadcn-base/DropdownMenu';
+} from '../shadcn-base/DropdownMenu';
 import classNames from 'classnames';
 import { Link, usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';

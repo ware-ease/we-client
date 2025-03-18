@@ -1,16 +1,16 @@
 'use client';
 import React from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from './shadcn-base/Avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '../shadcn-base/Avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from './shadcn-base/DropdownMenu';
+} from '../shadcn-base/DropdownMenu';
 import { Link } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { useCurrentLanguage } from '@/lib/hooks/useCurrentLanguage';
-import { useAuth } from './providers/AuthProvider';
+import { useAuth } from '../providers/AuthProvider';
 
 const AvatarButton = () => {
   const lang = useCurrentLanguage();

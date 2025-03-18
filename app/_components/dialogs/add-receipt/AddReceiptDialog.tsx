@@ -11,7 +11,7 @@ import {
 } from '@/app/_components/shadcn-base/Dialog';
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { Label } from '@/app/_components/shadcn-base/Label';
-import { TranslatedMessage } from '@/app/_components/TranslatedMessage';
+import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import { useTranslations } from 'next-intl';
 import { toast } from 'react-toastify';
 import { DataTable } from './DataTable';
