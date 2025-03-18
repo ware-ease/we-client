@@ -10,8 +10,8 @@ export type Product = {
   status?: boolean;
 };
 
-export type ProductTypeDetail = {
+export type ProductType = {
   id: string;
   name: string;
-  description: string;
+  note: string;
 };

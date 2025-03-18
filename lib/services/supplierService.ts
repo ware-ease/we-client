@@ -1,4 +1,5 @@
 import { Supplier } from '../types/supplier';
+import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
 
 export const data: Supplier[] = [
   {
@@ -39,6 +40,35 @@ export const getSuppliers = (): Promise<Supplier[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(data);
-    }, 500); // Simulating a 500ms network delay
+    }, 500);
   });
+};
+
+export const getAllSuppliers = async (): Promise<Supplier[]> => {
+  const response = await axiosGet('/suppliers', {});
+  return response.data.data;
+};
+
+export const getSupplierById = async (id: string): Promise<Supplier> => {
+  const response = await axiosGet(`/suppliers/${id}`, {});
+  return response.data.data;
+};
+
+export const createSupplier = async (
+  supplierData: Partial<Supplier>
+): Promise<Supplier> => {
+  const response = await axiosPost('/suppliers', supplierData, {});
+  return response.data.data;
+};
+
+export const updateSupplier = async (
+  id: string,
+  supplierData: Partial<Supplier>
+): Promise<Supplier> => {
+  const response = await axiosPut(`/suppliers/${id}`, supplierData, {});
+  return response.data.data;
+};
+
+export const deleteSupplier = async (id: string): Promise<void> => {
+  await axiosDelete(`/suppliers/${id}`, {});
 };
