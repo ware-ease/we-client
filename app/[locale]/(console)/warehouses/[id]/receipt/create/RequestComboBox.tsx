@@ -17,25 +17,20 @@ import {
   PopoverTrigger,
 } from '@/app/_components/shadcn-base/Popover';
 import { cn } from '@/lib/utils/utils';
+import { GoodRequest } from '@/lib/types/goodRequest';
 
-const frameworks = [
-  {
-    value: 'next.js',
-    label: 'Nhập mua NM001',
-  },
-  {
-    value: 'sveltekit',
-    label: 'Nhập trả hàng NTH001',
-  },
-  {
-    value: 'nuxt.js',
-    label: 'Nhập chuyển kho NCK001',
-  },
-];
+interface RequestComboBoxProps {
+  value: string;
+  onChange: (value: string) => void;
+  requests: GoodRequest[] | undefined;
+}
 
-export function RequestComboBox() {
+const RequestComboBox: React.FC<RequestComboBoxProps> = ({
+  value,
+  onChange,
+  requests,
+}) => {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -47,7 +42,7 @@ export function RequestComboBox() {
           className='w-[200px] justify-between'
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+            ? requests?.find((req) => req.id === value)?.id
             : 'Chọn yêu cầu'}
           <ChevronsUpDown className='opacity-50' />
         </Button>
@@ -58,28 +53,36 @@ export function RequestComboBox() {
           <CommandList>
             <CommandEmpty>Hiện chưa có yêu cầu.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
-                <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue);
-                    setOpen(false);
-                  }}
-                >
-                  {framework.label}
-                  <Check
-                    className={cn(
-                      'ml-auto',
-                      value === framework.value ? 'opacity-100' : 'opacity-0'
-                    )}
-                  />
-                </CommandItem>
-              ))}
+              {requests ? (
+                requests.map((req) => (
+                  <CommandItem
+                    key={req.id}
+                    value={req.id}
+                    onSelect={(currentValue) => {
+                      onChange(currentValue === value ? '' : currentValue);
+                      setOpen(false);
+                    }}
+                  >
+                    {req.id}
+                    <Check
+                      className={cn(
+                        'ml-auto',
+                        value === req.id ? 'opacity-100' : 'opacity-0'
+                      )}
+                    />
+                  </CommandItem>
+                ))
+              ) : (
+                <div className='flex justify-center items-center h-full w-full py-4'>
+                  <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
+                </div>
+              )}
             </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
   );
-}
+};
+
+export default RequestComboBox;
