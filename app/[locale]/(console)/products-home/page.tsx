@@ -1,6 +1,6 @@
 'use client';
+import BatchDialog from '@/app/_components/dialogs/BatchDialog';
 import CategoryDialog from '@/app/_components/dialogs/CategoryDialog';
-import CustomerDialog from '@/app/_components/dialogs/CustomerDialog';
 import UnitDialog from '@/app/_components/dialogs/UnitDialog';
 import { Button } from '@/app/_components/shadcn-base/Button';
 import {
@@ -114,12 +114,12 @@ const ProductsHome = () => {
         </div>
         <div className='p-4 flex space-x-10'>
           <div className='w-2/5'>
-            <CustomerDialog>
+            <BatchDialog>
               <Button className='w-full drop-shadow-xl'>
                 <Settings />
                 Hãng sản xuất
               </Button>
-            </CustomerDialog>
+            </BatchDialog>
           </div>
           <div className='w-2/5'>
             <UnitDialog>

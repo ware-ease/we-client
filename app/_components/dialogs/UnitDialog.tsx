@@ -179,7 +179,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
 
         <div className='border rounded-md p-3 max-h-60 overflow-auto'>
           <h3 className='text-sm font-semibold text-gray-600'>
-            Danh sách đơn vịvị
+            Danh sách đơn vị
           </h3>
           <ul className='mt-2 space-y-2'>
             {filteredUnits.length > 0 ? (
