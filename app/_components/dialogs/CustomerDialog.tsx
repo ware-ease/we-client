@@ -151,16 +151,11 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
               id='customer-name'
               value={newCustomer}
               onChange={(e) => setNewCustomer(e.target.value)}
-              placeholder='Enter customer name...'
+              placeholder='Nhập tên khách hàng...'
               className='mt-1'
             />
             <div className='flex justify-end mt-3 space-x-2'>
-              <Button
-                className='bg-blue-500 text-white'
-                onClick={handleAddCustomer}
-              >
-                Lưu và Chọn
-              </Button>
+              <Button onClick={handleAddCustomer}>Lưu và Chọn</Button>
               <Button variant='secondary' onClick={() => setShowForm(false)}>
                 Đóng
               </Button>

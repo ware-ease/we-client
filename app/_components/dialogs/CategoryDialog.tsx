@@ -146,11 +146,14 @@ const CategoryDialog = ({ children }: CategoryDialogProps) => {
 
         {showForm ? (
           <div className='border p-4 rounded-md bg-gray-50'>
-            <Label>Tên danh mục*</Label>
+            <Label htmlFor='category-name' className='text-red-600'>
+              Tên danh mục*
+            </Label>
             <Input
               value={newCategory}
               onChange={(e) => setNewCategory(e.target.value)}
               placeholder='Nhập tên danh mục...'
+              className='mt-1'
             />
             <div className='flex justify-end mt-3 space-x-2'>
               <Button onClick={handleAddCategory}>Lưu và Chọn</Button>
