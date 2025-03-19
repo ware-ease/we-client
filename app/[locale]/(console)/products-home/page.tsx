@@ -1,5 +1,6 @@
 'use client';
 import CategoryDialog from '@/app/_components/dialogs/CategoryDialog';
+import CustomerDialog from '@/app/_components/dialogs/CustomerDialog';
 import UnitDialog from '@/app/_components/dialogs/UnitDialog';
 import { Button } from '@/app/_components/shadcn-base/Button';
 import {
@@ -18,7 +19,6 @@ import {
 } from '@/lib/services/productService';
 import { useQuery } from '@tanstack/react-query';
 import { Settings } from 'lucide-react';
-import React from 'react';
 
 const ProductsHome = () => {
   const { data: productCount } = useQuery({
@@ -114,10 +114,12 @@ const ProductsHome = () => {
         </div>
         <div className='p-4 flex space-x-10'>
           <div className='w-2/5'>
-            <Button className='w-full drop-shadow-xl'>
-              <Settings />
-              Hãng sản xuất
-            </Button>
+            <CustomerDialog>
+              <Button className='w-full drop-shadow-xl'>
+                <Settings />
+                Hãng sản xuất
+              </Button>
+            </CustomerDialog>
           </div>
           <div className='w-2/5'>
             <UnitDialog>
