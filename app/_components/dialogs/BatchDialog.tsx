@@ -157,14 +157,14 @@ const BatchDialog = ({ children }: BatchDialogProps) => {
 
         {showForm ? (
           <div className='space-y-3'>
-            <Label>Mã lô hàng *</Label>
+            <Label className='text-red-600'>Mã lô hàng *</Label>
             <Input
               value={newBatch.code}
               onChange={(e) =>
                 setNewBatch({ ...newBatch, code: e.target.value })
               }
             />
-            <Label>Tên lô hàng *</Label>
+            <Label className='text-red-600'>Tên lô hàng *</Label>
             <Input
               value={newBatch.name}
               onChange={(e) =>
@@ -203,7 +203,12 @@ const BatchDialog = ({ children }: BatchDialogProps) => {
             </div>
           </div>
         ) : (
-          <Button onClick={() => setShowForm(true)}>+ Tạo lô hàng mới</Button>
+          <Button
+            className='w-full bg-green-500 text-white'
+            onClick={() => setShowForm(true)}
+          >
+            + Tạo lô hàng mới
+          </Button>
         )}
 
         <div className='relative'>

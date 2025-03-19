@@ -164,7 +164,7 @@ const CategoryDialog = ({ children }: CategoryDialogProps) => {
           </div>
         ) : (
           <Button
-            className='w-full bg-green-500 text-white mb-3'
+            className='w-full bg-green-500 text-white'
             onClick={() => setShowForm(true)}
           >
             + Tạo danh mục mới
