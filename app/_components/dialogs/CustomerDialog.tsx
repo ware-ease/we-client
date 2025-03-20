@@ -15,7 +15,6 @@ import { Label } from '@/app/_components/shadcn-base/Label';
 import {
   createCustomer,
   deleteCustomer,
-  getAllCustomers,
   updateCustomer,
 } from '@/lib/services/customerService';
 import { Customer } from '@/lib/types/customer';
@@ -25,13 +24,19 @@ import { toast } from 'react-toastify';
 
 interface CustomerDialogProps {
   children: ReactNode;
+  customers: Customer[];
+  onRefresh: () => void;
 }
 
-const CustomerDialog = ({ children }: CustomerDialogProps) => {
+const CustomerDialog = ({
+  children,
+  customers,
+  onRefresh,
+}: CustomerDialogProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [customers, setCustomers] = useState<Customer[]>([]);
-  const [filteredCustomers, setFilteredCustomers] = useState<Customer[]>([]);
+  const [filteredCustomers, setFilteredCustomers] =
+    useState<Customer[]>(customers);
   const [newCustomer, setNewCustomer] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -43,33 +48,31 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
   );
 
   useEffect(() => {
-    if (open) fetchCustomers();
-  }, [open]);
+    setFilteredCustomers(customers);
+  }, [customers]);
 
-  const fetchCustomers = async () => {
-    try {
-      const data = await getAllCustomers();
-      setCustomers(data);
-      setFilteredCustomers(data);
-    } catch (error) {
-      console.error('Lỗi khi lấy danh sách khách hàng:', error);
-      toast.error('Không thể tải danh sách khách hàng.');
-    }
-  };
+  // const fetchCustomers = async () => {
+  //   try {
+  //     const data = await getAllCustomers();
+  //     setCustomers(data);
+  //     setFilteredCustomers(data);
+  //   } catch (error) {
+  //     console.error('Lỗi khi lấy danh sách khách hàng:', error);
+  //     toast.error('Không thể tải danh sách khách hàng.');
+  //   }
+  // };
 
   const handleAddCustomer = async () => {
     if (!newCustomer.trim()) {
       toast.error('Vui lòng nhập tên khách hàng hợp lệ.');
       return;
     }
-
     try {
-      const createdCustomer = await createCustomer({ name: newCustomer });
-      setCustomers([...customers, createdCustomer]);
-      setFilteredCustomers([...customers, createdCustomer]);
+      await createCustomer({ name: newCustomer });
       setNewCustomer('');
       setShowForm(false);
       toast.success('Thêm khách hàng thành công!');
+      onRefresh();
     } catch (error) {
       console.error('Lỗi khi thêm khách hàng:', error);
       toast.error('Không thể thêm khách hàng.');
@@ -94,13 +97,9 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
   const handleSaveEdit = async (id: string) => {
     try {
       await updateCustomer(id, { name: editedName });
-      const updatedCustomers = customers.map((customer) =>
-        customer.id === id ? { ...customer, name: editedName } : customer
-      );
-      setCustomers(updatedCustomers);
-      setFilteredCustomers(updatedCustomers);
       setEditingCustomer(null);
       toast.success('Cập nhật khách hàng thành công!');
+      onRefresh();
     } catch (error) {
       console.error('Lỗi khi cập nhật khách hàng:', error);
       toast.error('Không thể cập nhật khách hàng.');
@@ -115,13 +114,9 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
   const handleDeleteCustomer = async () => {
     if (!customerToDelete) return;
     try {
-      await deleteCustomer(customerToDelete?.id || '');
-      const updatedCustomers = customers.filter(
-        (customer) => customer.id !== customerToDelete.id
-      );
-      setCustomers(updatedCustomers);
-      setFilteredCustomers(updatedCustomers);
+      await deleteCustomer(customerToDelete.id);
       toast.success('Xóa khách hàng thành công!');
+      onRefresh();
     } catch (error) {
       console.error('Lỗi khi xóa khách hàng:', error);
       toast.error('Không thể xóa khách hàng.');

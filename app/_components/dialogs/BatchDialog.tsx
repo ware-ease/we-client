@@ -156,37 +156,49 @@ const BatchDialog = ({ children }: BatchDialogProps) => {
         </DialogHeader>
 
         {showForm ? (
-          <div className='space-y-3'>
-            <Label className='text-red-600'>Mã lô hàng *</Label>
-            <Input
-              value={newBatch.code}
-              onChange={(e) =>
-                setNewBatch({ ...newBatch, code: e.target.value })
-              }
-            />
-            <Label className='text-red-600'>Tên lô hàng *</Label>
-            <Input
-              value={newBatch.name}
-              onChange={(e) =>
-                setNewBatch({ ...newBatch, name: e.target.value })
-              }
-            />
-            <Label>Ngày sản xuất</Label>
-            <Input
-              type='date'
-              value={newBatch.mfgDate}
-              onChange={(e) =>
-                setNewBatch({ ...newBatch, mfgDate: e.target.value })
-              }
-            />
-            <Label>Ngày hết hạn</Label>
-            <Input
-              type='date'
-              value={newBatch.expDate}
-              onChange={(e) =>
-                setNewBatch({ ...newBatch, expDate: e.target.value })
-              }
-            />
+          <div className='border p-4 rounded-md bg-gray-50'>
+            <div>
+              <Label className='text-red-600'>Mã lô hàng *</Label>
+              <Input
+                value={newBatch.code}
+                onChange={(e) =>
+                  setNewBatch({ ...newBatch, code: e.target.value })
+                }
+                className='bg-white'
+              />
+            </div>
+            <div>
+              <Label className='text-red-600'>Tên lô hàng *</Label>
+              <Input
+                value={newBatch.name}
+                onChange={(e) =>
+                  setNewBatch({ ...newBatch, name: e.target.value })
+                }
+                className='bg-white'
+              />
+            </div>
+            <div>
+              <Label>Ngày sản xuất</Label>
+              <Input
+                type='date'
+                value={newBatch.mfgDate}
+                onChange={(e) =>
+                  setNewBatch({ ...newBatch, mfgDate: e.target.value })
+                }
+                className='bg-white'
+              />
+            </div>
+            <div>
+              <Label>Ngày hết hạn</Label>
+              <Input
+                type='date'
+                value={newBatch.expDate}
+                onChange={(e) =>
+                  setNewBatch({ ...newBatch, expDate: e.target.value })
+                }
+                className='bg-white'
+              />
+            </div>
             <div className='flex justify-end mt-3 space-x-2'>
               <Button onClick={handleSaveBatch}>
                 {newBatch.id ? 'Lưu thay đổi' : 'Lưu và chọn'}

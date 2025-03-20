@@ -13,7 +13,6 @@ import { Label } from '@/app/_components/shadcn-base/Label';
 import {
   createCategory,
   deleteCategory,
-  getAllCategories,
   updateCategory,
 } from '@/lib/services/categoryService';
 import { Category } from '@/lib/types/category';
@@ -23,13 +22,19 @@ import { toast } from 'react-toastify';
 
 interface CategoryDialogProps {
   children: ReactNode;
+  categories: Category[];
+  onRefresh: () => void;
 }
 
-const CategoryDialog = ({ children }: CategoryDialogProps) => {
+const CategoryDialog = ({
+  children,
+  categories,
+  onRefresh,
+}: CategoryDialogProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
+  const [filteredCategories, setFilteredCategories] =
+    useState<Category[]>(categories);
   const [newCategory, setNewCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -41,19 +46,19 @@ const CategoryDialog = ({ children }: CategoryDialogProps) => {
   );
 
   useEffect(() => {
-    if (open) fetchCategories();
-  }, [open]);
+    setFilteredCategories(categories);
+  }, [categories]);
 
-  const fetchCategories = async () => {
-    try {
-      const data = await getAllCategories();
-      setCategories(data);
-      setFilteredCategories(data);
-    } catch (error) {
-      console.error('', error);
-      toast.error('Không thể tải danh sách danh mục.');
-    }
-  };
+  // const fetchCategories = async () => {
+  //   try {
+  //     const data = await getAllCategories();
+  //     setCategories(data);
+  //     setFilteredCategories(data);
+  //   } catch (error) {
+  //     console.error('', error);
+  //     toast.error('Không thể tải danh sách danh mục.');
+  //   }
+  // };
 
   const handleAddCategory = async () => {
     if (!newCategory.trim()) {
@@ -61,14 +66,13 @@ const CategoryDialog = ({ children }: CategoryDialogProps) => {
       return;
     }
     try {
-      const createdCategory = await createCategory({ name: newCategory });
-      setCategories([...categories, createdCategory]);
-      setFilteredCategories([...categories, createdCategory]);
+      await createCategory({ name: newCategory });
+      toast.success('Thêm danh mục thành công!');
       setNewCategory('');
       setShowForm(false);
-      toast.success('Thêm danh mục thành công!');
+      onRefresh();
     } catch (error) {
-      console.error('', error);
+      console.error(error);
       toast.error('Không thể thêm danh mục.');
     }
   };
@@ -91,20 +95,11 @@ const CategoryDialog = ({ children }: CategoryDialogProps) => {
   const handleSaveEdit = async (id: string) => {
     try {
       await updateCategory(id, { name: editedName });
-      setCategories(
-        categories.map((category) =>
-          category.id === id ? { ...category, name: editedName } : category
-        )
-      );
-      setFilteredCategories(
-        categories.map((category) =>
-          category.id === id ? { ...category, name: editedName } : category
-        )
-      );
-      setEditingCategory(null);
       toast.success('Cập nhật danh mục thành công!');
+      setEditingCategory(null);
+      onRefresh();
     } catch (error) {
-      console.error('', error);
+      console.error(error);
       toast.error('Không thể cập nhật danh mục.');
     }
   };
@@ -118,14 +113,10 @@ const CategoryDialog = ({ children }: CategoryDialogProps) => {
     if (!categoryToDelete) return;
     try {
       await deleteCategory(categoryToDelete.id);
-      const updatedCategories = categories.filter(
-        (category) => category.id !== categoryToDelete.id
-      );
-      setCategories(updatedCategories);
-      setFilteredCategories(updatedCategories);
       toast.success('Xóa danh mục thành công!');
+      onRefresh();
     } catch (error) {
-      console.error('', error);
+      console.error(error);
       toast.error('Không thể xóa danh mục.');
     } finally {
       setDeleteDialogOpen(false);

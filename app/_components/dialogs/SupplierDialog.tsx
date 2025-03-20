@@ -15,7 +15,6 @@ import { Label } from '@/app/_components/shadcn-base/Label';
 import {
   createSupplier,
   deleteSupplier,
-  getAllSuppliers,
   updateSupplier,
 } from '@/lib/services/supplierService';
 import { Supplier } from '@/lib/types/supplier';
@@ -25,13 +24,19 @@ import { toast } from 'react-toastify';
 
 interface SupplierDialogProps {
   children: ReactNode;
+  suppliers: Supplier[];
+  fetchSuppliers: () => Promise<void>;
 }
 
-const SupplierDialog = ({ children }: SupplierDialogProps) => {
+const SupplierDialog = ({
+  children,
+  suppliers,
+  fetchSuppliers,
+}: SupplierDialogProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
-  const [filteredSuppliers, setFilteredSuppliers] = useState<Supplier[]>([]);
+  const [filteredSuppliers, setFilteredSuppliers] =
+    useState<Supplier[]>(suppliers);
   const [newSupplier, setNewSupplier] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -43,19 +48,19 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
   );
 
   useEffect(() => {
-    if (open) fetchSuppliers();
-  }, [open]);
+    setFilteredSuppliers(suppliers);
+  }, [suppliers]);
 
-  const fetchSuppliers = async () => {
-    try {
-      const data = await getAllSuppliers();
-      setSuppliers(data);
-      setFilteredSuppliers(data);
-    } catch (error) {
-      console.error('Lỗi khi lấy danh sách nhà cung cấp:', error);
-      toast.error('Không thể tải danh sách nhà cung cấp.');
-    }
-  };
+  // const fetchSuppliers = async () => {
+  //   try {
+  //     const data = await getAllSuppliers();
+  //     setSuppliers(data);
+  //     setFilteredSuppliers(data);
+  //   } catch (error) {
+  //     console.error('Lỗi khi lấy danh sách nhà cung cấp:', error);
+  //     toast.error('Không thể tải danh sách nhà cung cấp.');
+  //   }
+  // };
 
   const handleAddSupplier = async () => {
     if (!newSupplier.trim()) {
@@ -64,11 +69,9 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
     }
 
     try {
-      const createdSupplier = await createSupplier({ name: newSupplier });
-      setSuppliers([...suppliers, createdSupplier]);
-      setFilteredSuppliers([...suppliers, createdSupplier]);
+      await createSupplier({ name: newSupplier });
+      await fetchSuppliers();
       setNewSupplier('');
-      setShowForm(false);
       toast.success('Thêm nhà cung cấp thành công!');
     } catch (error) {
       console.error('Lỗi khi thêm nhà cung cấp:', error);
@@ -94,11 +97,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
   const handleSaveEdit = async (id: string) => {
     try {
       await updateSupplier(id, { name: editedName });
-      const updatedSuppliers = suppliers.map((supplier) =>
-        supplier.id === id ? { ...supplier, name: editedName } : supplier
-      );
-      setSuppliers(updatedSuppliers);
-      setFilteredSuppliers(updatedSuppliers);
+      await fetchSuppliers(); // Cập nhật danh sách sau khi chỉnh sửa
       setEditingSupplier(null);
       toast.success('Cập nhật nhà cung cấp thành công!');
     } catch (error) {
@@ -114,14 +113,11 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
 
   const handleDeleteSupplier = async () => {
     if (!supplierToDelete) return;
+
     try {
-      await deleteSupplier(supplierToDelete?.id || '');
-      const updatedSuppliers = suppliers.filter(
-        (supplier) => supplier.id !== supplierToDelete.id
-      );
-      setSuppliers(updatedSuppliers);
-      setFilteredSuppliers(updatedSuppliers);
-      toast.success('Xóa nhà cung cấp thành công!');
+      await deleteSupplier(supplierToDelete.id);
+      toast.success(`Đã xóa nhà cung cấp: ${supplierToDelete.name}`);
+      await fetchSuppliers(); // Cập nhật danh sách sau khi xóa
     } catch (error) {
       console.error('Lỗi khi xóa nhà cung cấp:', error);
       toast.error('Không thể xóa nhà cung cấp.');
