@@ -9,6 +9,25 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
+const axiosRefreshInstance = axios.create({
+  baseURL: baseUrl,
+  withCredentials: true,
+});
+
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401) {
+      await axiosRefreshInstance.post(baseUrl + '/auth/refresh');
+      const res = await axios.request(error.config);
+
+      if (res.status !== 401) return res;
+    }
+
+    return Promise.reject(error);
+  }
+);
+
 export const axiosGet = (path: string, config: any) =>
   axiosInstance.get(baseUrl + path, config);
 

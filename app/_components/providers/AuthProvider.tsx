@@ -2,11 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Account } from '@/lib/types/account';
 import { Permission } from '@/lib/types/permission';
-import {
-  getCurrentUser,
-  login,
-  refreshTokens,
-} from '@/lib/services/authService';
+import { getCurrentUser, login } from '@/lib/services/authService';
 import { getPermissions } from '@/lib/services/permissionService';
 import { LoginRequest } from '@/lib/types/request/login';
 import { AxiosResponse } from 'axios';
@@ -34,16 +30,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         const userRes = await getCurrentUser();
         setCurrentUser(userRes.data.data);
       } catch {
-        setCurrentUser(undefined);
-        try {
-          const tokenRes = await refreshTokens();
-          if (tokenRes.status === 200) {
-            const userRes = await getCurrentUser();
-            setCurrentUser(userRes.data.data);
-          }
-        } catch {
-          setCurrentUser(null);
-        }
+        setCurrentUser(null);
+        // try {
+        //   const tokenRes = await refreshTokens();
+        //   if (tokenRes.status === 200) {
+        //     const userRes = await getCurrentUser();
+        //     setCurrentUser(userRes.data.data);
+        //   }
+        // } catch {
+        //   setCurrentUser(null);
+        // }
       }
     }
 
