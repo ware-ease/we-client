@@ -36,11 +36,7 @@ const WarehousesList = () => {
             name={warehouse.name}
             operatedFrom={`${new Date(
               warehouse.operateFrom ?? ''
-            ).getDate()}/${new Date(
-              warehouse.operateFrom ?? ''
-            ).getMonth()}/${new Date(
-              warehouse.operateFrom ?? ''
-            ).getFullYear()}`}
+            ).toLocaleDateString('vi-VN')}`}
           />
         ))}
       </div>
