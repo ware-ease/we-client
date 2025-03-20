@@ -22,7 +22,7 @@ import { toast } from 'react-toastify';
 
 interface CategoryDialogProps {
   children: ReactNode;
-  categories: Category[];
+  categories: Category[] | undefined;
   onRefresh: () => void;
 }
 
@@ -33,8 +33,9 @@ const CategoryDialog = ({
 }: CategoryDialogProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [filteredCategories, setFilteredCategories] =
-    useState<Category[]>(categories);
+  const [filteredCategories, setFilteredCategories] = useState<
+    Category[] | undefined
+  >(categories);
   const [newCategory, setNewCategory] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -81,7 +82,7 @@ const CategoryDialog = ({
     const value = e.target.value;
     setSearchTerm(value);
     setFilteredCategories(
-      categories.filter((category) =>
+      categories?.filter((category) =>
         category.name.toLowerCase().includes(value.toLowerCase())
       )
     );
@@ -178,7 +179,7 @@ const CategoryDialog = ({
             Danh sách danh mục
           </h3>
           <ul className='mt-2 space-y-2'>
-            {filteredCategories.map((category, index) => (
+            {filteredCategories?.map((category, index) => (
               <li
                 key={category.id}
                 className='flex justify-between items-center p-2 border rounded-md hover:bg-gray-100'
