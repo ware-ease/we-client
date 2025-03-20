@@ -2,6 +2,7 @@
 import axios from 'axios';
 
 export const baseUrl = process.env.NEXT_PUBLIC_API_URL;
+export const baseFilters = '?pageIndex=1&pageSize=1000';
 
 const axiosInstance = axios.create({
   baseURL: baseUrl,

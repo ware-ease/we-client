@@ -84,7 +84,7 @@ const AddProductDialog = () => {
         </Button>
       </DialogTrigger>
       <DialogContent
-        className='flex flex-col w-full max-w-4xl p-6 m-4 bg-white rounded-lg shadow-lg border border-gray-200 !overflow-visible fixed'
+        className=''
         // style={{
         //   position: 'fixed',
         //   top: '50%',

@@ -1,5 +1,11 @@
 import { Batch } from '../types/batch';
-import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPost,
+  axiosPut,
+  baseFilters,
+} from './baseService';
 
 export const getBatchCount = async (): Promise<number> => {
   const response = await axiosGet('/batches/count', {});
@@ -7,7 +13,7 @@ export const getBatchCount = async (): Promise<number> => {
 };
 
 export const getAllBatches = async (): Promise<Batch[]> => {
-  const response = await axiosGet('/batches', {});
+  const response = await axiosGet('/batches' + baseFilters, {});
   return response.data.data.records;
 };
 

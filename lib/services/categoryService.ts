@@ -1,5 +1,11 @@
 import { Category } from '../types/category';
-import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPost,
+  axiosPut,
+  baseFilters,
+} from './baseService';
 
 export const getCategoryCount = async (): Promise<number> => {
   const response = await axiosGet('/categories/count', {});
@@ -7,7 +13,7 @@ export const getCategoryCount = async (): Promise<number> => {
 };
 
 export const getAllCategories = async (): Promise<Category[]> => {
-  const response = await axiosGet('/categories', {});
+  const response = await axiosGet('/categories' + baseFilters, {});
   return response.data.data.records;
 };
 

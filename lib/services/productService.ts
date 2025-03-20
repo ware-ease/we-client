@@ -1,9 +1,9 @@
 import { Product, ProductType } from '../types/product';
 import { ProductCreate } from '../types/request/product';
-import { axiosGet, axiosPost } from './baseService';
+import { axiosGet, axiosPost, baseFilters } from './baseService';
 
 export const getAllProducts = async (): Promise<Product[]> => {
-  const response = await axiosGet('/products', {});
+  const response = await axiosGet('/products' + baseFilters, {});
   return response.data.data.records;
 };
 

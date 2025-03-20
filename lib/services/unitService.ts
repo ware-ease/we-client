@@ -1,8 +1,14 @@
 import { Unit } from '../types/unit';
-import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPost,
+  axiosPut,
+  baseFilters,
+} from './baseService';
 
 export const getAllUnits = async (): Promise<Unit[]> => {
-  const response = await axiosGet('/units', {});
+  const response = await axiosGet('/units' + baseFilters, {});
   return response.data.data.records;
 };
 

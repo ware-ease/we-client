@@ -1,8 +1,14 @@
 import { Warehouse } from '../types/warehouse';
-import { axiosDelete, axiosGet, axiosPatch, axiosPost } from './baseService';
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPatch,
+  axiosPost,
+  baseFilters,
+} from './baseService';
 
 export const getAllWarehouses = async (): Promise<Warehouse[]> => {
-  const response = await axiosGet('/warehouses', {});
+  const response = await axiosGet('/warehouses' + baseFilters, {});
   return response.data.data.records;
 };
 

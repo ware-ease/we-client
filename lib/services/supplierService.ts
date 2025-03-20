@@ -1,5 +1,11 @@
 import { Supplier } from '../types/supplier';
-import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPost,
+  axiosPut,
+  baseFilters,
+} from './baseService';
 
 export const data: Supplier[] = [
   {
@@ -45,7 +51,7 @@ export const getSuppliers = (): Promise<Supplier[]> => {
 };
 
 export const getAllSuppliers = async (): Promise<Supplier[]> => {
-  const response = await axiosGet('/suppliers', {});
+  const response = await axiosGet('/suppliers' + baseFilters, {});
   return response.data.data.records;
 };
 

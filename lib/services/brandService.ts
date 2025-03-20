@@ -1,8 +1,14 @@
 import { Brand } from '../types/brand';
-import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPost,
+  axiosPut,
+  baseFilters,
+} from './baseService';
 
 export const getAllBrands = async (): Promise<Brand[]> => {
-  const response = await axiosGet('/brands', {});
+  const response = await axiosGet('/brands' + baseFilters, {});
   return response.data.data.records;
 };
 

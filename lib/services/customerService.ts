@@ -1,8 +1,14 @@
 import { Customer } from '../types/customer';
-import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPost,
+  axiosPut,
+  baseFilters,
+} from './baseService';
 
 export const getAllCustomers = async (): Promise<Customer[]> => {
-  const response = await axiosGet('/customers', {});
+  const response = await axiosGet('/customers' + baseFilters, {});
   return response.data.data;
 };
 
