@@ -36,9 +36,15 @@ const WarehousesList = () => {
             key={index}
             idPath={`${pathname}/${warehouse.id}`}
             address={warehouse.address}
-            area='2000m2'
+            area={`${warehouse.area.toString()}m²`}
             name={warehouse.name}
-            operatedFrom='15/3/2025'
+            operatedFrom={`${new Date(
+              warehouse.operateFrom ?? ''
+            ).getDate()}/${new Date(
+              warehouse.operateFrom ?? ''
+            ).getMonth()}/${new Date(
+              warehouse.operateFrom ?? ''
+            ).getFullYear()}`}
           />
         ))}
       </div>
