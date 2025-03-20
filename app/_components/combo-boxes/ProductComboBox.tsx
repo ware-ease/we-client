@@ -16,21 +16,26 @@ import {
   CommandList,
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
-import { Product } from '@/lib/types/product';
+import { useProducts } from '@/lib/hooks/queries/productQueries';
+import Loading from '../app/Loading';
+import Error from '../app/Error';
 
 interface ProductComboBoxProps {
   value: string;
   onChange: (value: string) => void;
-  products: Product[] | undefined;
 }
 
 const ProductComboBox: React.FC<ProductComboBoxProps> = ({
   value,
   onChange,
-  products,
 }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const { data: products, isPending, isError } = useProducts();
+
+  if (isError) {
+    return <Error />;
+  }
 
   const handleOnAdd = () => {};
 
@@ -44,7 +49,11 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
           className='w-full justify-between border-none'
           ref={triggerRef}
         >
-          {value ? products?.find((p) => p.id === value)?.sku : 'Chọn sản phẩm'}
+          {isPending
+            ? 'Chọn sản phẩm'
+            : value
+            ? products.find((p) => p.id === value)?.sku
+            : 'Chọn sản phẩm'}
           <ChevronsUpDown className='opacity-50 truncate' />
         </Button>
       </PopoverTrigger>
@@ -57,7 +66,7 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
           <CommandList>
             <CommandEmpty>Không tìm thấy sản phẩm.</CommandEmpty>
             <CommandGroup>
-              {products ? (
+              {!isPending ? (
                 products.map((p, index) => (
                   <CommandItem
                     key={index}
@@ -77,9 +86,7 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
                   </CommandItem>
                 ))
               ) : (
-                <div className='flex justify-center items-center h-full w-full py-4'>
-                  <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
-                </div>
+                <Loading />
               )}
               <CommandItem
                 className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'

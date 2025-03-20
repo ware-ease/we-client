@@ -17,8 +17,8 @@ import {
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
 import ProductTypeDialog from '../dialogs/ProductTypeDialog';
-import { useQuery } from '@tanstack/react-query';
-import { getAllBrands } from '@/lib/services/brandService';
+import { useBrands } from '@/lib/hooks/queries/brandQueries';
+import Error from '../app/Error';
 
 interface BrandComboBoxProps {
   value: string;
@@ -29,10 +29,11 @@ const BrandComboBox: React.FC<BrandComboBoxProps> = ({ value, onChange }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
-  const { data: brands } = useQuery({
-    queryKey: ['brands'],
-    queryFn: getAllBrands,
-  });
+  const { data: brands, isPending, isError } = useBrands();
+
+  if (isError) {
+    return <Error />;
+  }
 
   const handleOnAdd = () => {};
 
@@ -62,7 +63,7 @@ const BrandComboBox: React.FC<BrandComboBoxProps> = ({ value, onChange }) => {
           <CommandList>
             <CommandEmpty>Không tìm thấy hãng.</CommandEmpty>
             <CommandGroup>
-              {brands ? (
+              {!isPending ? (
                 brands.map((p) => (
                   <CommandItem
                     key={p.id}

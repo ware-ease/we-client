@@ -14,21 +14,12 @@ import { Label } from '@/app/_components/shadcn-base/Label';
 import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import ProductTypeComboBox from '../combo-boxes/ProductTypeComboBox';
 import BrandComboBox from '../combo-boxes/BrandComboBox';
 import UnitComboBox from '../combo-boxes/UnitComboBox';
-import { useMutation } from '@tanstack/react-query';
-import { ProductCreate } from '@/lib/types/request/product';
-import { createProduct } from '@/lib/services/productService';
+import { useAddProduct } from '@/lib/hooks/queries/productQueries';
 
-interface AddProductDialogProps {
-  onProductAdded: () => void;
-}
-
-const AddProductDialog: React.FC<AddProductDialogProps> = ({
-  onProductAdded,
-}) => {
+const AddProductDialog = () => {
   const t = useTranslations();
   const [formData, setFormData] = useState({
     name: '',
@@ -38,23 +29,7 @@ const AddProductDialog: React.FC<AddProductDialogProps> = ({
     brandId: '',
   });
 
-  const productCreateMutation = useMutation({
-    mutationFn: (data: ProductCreate) => {
-      const res = createProduct(data);
-      return res;
-    },
-    onSuccess: () => {
-      toast.success(t('Toast.success'), {
-        autoClose: 3000,
-      });
-      onProductAdded();
-    },
-    onError: () => {
-      toast.error(t('Toast.error'), {
-        autoClose: 3000,
-      });
-    },
-  });
+  const productCreateMutation = useAddProduct();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

@@ -5,17 +5,13 @@ import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import React from 'react';
 import WarehouseCard from './WarehouseCard';
 import AddWarehouseDialog from '@/app/_components/dialogs/AddWarehouseDialog';
-import { useQuery } from '@tanstack/react-query';
-import { getAllWarehouses } from '@/lib/services/warehouseService';
 import { usePathname } from '@/i18n/routing';
+import { useWarehouses } from '@/lib/hooks/queries/warehouseQueries';
 
 const WarehousesList = () => {
   const pathname = usePathname();
 
-  const { data: warehouses } = useQuery({
-    queryKey: ['warehouses'],
-    queryFn: getAllWarehouses,
-  });
+  const { data: warehouses } = useWarehouses();
 
   return (
     <div className='flex flex-col rounded-md border w-full'>

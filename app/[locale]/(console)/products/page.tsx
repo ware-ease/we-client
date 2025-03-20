@@ -5,23 +5,23 @@ import { DataTable } from './DataTable';
 import { columns } from './Columns';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getAllProducts } from '@/lib/services/productService';
-import { toast } from 'react-toastify';
+import Loading from '@/app/_components/app/Loading';
+import Error from '@/app/_components/app/Error';
 
 const Products = () => {
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ['products'],
     queryFn: getAllProducts,
   });
 
-  if (isLoading) {
-    return <p className='text-center text-gray-500'>Loading...</p>;
+  if (isPending) {
+    return <Loading />;
   }
 
   if (isError) {
-    toast.error('Failed to fetch products.');
-    return <p className='text-center text-red-500'>Error loading accounts.</p>;
+    return <Error />;
   }
 
   const handleProductAdded = () => {
@@ -39,7 +39,7 @@ const Products = () => {
         </div>
         <DataTable
           columns={columns}
-          data={data!}
+          data={data}
           onProductAdded={handleProductAdded}
         />
       </div>

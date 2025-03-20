@@ -17,8 +17,9 @@ import {
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
 import UnitDialog from '../dialogs/UnitDialog';
-import { useQuery } from '@tanstack/react-query';
-import { getAllUnits } from '@/lib/services/unitService';
+import Loading from '../app/Loading';
+import { useUnits } from '@/lib/hooks/queries/unitQueries';
+import Error from '../app/Error';
 
 interface UnitComboBoxProps {
   value: string;
@@ -29,10 +30,11 @@ const UnitComboBox: React.FC<UnitComboBoxProps> = ({ value, onChange }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
-  const { data: units } = useQuery({
-    queryKey: ['units'],
-    queryFn: getAllUnits,
-  });
+  const { data: units, isPending, isError } = useUnits();
+
+  if (isError) {
+    return <Error />;
+  }
 
   const handleOnAdd = () => {};
 
@@ -62,7 +64,7 @@ const UnitComboBox: React.FC<UnitComboBoxProps> = ({ value, onChange }) => {
           <CommandList>
             <CommandEmpty>Không tìm thấy đơn vị.</CommandEmpty>
             <CommandGroup>
-              {units ? (
+              {!isPending ? (
                 units.map((p) => (
                   <CommandItem
                     key={p.id}
@@ -82,9 +84,7 @@ const UnitComboBox: React.FC<UnitComboBoxProps> = ({ value, onChange }) => {
                   </CommandItem>
                 ))
               ) : (
-                <div className='flex justify-center items-center h-full w-full py-4'>
-                  <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
-                </div>
+                <Loading />
               )}
 
               <UnitDialog>

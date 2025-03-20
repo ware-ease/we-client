@@ -4,8 +4,8 @@ import React, { ReactNode, useState, useRef, useEffect } from 'react';
 import ProductComboBox from '../combo-boxes/ProductComboBox';
 import { useQuery } from '@tanstack/react-query';
 import BatchComboBox from '../combo-boxes/BatchComboBox';
-import { getAllProducts } from '@/lib/services/productService';
 import { getAllBatches } from '@/lib/services/batchService';
+import { useProducts } from '@/lib/hooks/queries/productQueries';
 
 interface Column {
   header: string;
@@ -48,10 +48,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
   const startX = useRef<number>(0);
   const newWidth = useRef<number>(0);
 
-  const { data: products } = useQuery({
-    queryKey: ['products'],
-    queryFn: getAllProducts,
-  });
+  const { data: products } = useProducts();
 
   const { data: batches } = useQuery({
     queryKey: ['batches'],
@@ -78,7 +75,6 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
       {
         sku: (
           <ProductComboBox
-            products={products}
             value=''
             onChange={(value) =>
               handleProductSelect(prevRows.length, 'sku', value)
@@ -171,7 +167,6 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
               ...row,
               [key]: (
                 <ProductComboBox
-                  products={products}
                   value={value}
                   onChange={(v) => handleProductSelect(rowIndex, key, v)}
                 />

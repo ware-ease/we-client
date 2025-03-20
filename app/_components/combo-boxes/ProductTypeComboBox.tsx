@@ -17,8 +17,8 @@ import {
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
 import ProductTypeDialog from '../dialogs/ProductTypeDialog';
-import { useQuery } from '@tanstack/react-query';
-import { getAllProductTypes } from '@/lib/services/productService';
+import { useProductTypes } from '@/lib/hooks/queries/productTypeQueries';
+import Error from '../app/Error';
 
 interface ProductTypeComboBoxProps {
   value: string;
@@ -32,10 +32,11 @@ const ProductTypeComboBox: React.FC<ProductTypeComboBoxProps> = ({
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
-  const { data: productTypes } = useQuery({
-    queryKey: ['productTypes'],
-    queryFn: getAllProductTypes,
-  });
+  const { data: productTypes, isPending, isError } = useProductTypes();
+
+  if (isError) {
+    return <Error />;
+  }
 
   const handleOnAdd = () => {};
 
@@ -67,7 +68,7 @@ const ProductTypeComboBox: React.FC<ProductTypeComboBoxProps> = ({
           <CommandList>
             <CommandEmpty>Không tìm thấy loại sản phẩm.</CommandEmpty>
             <CommandGroup>
-              {productTypes ? (
+              {!isPending ? (
                 productTypes.map((p) => (
                   <CommandItem
                     key={p.id}
