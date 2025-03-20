@@ -24,8 +24,8 @@ const AddWarehouseDialog = () => {
     id: '', // You might generate this on the backend
     name: '',
     address: '',
-    length: 0,
-    width: 0,
+    area: 0,
+    operateFrom: '',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,12 +39,7 @@ const AddWarehouseDialog = () => {
 
   const handleSubmit = () => {
     // Validate required fields
-    if (
-      !formData.name ||
-      !formData.address ||
-      formData.length <= 0 ||
-      formData.width <= 0
-    ) {
+    if (!formData.name || !formData.address) {
       toast.error('Please fill in all required fields with valid values.');
       return;
     }
@@ -99,23 +94,23 @@ const AddWarehouseDialog = () => {
             />
           </div>
           <div>
-            <Label htmlFor='length'>Chiều dài</Label>
+            <Label htmlFor='length'>Diện tích</Label>
             <Input
               id='length'
               name='length'
               type='number'
-              value={formData.length}
+              value={formData.area}
               onChange={handleInputChange}
               required
             />
           </div>
           <div>
-            <Label htmlFor='width'>Chiều rộng</Label>
+            <Label htmlFor='width'>Hoạt động từ</Label>
             <Input
               id='width'
               name='width'
-              type='number'
-              value={formData.width}
+              type='date'
+              value={formData.operateFrom}
               onChange={handleInputChange}
               required
             />
