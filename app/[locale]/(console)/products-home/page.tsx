@@ -1,6 +1,7 @@
 'use client';
 import BatchDialog from '@/app/_components/dialogs/BatchDialog';
 import CategoryDialog from '@/app/_components/dialogs/CategoryDialog';
+import ProductTypeDialog from '@/app/_components/dialogs/ProductTypeDialog';
 import UnitDialog from '@/app/_components/dialogs/UnitDialog';
 import { Button } from '@/app/_components/shadcn-base/Button';
 import {
@@ -71,12 +72,11 @@ const ProductsHome = () => {
               <CardDescription>hiện có trong ứng dụng.</CardDescription>
             </CardHeader>
             <CardFooter>
-              <Link
-                href='/product-types'
-                className='hover:cursor-pointer font-semibold text-blue-500'
-              >
-                → Xem chi tiết
-              </Link>
+              <ProductTypeDialog>
+                <button className='hover:cursor-pointer font-semibold text-blue-500'>
+                  → Xem chi tiết
+                </button>
+              </ProductTypeDialog>
             </CardFooter>
           </Card>
         </div>

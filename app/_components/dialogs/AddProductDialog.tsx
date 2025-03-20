@@ -22,7 +22,13 @@ import { useMutation } from '@tanstack/react-query';
 import { ProductCreate } from '@/lib/types/request/product';
 import { createProduct } from '@/lib/services/productService';
 
-const AddProductDialog = () => {
+interface AddProductDialogProps {
+  onProductAdded: () => void;
+}
+
+const AddProductDialog: React.FC<AddProductDialogProps> = ({
+  onProductAdded,
+}) => {
   const t = useTranslations();
   const [formData, setFormData] = useState({
     name: '',
@@ -41,6 +47,7 @@ const AddProductDialog = () => {
       toast.success(t('Toast.success'), {
         autoClose: 3000,
       });
+      onProductAdded();
     },
     onError: () => {
       toast.error(t('Toast.error'), {

@@ -35,6 +35,6 @@ export const getProductTypeCount = async (): Promise<number> => {
 };
 
 export const getAllProductTypes = async (): Promise<ProductType[]> => {
-  const response = await axiosGet('/product-types', {});
+  const response = await axiosGet('/product-types' + baseFilters, {});
   return response.data.data.records;
 };

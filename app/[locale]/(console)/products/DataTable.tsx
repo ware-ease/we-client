@@ -1,5 +1,4 @@
 'use client';
-
 import {
   ColumnDef,
   flexRender,
@@ -30,11 +29,13 @@ import AddProductDialog from '@/app/_components/dialogs/AddProductDialog';
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  onProductAdded: () => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data = [],
+  onProductAdded,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -55,6 +56,10 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const handleProductAdded = () => {
+    onProductAdded();
+  };
+
   return (
     <div className='flex flex-col'>
       <div className='flex flex-col rounded-md border'>
@@ -66,7 +71,7 @@ export function DataTable<TData, TValue>({
             </Button>
           </div>
           <div className='flex w-[50%] justify-end'>
-            <AddProductDialog />
+            <AddProductDialog onProductAdded={handleProductAdded} />
           </div>
         </div>
         <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>
