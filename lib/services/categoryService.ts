@@ -8,7 +8,7 @@ export const getCategoryCount = async (): Promise<number> => {
 
 export const getAllCategories = async (): Promise<Category[]> => {
   const response = await axiosGet('/categories', {});
-  return response.data.data;
+  return response.data.data.records;
 };
 
 export const getCategoryById = async (id: string): Promise<Category> => {

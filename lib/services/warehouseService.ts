@@ -3,7 +3,7 @@ import { axiosDelete, axiosGet, axiosPatch, axiosPost } from './baseService';
 
 export const getAllWarehouses = async (): Promise<Warehouse[]> => {
   const response = await axiosGet('/warehouses', {});
-  return response.data.data;
+  return response.data.data.records;
 };
 
 export const getWarehouseById = async (id: string): Promise<Warehouse> => {

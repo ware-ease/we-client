@@ -7,6 +7,6 @@ export const getAllGoodRequests = async (): Promise<GoodRequest[]> => {
 };
 
 export const getAllGoodReceiveRequests = async (): Promise<GoodRequest[]> => {
-  const response = await axiosGet('/good-requests/search?type=0', {});
+  const response = await axiosGet('/good-requests?type=0', {});
   return response.data.data.records;
 };

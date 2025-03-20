@@ -84,6 +84,7 @@ const BatchComboBox: React.FC<BatchComboBoxProps> = ({
               <CommandItem
                 className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
                 onSelect={() => handleOnAdd()}
+                aria-selected={false}
               >
                 Thêm
                 <Settings className='ml-auto text-white' />

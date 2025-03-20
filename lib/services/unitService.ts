@@ -3,7 +3,7 @@ import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
 
 export const getAllUnits = async (): Promise<Unit[]> => {
   const response = await axiosGet('/units', {});
-  return response.data.data;
+  return response.data.data.records;
 };
 
 export const getUnitById = async (id: string): Promise<Unit> => {

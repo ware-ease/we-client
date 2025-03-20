@@ -3,7 +3,7 @@ import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
 
 export const getAllBrands = async (): Promise<Brand[]> => {
   const response = await axiosGet('/brands', {});
-  return response.data.data;
+  return response.data.data.records;
 };
 
 export const getBrandById = async (id: string): Promise<Brand> => {

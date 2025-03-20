@@ -46,7 +46,7 @@ export const getSuppliers = (): Promise<Supplier[]> => {
 
 export const getAllSuppliers = async (): Promise<Supplier[]> => {
   const response = await axiosGet('/suppliers', {});
-  return response.data.data;
+  return response.data.data.records;
 };
 
 export const getSupplierById = async (id: string): Promise<Supplier> => {

@@ -8,7 +8,7 @@ export const getBatchCount = async (): Promise<number> => {
 
 export const getAllBatches = async (): Promise<Batch[]> => {
   const response = await axiosGet('/batches', {});
-  return response.data.data;
+  return response.data.data.records;
 };
 
 export const getBatchById = async (id: string): Promise<Batch> => {

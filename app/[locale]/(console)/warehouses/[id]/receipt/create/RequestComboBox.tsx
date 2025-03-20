@@ -42,7 +42,7 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
           className='w-[200px] justify-between'
         >
           {value
-            ? requests?.find((req) => req.id === value)?.id
+            ? requests?.find((req) => req.id === value)?.code
             : 'Chọn yêu cầu'}
           <ChevronsUpDown className='opacity-50' />
         </Button>
@@ -63,7 +63,7 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
                       setOpen(false);
                     }}
                   >
-                    {req.id}
+                    {req.code}
                     <Check
                       className={cn(
                         'ml-auto',

@@ -1,5 +1,6 @@
 export type GoodRequest = {
   id?: string;
+  code?: string;
   requestType?: number;
   partnerId?: string;
   partnerName?: string;
