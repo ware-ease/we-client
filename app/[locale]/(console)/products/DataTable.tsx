@@ -24,18 +24,15 @@ import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';
 import AddProductDialog from '@/app/_components/dialogs/AddProductDialog';
-// import AddAccountDialog from './AddAccount';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  onProductAdded: () => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data = [],
-  onProductAdded,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -56,10 +53,6 @@ export function DataTable<TData, TValue>({
     },
   });
 
-  const handleProductAdded = () => {
-    onProductAdded();
-  };
-
   return (
     <div className='flex flex-col'>
       <div className='flex flex-col rounded-md border'>
@@ -71,7 +64,7 @@ export function DataTable<TData, TValue>({
             </Button>
           </div>
           <div className='flex w-[50%] justify-end'>
-            <AddProductDialog onProductAdded={handleProductAdded} />
+            <AddProductDialog />
           </div>
         </div>
         <div className='overflow-auto min-h-[58vh] max-h-[58vh]'>

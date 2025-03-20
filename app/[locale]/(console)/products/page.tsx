@@ -3,18 +3,12 @@ import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
 import React from 'react';
 import { DataTable } from './DataTable';
 import { columns } from './Columns';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getAllProducts } from '@/lib/services/productService';
 import Loading from '@/app/_components/app/Loading';
 import Error from '@/app/_components/app/Error';
+import { useProducts } from '@/lib/hooks/queries/productQueries';
 
 const Products = () => {
-  const queryClient = useQueryClient();
-
-  const { data, isPending, isError } = useQuery({
-    queryKey: ['products'],
-    queryFn: getAllProducts,
-  });
+  const { data, isPending, isError } = useProducts();
 
   if (isPending) {
     return <Loading />;
@@ -23,10 +17,6 @@ const Products = () => {
   if (isError) {
     return <Error />;
   }
-
-  const handleProductAdded = () => {
-    queryClient.invalidateQueries({ queryKey: ['products'] });
-  };
 
   return (
     <div className='flex flex-col max-h-full'>
@@ -37,11 +27,7 @@ const Products = () => {
           </div>
           <div></div>
         </div>
-        <DataTable
-          columns={columns}
-          data={data}
-          onProductAdded={handleProductAdded}
-        />
+        <DataTable columns={columns} data={data} />
       </div>
     </div>
   );
