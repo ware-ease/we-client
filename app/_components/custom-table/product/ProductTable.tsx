@@ -7,7 +7,7 @@ import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import { useProducts } from '@/lib/hooks/queries/productQueries';
 import { Edit } from 'lucide-react';
 import AddProductDialog from '../../dialogs/AddProductDialog';
-import CustomDeleteButton from '../base-data-table/CustomDeleteButton';
+import CustomDeleteButton from './ProductDeleteButton';
 
 export const columns: ColumnDef<Product>[] = [
   {
