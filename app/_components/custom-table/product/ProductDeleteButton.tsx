@@ -8,7 +8,7 @@ interface CustomDeleteButtonProps {
   productId: string;
 }
 
-const CustomDeleteButton: React.FC<CustomDeleteButtonProps> = ({
+const ProductDeleteButton: React.FC<CustomDeleteButtonProps> = ({
   productId,
 }: CustomDeleteButtonProps) => {
   const mutation = useDeleteProduct();
@@ -33,4 +33,4 @@ const CustomDeleteButton: React.FC<CustomDeleteButtonProps> = ({
   );
 };
 
-export default CustomDeleteButton;
+export default ProductDeleteButton;

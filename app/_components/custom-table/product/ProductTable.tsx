@@ -7,7 +7,7 @@ import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import { useProducts } from '@/lib/hooks/queries/productQueries';
 import { Edit } from 'lucide-react';
 import AddProductDialog from '../../dialogs/AddProductDialog';
-import CustomDeleteButton from './ProductDeleteButton';
+import ProductDeleteButton from './ProductDeleteButton';
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -127,7 +127,7 @@ export const columns: ColumnDef<Product>[] = [
       <div className='flex space-x-2'>
         {/* Gắn nút mở dialog Edit/Delete rồi dùng {row.getValue('id')} để truyền id vào */}
         <Edit className='text-yellow-500' size={20} />
-        <CustomDeleteButton productId={row.getValue('id')} />
+        <ProductDeleteButton productId={row.getValue('id')} />
       </div>
     ),
   },
