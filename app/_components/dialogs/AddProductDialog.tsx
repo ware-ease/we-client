@@ -4,6 +4,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -78,6 +79,7 @@ const AddProductDialog = () => {
           <DialogTitle className='text-xl font-semibold text-gray-800'>
             Tạo sản phẩm mới
           </DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className='grid grid-cols-2 gap-6'>
           <div>

@@ -16,7 +16,7 @@ import {
   CommandList,
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
-import ProductTypeDialog from '../dialogs/ProductTypeDialog';
+// import ProductTypeDialog from '../dialogs/ProductTypeDialog';
 import { useProductTypes } from '@/lib/hooks/queries/productTypeQueries';
 import Error from '../app/Error';
 
@@ -93,18 +93,18 @@ const ProductTypeComboBox: React.FC<ProductTypeComboBoxProps> = ({
                 </div>
               )}
 
-              <ProductTypeDialog>
-                <button className='w-full'>
-                  <CommandItem
-                    className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
-                    onSelect={() => handleOnAdd()}
-                    aria-selected={false}
-                  >
-                    Thêm
-                    <Settings className='ml-auto text-white' />
-                  </CommandItem>
-                </button>
-              </ProductTypeDialog>
+              {/* <ProductTypeDialog> */}
+              <button className='w-full'>
+                <CommandItem
+                  className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
+                  onSelect={() => handleOnAdd()}
+                  aria-selected={false}
+                >
+                  Thêm
+                  <Settings className='ml-auto text-white' />
+                </CommandItem>
+              </button>
+              {/* </ProductTypeDialog> */}
             </CommandGroup>
           </CommandList>
         </Command>
