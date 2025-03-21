@@ -2,11 +2,12 @@
 import { Product } from '@/lib/types/product';
 import { ColumnDef } from '@tanstack/react-table';
 import React from 'react';
-import { DataTableColumnHeader } from './base-data-table/ColumnHeader';
-import { CustomDataTable } from './base-data-table/CustomDataTable';
+import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
+import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import { useProducts } from '@/lib/hooks/queries/productQueries';
-import { Edit, Trash2 } from 'lucide-react';
-import AddProductDialog from '../dialogs/AddProductDialog';
+import { Edit } from 'lucide-react';
+import AddProductDialog from '../../dialogs/AddProductDialog';
+import CustomDeleteButton from '../base-data-table/CustomDeleteButton';
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -122,12 +123,11 @@ export const columns: ColumnDef<Product>[] = [
         className='text-xs'
       />
     ),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     cell: ({ row }) => (
       <div className='flex space-x-2'>
         {/* Gắn nút mở dialog Edit/Delete rồi dùng {row.getValue('id')} để truyền id vào */}
         <Edit className='text-yellow-500' size={20} />
-        <Trash2 className='text-red-500' size={19} />
+        <CustomDeleteButton productId={row.getValue('id')} />
       </div>
     ),
   },

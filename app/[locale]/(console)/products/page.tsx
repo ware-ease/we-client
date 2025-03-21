@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductTable from '@/app/_components/custom-table/ProductTable';
+import ProductTable from '@/app/_components/custom-table/product/ProductTable';
 
 const Products = () => {
   return (

@@ -1,4 +1,4 @@
-import ProductTable from '@/app/_components/custom-table/ProductTable';
+import ProductTable from '@/app/_components/custom-table/product/ProductTable';
 import React from 'react';
 
 const Requests = () => {

@@ -20,6 +20,11 @@ export const createProduct = async (
   return response.data.data;
 };
 
+export const deleteProduct = async (id: string): Promise<unknown> => {
+  const response = await axiosDelete(`/products/${id}`, {});
+  return response.data.data;
+};
+
 export const getProductCount = async (): Promise<number> => {
   const response = await axiosGet('/products/count', {});
   return response.data.data;
