@@ -1,5 +1,6 @@
-export type Product = {
-  id?: string;
+import { Base } from './base/base-type';
+
+export interface Product extends Base {
   sku?: string;
   name?: string;
   note?: string;
@@ -8,7 +9,7 @@ export type Product = {
   brand?: string;
   unit?: string;
   status?: boolean;
-};
+}
 
 export type ProductType = {
   id?: string;
