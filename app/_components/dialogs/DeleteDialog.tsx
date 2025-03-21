@@ -3,36 +3,30 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { ReactNode } from 'react';
 
 interface DeleteDialogProps {
-  title?: string;
-  description?: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => void;
   isLoading?: boolean;
+  children: ReactNode;
 }
 
 export function DeleteDialog({
-  title = 'Xác nhận xóa',
-  description = 'Bạn có chắc chắn muốn xóa mục này? Hành động này không thể hoàn tác.',
   isOpen,
   onOpenChange,
   onConfirm,
   isLoading = false,
+  children,
 }: DeleteDialogProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
-        </AlertDialogHeader>
+        <AlertDialogHeader>{children}</AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>Hủy</AlertDialogCancel>
           <AlertDialogAction
