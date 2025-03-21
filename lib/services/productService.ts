@@ -1,6 +1,12 @@
 import { Product, ProductType } from '../types/product';
 import { ProductCreate } from '../types/request/product';
-import { axiosGet, axiosPost, baseFilters } from './baseService';
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPost,
+  axiosPut,
+  baseFilters,
+} from './baseService';
 
 export const getAllProducts = async (): Promise<Product[]> => {
   const response = await axiosGet('/products' + baseFilters, {});
@@ -37,4 +43,28 @@ export const getProductTypeCount = async (): Promise<number> => {
 export const getAllProductTypes = async (): Promise<ProductType[]> => {
   const response = await axiosGet('/product-types' + baseFilters, {});
   return response.data.data.records;
+};
+
+export const createProductType = async (
+  data: ProductType
+): Promise<ProductType> => {
+  const response = await axiosPost('/product-types', data, {});
+  return response.data.data;
+};
+
+export const getProductTypeById = async (id: string): Promise<ProductType> => {
+  const response = await axiosGet(`/product-types/${id}`, {});
+  return response.data.data;
+};
+
+export const updateProductType = async (
+  id: string,
+  data: ProductType
+): Promise<ProductType> => {
+  const response = await axiosPut(`/product-types/${id}`, data, {});
+  return response.data.data;
+};
+
+export const deleteProductType = async (id: string): Promise<void> => {
+  await axiosDelete(`/product-types/${id}`, {});
 };
