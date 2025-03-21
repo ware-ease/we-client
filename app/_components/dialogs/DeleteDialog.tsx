@@ -5,7 +5,7 @@ import {
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
-} from '@/components/ui/alert-dialog';
+} from '@/app/_components/shadcn-base/AlertDialog';
 import { ReactNode } from 'react';
 
 interface DeleteDialogProps {
