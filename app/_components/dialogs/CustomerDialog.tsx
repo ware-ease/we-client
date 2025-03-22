@@ -3,9 +3,7 @@
 import { Button } from '@/app/_components/shadcn-base/Button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -13,97 +11,61 @@ import {
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { Label } from '@/app/_components/shadcn-base/Label';
 import {
-  createCustomer,
-  deleteCustomer,
-  updateCustomer,
-} from '@/lib/services/customerService';
+  useAddCustomer,
+  useCustomers,
+  useDeleteCustomer,
+  useUpdateCustomer,
+} from '@/lib/hooks/queries/customerQueries';
 import { Customer } from '@/lib/types/customer';
 import { Check, Edit, Search, Trash2, X } from 'lucide-react';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { toast } from 'react-toastify';
+import { DeleteDialog } from './DeleteDialog';
 
 interface CustomerDialogProps {
   children: ReactNode;
-  customers: Customer[];
-  onRefresh: () => void;
 }
 
-const CustomerDialog = ({
-  children,
-  customers,
-  onRefresh,
-}: CustomerDialogProps) => {
+const CustomerDialog = ({ children }: CustomerDialogProps) => {
+  const { data: customers, isPending } = useCustomers();
+  const addCustomerMutation = useAddCustomer();
+  const updateCustomerMutation = useUpdateCustomer();
+  const deleteCustomerMutation = useDeleteCustomer();
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [filteredCustomers, setFilteredCustomers] =
-    useState<Customer[]>(customers);
+  const [filteredCustomers, setFilteredCustomers] = useState<
+    Customer[] | undefined
+  >(customers);
   const [newCustomer, setNewCustomer] = useState('');
+  const [newCustomerEmail, setNewCustomerEmail] = useState('');
+
+  const [editedEmail, setEditedEmail] = useState('');
+
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [editingCustomer, setEditingCustomer] = useState<string | null>(null);
   const [editedName, setEditedName] = useState('');
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(
-    null
-  );
-
-  useEffect(() => {
-    setFilteredCustomers(customers);
-  }, [customers]);
-
-  // const fetchCustomers = async () => {
-  //   try {
-  //     const data = await getAllCustomers();
-  //     setCustomers(data);
-  //     setFilteredCustomers(data);
-  //   } catch (error) {
-  //     console.error('Lỗi khi lấy danh sách khách hàng:', error);
-  //     toast.error('Không thể tải danh sách khách hàng.');
-  //   }
-  // };
-
-  const handleAddCustomer = async () => {
-    if (!newCustomer.trim()) {
-      toast.error('Vui lòng nhập tên khách hàng hợp lệ.');
-      return;
-    }
-    try {
-      await createCustomer({ name: newCustomer });
-      setNewCustomer('');
-      setShowForm(false);
-      toast.success('Thêm khách hàng thành công!');
-      onRefresh();
-    } catch (error) {
-      console.error('Lỗi khi thêm khách hàng:', error);
-      toast.error('Không thể thêm khách hàng.');
-    }
-  };
+  const [customerToDelete, setCustomerToDelete] = useState<string>('');
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.toLowerCase();
     setSearchTerm(value);
-    setFilteredCustomers(
-      customers.filter((customer) =>
-        customer.name.toLowerCase().includes(value.toLowerCase())
-      )
+
+    if (!customers) return;
+
+    const filtered = customers.filter((customer) =>
+      customer.name.toLowerCase().includes(value)
     );
+
+    setFilteredCustomers(filtered);
   };
 
   const handleEditCustomer = (customer: Customer) => {
     setEditingCustomer(customer.id);
     setEditedName(customer.name);
   };
-
-  const handleSaveEdit = async (id: string) => {
-    try {
-      await updateCustomer(id, { name: editedName });
-      setEditingCustomer(null);
-      toast.success('Cập nhật khách hàng thành công!');
-      onRefresh();
-    } catch (error) {
-      console.error('Lỗi khi cập nhật khách hàng:', error);
-      toast.error('Không thể cập nhật khách hàng.');
-    }
+  const handleSaveEdit = (id: string) => {
+    updateCustomerMutation.mutate({ id, name: editedName, email: editedEmail });
   };
 
   const handleCancelEdit = () => {
@@ -111,19 +73,8 @@ const CustomerDialog = ({
     setEditedName('');
   };
 
-  const handleDeleteCustomer = async () => {
-    if (!customerToDelete) return;
-    try {
-      await deleteCustomer(customerToDelete.id);
-      toast.success('Xóa khách hàng thành công!');
-      onRefresh();
-    } catch (error) {
-      console.error('Lỗi khi xóa khách hàng:', error);
-      toast.error('Không thể xóa khách hàng.');
-    } finally {
-      setDeleteDialogOpen(false);
-      setCustomerToDelete(null);
-    }
+  const handleConfirmDelete = () => {
+    deleteCustomerMutation.mutate(customerToDelete);
   };
 
   return (
@@ -137,10 +88,11 @@ const CustomerDialog = ({
           </DialogTitle>
         </DialogHeader>
 
+        {/* Form thêm khách hàng */}
         {showForm ? (
           <div className='border p-4 rounded-md bg-gray-50'>
             <Label htmlFor='customer-name' className='text-red-600'>
-              Tên khách hàng*
+              Tên khách hàng *
             </Label>
             <Input
               id='customer-name'
@@ -149,10 +101,37 @@ const CustomerDialog = ({
               placeholder='Nhập tên khách hàng...'
               className='mt-1'
             />
+
+            <Label htmlFor='customer-email' className='mt-2 text-red-600'>
+              Email khách hàng *
+            </Label>
+            <Input
+              id='customer-email'
+              value={newCustomerEmail}
+              onChange={(e) => setNewCustomerEmail(e.target.value)}
+              placeholder='Nhập email khách hàng...'
+              className='mt-1'
+            />
             <div className='flex justify-end mt-3 space-x-2'>
-              <Button onClick={handleAddCustomer}>Lưu và Chọn</Button>
+              <Button
+                onClick={() => {
+                  if (!newCustomer || !newCustomerEmail) {
+                    toast.error('Vui lòng nhập đầy đủ thông tin khách hàng.');
+                    return;
+                  }
+                  addCustomerMutation.mutate({
+                    name: newCustomer,
+                    email: newCustomerEmail,
+                  });
+                  setNewCustomer('');
+                  setNewCustomerEmail('');
+                }}
+                disabled={addCustomerMutation.isPending}
+              >
+                {addCustomerMutation.isPending ? 'Đang lưu...' : 'Lưu và chọn'}
+              </Button>
               <Button variant='secondary' onClick={() => setShowForm(false)}>
-                Đóng
+                Hủy
               </Button>
             </div>
           </div>
@@ -161,13 +140,13 @@ const CustomerDialog = ({
             className='w-full bg-green-500 text-white'
             onClick={() => setShowForm(true)}
           >
-            + Tạo khách hàng mới
+            + Thêm khách hàng mới
           </Button>
         )}
 
-        {/* Tìm kiếm */}
-        <div className='relative mb-3'>
-          <Search className='absolute left-3 top-3 text-gray-400 h-4 w-4' />
+        {/* Thanh tìm kiếm */}
+        <div className='relative mt-3'>
+          <Search className='absolute left-3 top-2.5 text-gray-400' size={16} />
           <Input
             type='text'
             placeholder='Tìm kiếm khách hàng...'
@@ -183,7 +162,9 @@ const CustomerDialog = ({
             Danh sách khách hàng
           </h3>
           <ul className='mt-2 space-y-2'>
-            {filteredCustomers.length > 0 ? (
+            {isPending ? (
+              <p className='text-gray-500 text-sm text-center'>Đang tải...</p>
+            ) : filteredCustomers && filteredCustomers.length > 0 ? (
               filteredCustomers.map((customer, index) => (
                 <li
                   key={customer.id}
@@ -196,7 +177,12 @@ const CustomerDialog = ({
                       <Input
                         value={editedName}
                         onChange={(e) => setEditedName(e.target.value)}
-                        className='flex-1'
+                        placeholder='Nhập tên khách hàng...'
+                      />
+                      <Input
+                        value={editedEmail}
+                        onChange={(e) => setEditedEmail(e.target.value)}
+                        placeholder='Nhập email khách hàng...'
                       />
                       <Check
                         className='text-green-600 h-5 w-5 cursor-pointer'
@@ -216,13 +202,19 @@ const CustomerDialog = ({
                             className='text-blue-600 h-4 w-4 cursor-pointer'
                             onClick={() => handleEditCustomer(customer)}
                           />
-                          <Trash2
-                            className='text-red-600 h-4 w-4 cursor-pointer'
-                            onClick={() => {
-                              setCustomerToDelete(customer);
-                              setDeleteDialogOpen(true);
-                            }}
-                          />
+                          <DeleteDialog
+                            onConfirmDelete={handleConfirmDelete}
+                            title='Xóa thương hiệu'
+                            description='Bạn có chắc chắn muốn xóa thương hiệu này không?'
+                            isLoading={deleteCustomerMutation.isPending}
+                          >
+                            <Trash2
+                              className='text-red-600 h-4 w-4 cursor-pointer'
+                              onClick={() => {
+                                setCustomerToDelete(customer.id);
+                              }}
+                            />
+                          </DeleteDialog>
                         </div>
                       )}
                     </>
@@ -236,37 +228,6 @@ const CustomerDialog = ({
             )}
           </ul>
         </div>
-
-        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <DialogContent className='max-w-sm bg-white p-5 rounded-lg shadow-lg'>
-            <DialogHeader>
-              <DialogTitle className='text-red-600'>Xác nhận xóa</DialogTitle>
-            </DialogHeader>
-            <p>
-              Bạn có chắc chắn muốn xóa khách hàng &quot;
-              {customerToDelete?.name}&quot; không?
-            </p>
-            <DialogFooter>
-              <Button variant='destructive' onClick={handleDeleteCustomer}>
-                Xóa
-              </Button>
-              <DialogClose asChild>
-                <Button variant='secondary'>Hủy</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              variant='secondary'
-              className='px-4 py-2 hover:bg-slate-200'
-            >
-              Đóng
-            </Button>
-          </DialogClose>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
