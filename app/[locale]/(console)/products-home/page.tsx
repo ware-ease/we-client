@@ -55,8 +55,8 @@ const ProductsHome = () => {
   };
 
   return (
-    <div className='flex flex-col max-h-full'>
-      <div className='flex flex-col p-4 gap-6 max-h-full'>
+    <div className='flex flex-col max-h-[100vh-3rem]'>
+      <div className='flex flex-col p-4 gap-5 max-h-full'>
         <div className='mb-4'>
           <div className='text-4xl font-semibold text-primary'>
             Quản lý sản phẩm

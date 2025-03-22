@@ -3,7 +3,7 @@ import { axiosGet, baseFilters } from './baseService';
 
 export const getAllGoodRequests = async (): Promise<GoodRequest[]> => {
   const response = await axiosGet('/good-requests' + baseFilters, {});
-  return response.data.data;
+  return response.data.data.records;
 };
 
 export const getAllGoodReceiveRequests = async (): Promise<GoodRequest[]> => {

@@ -13,7 +13,6 @@ type AuthContextType = {
   handleLogin: (
     loginCredentials: LoginRequest
   ) => Promise<AxiosResponse<unknown, unknown>>;
-  // handleLogout: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,15 +30,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setCurrentUser(userRes.data.data);
       } catch {
         setCurrentUser(null);
-        // try {
-        //   const tokenRes = await refreshTokens();
-        //   if (tokenRes.status === 200) {
-        //     const userRes = await getCurrentUser();
-        //     setCurrentUser(userRes.data.data);
-        //   }
-        // } catch {
-        //   setCurrentUser(null);
-        // }
       }
     }
 
