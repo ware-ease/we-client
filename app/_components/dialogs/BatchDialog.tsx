@@ -27,9 +27,10 @@ interface BatchDialogProps {
 const BatchDialog = ({ children, productId }: BatchDialogProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const batchesQuery = useBatches();
-  const batches = batchesQuery.data || [];
-  const [filteredBatches, setFilteredBatches] = useState<Batch[]>(batches);
+  const { data: batches } = useBatches();
+  const [filteredBatches, setFilteredBatches] = useState<Batch[] | undefined>(
+    undefined
+  );
   const [newBatch, setNewBatch] = useState<Partial<Batch>>({
     code: '',
     name: '',
@@ -54,7 +55,7 @@ const BatchDialog = ({ children, productId }: BatchDialogProps) => {
     const value = e.target.value;
     setSearchTerm(value);
     setFilteredBatches(
-      batches.filter((batch) =>
+      batches?.filter((batch) =>
         batch.name.toLowerCase().includes(value.toLowerCase())
       )
     );
@@ -205,8 +206,8 @@ const BatchDialog = ({ children, productId }: BatchDialogProps) => {
             Danh sách lô hàng
           </h3>
           <ul className='mt-2 space-y-2'>
-            {filteredBatches.length > 0 ? (
-              filteredBatches.map((batch, index) => (
+            {filteredBatches?.length ?? 0 > 0 ? (
+              filteredBatches?.map((batch, index) => (
                 <li
                   key={batch.id}
                   className='flex justify-between items-center p-2 border rounded-md transition-all duration-300 hover:bg-gray-100'
