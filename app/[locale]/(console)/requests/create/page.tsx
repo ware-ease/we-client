@@ -17,9 +17,7 @@ const ReceiptCreate = () => {
     <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-4'>
       <div className='flex flex-col w-full'>
         <div className='flex space-x-20 items-center w-full'>
-          <div className='text-4xl font-semibold text-primary'>
-            Phiếu nhập kho
-          </div>
+          <div className='text-4xl font-semibold text-primary'>Tạo yêu cầu</div>
         </div>
         <div className='flex space-x-20 py-5 pl-3'>
           <div className='flex flex-col space-y-2'>

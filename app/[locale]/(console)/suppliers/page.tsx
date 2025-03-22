@@ -1,30 +1,12 @@
-'use client';
-import { getSuppliers } from '@/lib/services/supplierService';
-import { useQuery } from '@tanstack/react-query';
-import { columns } from './Columns';
-import { DataTable } from './DataTable';
+import SupplierTable from '@/app/_components/custom-table/partner/SupplierTable';
 
 const Suppliers = () => {
-  const { data } = useQuery({
-    queryKey: ['suppliers'],
-    queryFn: async () => {
-      const res = await getSuppliers();
-      return res;
-    },
-  });
-
   return (
-    <div className='flex flex-col max-h-full'>
-      <div className='flex flex-col p-4 gap-6 max-h-full'>
-        <div className='mb-6'>
-          <div className='text-4xl font-semibold text-primary'>
-            {/* <TranslatedMessage tKey='Suppliers' /> */}
-            Nhà cung cấp
-          </div>
-          <div></div>
-        </div>
-        <DataTable columns={columns} data={data!} />
+    <div className='flex flex-col p-4 gap-6'>
+      <div className='text-4xl font-semibold text-primary'>
+        Quản lý nhà cung cấp
       </div>
+      <SupplierTable />
     </div>
   );
 };

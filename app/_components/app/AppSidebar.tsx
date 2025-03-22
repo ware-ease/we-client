@@ -103,16 +103,16 @@ export function AppSidebar() {
       url: '/accounts',
       icon: UsersRound,
     },
-    // {
-    //   title: t('Sidebar.suppliers'),
-    //   url: '/suppliers',
-    //   icon: UsersRound,
-    // },
-    // {
-    //   title: t('Sidebar.customers'),
-    //   url: '/customers',
-    //   icon: UsersRound,
-    // },
+    {
+      title: t('Sidebar.suppliers'),
+      url: '/suppliers',
+      icon: UsersRound,
+    },
+    {
+      title: t('Sidebar.customers'),
+      url: '/customers',
+      icon: UsersRound,
+    },
     {
       title: t('Sidebar.warehouses'),
       url: '/warehouses',
