@@ -1,6 +1,8 @@
 import {
   createCategory,
+  deleteCategory,
   getAllCategories,
+  updateCategory,
 } from '@/lib/services/categoryService';
 import { Category } from '@/lib/types/category';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -19,13 +21,46 @@ export const useAddCategory = () => {
   return useMutation({
     mutationFn: (category: Category) => createCategory(category),
     onSuccess: () => {
-      toast.success('Thành công!');
+      toast.success('Thêm danh mục thành công!');
       queryClient.invalidateQueries({
         queryKey: ['categories'],
       });
     },
     onError: () => {
-      toast.error('Thất bại!');
+      toast.error('Không thể thêm danh mục.');
+    },
+  });
+};
+
+export const useUpdateCategory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) =>
+      updateCategory(id, { name }),
+    onSuccess: () => {
+      toast.success('Cập nhật danh mục thành công!');
+      queryClient.invalidateQueries({
+        queryKey: ['categories'],
+      });
+    },
+    onError: () => {
+      toast.error('Không thể cập nhật danh mục.');
+    },
+  });
+};
+
+export const useDeleteCategory = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteCategory(id),
+    onSuccess: () => {
+      toast.success('Xóa danh mục thành công!');
+      queryClient.invalidateQueries({
+        queryKey: ['categories'],
+      });
+    },
+    onError: () => {
+      toast.error('Không thể xóa danh mục.');
     },
   });
 };
