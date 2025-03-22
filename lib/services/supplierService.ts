@@ -75,6 +75,7 @@ export const updateSupplier = async (
   return response.data.data;
 };
 
-export const deleteSupplier = async (id: string): Promise<void> => {
-  await axiosDelete(`/suppliers/${id}`, {});
+export const deleteSupplier = async (id: string): Promise<unknown> => {
+  const response = await axiosDelete(`/suppliers/${id}`, {});
+  return response.data.data;
 };

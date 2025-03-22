@@ -3,13 +3,12 @@ import { ColumnDef } from '@tanstack/react-table';
 import React from 'react';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import { Edit } from 'lucide-react';
-import { GoodRequest } from '@/lib/types/goodRequest';
-import { useGoodRequests } from '@/lib/hooks/queries/goodRequests';
 import { Link, usePathname } from '@/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
+import { Batch } from '@/lib/types/batch';
+import { useBatches } from '@/lib/hooks/queries/batchQueries';
 
-export const columns: ColumnDef<GoodRequest>[] = [
+export const columns: ColumnDef<Batch>[] = [
   {
     id: 'stt',
     header: ({ column }) => (
@@ -33,45 +32,39 @@ export const columns: ColumnDef<GoodRequest>[] = [
   {
     accessorKey: 'code',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Mã yêu cầu' />
+      <DataTableColumnHeader column={column} title='Mã phiếu' />
     ),
     meta: {
-      title: 'Mã yêu cầu',
+      title: 'Mã phiếu',
     },
   },
   {
-    accessorKey: 'requestType',
+    accessorKey: 'date',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Loại yêu cầu' />
+      <DataTableColumnHeader column={column} title='Ngày thực hiện' />
     ),
-    cell: ({ row }) => {
-      const type = row.getValue('requestType');
-      switch (type) {
-        case 0:
-          return <div className='text-blue-500 font-medium'>Nhập</div>;
-        case 1:
-          return <div className='text-blue-500 font-medium'>Xuất</div>;
-        case 2:
-          return <div className='text-yellow-500 font-medium'>Chuyển</div>;
-        case 3:
-          return <div className='text-red-500 font-medium'>Trả hàng</div>;
-        default:
-          return (
-            <div className='text-gray-400 font-medium'>Không xác định</div>
-          );
+    cell: ({ row }) => new Date(row.getValue('date')).toLocaleString('vi-VN'),
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue?.from && !filterValue?.to) return true;
+      const rowDate = new Date(row.getValue(columnId));
+      const fromDate = filterValue.from ? new Date(filterValue.from) : null;
+      const toDate = filterValue.to ? new Date(filterValue.to) : null;
+
+      if (toDate) {
+        toDate.setHours(23, 59, 59, 999);
       }
+
+      if (fromDate && toDate) {
+        return rowDate >= fromDate && rowDate <= toDate;
+      }
+      if (fromDate) return rowDate >= fromDate;
+      if (toDate) return rowDate <= toDate;
+
+      return true;
     },
     meta: {
-      title: 'Loại yêu cầu',
-    },
-  },
-  {
-    accessorKey: 'partnerName',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Đối tác' />
-    ),
-    meta: {
-      title: 'Đối tác',
+      title: 'Ngày thực hiện',
+      type: 'date',
     },
   },
   {
@@ -84,21 +77,30 @@ export const columns: ColumnDef<GoodRequest>[] = [
     },
   },
   {
-    accessorKey: 'warehouseName',
+    accessorKey: 'goodRequestId',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Kho yêu cầu' />
+      <DataTableColumnHeader column={column} title='Yêu cầu' />
     ),
     meta: {
-      title: 'Kho yêu cầu',
+      title: 'Yêu cầu',
     },
   },
   {
-    accessorKey: 'note',
+    accessorKey: 'shipperName',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Ghi chú' />
+      <DataTableColumnHeader column={column} title='Người giao hàng' />
     ),
     meta: {
-      title: 'Ghi chú',
+      title: 'Người giao hàng',
+    },
+  },
+  {
+    accessorKey: 'receiverName',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Người nhận hàng' />
+    ),
+    meta: {
+      title: 'Người nhận hàng',
     },
   },
   {
@@ -131,29 +133,11 @@ export const columns: ColumnDef<GoodRequest>[] = [
       type: 'date',
     },
   },
-  {
-    id: 'crud-actions',
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title='Hành động'
-        className='text-xs'
-      />
-    ),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    cell: ({ row }) => (
-      <div className='flex space-x-2'>
-        {/* Gắn nút mở dialog Edit/Delete rồi dùng {row.getValue('id')} để truyền id vào */}
-        <Edit className='text-yellow-500' size={20} />
-        {/* <ProductDeleteButton productId={row.getValue('id')} /> */}
-      </div>
-    ),
-  },
 ];
 
-const GoodRequestTable = () => {
+const BatchTable = () => {
   const pathname = usePathname();
-  const { data, isSuccess } = useGoodRequests();
+  const { data, isSuccess } = useBatches();
 
   return (
     <CustomDataTable columns={columns} data={isSuccess ? data : []}>
@@ -164,4 +148,4 @@ const GoodRequestTable = () => {
   );
 };
 
-export default GoodRequestTable;
+export default BatchTable;
