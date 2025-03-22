@@ -9,7 +9,7 @@ import {
 
 export const getAllCustomers = async (): Promise<Customer[]> => {
   const response = await axiosGet('/customers' + baseFilters, {});
-  return response.data.data;
+  return response.data.data.records;
 };
 
 export const getCustomerById = async (id: string): Promise<Customer> => {

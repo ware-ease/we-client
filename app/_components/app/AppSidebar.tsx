@@ -1,6 +1,7 @@
 'use client';
 import {
   Boxes,
+  FileInput,
   Home,
   LayoutDashboardIcon,
   LogOut,
@@ -112,6 +113,11 @@ export function AppSidebar() {
       title: t('Sidebar.customers'),
       url: '/customers',
       icon: UsersRound,
+    },
+    {
+      title: 'Yêu cầu',
+      url: '/requests',
+      icon: FileInput,
     },
     {
       title: t('Sidebar.warehouses'),
