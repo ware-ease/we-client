@@ -3,9 +3,7 @@
 import { Button } from '@/app/_components/shadcn-base/Button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -13,40 +11,38 @@ import {
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { Label } from '@/app/_components/shadcn-base/Label';
 import {
-  createBrand,
-  deleteBrand,
-  getAllBrands,
-  updateBrand,
-} from '@/lib/services/brandService';
+  useAddBrand,
+  useBrands,
+  useDeleteBrand,
+  useUpdateBrand,
+} from '@/lib/hooks/queries/brandQueries';
 import { Brand } from '@/lib/types/brand';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Check, Edit, Search, Trash2, X } from 'lucide-react';
-import { ReactNode, useState } from 'react';
-import { toast } from 'react-toastify';
+import { ReactNode, useEffect, useState } from 'react';
+import { DeleteDialog } from './DeleteDialog';
 
 interface BrandDialogProps {
   children: ReactNode;
-  brands: Brand[] | undefined;
-  onRefresh: () => void;
 }
 
-const BrandDialog = ({ children, brands, onRefresh }: BrandDialogProps) => {
+const BrandDialog = ({ children }: BrandDialogProps) => {
+  const { data: brands, isPending } = useBrands();
+  const addBrandMutation = useAddBrand();
+  const updateBrandMutation = useUpdateBrand();
+  const deleteBrandMutation = useDeleteBrand();
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [filteredBrands, setFilteredBrands] = useState<Brand[] | undefined>(
-    brands
-  );
+  const [filteredBrands, setFilteredBrands] = useState<Brand[] | undefined>([]);
   const [newBrand, setNewBrand] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [editingBrand, setEditingBrand] = useState<string | null>(null);
   const [editedName, setEditedName] = useState('');
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [brandToDelete, setBrandToDelete] = useState<Brand | null>(null);
+  const [brandToDelete, setBrandToDelete] = useState<string>('');
 
-  //   useEffect(() => {
-  //     setFilteredBrands(brands);
-  //   }, [brands]);
+  useEffect(() => {
+    setFilteredBrands(brands);
+  }, [brands]);
 
   //   const fetchBrands = async () => {
   //     try {
@@ -58,45 +54,6 @@ const BrandDialog = ({ children, brands, onRefresh }: BrandDialogProps) => {
   //       toast.error('Không thể tải danh sách thương hiệu.');
   //     }
   //   };
-  const brandsQuery = useQuery({
-    queryKey: ['brands'],
-    queryFn: getAllBrands,
-  });
-  const queryClient = useQueryClient();
-
-  const addBrandMutation = useMutation({
-    mutationFn: async () => await createBrand({ name: newBrand }),
-    onSuccess: () => {
-      toast.success('Thêm thương hiệu thành công!');
-      setNewBrand('');
-      setShowForm(false);
-      queryClient.invalidateQueries({ queryKey: ['brands'] });
-      onRefresh();
-    },
-    onError: () => toast.error('Không thể thêm thương hiệu.'),
-  });
-
-  const updateBrandMutation = useMutation({
-    mutationFn: async (id: string) =>
-      await updateBrand(id, { name: editedName }),
-    onSuccess: () => {
-      toast.success('Cập nhật thương hiệu thành công!');
-      setEditingBrand(null);
-      queryClient.invalidateQueries({ queryKey: ['brands'] });
-      onRefresh();
-    },
-    onError: () => toast.error('Không thể cập nhật thương hiệu.'),
-  });
-
-  const deleteBrandMutation = useMutation({
-    mutationFn: async (id: string) => await deleteBrand(id),
-    onSuccess: () => {
-      toast.success('Xóa thương hiệu thành công!');
-      queryClient.invalidateQueries({ queryKey: ['brands'] });
-      onRefresh();
-    },
-    onError: () => toast.error('Không thể xóa thương hiệu.'),
-  });
 
   //   const handleAddBrand = async () => {
   //     if (!newBrand.trim()) {
@@ -134,7 +91,7 @@ const BrandDialog = ({ children, brands, onRefresh }: BrandDialogProps) => {
   };
 
   const handleSaveEdit = (id: string) => {
-    updateBrandMutation.mutate(id);
+    updateBrandMutation.mutate({ id, name: editedName });
   };
 
   const handleCancelEdit = () => {
@@ -142,20 +99,9 @@ const BrandDialog = ({ children, brands, onRefresh }: BrandDialogProps) => {
     setEditedName('');
   };
 
-  //   const handleDeleteBrand = async () => {
-  //     if (!brandToDelete) return;
-  //     try {
-  //       await deleteBrand(brandToDelete.id);
-  //       toast.success('Xóa thương hiệu thành công!');
-  //       onRefresh();
-  //     } catch (error) {
-  //       console.error(error);
-  //       toast.error('Không thể xóa thương hiệu.');
-  //     } finally {
-  //       setDeleteDialogOpen(false);
-  //       setBrandToDelete(null);
-  //     }
-  //   };
+  const handleConfirmDelete = () => {
+    deleteBrandMutation.mutate(brandToDelete);
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -183,11 +129,12 @@ const BrandDialog = ({ children, brands, onRefresh }: BrandDialogProps) => {
             />
             <div className='flex justify-end mt-3 space-x-2'>
               <Button
-                onClick={() => addBrandMutation.mutate()}
+                onClick={() => addBrandMutation.mutate({ name: newBrand })}
                 disabled={addBrandMutation.isPending}
               >
                 {addBrandMutation.isPending ? 'Đang lưu...' : 'Lưu và chọn'}
               </Button>
+
               <Button variant='secondary' onClick={() => setShowForm(false)}>
                 Hủy
               </Button>
@@ -220,7 +167,7 @@ const BrandDialog = ({ children, brands, onRefresh }: BrandDialogProps) => {
             Danh sách thương hiệu
           </h3>
           <ul className='mt-2 space-y-2'>
-            {brandsQuery.isLoading ? (
+            {isPending ? (
               <p className='text-gray-500 text-sm text-center'>Đang tải...</p>
             ) : filteredBrands && filteredBrands.length > 0 ? (
               filteredBrands.map((brand, index) => (
@@ -255,13 +202,19 @@ const BrandDialog = ({ children, brands, onRefresh }: BrandDialogProps) => {
                             className='text-blue-600 h-4 w-4 cursor-pointer'
                             onClick={() => handleEditBrand(brand)}
                           />
-                          <Trash2
-                            className='text-red-600 h-4 w-4 cursor-pointer'
-                            onClick={() => {
-                              setBrandToDelete(brand);
-                              setDeleteDialogOpen(true);
-                            }}
-                          />
+                          <DeleteDialog
+                            onConfirmDelete={handleConfirmDelete}
+                            title='Xóa thương hiệu'
+                            description='Bạn có chắc chắn muốn xóa thương hiệu này không?'
+                            isLoading={deleteBrandMutation.isPending}
+                          >
+                            <Trash2
+                              className='text-red-600 h-4 w-4 cursor-pointer'
+                              onClick={() => {
+                                setBrandToDelete(brand.id);
+                              }}
+                            />
+                          </DeleteDialog>
                         </div>
                       )}
                     </>
@@ -275,44 +228,6 @@ const BrandDialog = ({ children, brands, onRefresh }: BrandDialogProps) => {
             )}
           </ul>
         </div>
-
-        {/* Dialog xác nhận xóa */}
-        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <DialogContent className='max-w-sm bg-white p-5 rounded-lg shadow-lg'>
-            <DialogHeader>
-              <DialogTitle className='text-red-600'>Xác nhận xóa</DialogTitle>
-            </DialogHeader>
-            <p>
-              Bạn có chắc chắn muốn xóa thương hiệu &quot;
-              {brandToDelete?.name}&quot; không?
-            </p>
-            <DialogFooter>
-              <Button
-                variant='destructive'
-                onClick={() =>
-                  brandToDelete && deleteBrandMutation.mutate(brandToDelete.id)
-                }
-                disabled={deleteBrandMutation.isPending}
-              >
-                {deleteBrandMutation.isPending ? 'Đang xóa...' : 'Xóa'}
-              </Button>
-              <DialogClose asChild>
-                <Button variant='secondary'>Hủy</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              variant='secondary'
-              className='px-4 py-2 hover:bg-slate-200'
-            >
-              Đóng
-            </Button>
-          </DialogClose>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

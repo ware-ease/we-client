@@ -1,8 +1,13 @@
-import { createBrand, getAllBrands } from '@/lib/services/brandService';
-import { Brand } from '@/lib/types/brand';
+import {
+  createBrand,
+  deleteBrand,
+  getAllBrands,
+  updateBrand,
+} from '@/lib/services/brandService';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
+// Lấy danh sách thương hiệu
 export const useBrands = () =>
   useQuery({
     queryKey: ['brands'],
@@ -14,15 +19,42 @@ export const useBrands = () =>
 export const useAddBrand = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (brand: Brand) => createBrand(brand),
+    mutationFn: (brand: { name: string }) => createBrand(brand),
     onSuccess: () => {
-      toast.success('Thành công!');
-      queryClient.invalidateQueries({
-        queryKey: ['brands'],
-      });
+      toast.success('Thêm thương hiệu thành công!');
+      queryClient.invalidateQueries({ queryKey: ['brands'] });
     },
     onError: () => {
-      toast.error('Thất bại!');
+      toast.error('Không thể thêm thương hiệu.');
+    },
+  });
+};
+
+export const useUpdateBrand = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, name }: { id: string; name: string }) =>
+      updateBrand(id, { name }),
+    onSuccess: () => {
+      toast.success('Cập nhật thương hiệu thành công!');
+      queryClient.invalidateQueries({ queryKey: ['brands'] });
+    },
+    onError: () => {
+      toast.error('Không thể cập nhật thương hiệu.');
+    },
+  });
+};
+
+export const useDeleteBrand = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteBrand(id),
+    onSuccess: () => {
+      toast.success('Xóa thương hiệu thành công!');
+      queryClient.invalidateQueries({ queryKey: ['brands'] });
+    },
+    onError: () => {
+      toast.error('Không thể xóa thương hiệu.');
     },
   });
 };
