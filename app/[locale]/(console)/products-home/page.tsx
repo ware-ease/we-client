@@ -113,7 +113,7 @@ const ProductsHome = () => {
         </div>
         <div className='p-4 flex space-x-10'>
           <div className='w-2/5'>
-            <BatchDialog>
+            <BatchDialog productId={'1'}>
               <Button className='w-full drop-shadow-xl'>
                 <Settings />
                 Hãng sản xuất

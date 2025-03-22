@@ -2,8 +2,8 @@ import { Batch } from '../types/batch';
 import {
   axiosDelete,
   axiosGet,
+  axiosPatch,
   axiosPost,
-  axiosPut,
   baseFilters,
 } from './baseService';
 
@@ -33,7 +33,7 @@ export const updateBatch = async (
   id: string,
   batchData: Partial<Batch>
 ): Promise<Batch> => {
-  const response = await axiosPut(`/batches/${id}`, batchData, {});
+  const response = await axiosPatch(`/batches/${id}`, batchData, {});
   return response.data.data;
 };
 

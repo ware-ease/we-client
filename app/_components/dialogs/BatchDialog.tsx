@@ -1,9 +1,7 @@
 import { Button } from '@/app/_components/shadcn-base/Button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -11,69 +9,46 @@ import {
 import { Input } from '@/app/_components/shadcn-base/Input';
 import { Label } from '@/app/_components/shadcn-base/Label';
 import {
-  createBatch,
-  deleteBatch,
-  getAllBatches,
-  updateBatch,
-} from '@/lib/services/batchService';
+  useAddBatch,
+  useBatches,
+  useDeleteBatch,
+  useUpdateBatch,
+} from '@/lib/hooks/queries/batchQueries';
 import { Batch } from '@/lib/types/batch';
 import { Edit, Search, Trash2, X } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { DeleteDialog } from './DeleteDialog';
 
 interface BatchDialogProps {
   children: ReactNode;
+  productId: string;
 }
-const BatchDialog = ({ children }: BatchDialogProps) => {
+const BatchDialog = ({ children, productId }: BatchDialogProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [batches, setBatches] = useState<Batch[]>([]);
-  const [filteredBatches, setFilteredBatches] = useState<Batch[]>([]);
+  const batchesQuery = useBatches();
+  const batches = batchesQuery.data || [];
+  const [filteredBatches, setFilteredBatches] = useState<Batch[]>(batches);
   const [newBatch, setNewBatch] = useState<Partial<Batch>>({
     code: '',
     name: '',
     mfgDate: '',
     expDate: '',
+    productId,
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [editingBatch, setEditingBatch] = useState<string | null>(null);
   const [editedBatch, setEditedBatch] = useState<Partial<Batch>>({});
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [batchToDelete, setBatchToDelete] = useState<Batch | null>(null);
+  const addBatchMutation = useAddBatch();
+  const updateBatchMutation = useUpdateBatch();
+  const deleteBatchMutation = useDeleteBatch();
 
   useEffect(() => {
-    if (open) fetchBatches();
-  }, [open]);
-
-  const fetchBatches = async () => {
-    try {
-      const data = await getAllBatches();
-      setBatches(data);
-      setFilteredBatches(data);
-    } catch (error) {
-      console.error(error);
-      toast.error('Không thể tải danh sách lô hàng.');
-    }
-  };
-
-  // const handleAddBatch = async () => {
-  //   if (!newBatch.code?.trim() || !newBatch.name?.trim()) {
-  //     toast.error('Vui lòng nhập thông tin lô hàng hợp lệ.');
-  //     return;
-  //   }
-  //   try {
-  //     const createdBatch = await createBatch(newBatch);
-  //     setBatches([...batches, createdBatch]);
-  //     // setFilteredBatches([...batches, createdBatch]);
-  //     setNewBatch({ code: '', name: '', mfgDate: '', expDate: '' });
-  //     setShowForm(false);
-  //     toast.success('Thêm lô hàng thành công!');
-  //   } catch (error) {
-  //     console.error(error);
-  //     toast.error('Không thể thêm lô hàng.');
-  //   }
-  // };
+    setFilteredBatches(batches);
+  }, [batches]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -90,36 +65,37 @@ const BatchDialog = ({ children }: BatchDialogProps) => {
     setShowForm(true); // Hiển thị form
   };
 
-  const handleSaveBatch = async () => {
+  const handleSaveBatch = () => {
     if (!newBatch.code?.trim() || !newBatch.name?.trim()) {
       toast.error('Vui lòng nhập thông tin lô hàng hợp lệ.');
       return;
     }
 
-    try {
-      if (newBatch.id) {
-        // Nếu có ID, tức là đang chỉnh sửa
-        await updateBatch(newBatch.id, newBatch);
-        setBatches(
-          batches.map((batch) =>
-            batch.id === newBatch.id ? { ...batch, ...newBatch } : batch
-          )
-        );
-        toast.success('Cập nhật lô hàng thành công!');
-      } else {
-        // Nếu không có ID, tức là đang tạo mới
-        const createdBatch = await createBatch(newBatch);
-        setBatches([...batches, createdBatch]);
-        toast.success('Thêm lô hàng thành công!');
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error('Không thể lưu lô hàng.');
+    if (newBatch.id) {
+      updateBatchMutation.mutate(
+        { id: newBatch.id, batch: newBatch as Batch },
+        {
+          onSuccess: () => {
+            toast.success('Cập nhật lô hàng thành công!');
+            setShowForm(false);
+          },
+          onError: () => {
+            toast.error('Không thể cập nhật lô hàng.');
+          },
+        }
+      );
+    } else {
+      addBatchMutation.mutate({ ...newBatch, productId } as Batch, {
+        onSuccess: () => {
+          toast.success('Thêm lô hàng thành công!');
+          setShowForm(false);
+          setNewBatch({ code: '', name: '', mfgDate: '', expDate: '' });
+        },
+        onError: () => {
+          toast.error('Không thể thêm lô hàng.');
+        },
+      });
     }
-
-    // Reset form sau khi lưu
-    setNewBatch({ code: '', name: '', mfgDate: '', expDate: '' });
-    setShowForm(false);
   };
 
   const handleCancelEdit = () => {
@@ -127,23 +103,14 @@ const BatchDialog = ({ children }: BatchDialogProps) => {
     setEditedBatch({});
   };
 
-  const handleDeleteBatch = async () => {
+  const handleDeleteBatch = () => {
     if (!batchToDelete) return;
-    try {
-      await deleteBatch(batchToDelete.id!);
-      const updatedBatches = batches.filter(
-        (batch) => batch.id !== batchToDelete.id
-      );
-      setBatches(updatedBatches);
-      setFilteredBatches(updatedBatches);
-      toast.success('Xóa lô hàng thành công!');
-    } catch (error) {
-      console.error(error);
-      toast.error('Không thể xóa lô hàng.');
-    } finally {
-      setDeleteDialogOpen(false);
-      setBatchToDelete(null);
-    }
+    deleteBatchMutation.mutate(batchToDelete.id!, {
+      onSuccess: () => {
+        toast.success('Xóa lô hàng thành công!');
+      },
+      onError: () => toast.error('Không thể xóa lô hàng.'),
+    });
   };
 
   return (
@@ -277,13 +244,19 @@ const BatchDialog = ({ children }: BatchDialogProps) => {
                             onClick={() => handleEditBatch(batch)}
                           />
 
-                          <Trash2
-                            className='text-red-600 h-4 w-4 cursor-pointer'
-                            onClick={() => {
-                              setBatchToDelete(batch);
-                              setDeleteDialogOpen(true);
-                            }}
-                          />
+                          <DeleteDialog
+                            onConfirmDelete={handleDeleteBatch}
+                            title='Xóa lô hànghàng'
+                            description='Bạn có chắc chắn muốn xóa lô hàng này không?'
+                            isLoading={deleteBatchMutation.isPending}
+                          >
+                            <Trash2
+                              className='text-red-600 h-4 w-4 cursor-pointer'
+                              onClick={() => {
+                                setBatchToDelete(batch);
+                              }}
+                            />
+                          </DeleteDialog>
                         </div>
                       )}
                     </>
@@ -297,36 +270,6 @@ const BatchDialog = ({ children }: BatchDialogProps) => {
             )}
           </ul>
         </div>
-        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-          <DialogContent className='max-w-sm bg-white p-5 rounded-lg shadow-lg'>
-            <DialogHeader>
-              <DialogTitle className='text-red-600'>Xác nhận xóa</DialogTitle>
-            </DialogHeader>
-            <p>
-              Bạn có chắc chắn muốn xóa lô hàng &quot;
-              {batchToDelete?.name}&quot; không?
-            </p>
-            <DialogFooter>
-              <Button variant='destructive' onClick={handleDeleteBatch}>
-                Xóa
-              </Button>
-              <DialogClose asChild>
-                <Button variant='secondary'>Hủy</Button>
-              </DialogClose>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button
-              variant='secondary'
-              className='px-4 py-2 hover:bg-slate-200'
-            >
-              Đóng
-            </Button>
-          </DialogClose>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
