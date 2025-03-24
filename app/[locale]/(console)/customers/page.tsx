@@ -1,4 +1,4 @@
-import CustomerTable from '@/app/_components/custom-table/partner/CustomerTable';
+import CustomerTable from '@/components/custom-table/partner/CustomerTable';
 
 export default async function Customers() {
   return (

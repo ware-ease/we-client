@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/app/_components/shadcn-base/Button';
+import { Button } from '@/components/shadcn-base/Button';
 import {
   Dialog,
   DialogClose,
@@ -8,10 +8,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/app/_components/shadcn-base/Dialog';
-import { Input } from '@/app/_components/shadcn-base/Input';
-import { Label } from '@/app/_components/shadcn-base/Label';
-import { ScrollArea } from '@/app/_components/shadcn-base/ScrollArea';
+} from '@/components/shadcn-base/Dialog';
+import { Input } from '@/components/shadcn-base/Input';
+import { Label } from '@/components/shadcn-base/Label';
+import { ScrollArea } from '@/components/shadcn-base/ScrollArea';
 import { Edit, Plus, SortAsc, SortDesc, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
 

@@ -1,11 +1,11 @@
 'use client';
 import PasswordStrength, {
   checkPasswordStrength,
-} from '@/app/_components/app/PasswordStrength';
-import { Button } from '@/app/_components/shadcn-base/Button';
-import { Input } from '@/app/_components/shadcn-base/Input';
-import { changePassword } from '@/lib/services/accountService';
-import { ChangePasswordRequest } from '@/lib/types/request/account';
+} from '@/components/app/PasswordStrength';
+import { Button } from '@/components/shadcn-base/Button';
+import { Input } from '@/components/shadcn-base/Input';
+import { changePassword } from '@/services/accountService';
+import { ChangePasswordRequest } from '@/types/request/account';
 import { useMutation } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';

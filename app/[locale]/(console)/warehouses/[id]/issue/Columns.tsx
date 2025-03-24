@@ -1,5 +1,5 @@
 'use client';
-import { Issue } from '@/lib/types/issue';
+import { Issue } from '@/types/issue';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Issue>[] = [

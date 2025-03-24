@@ -1,7 +1,7 @@
 'use client';
 
-import UpdateCustomerDialog from '@/app/_components/dialogs/UpdateCustomerDialog';
-import { Customer } from '@/lib/types/customer';
+import UpdateCustomerDialog from '@/components/dialogs/UpdateCustomerDialog';
+import { Customer } from '@/types/customer';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Customer>[] = [

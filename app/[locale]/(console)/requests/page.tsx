@@ -1,4 +1,4 @@
-import GoodRequestTable from '@/app/_components/custom-table/good-request/GoodRequestTable';
+import GoodRequestTable from '@/components/custom-table/good-request/GoodRequestTable';
 import React from 'react';
 
 const Requests = () => {

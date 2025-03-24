@@ -10,8 +10,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import { DataTablePagination } from '@/app/_components/shadcn-base/DataTablePagination';
-import { Input } from '@/app/_components/shadcn-base/Input';
+import { DataTablePagination } from '@/components/shadcn-base/DataTablePagination';
+import { Input } from '@/components/shadcn-base/Input';
 import {
   Table,
   TableBody,
@@ -19,7 +19,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/app/_components/shadcn-base/Table';
+} from '@/components/shadcn-base/Table';
 import { useMemo, useState } from 'react';
 
 interface DataTableProps<TData, TValue> {

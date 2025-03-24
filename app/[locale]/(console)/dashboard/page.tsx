@@ -1,5 +1,5 @@
 'use client';
-import { useAuth } from '@/app/_components/providers/AuthProvider';
+import { useAuth } from '@/components/providers/AuthProvider';
 import React from 'react';
 
 const Dashboard = () => {

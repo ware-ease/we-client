@@ -1,8 +1,8 @@
-import { SidebarProvider } from '@/app/_components/shadcn-base/SideBar';
+import { SidebarProvider } from '@/components/shadcn-base/SideBar';
 import '../../globals.css';
-import { AppSidebar } from '@/app/_components/app/AppSidebar';
-import Nav from '@/app/_components/app/Nav';
-import ProtectedRoute from '@/app/_components/app/ProtectedRoute';
+import { AppSidebar } from '@/components/app/AppSidebar';
+import Nav from '@/components/app/Nav';
+import ProtectedRoute from '@/components/app/ProtectedRoute';
 
 export default function ConsoleLayout({
   children,

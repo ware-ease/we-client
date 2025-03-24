@@ -1,5 +1,5 @@
 // import { Button } from '@/app/_components/shadcn-base/Button';
-import { Link } from '@/i18n/routing';
+import { Link } from '@/lib/i18n/routing';
 import {
   // Box,
   CalendarDays,

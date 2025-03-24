@@ -1,13 +1,13 @@
-import { routing } from '@/i18n/routing';
+import { routing } from '@/lib/i18n/routing';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import ReactQueryProvider from '@/app/_components/providers/ReactQueryProvider';
+import ReactQueryProvider from '@/components/providers/ReactQueryProvider';
 import { ToastContainer } from 'react-toastify';
 // import { Roboto } from 'next/font/google';
 import '../globals.css';
-import { AuthProvider } from '../_components/providers/AuthProvider';
+import { AuthProvider } from '../../components/providers/AuthProvider';
 
 export const metadata: Metadata = {
   title: 'WareEase',

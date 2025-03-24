@@ -1,10 +1,8 @@
 'use client';
-import { Input } from '@/app/_components/shadcn-base/Input';
+import { Input } from '@/components/shadcn-base/Input';
 import React, { useState } from 'react';
-import { Button } from '@/app/_components/shadcn-base/Button';
-import CustomTable, {
-  RowData,
-} from '@/app/_components/custom-table/CustomTable';
+import { Button } from '@/components/shadcn-base/Button';
+import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
 
 const ReceiptCreate = () => {
   const [data, setData] = useState<RowData[]>([]);

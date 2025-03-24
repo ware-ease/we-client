@@ -1,14 +1,14 @@
 'use client';
-import { Button } from '@/app/_components/shadcn-base/Button';
-import { Input } from '@/app/_components/shadcn-base/Input';
+import { Button } from '@/components/shadcn-base/Button';
+import { Input } from '@/components/shadcn-base/Input';
 import { useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import LanguageSelector from '@/app/_components/app/LanguageSelector';
+import LanguageSelector from '@/components/app/LanguageSelector';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
-import { LoginRequest } from '@/lib/types/request/login';
-import { useAuth } from '@/app/_components/providers/AuthProvider';
+import { LoginRequest } from '@/types/request/login';
+import { useAuth } from '@/components/providers/AuthProvider';
 
 const Login = () => {
   const t = useTranslations();

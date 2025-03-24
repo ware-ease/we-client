@@ -1,5 +1,5 @@
 import React from 'react';
-import GoodReceiveNoteTable from '@/app/_components/custom-table/good-note/GoodReceiveNoteTable';
+import GoodReceiveNoteTable from '@/components/custom-table/good-note/GoodReceiveNoteTable';
 
 const WarehouseReceipt = () => {
   return (

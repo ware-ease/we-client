@@ -1,7 +1,7 @@
 'use client';
 
-import DetailPurchaseDialog from '@/app/_components/dialogs/DetailPurchaseDialog';
-import { Purchase, PurchaseDetail } from '@/lib/types/purchase';
+import DetailPurchaseDialog from '@/components/dialogs/DetailPurchaseDialog';
+import { Purchase, PurchaseDetail } from '@/types/purchase';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Purchase>[] = [

@@ -1,12 +1,12 @@
 'use client';
-import { Button } from '@/app/_components/shadcn-base/Button';
-import { Input } from '@/app/_components/shadcn-base/Input';
-import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
+import { Button } from '@/components/shadcn-base/Button';
+import { Input } from '@/components/shadcn-base/Input';
+import { TranslatedMessage } from '@/components/app/TranslatedMessage';
 import React from 'react';
 import WarehouseCard from './WarehouseCard';
-import AddWarehouseDialog from '@/app/_components/dialogs/AddWarehouseDialog';
-import { usePathname } from '@/i18n/routing';
-import { useWarehouses } from '@/lib/hooks/queries/warehouseQueries';
+import AddWarehouseDialog from '@/components/dialogs/AddWarehouseDialog';
+import { usePathname } from '@/lib/i18n/routing';
+import { useWarehouses } from '@/hooks/queries/warehouseQueries';
 
 const WarehousesList = () => {
   const pathname = usePathname();

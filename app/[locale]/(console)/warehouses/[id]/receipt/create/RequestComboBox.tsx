@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { Button } from '@/app/_components/shadcn-base/Button';
+import { Button } from '@/components/shadcn-base/Button';
 import {
   Command,
   CommandEmpty,
@@ -10,14 +10,14 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/app/_components/shadcn-base/Command';
+} from '@/components/shadcn-base/Command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/app/_components/shadcn-base/Popover';
+} from '@/components/shadcn-base/Popover';
 import { cn } from '@/lib/utils/utils';
-import { GoodRequest } from '@/lib/types/goodRequest';
+import { GoodRequest } from '@/types/goodRequest';
 
 interface RequestComboBoxProps {
   value: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataTable } from './DataTable';
 import { columns } from './Columns';
-import { Issue } from '@/lib/types/issue';
+import { Issue } from '@/types/issue';
 
 const data: Issue[] = [
   {

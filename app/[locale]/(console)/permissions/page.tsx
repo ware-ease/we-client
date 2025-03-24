@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/app/_components/shadcn-base/Button';
+import { Button } from '@/components/shadcn-base/Button';
 import { List, Users } from 'lucide-react';
 import { useState } from 'react';
 import Accounts from './Accounts';

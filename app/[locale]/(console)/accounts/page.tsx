@@ -1,4 +1,4 @@
-import AccountTable from '@/app/_components/custom-table/account/AccountTable';
+import AccountTable from '@/components/custom-table/account/AccountTable';
 
 export default function Accounts() {
   return (

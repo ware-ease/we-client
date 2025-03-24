@@ -1,14 +1,12 @@
 'use client';
-import { Input } from '@/app/_components/shadcn-base/Input';
+import { Input } from '@/components/shadcn-base/Input';
 import React, { useState } from 'react';
 import RequestComboBox from './RequestComboBox';
-import { Button } from '@/app/_components/shadcn-base/Button';
-import CustomTable, {
-  RowData,
-} from '@/app/_components/custom-table/CustomTable';
-import { useCurrentWarehouse } from '@/lib/hooks/useCurrentWarehouse';
+import { Button } from '@/components/shadcn-base/Button';
+import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
+import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useQuery } from '@tanstack/react-query';
-import { getAllGoodReceiveRequests } from '@/lib/services/goodRequestService';
+import { getAllGoodReceiveRequests } from '@/services/goodRequestService';
 
 const ReceiptCreate = () => {
   const [data, setData] = useState<RowData[]>([]);

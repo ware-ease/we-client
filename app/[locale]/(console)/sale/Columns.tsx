@@ -1,7 +1,7 @@
 'use client';
 
-import DetailSaleDialog from '@/app/_components/dialogs/DetailSaleDialog';
-import { Sale, SaleDetail } from '@/lib/types/sale';
+import DetailSaleDialog from '@/components/dialogs/DetailSaleDialog';
+import { Sale, SaleDetail } from '@/types/sale';
 import { ColumnDef } from '@tanstack/react-table';
 
 export const columns: ColumnDef<Sale>[] = [

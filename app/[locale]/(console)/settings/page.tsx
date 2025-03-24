@@ -3,8 +3,8 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@/app/_components/shadcn-base/Avatar';
-import { Button } from '@/app/_components/shadcn-base/Button';
+} from '@/components/shadcn-base/Avatar';
+import { Button } from '@/components/shadcn-base/Button';
 import {
   Dialog,
   DialogClose,
@@ -14,17 +14,17 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/app/_components/shadcn-base/Dialog';
-import { Input } from '@/app/_components/shadcn-base/Input';
-import { Label } from '@/app/_components/shadcn-base/Label';
+} from '@/components/shadcn-base/Dialog';
+import { Input } from '@/components/shadcn-base/Input';
+import { Label } from '@/components/shadcn-base/Label';
 import {
   RadioGroup,
   RadioGroupItem,
-} from '@/app/_components/shadcn-base/RadioGroup';
+} from '@/components/shadcn-base/RadioGroup';
 import { toast } from 'react-toastify';
 import { useTranslations } from 'next-intl';
 import { ChangeEvent, useState } from 'react';
-import ConfirmDialog from '@/app/_components/app/ConfirmDialog';
+import ConfirmDialog from '@/components/app/ConfirmDialog';
 import ChangePassword from './ChangePassword';
 
 const Settings = () => {

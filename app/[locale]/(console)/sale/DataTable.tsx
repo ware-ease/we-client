@@ -10,10 +10,10 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import AddSaleDialog from '@/app/_components/dialogs/AddSaleDialog';
-import { Button } from '@/app/_components/shadcn-base/Button';
-import { DataTablePagination } from '@/app/_components/shadcn-base/DataTablePagination';
-import { Input } from '@/app/_components/shadcn-base/Input';
+import AddSaleDialog from '@/components/dialogs/AddSaleDialog';
+import { Button } from '@/components/shadcn-base/Button';
+import { DataTablePagination } from '@/components/shadcn-base/DataTablePagination';
+import { Input } from '@/components/shadcn-base/Input';
 import {
   Table,
   TableBody,
@@ -21,8 +21,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/app/_components/shadcn-base/Table';
-import { TranslatedMessage } from '@/app/_components/app/TranslatedMessage';
+} from '@/components/shadcn-base/Table';
+import { TranslatedMessage } from '@/components/app/TranslatedMessage';
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, X } from 'lucide-react';
 import { useState } from 'react';
 

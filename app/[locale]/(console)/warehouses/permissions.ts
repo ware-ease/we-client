@@ -1,4 +1,4 @@
-import { Permission } from '@/lib/types/permission';
+import { Permission } from '@/types/permission';
 
 const permissions = [
   'warehouses:create',

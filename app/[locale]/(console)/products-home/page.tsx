@@ -1,22 +1,22 @@
 'use client';
-import BatchDialog from '@/app/_components/dialogs/BatchDialog';
-import CategoryDialog from '@/app/_components/dialogs/CategoryDialog';
-import UnitDialog from '@/app/_components/dialogs/UnitDialog';
-import { Button } from '@/app/_components/shadcn-base/Button';
+import BatchDialog from '@/components/dialogs/BatchDialog';
+import CategoryDialog from '@/components/dialogs/CategoryDialog';
+import UnitDialog from '@/components/dialogs/UnitDialog';
+import { Button } from '@/components/shadcn-base/Button';
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/app/_components/shadcn-base/Card';
-import { Link } from '@/i18n/routing';
+} from '@/components/shadcn-base/Card';
+import { Link } from '@/lib/i18n/routing';
 import {
   getBatchCount,
   getCategoryCount,
   getProductCount,
   getProductTypeCount,
-} from '@/lib/services/productService';
+} from '@/services/productService';
 import { useQuery } from '@tanstack/react-query';
 import { Settings } from 'lucide-react';
 

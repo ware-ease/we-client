@@ -1,4 +1,4 @@
-import SupplierTable from '@/app/_components/custom-table/partner/SupplierTable';
+import SupplierTable from '@/components/custom-table/partner/SupplierTable';
 
 const Suppliers = () => {
   return (
