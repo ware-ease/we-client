@@ -24,7 +24,7 @@ export default function ConsoleLayout({
         <AppSidebar />
         <div className='flex flex-col w-full'>
           <Nav />
-          <div className='w-full max-h-[100%]'>{children}</div>
+          <div className='w-full max-h-[100%] overflow-y-auto'>{children}</div>
         </div>
       </ProtectedRoute>
     </SidebarProvider>

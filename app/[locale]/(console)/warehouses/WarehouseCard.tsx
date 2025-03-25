@@ -1,12 +1,10 @@
 // import { Button } from '@/app/_components/shadcn-base/Button';
 import { Link } from '@/lib/i18n/routing';
 import {
-  // Box,
   CalendarDays,
   Edit,
   LandPlot,
   MapPin,
-  // SquareLibrary,
   Trash2,
   Warehouse,
 } from 'lucide-react';
@@ -28,8 +26,8 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({
   operatedFrom,
 }) => {
   return (
-    <div className='flex border rounded-md hover:border-primary p-4 bg-gray-50 hover:bg-gray-100'>
-      <div className='flex px-2'>
+    <div className='flex border rounded-md hover:border-primary p-4 hover:bg-gray-50'>
+      <div className='flex px-6'>
         <Warehouse size={72} />
       </div>
       <div className='flex flex-col px-4 w-full justify-center'>
