@@ -4,9 +4,13 @@ import React from 'react';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import { GoodNote } from '@/types/goodNote';
-import { useGoodReceiveNotes } from '@/hooks/queries/goodNoteQueries';
+import {
+  useCurrentWarehouseGoodReceiveNotes,
+  useGoodReceiveNotes,
+} from '@/hooks/queries/goodNoteQueries';
 import { Link, usePathname } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
+import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 
 export const columns: ColumnDef<GoodNote>[] = [
   {
@@ -135,12 +139,36 @@ export const columns: ColumnDef<GoodNote>[] = [
   },
 ];
 
-const GoodReceiveNoteTable = () => {
+interface GoodReceiveNoteTableProps {
+  onlyCurrentWarehouse?: boolean;
+}
+
+const GoodReceiveNoteTable: React.FC<GoodReceiveNoteTableProps> = ({
+  onlyCurrentWarehouse = false,
+}) => {
   const pathname = usePathname();
-  const { data, isSuccess } = useGoodReceiveNotes();
+  const currentWarehouse = useCurrentWarehouse();
+  console.log(currentWarehouse?.id);
+
+  const { data, isSuccess } = useGoodReceiveNotes(
+    !onlyCurrentWarehouse && currentWarehouse?.id !== undefined
+  );
+  const { data: currentWarehouseData, isSuccess: isCurrentWarehouseSuccess } =
+    useCurrentWarehouseGoodReceiveNotes(
+      onlyCurrentWarehouse && currentWarehouse?.id !== undefined,
+      currentWarehouse?.id ?? ''
+    );
+
+  const tableData = onlyCurrentWarehouse
+    ? isCurrentWarehouseSuccess
+      ? currentWarehouseData
+      : []
+    : isSuccess
+    ? data
+    : [];
 
   return (
-    <CustomDataTable columns={columns} data={isSuccess ? data : []}>
+    <CustomDataTable columns={columns} data={tableData}>
       <Link href={`${pathname}/create`}>
         <Button>Thêm</Button>
       </Link>

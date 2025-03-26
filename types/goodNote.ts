@@ -16,4 +16,5 @@ export interface GoodNoteDetail extends Base {
   quantity?: number;
   note?: string;
   batch?: Batch;
+  batchId?: string;
 }

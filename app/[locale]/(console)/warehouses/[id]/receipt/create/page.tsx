@@ -7,28 +7,75 @@ import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useQuery } from '@tanstack/react-query';
 import { getAllGoodReceiveRequests } from '@/services/goodRequestService';
+import { GoodNote } from '@/types/goodNote';
+import useFormData from '@/hooks/useFormData';
+import { useAddGoodReceiveNote } from '@/hooks/queries/goodNoteQueries';
+import { toast } from 'react-toastify';
+import { GoodNoteSchema } from '@/lib/zod/schemas';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
 
 const ReceiptCreate = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [data, setData] = useState<RowData[]>([]);
-  const [selectedRequest, setSelectedRequest] = useState<string>('');
   const [supplierName, setSupplierName] = useState<string>('');
+  const { formData, handleChange, setFormData } = useFormData<GoodNote>({
+    noteType: 0,
+    shipperName: '',
+    receiverName: '',
+    code: '',
+    date: '',
+    goodRequestId: '',
+    goodNoteDetails: [],
+  });
 
   const { data: requests } = useQuery({
     queryKey: ['requests'],
     queryFn: getAllGoodReceiveRequests,
   });
 
+  const { mutate } = useAddGoodReceiveNote();
+
   const currentWarehouse = useCurrentWarehouse();
 
   const handleSubmit = () => {
+    const finalFormData = {
+      ...formData,
+      goodNoteDetails: data.map((row) => ({
+        quantity: parseFloat(row.quantity.toString()),
+        note: row.note,
+        batchId: row.batch,
+      })),
+    };
+
     console.log(data);
-    console.log(requests);
-    console.log(selectedRequest);
+
+    console.log(finalFormData);
+
+    const result = GoodNoteSchema.safeParse(finalFormData);
+
+    if (!result.success) {
+      result.error.errors.forEach((err) => {
+        toast.error(err.message);
+      });
+      return;
+    }
+
+    mutate(finalFormData, {
+      onSuccess: () => {
+        router.push(pathname.replace('/create', ''));
+      },
+    });
+    // resetForm();
   };
 
   const handleRequestSelect = (value: string) => {
     const req = requests?.find((req) => req.id === value);
-    setSelectedRequest(req?.id ?? '');
+
+    setFormData((prevData) => ({
+      ...prevData,
+      goodRequestId: req?.id ?? '',
+    }));
     setSupplierName(req?.partnerName ?? '');
   };
 
@@ -42,7 +89,7 @@ const ReceiptCreate = () => {
           <div className='flex items-center space-x-2 text-sm'>
             <div className='text-md'>Yêu cầu từ:</div>
             <RequestComboBox
-              value={selectedRequest}
+              value={formData.goodRequestId ?? ''}
               requests={requests}
               onChange={(value) => handleRequestSelect(value)}
             />
@@ -52,11 +99,22 @@ const ReceiptCreate = () => {
           <div className='flex flex-col space-y-2'>
             <div className='w-64'>
               <div className='text-sm'>Mã phiếu</div>
-              <Input name='code' required />
+              <Input
+                name='code'
+                value={formData.code}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className='w-64'>
               <div className='text-sm'>Ngày tạo</div>
-              <Input name='date' type='date' required />
+              <Input
+                name='date'
+                value={formData.date}
+                type='date'
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
           <div className='flex flex-col space-y-2'>
@@ -66,7 +124,12 @@ const ReceiptCreate = () => {
             </div>
             <div className='w-64'>
               <div className='text-sm'>Người giao hàng</div>
-              <Input name='shipper' required />
+              <Input
+                name='shipperName'
+                value={formData.shipperName}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
           <div className='flex flex-col space-y-2'>
@@ -75,8 +138,13 @@ const ReceiptCreate = () => {
               <Input value={currentWarehouse?.name ?? ''} disabled />
             </div>
             <div className='w-64'>
-              <div className='text-sm'>Diễn giải</div>
-              <Input name='explanation' required />
+              <div className='text-sm'>Người nhận hàng</div>
+              <Input
+                name='receiverName'
+                value={formData.receiverName}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
         </div>
