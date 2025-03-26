@@ -1,16 +1,45 @@
 'use client';
-import { useAuth } from '@/components/providers/AuthProvider';
-import React from 'react';
+
+import BaseCard from '@/components/dashboards/BaseCard';
+import { StockChart } from '@/components/dashboards/StockChart';
+import {
+  LucideDollarSign,
+  LucidePackage,
+  LucideShoppingCart,
+  LucideUsers,
+} from 'lucide-react';
 
 const Dashboard = () => {
-  const { permissions, currentUser } = useAuth();
-
   return (
-    <div>
-      {permissions?.map((p, index) => (
-        <div key={index}>{p.key}</div>
-      ))}
-      <>{currentUser?.profile.firstName}</>
+    <div className='grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-4'>
+      <BaseCard
+        title='Total Revenue'
+        amount='$45,231.89'
+        percentageChange='+20.1% from last month'
+        icon={LucideDollarSign}
+      />
+      <BaseCard
+        title='New Orders'
+        amount='1,523'
+        percentageChange='+5.2% from last week'
+        icon={LucideShoppingCart}
+      />
+      <BaseCard
+        title='Stock Value'
+        amount='$120,450'
+        percentageChange='+8.7% this quarter'
+        icon={LucidePackage}
+      />
+      <BaseCard
+        title='Customer Growth'
+        amount='3,450'
+        percentageChange='+15.4% from last year'
+        icon={LucideUsers}
+      />
+      {/* Biểu đồ tồn kho */}
+      <div className='col-span-2'>
+        <StockChart />
+      </div>
     </div>
   );
 };
