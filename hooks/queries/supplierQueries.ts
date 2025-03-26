@@ -2,6 +2,7 @@ import {
   createSupplier,
   deleteSupplier,
   getAllSuppliers,
+  updateSupplier,
 } from '@/services/supplierService';
 import { Supplier } from '@/types/supplier';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -27,6 +28,23 @@ export const useAddSupplier = () => {
     },
     onError: () => {
       toast.error('Thất bại!');
+    },
+  });
+};
+
+export const useUpdateSupplier = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, ...supplierData }: Supplier) =>
+      updateSupplier(id ?? '', supplierData),
+    onSuccess: () => {
+      toast.success('Cập nhật thành công!');
+      queryClient.invalidateQueries({
+        queryKey: ['suppliers'],
+      });
+    },
+    onError: () => {
+      toast.error('Cập nhật thất bại!');
     },
   });
 };

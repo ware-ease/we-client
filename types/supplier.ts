@@ -1,8 +1,9 @@
-export type Supplier = {
-  id: string;
+import { Base } from './base/base-type';
+
+export interface Supplier extends Base {
   name: string;
   email: string;
   phone: string;
   address: string;
-  status: 'active' | 'inactive' | 'banned';
-};
+  // status: boolean;
+}

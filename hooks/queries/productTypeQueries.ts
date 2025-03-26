@@ -4,14 +4,9 @@ import {
   getAllProductTypes,
   updateProductType,
 } from '@/services/productService';
+import { ProductType } from '@/types/product';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
-
-export type ProductType = {
-  id?: string;
-  name: string;
-  note: string;
-};
 
 // Lấy danh sách loại sản phẩm
 export const useProductTypes = () =>
