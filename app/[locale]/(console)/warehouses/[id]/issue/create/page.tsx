@@ -1,20 +1,20 @@
 'use client';
 import { Input } from '@/components/shadcn-base/Input';
 import React, { useState } from 'react';
-import RequestComboBox from '../../../../../../../components/combo-boxes/RequestComboBox';
+import RequestComboBox from '@/components/combo-boxes/RequestComboBox';
 import { Button } from '@/components/shadcn-base/Button';
 import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useQuery } from '@tanstack/react-query';
-import { getAllGoodReceiveRequests } from '@/services/goodRequestService';
+import { getAllGoodIssueRequests } from '@/services/goodRequestService';
 import { GoodNote } from '@/types/goodNote';
 import useFormData from '@/hooks/useFormData';
-import { useAddGoodReceiveNote } from '@/hooks/queries/goodNoteQueries';
+import { useAddGoodIssueNote } from '@/hooks/queries/goodNoteQueries';
 import { toast } from 'react-toastify';
 import { GoodNoteSchema } from '@/lib/zod/schemas';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 
-const ReceiptCreate = () => {
+const IssueCreate = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [data, setData] = useState<RowData[]>([]);
@@ -31,10 +31,10 @@ const ReceiptCreate = () => {
 
   const { data: requests } = useQuery({
     queryKey: ['requests'],
-    queryFn: getAllGoodReceiveRequests,
+    queryFn: getAllGoodIssueRequests,
   });
 
-  const { mutate } = useAddGoodReceiveNote();
+  const { mutate } = useAddGoodIssueNote();
 
   const currentWarehouse = useCurrentWarehouse();
 
@@ -84,7 +84,7 @@ const ReceiptCreate = () => {
       <div className='flex flex-col w-full'>
         <div className='flex space-x-20 items-center w-full'>
           <div className='text-4xl font-semibold text-primary'>
-            Phiếu nhập kho
+            Phiếu xuất kho
           </div>
           <div className='flex items-center space-x-2 text-sm'>
             <div className='text-md'>Yêu cầu từ:</div>
@@ -160,4 +160,4 @@ const ReceiptCreate = () => {
   );
 };
 
-export default ReceiptCreate;
+export default IssueCreate;

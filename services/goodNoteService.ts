@@ -27,6 +27,16 @@ export const getAllGoodIssueNotes = async (): Promise<GoodNote[]> => {
   return response.data.data.records;
 };
 
+export const getAllCurrentWarehouseGoodIssueNotes = async (
+  id: string
+): Promise<GoodNote[]> => {
+  const response = await axiosGet(
+    '/good-notes' + baseFilters + '&noteType=1&requestedWarehouseId=' + id,
+    {}
+  );
+  return response.data.data.records;
+};
+
 export const createGoodNote = async (data: GoodNote): Promise<GoodNote> => {
   const response = await axiosPost('/good-notes', data, {});
   return response.data.data;

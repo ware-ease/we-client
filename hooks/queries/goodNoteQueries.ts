@@ -1,5 +1,6 @@
 import {
   createGoodNote,
+  getAllCurrentWarehouseGoodIssueNotes,
   getAllCurrentWarehouseGoodReceiveNotes,
   getAllGoodIssueNotes,
   getAllGoodReceiveNotes,
@@ -43,10 +44,37 @@ export const useAddGoodReceiveNote = () => {
   });
 };
 
-export const useGoodIssueNotes = () =>
+export const useGoodIssueNotes = (enabled: boolean) =>
   useQuery({
     queryKey: ['issueNotes'],
     queryFn: getAllGoodIssueNotes,
     staleTime: 300000,
     refetchOnWindowFocus: false,
+    enabled: enabled,
   });
+
+export const useCurrentWarehouseGoodIssueNotes = (
+  enabled: boolean,
+  currentWarehouseId: string
+) =>
+  useQuery({
+    queryKey: ['issueNotes'],
+    queryFn: () => getAllCurrentWarehouseGoodIssueNotes(currentWarehouseId),
+    staleTime: 300000,
+    refetchOnWindowFocus: false,
+    enabled: enabled,
+  });
+
+export const useAddGoodIssueNote = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (grn: GoodNote) => createGoodNote(grn),
+    onSuccess: () => {
+      toast.success('Thêm thành công!');
+      queryClient.invalidateQueries({ queryKey: ['issueNotes'] });
+    },
+    onError: () => {
+      toast.error('Không thể thêm.');
+    },
+  });
+};

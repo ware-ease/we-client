@@ -5,8 +5,8 @@ import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import { GoodNote } from '@/types/goodNote';
 import {
-  useCurrentWarehouseGoodReceiveNotes,
-  useGoodReceiveNotes,
+  useCurrentWarehouseGoodIssueNotes,
+  useGoodIssueNotes,
 } from '@/hooks/queries/goodNoteQueries';
 import { Link, usePathname } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
@@ -139,21 +139,21 @@ export const columns: ColumnDef<GoodNote>[] = [
   },
 ];
 
-interface GoodReceiveNoteTableProps {
+interface GoodIssueNoteTableProps {
   onlyCurrentWarehouse?: boolean;
 }
 
-const GoodReceiveNoteTable: React.FC<GoodReceiveNoteTableProps> = ({
+const GoodIssueNoteTable: React.FC<GoodIssueNoteTableProps> = ({
   onlyCurrentWarehouse = false,
 }) => {
   const pathname = usePathname();
   const currentWarehouse = useCurrentWarehouse();
 
-  const { data, isSuccess } = useGoodReceiveNotes(
+  const { data, isSuccess } = useGoodIssueNotes(
     !onlyCurrentWarehouse && currentWarehouse?.id !== undefined
   );
   const { data: currentWarehouseData, isSuccess: isCurrentWarehouseSuccess } =
-    useCurrentWarehouseGoodReceiveNotes(
+    useCurrentWarehouseGoodIssueNotes(
       onlyCurrentWarehouse && currentWarehouse?.id !== undefined,
       currentWarehouse?.id ?? ''
     );
@@ -175,4 +175,4 @@ const GoodReceiveNoteTable: React.FC<GoodReceiveNoteTableProps> = ({
   );
 };
 
-export default GoodReceiveNoteTable;
+export default GoodIssueNoteTable;

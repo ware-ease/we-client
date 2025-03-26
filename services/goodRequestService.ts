@@ -8,7 +8,15 @@ export const getAllGoodRequests = async (): Promise<GoodRequest[]> => {
 
 export const getAllGoodReceiveRequests = async (): Promise<GoodRequest[]> => {
   const response = await axiosGet(
-    '/good-requests' + baseFilters + '&type=0',
+    '/good-requests' + baseFilters + '&requestType=0',
+    {}
+  );
+  return response.data.data.records;
+};
+
+export const getAllGoodIssueRequests = async (): Promise<GoodRequest[]> => {
+  const response = await axiosGet(
+    '/good-requests' + baseFilters + '&requestType=1',
     {}
   );
   return response.data.data.records;
