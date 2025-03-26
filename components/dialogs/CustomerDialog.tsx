@@ -18,7 +18,7 @@ import {
 } from '@/hooks/queries/customerQueries';
 import { Customer } from '@/types/customer';
 import { Check, Edit, Search, Trash2, X } from 'lucide-react';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { DeleteDialog } from './DeleteDialog';
 
@@ -46,6 +46,10 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
   const [editingCustomer, setEditingCustomer] = useState<string | null>(null);
   const [editedName, setEditedName] = useState('');
   const [customerToDelete, setCustomerToDelete] = useState<string>('');
+
+  useEffect(() => {
+    setFilteredCustomers(customers);
+  }, [customers]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toLowerCase();
