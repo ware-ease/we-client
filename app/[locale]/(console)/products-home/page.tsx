@@ -1,6 +1,7 @@
 'use client';
-import BatchDialog from '@/components/dialogs/BatchDialog';
+import BrandDialog from '@/components/dialogs/BrandDialog';
 import CategoryDialog from '@/components/dialogs/CategoryDialog';
+import ProductTypeDialog from '@/components/dialogs/ProductTypeDialog';
 import SupplierDialog from '@/components/dialogs/SupplierDialog';
 import { Button } from '@/components/shadcn-base/Button';
 import {
@@ -71,11 +72,11 @@ const ProductsHome = () => {
               <CardDescription>hiện có trong ứng dụng.</CardDescription>
             </CardHeader>
             <CardFooter>
-              {/* <ProductTypeDialog> */}
-              <button className='hover:cursor-pointer font-semibold text-blue-500'>
-                → Xem chi tiết
-              </button>
-              {/* </ProductTypeDialog> */}
+              <ProductTypeDialog>
+                <button className='hover:cursor-pointer font-semibold text-blue-500'>
+                  → Xem chi tiết
+                </button>
+              </ProductTypeDialog>
             </CardFooter>
           </Card>
         </div>
@@ -113,12 +114,12 @@ const ProductsHome = () => {
         </div>
         <div className='p-4 flex space-x-10'>
           <div className='w-2/5'>
-            <BatchDialog productId={'1'}>
+            <BrandDialog>
               <Button className='w-full drop-shadow-xl'>
                 <Settings />
                 Hãng sản xuất
               </Button>
-            </BatchDialog>
+            </BrandDialog>
           </div>
           <div className='w-2/5'>
             <SupplierDialog>
