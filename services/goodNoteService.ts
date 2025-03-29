@@ -9,7 +9,7 @@ export const getAllGoodReceiveNotes = async (): Promise<GoodNote[]> => {
   return response.data.data.records;
 };
 
-export const getGoodReceiveNoteById = async (id: string): Promise<GoodNote> => {
+export const getGoodNoteById = async (id: string): Promise<GoodNote> => {
   const response = await axiosGet('/good-notes/' + id, {});
   return response.data.data;
 };
@@ -30,6 +30,11 @@ export const getAllGoodIssueNotes = async (): Promise<GoodNote[]> => {
     {}
   );
   return response.data.data.records;
+};
+
+export const getGoodIssueNoteById = async (id: string): Promise<GoodNote> => {
+  const response = await axiosGet('/good-notes/' + id, {});
+  return response.data.data;
 };
 
 export const getAllCurrentWarehouseGoodIssueNotes = async (
