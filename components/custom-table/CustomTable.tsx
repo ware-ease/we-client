@@ -2,10 +2,9 @@
 'use client';
 import React, { ReactNode, useState, useRef, useEffect } from 'react';
 import ProductComboBox from '../combo-boxes/ProductComboBox';
-import { useQuery } from '@tanstack/react-query';
 import BatchComboBox from '../combo-boxes/BatchComboBox';
-import { getAllBatches } from '@/services/batchService';
 import { useProducts } from '@/hooks/queries/productQueries';
+import { useBatches } from '@/hooks/queries/batchQueries';
 
 interface Column {
   header: string;
@@ -25,6 +24,8 @@ export interface RowData {
   quantity: number;
   batch: string;
   note: string;
+  productId?: string;
+  batchId?: string;
 }
 
 const initialColumns: Column[] = [
@@ -39,21 +40,76 @@ const initialColumns: Column[] = [
 
 interface CustomTableProps {
   onDataChange: (data: RowData[]) => void;
+  initialData?: RowData[];
 }
 
-const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
+const CustomTable: React.FC<CustomTableProps> = ({
+  onDataChange,
+  initialData,
+}) => {
+  const { data: products } = useProducts();
+  const { data: batches } = useBatches();
+
   const [columns, setColumns] = useState<Column[]>(initialColumns);
   const [rows, setRows] = useState<Row[]>([]);
   const resizingColumn = useRef<number | null>(null);
   const startX = useRef<number>(0);
   const newWidth = useRef<number>(0);
 
-  const { data: products } = useProducts();
+  const setInitialRows = () => {
+    if (!products || !batches) return;
 
-  const { data: batches } = useQuery({
-    queryKey: ['batches'],
-    queryFn: getAllBatches,
-  });
+    setRows(
+      (initialData ?? []).map((rowData, index) => {
+        const selectedProduct = products.find(
+          (p) => p.id === rowData.productId
+        );
+        const filteredBatches = batches.filter(
+          (b) => b.productId === selectedProduct?.id
+        );
+        return {
+          sku: (
+            <ProductComboBox
+              value={rowData.productId || ''}
+              onChange={(value) => handleProductSelect(index, 'sku', value)}
+            />
+          ),
+          name: <div className='p-2 truncate'>{rowData.name}</div>,
+          unit: <div className='p-2 truncate'>{rowData.unit}</div>,
+          quantity: (
+            <input
+              type='number'
+              className='border-none w-full p-2'
+              value={rowData.quantity}
+              onChange={(e) => handleQuantityChange(index, e.target.value)}
+            />
+          ),
+          batch: (
+            <BatchComboBox
+              batches={filteredBatches}
+              value={rowData.batchId || ''}
+              onChange={(batchValue) =>
+                handleBatchSelect(index, 'batch', batchValue)
+              }
+            />
+          ),
+          note: (
+            <input
+              type='text'
+              className='w-full p-2'
+              value={rowData.note}
+              onChange={(e) => handleNoteChange(index, e.target.value)}
+            />
+          ),
+        };
+      })
+    );
+  };
+
+  useEffect(() => {
+    setInitialRows();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [products, batches]);
 
   useEffect(() => {
     const updatedData: RowData[] = rows.map((row) => ({
@@ -105,6 +161,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
   };
 
   const handleQuantityChange = (rowIndex: number, value: string) => {
+    console.log(rowIndex);
     setRows((prevRows) => {
       return prevRows.map((row, index) =>
         index === rowIndex
@@ -115,9 +172,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
                   type='number'
                   className='border-none w-full p-2'
                   value={value}
-                  onChange={(e) =>
-                    handleQuantityChange(rows.length, e.target.value)
-                  }
+                  onChange={(e) => handleQuantityChange(index, e.target.value)}
                 />
               ),
             }
@@ -137,9 +192,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
                   type='text'
                   className='border-none w-full p-2'
                   value={value}
-                  onChange={(e) =>
-                    handleNoteChange(rows.length, e.target.value)
-                  }
+                  onChange={(e) => handleNoteChange(index, e.target.value)}
                 />
               ),
             }
@@ -155,7 +208,7 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
   ) => {
     if (!products || !batches) return;
     const selectedProduct = products.find((p) => p.id === value);
-    console.log(batches);
+
     const filteredBatches = batches.filter(
       (b) => b.productId === selectedProduct?.id
     );
@@ -278,28 +331,30 @@ const CustomTable: React.FC<CustomTableProps> = ({ onDataChange }) => {
             </div>
 
             {/* Data Rows */}
-            {rows.map((row, rowIndex) => (
-              <div
-                key={rowIndex}
-                className='flex border-b last:border-none items-center'
-              >
-                {columns.map((col, colIndex) => (
-                  <div
-                    key={colIndex}
-                    className='whitespace-nowrap last:border-none border-r box-border'
-                    style={{ width: `${col.width}px` }}
-                  >
-                    {row[col.key]}
-                  </div>
-                ))}
-                <button
-                  className='text-red-500 hover:text-red-700 px-2'
-                  onClick={() => deleteRow(rowIndex)}
+            {products &&
+              batches &&
+              rows.map((row, rowIndex) => (
+                <div
+                  key={rowIndex}
+                  className='flex border-b last:border-none items-center'
                 >
-                  ✕
-                </button>
-              </div>
-            ))}
+                  {columns.map((col, colIndex) => (
+                    <div
+                      key={colIndex}
+                      className='whitespace-nowrap last:border-none border-r box-border'
+                      style={{ width: `${col.width}px` }}
+                    >
+                      {row[col.key]}
+                    </div>
+                  ))}
+                  <button
+                    className='text-red-500 hover:text-red-700 px-2'
+                    onClick={() => deleteRow(rowIndex)}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
           </div>
         </div>
       </div>

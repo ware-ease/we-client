@@ -13,6 +13,7 @@ import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { Edit } from 'lucide-react';
 import StatusUI from '@/components/app/StatusUI';
+import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 
 export const columns: ColumnDef<GoodNote>[] = [
   {
@@ -118,6 +119,7 @@ export const columns: ColumnDef<GoodNote>[] = [
     cell: ({ row }) => {
       return <StatusUI status={row.getValue('status')} />;
     },
+    filterFn: statusFilterFn,
     meta: {
       title: 'Trạng thái',
     },

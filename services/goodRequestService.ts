@@ -6,6 +6,11 @@ export const getAllGoodRequests = async (): Promise<GoodRequest[]> => {
   return response.data.data.records;
 };
 
+export const getGoodRequestById = async (id: string): Promise<GoodRequest> => {
+  const response = await axiosGet('/good-requests/' + id, {});
+  return response.data.data;
+};
+
 export const getAllGoodReceiveRequests = async (): Promise<GoodRequest[]> => {
   const response = await axiosGet(
     '/good-requests' + baseFilters + '&requestType=0',

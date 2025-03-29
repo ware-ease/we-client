@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Product } from './product';
+
 export type Batch = {
   id: string;
   productId: string;
@@ -7,4 +8,5 @@ export type Batch = {
   name: string;
   mfgDate: string;
   expDate: string;
+  product?: Product;
 };

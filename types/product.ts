@@ -7,7 +7,9 @@ export interface Product extends Base {
   productType?: string;
   category?: string;
   brand?: string;
+  brandName?: string;
   unit?: string;
+  unitName?: string;
   status?: boolean;
 }
 

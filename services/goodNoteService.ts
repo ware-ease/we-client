@@ -1,5 +1,5 @@
 import { GoodNote } from '../types/goodNote';
-import { axiosGet, axiosPost, baseFilters } from './baseService';
+import { axiosGet, axiosPatch, axiosPost, baseFilters } from './baseService';
 
 export const getAllGoodReceiveNotes = async (): Promise<GoodNote[]> => {
   const response = await axiosGet(
@@ -7,6 +7,11 @@ export const getAllGoodReceiveNotes = async (): Promise<GoodNote[]> => {
     {}
   );
   return response.data.data.records;
+};
+
+export const getGoodReceiveNoteById = async (id: string): Promise<GoodNote> => {
+  const response = await axiosGet('/good-notes/' + id, {});
+  return response.data.data;
 };
 
 export const getAllCurrentWarehouseGoodReceiveNotes = async (
@@ -39,5 +44,10 @@ export const getAllCurrentWarehouseGoodIssueNotes = async (
 
 export const createGoodNote = async (data: GoodNote): Promise<GoodNote> => {
   const response = await axiosPost('/good-notes', data, {});
+  return response.data.data;
+};
+
+export const updateGoodNote = async (data: GoodNote): Promise<GoodNote> => {
+  const response = await axiosPatch('/good-notes/' + data.id, data, {});
   return response.data.data;
 };

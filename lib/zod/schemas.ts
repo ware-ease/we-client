@@ -9,7 +9,7 @@ export const GoodNoteDetailSchema = BaseSchema.extend({
 });
 
 export const GoodNoteSchema = BaseSchema.extend({
-  noteType: z.number(),
+  // noteType: z.number(),
   shipperName: z.string(),
   receiverName: z.string(),
   code: z.string(),

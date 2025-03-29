@@ -4,6 +4,8 @@ import {
   getAllCurrentWarehouseGoodReceiveNotes,
   getAllGoodIssueNotes,
   getAllGoodReceiveNotes,
+  getGoodReceiveNoteById,
+  updateGoodNote,
 } from '@/services/goodNoteService';
 import { GoodNote } from '@/types/goodNote';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -13,6 +15,15 @@ export const useGoodReceiveNotes = (enabled: boolean) =>
   useQuery({
     queryKey: ['receiveNotes'],
     queryFn: getAllGoodReceiveNotes,
+    staleTime: 300000,
+    refetchOnWindowFocus: false,
+    enabled: enabled,
+  });
+
+export const useGoodReceiveNote = (enabled: boolean, id: string) =>
+  useQuery({
+    queryKey: ['receiveNote', id],
+    queryFn: () => getGoodReceiveNoteById(id),
     staleTime: 300000,
     refetchOnWindowFocus: false,
     enabled: enabled,
@@ -40,6 +51,20 @@ export const useAddGoodReceiveNote = () => {
     },
     onError: () => {
       toast.error('Không thể thêm.');
+    },
+  });
+};
+
+export const useUpdateGoodReceiveNote = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (grn: GoodNote) => updateGoodNote(grn),
+    onSuccess: () => {
+      toast.success('Sửa thành công!');
+      queryClient.invalidateQueries({ queryKey: ['receiveNotes'] });
+    },
+    onError: () => {
+      toast.error('Không thể sửa.');
     },
   });
 };

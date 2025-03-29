@@ -1,3 +1,4 @@
+import { statusMap } from '@/lib/tanstack-table/customFilterFn';
 import React from 'react';
 
 interface StatusUIProps {
@@ -5,13 +6,6 @@ interface StatusUIProps {
 }
 
 const StatusUI: React.FC<StatusUIProps> = ({ status }) => {
-  const statusMap = [
-    { status: 'Pending', label: 'Chờ xử lý', color: 'bg-yellow-500' },
-    { status: 'Completed', label: 'Hoàn thành', color: 'bg-green-500' },
-    { status: 'Canceled', label: 'Đã hủy', color: 'bg-red-500' },
-    { status: 'Failed', label: 'Thất bại', color: 'bg-orange-500' },
-  ];
-
   const statusInfo = statusMap.find((item) => item.status === status) || {
     label: 'Không xác định',
     color: 'bg-gray-500',
