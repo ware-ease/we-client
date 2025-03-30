@@ -29,6 +29,7 @@ import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { logout } from '@/services/authService';
+import { useAuth } from '../providers/AuthProvider';
 
 export function AppSidebar() {
   const lang = useCurrentLanguage();
@@ -36,6 +37,20 @@ export function AppSidebar() {
   const t = useTranslations();
   const warehouse = useCurrentWarehouse();
   const router = useRouter();
+  const { permissions } = useAuth();
+
+  const viewPermissions = permissions?.filter((p) => {
+    const segments = p.code.split(':');
+    return segments[segments.length - 1] === 'view';
+  });
+
+  const excludedUrls = ['/home'];
+
+  const hasViewPermission = (url: string) => {
+    return (
+      excludedUrls.includes(url) || viewPermissions?.some((p) => p.url === url)
+    );
+  };
 
   const handleLogout = () => {
     logout();
@@ -180,6 +195,11 @@ export function AppSidebar() {
     },
   ];
 
+  // const filteredWarehouseItems = warehouseItems.filter((item) =>
+  //   hasViewPermission(item.url)
+  // );
+  const filteredItems = items.filter((item) => hasViewPermission(item.url));
+
   return (
     <Sidebar collapsible='icon' className='max-h-full text-white text-3xl'>
       <SidebarHeader className='flex justify-center items-center py-6 pt-10'>
@@ -246,7 +266,7 @@ export function AppSidebar() {
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                {items.map((item, index) => {
+                {filteredItems.map((item, index) => {
                   const isActive = pathname.slice(3).includes(item.url);
                   return (
                     <SidebarMenuItem className='my-2' key={index}>

@@ -3,7 +3,6 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { Account } from '@/types/account';
 import { Permission } from '@/types/permission';
 import { getCurrentUser, login } from '@/services/authService';
-import { getPermissions } from '@/services/permissionService';
 import { LoginRequest } from '@/types/request/login';
 import { AxiosResponse } from 'axios';
 
@@ -35,7 +34,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     async function fetchPermissions() {
       try {
-        const permsRes = await getPermissions();
+        const userRes = await getCurrentUser();
+        const user: Account = userRes.data.data;
+        const permsRes = [
+          ...(user?.groups?.flatMap((group) => group.permissions) || []),
+          ...(user?.permissions || []),
+        ];
         setPermissions(permsRes);
       } catch {
         setPermissions([]);

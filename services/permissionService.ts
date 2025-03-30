@@ -1,9 +1,7 @@
-import { Permission, samplePermissions } from '../types/permission';
+import { Permission } from '../types/permission';
+import { axiosGet } from './baseService';
 
-export const getPermissions = (): Promise<Permission[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(samplePermissions);
-    }, 500); // Simulating a 500ms network delay
-  });
+export const getPermissions = async (): Promise<Permission[]> => {
+  const response = await axiosGet('/permissions', {});
+  return response.data.data;
 };

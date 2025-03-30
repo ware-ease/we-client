@@ -11,11 +11,23 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const { currentUser } = useAuth();
   const router = useRouter();
+  // const pathname = usePathname();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // useEffect(() => {
+  //   const viewPermissions = permissions?.filter((p) => {
+  //     const segments = p.code.split(':');
+  //     return segments[segments.length - 1] === 'view';
+  //   });
+  //   const hasPerm = viewPermissions?.find((p) => p.url === pathname);
+  //   if (!hasPerm) {
+  //     router.push('/home');
+  //   }
+  // }, [pathname, permissions, router]);
 
   useEffect(() => {
     if (isClient && currentUser === null) {

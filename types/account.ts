@@ -1,3 +1,5 @@
+import { Permission } from './permission';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Profile = {
   firstName: string;
@@ -21,6 +23,6 @@ export type Account = {
   email: string;
   profile: Profile;
   groups: Group[];
-  permissions: any[];
+  permissions: Permission[];
   warehouses: any[];
 };
