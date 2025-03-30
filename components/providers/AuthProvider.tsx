@@ -32,6 +32,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
 
+    fetchCurrentUser();
+  }, []);
+
+  useEffect(() => {
     async function fetchPermissions() {
       try {
         const userRes = await getCurrentUser();
@@ -46,9 +50,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
 
-    fetchCurrentUser();
     fetchPermissions();
-  }, []);
+  }, [currentUser]);
 
   async function handleLogin(loginCredentials: LoginRequest) {
     const res = await login(loginCredentials);
