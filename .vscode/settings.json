@@ -1,5 +1,5 @@
 {
-  "i18n-ally.localesPaths": ["i18n", "messages"],
+  "i18n-ally.localesPaths": ["i18n", "lib/messages"],
   "i18n-ally.keystyle": "nested",
   "CodeGPT.apiKey": "CodeGPT Plus"
 }

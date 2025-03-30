@@ -2,7 +2,7 @@ import { statusMap } from '@/lib/tanstack-table/customFilterFn';
 import React from 'react';
 
 interface StatusUIProps {
-  status: string;
+  status: number;
 }
 
 const StatusUI: React.FC<StatusUIProps> = ({ status }) => {

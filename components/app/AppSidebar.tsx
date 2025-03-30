@@ -43,6 +43,11 @@ export function AppSidebar() {
   };
 
   const ensureUniquePath = (base: string, page: string) => {
+    const pathSegments: string[] = base.split('/');
+    if (pathSegments.length > 5) {
+      return '/' + pathSegments[2] + '/' + pathSegments[3] + page;
+    }
+
     crudSuffix.forEach((crudSuffix) => {
       if (base.includes(crudSuffix)) {
         base = base.substring(0, base.length - 7);
@@ -61,7 +66,13 @@ export function AppSidebar() {
   // const pathSegments = pathname.split('/');
   // const warehouseId = pathSegments[3];
 
-  const suffixList = ['/dashboard', '/goods', '/receipt', '/issue'];
+  const suffixList = [
+    '/dashboard',
+    '/goods',
+    '/receipt',
+    '/issue',
+    '/requests',
+  ];
 
   const crudSuffix = ['/create', '/update', '/delete'];
 
@@ -75,6 +86,11 @@ export function AppSidebar() {
       title: t('Sidebar.goods'),
       url: ensureUniquePath(pathname, '/goods'),
       icon: Boxes,
+    },
+    {
+      title: 'Yêu cầu',
+      url: ensureUniquePath(pathname, '/requests'),
+      icon: FileInput,
     },
     {
       title: t('Sidebar.import'),

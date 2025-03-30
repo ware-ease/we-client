@@ -5,10 +5,10 @@ interface HasStatus {
 }
 
 export const statusMap = [
-  { status: 'Pending', label: 'Chờ xử lý', color: 'bg-yellow-500' },
-  { status: 'Completed', label: 'Hoàn thành', color: 'bg-green-500' },
-  { status: 'Canceled', label: 'Đã hủy', color: 'bg-red-500' },
-  { status: 'Failed', label: 'Thất bại', color: 'bg-orange-500' },
+  { status: 0, label: 'Chờ xử lý', color: 'bg-yellow-500' },
+  { status: 1, label: 'Hoàn thành', color: 'bg-green-500' },
+  { status: 2, label: 'Đã hủy', color: 'bg-red-500' },
+  { status: 3, label: 'Thất bại', color: 'bg-orange-500' },
 ];
 
 export const statusFilterFn = <T extends Partial<HasStatus>>(
