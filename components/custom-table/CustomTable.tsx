@@ -89,8 +89,14 @@ const CustomTable: React.FC<CustomTableProps> = ({
               batches={filteredBatches}
               value={rowData.batchId || ''}
               onChange={(batchValue) =>
-                handleBatchSelect(index, 'batch', batchValue)
+                handleBatchSelect(
+                  index,
+                  'batch',
+                  batchValue,
+                  rowData.productId || ''
+                )
               }
+              productId={rowData.productId || ''}
             />
           ),
           note: (
@@ -239,8 +245,14 @@ const CustomTable: React.FC<CustomTableProps> = ({
                   batches={filteredBatches}
                   value=''
                   onChange={(batchValue) =>
-                    handleBatchSelect(rowIndex, 'batch', batchValue)
+                    handleBatchSelect(
+                      rowIndex,
+                      'batch',
+                      batchValue,
+                      selectedProduct?.id || ''
+                    )
                   }
+                  productId={selectedProduct?.id || ''}
                 />
               ),
             }
@@ -249,7 +261,12 @@ const CustomTable: React.FC<CustomTableProps> = ({
     );
   };
 
-  const handleBatchSelect = (rowIndex: number, key: string, value: string) => {
+  const handleBatchSelect = (
+    rowIndex: number,
+    key: string,
+    value: string,
+    productId: string
+  ) => {
     setRows((prevRows) =>
       prevRows.map((row, index) =>
         index === rowIndex
@@ -259,7 +276,10 @@ const CustomTable: React.FC<CustomTableProps> = ({
                 <BatchComboBox
                   batches={(row.batch as any).props.batches || []}
                   value={value}
-                  onChange={(v) => handleBatchSelect(rowIndex, key, v)}
+                  onChange={(v) =>
+                    handleBatchSelect(rowIndex, key, v, productId)
+                  }
+                  productId={productId}
                 />
               ),
             }

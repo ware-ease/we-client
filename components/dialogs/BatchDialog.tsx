@@ -10,7 +10,7 @@ import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
 import {
   useAddBatch,
-  useBatches,
+  useBatchesByProductId,
   useDeleteBatch,
   useUpdateBatch,
 } from '@/hooks/queries/batchQueries';
@@ -19,6 +19,7 @@ import { Edit, Search, Trash2, X } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { DeleteDialog } from './DeleteDialog';
+import { DialogDescription } from '@radix-ui/react-dialog';
 
 interface BatchDialogProps {
   children: ReactNode;
@@ -27,7 +28,7 @@ interface BatchDialogProps {
 const BatchDialog = ({ children, productId }: BatchDialogProps) => {
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const { data: batches } = useBatches();
+  const { data: batches } = useBatchesByProductId(productId);
   const [filteredBatches, setFilteredBatches] = useState<Batch[] | undefined>(
     undefined
   );
@@ -122,7 +123,7 @@ const BatchDialog = ({ children, productId }: BatchDialogProps) => {
         <DialogHeader>
           <DialogTitle>Quản lý lô hàng</DialogTitle>
         </DialogHeader>
-
+        <DialogDescription />
         {showForm ? (
           <div className='border p-4 rounded-md bg-gray-50'>
             <div>

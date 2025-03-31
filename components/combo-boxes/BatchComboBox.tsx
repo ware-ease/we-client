@@ -17,17 +17,20 @@ import {
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
 import { Batch } from '@/types/batch';
+import BatchDialog from '../dialogs/BatchDialog';
 
 interface BatchComboBoxProps {
   value: string;
   onChange: (value: string) => void;
   batches: Batch[] | undefined;
+  productId: string;
 }
 
 const BatchComboBox: React.FC<BatchComboBoxProps> = ({
   value,
   onChange,
   batches,
+  productId,
 }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -81,14 +84,18 @@ const BatchComboBox: React.FC<BatchComboBoxProps> = ({
                   <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
                 </div>
               )}
-              <CommandItem
-                className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
-                onSelect={() => handleOnAdd()}
-                aria-selected={false}
-              >
-                Thêm
-                <Settings className='ml-auto text-white' />
-              </CommandItem>
+              <BatchDialog productId={productId}>
+                <button className='w-full'>
+                  <CommandItem
+                    className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
+                    onSelect={() => handleOnAdd()}
+                    aria-selected={false}
+                  >
+                    Thêm
+                    <Settings className='ml-auto text-white' />
+                  </CommandItem>
+                </button>
+              </BatchDialog>
             </CommandGroup>
           </CommandList>
         </Command>

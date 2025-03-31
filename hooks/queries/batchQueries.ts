@@ -11,7 +11,15 @@ import { toast } from 'react-toastify';
 export const useBatches = () =>
   useQuery({
     queryKey: ['batches'],
-    queryFn: getAllBatches,
+    queryFn: () => getAllBatches(),
+    staleTime: 300000, // 5 phút
+    refetchOnWindowFocus: false,
+  });
+
+export const useBatchesByProductId = (productId?: string) =>
+  useQuery({
+    queryKey: ['batches', productId],
+    queryFn: () => getAllBatches(productId),
     staleTime: 300000, // 5 phút
     refetchOnWindowFocus: false,
   });
