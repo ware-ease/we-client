@@ -48,10 +48,6 @@ const ReceiptCreate = () => {
       })),
     };
 
-    console.log(data);
-
-    console.log(finalFormData);
-
     const result = GoodNoteSchema.safeParse(finalFormData);
 
     if (!result.success) {

@@ -3,12 +3,60 @@ import { Input } from '@/components/shadcn-base/Input';
 import React, { useState } from 'react';
 import { Button } from '@/components/shadcn-base/Button';
 import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
+import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
+import useFormData from '@/hooks/useFormData';
+import { GoodRequest } from '@/types/goodRequest';
+import { useAddGoodRequest } from '@/hooks/queries/goodRequests';
+import { usePathname, useRouter } from '@/lib/i18n/routing';
+import RequestTypeComboBox from '@/components/combo-boxes/RequestTypeComboBox';
+import PartnerComboBox from '@/components/combo-boxes/PartnerComboBox';
 
 const ReceiptCreate = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [data, setData] = useState<RowData[]>([]);
+  const { formData, handleChange, setFormData } = useFormData<GoodRequest>({
+    requestType: 0,
+    partnerName: '',
+    code: '',
+    note: '',
+    partnerId: '',
+    warehouseId: '',
+    requestedWarehouseId: '',
+    goodRequestDetails: [],
+  });
+
+  const { mutate } = useAddGoodRequest();
 
   const handleSubmit = () => {
-    console.log(data);
+    const finalFormData = {
+      ...formData,
+      goodNoteDetails: data.map((row) => ({
+        quantity: parseFloat(row.quantity.toString()),
+        note: row.note,
+        batchId: row.batch,
+      })),
+    };
+
+    mutate(finalFormData, {
+      onSuccess: () => {
+        router.push(pathname.replace('/create', ''));
+      },
+    });
+  };
+
+  const handleWarehouseSelect = (value: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      warehouseId: value,
+    }));
+  };
+
+  const handleRequestTypeSelect = (value: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      requestType: parseInt(value),
+    }));
   };
 
   return (
@@ -21,38 +69,56 @@ const ReceiptCreate = () => {
           <div className='flex flex-col space-y-2'>
             <div className='w-64'>
               <div className='text-sm'>Mã yêu cầu</div>
-              <Input name='code' required />
-            </div>
-            <div className='w-64'>
-              <div className='text-sm'>Ngày tạo</div>
-              <Input value={new Date().toLocaleDateString('vi-VN')} disabled />
+              <Input
+                name='code'
+                value={formData.code}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
           <div className='flex flex-col space-y-2'>
-            <div className='flex items-center space-x-2 text-sm'>
-              <div className='text-md'>Loại yêu cầu:</div>
-              {/* Request Type Combo Box */}
+            <div className='text-sm'>
+              <div className='text-sm'>Loại yêu cầu:</div>
+              <RequestTypeComboBox
+                value={formData.requestType?.toString() ?? ''}
+                onChange={(value) => handleRequestTypeSelect(value)}
+              />
             </div>
-            <div className='w-64'>
-              <div className='text-sm'>Nhà cung cấp / Khách hàng</div>
-              {/* Supplier / Customer Combo Box */}
+
+            <div className='w-64 text-sm'>
+              {formData.requestType !== 2 && (
+                <div>
+                  <div className='text-sm'>
+                    {formData.requestType === 0 ? 'Nhà cung cấp' : 'Khách hàng'}
+                  </div>
+                  <PartnerComboBox />
+                </div>
+              )}
             </div>
           </div>
           <div className='flex flex-col space-y-2'>
             <div className='w-64'>
               <div className='text-sm'>Kho nhận yêu cầu</div>
-              {/* Warehouse Combo Box */}
+              <WarehouseComboBox
+                value={formData.warehouseId ?? ''}
+                onChange={(value) => handleWarehouseSelect(value)}
+              />
             </div>
             <div className='w-64'>
               <div className='text-sm'>Diễn giải</div>
-              <Input name='explanation' required />
+              <Input
+                name='note'
+                value={formData.note}
+                onChange={handleChange}
+                required
+              />
             </div>
           </div>
         </div>
       </div>
       <div>
         <CustomTable onDataChange={setData} />
-        {/* Another CustomeTable */}
       </div>
       <div className='flex w-full'>
         <div className='grow'></div>
