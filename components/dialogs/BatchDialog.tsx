@@ -78,23 +78,15 @@ const BatchDialog = ({ children, productId }: BatchDialogProps) => {
         { id: newBatch.id, batch: newBatch as Batch },
         {
           onSuccess: () => {
-            toast.success('Cập nhật lô hàng thành công!');
             setShowForm(false);
-          },
-          onError: () => {
-            toast.error('Không thể cập nhật lô hàng.');
           },
         }
       );
     } else {
       addBatchMutation.mutate({ ...newBatch, productId } as Batch, {
         onSuccess: () => {
-          toast.success('Thêm lô hàng thành công!');
           setShowForm(false);
           setNewBatch({ code: '', name: '', mfgDate: '', expDate: '' });
-        },
-        onError: () => {
-          toast.error('Không thể thêm lô hàng.');
         },
       });
     }

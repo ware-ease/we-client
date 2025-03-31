@@ -4,7 +4,6 @@ import React, { ReactNode, useState, useRef, useEffect } from 'react';
 import ProductComboBox from '../combo-boxes/ProductComboBox';
 import BatchComboBox from '../combo-boxes/BatchComboBox';
 import { useProducts } from '@/hooks/queries/productQueries';
-import { useBatches } from '@/hooks/queries/batchQueries';
 
 interface Column {
   header: string;
@@ -48,7 +47,6 @@ const CustomTable: React.FC<CustomTableProps> = ({
   initialData,
 }) => {
   const { data: products } = useProducts();
-  const { data: batches } = useBatches();
 
   const [columns, setColumns] = useState<Column[]>(initialColumns);
   const [rows, setRows] = useState<Row[]>([]);
@@ -57,16 +55,10 @@ const CustomTable: React.FC<CustomTableProps> = ({
   const newWidth = useRef<number>(0);
 
   const setInitialRows = () => {
-    if (!products || !batches) return;
+    if (!products) return;
 
     setRows(
       (initialData ?? []).map((rowData, index) => {
-        const selectedProduct = products.find(
-          (p) => p.id === rowData.productId
-        );
-        const filteredBatches = batches.filter(
-          (b) => b.productId === selectedProduct?.id
-        );
         return {
           sku: (
             <ProductComboBox
@@ -86,7 +78,6 @@ const CustomTable: React.FC<CustomTableProps> = ({
           ),
           batch: (
             <BatchComboBox
-              batches={filteredBatches}
               value={rowData.batchId || ''}
               onChange={(batchValue) =>
                 handleBatchSelect(
@@ -115,7 +106,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
   useEffect(() => {
     setInitialRows();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products, batches]);
+  }, [products]);
 
   useEffect(() => {
     const updatedData: RowData[] = rows.map((row) => ({
@@ -212,13 +203,8 @@ const CustomTable: React.FC<CustomTableProps> = ({
     key: string,
     value: string
   ) => {
-    if (!products || !batches) return;
+    if (!products) return;
     const selectedProduct = products.find((p) => p.id === value);
-
-    const filteredBatches = batches.filter(
-      (b) => b.productId === selectedProduct?.id
-    );
-
     setRows((prevRows) =>
       prevRows.map((row, index) =>
         index === rowIndex
@@ -242,7 +228,6 @@ const CustomTable: React.FC<CustomTableProps> = ({
               ),
               batch: (
                 <BatchComboBox
-                  batches={filteredBatches}
                   value=''
                   onChange={(batchValue) =>
                     handleBatchSelect(
@@ -274,7 +259,6 @@ const CustomTable: React.FC<CustomTableProps> = ({
               ...row,
               [key]: (
                 <BatchComboBox
-                  batches={(row.batch as any).props.batches || []}
                   value={value}
                   onChange={(v) =>
                     handleBatchSelect(rowIndex, key, v, productId)
@@ -352,7 +336,6 @@ const CustomTable: React.FC<CustomTableProps> = ({
 
             {/* Data Rows */}
             {products &&
-              batches &&
               rows.map((row, rowIndex) => (
                 <div
                   key={rowIndex}
@@ -379,7 +362,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
         </div>
       </div>
 
-      {products && batches && (
+      {products && (
         <div className='py-4 flex justify-start'>
           <button
             className='bg-blue-500 text-white px-4 py-2 rounded'

@@ -16,26 +16,33 @@ import {
   CommandList,
 } from '../shadcn-base/Command';
 import { cn } from '@/lib/utils/utils';
-import { Batch } from '@/types/batch';
 import BatchDialog from '../dialogs/BatchDialog';
+import { useBatchesByProductId } from '@/hooks/queries/batchQueries';
+import Error from '../app/Error';
 
 interface BatchComboBoxProps {
   value: string;
   onChange: (value: string) => void;
-  batches: Batch[] | undefined;
   productId: string;
 }
 
 const BatchComboBox: React.FC<BatchComboBoxProps> = ({
   value,
   onChange,
-  batches,
   productId,
 }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
 
-  const handleOnAdd = () => {};
+  const {
+    data: batches,
+    isPending,
+    isError,
+  } = useBatchesByProductId(productId);
+
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -60,7 +67,7 @@ const BatchComboBox: React.FC<BatchComboBoxProps> = ({
           <CommandList>
             <CommandEmpty>Không tìm thấy lô.</CommandEmpty>
             <CommandGroup>
-              {batches ? (
+              {!isPending ? (
                 batches.map((p) => (
                   <CommandItem
                     key={p.id}
@@ -88,7 +95,6 @@ const BatchComboBox: React.FC<BatchComboBoxProps> = ({
                 <button className='w-full'>
                   <CommandItem
                     className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
-                    onSelect={() => handleOnAdd()}
                     aria-selected={false}
                   >
                     Thêm
