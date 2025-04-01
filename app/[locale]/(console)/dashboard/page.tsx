@@ -37,7 +37,7 @@ const Dashboard = () => {
         icon={LucideUsers}
       />
       {/* Biểu đồ tồn kho */}
-      <div className='col-span-2'>
+      <div className='col-span-4'>
         <StockChart />
       </div>
     </div>
