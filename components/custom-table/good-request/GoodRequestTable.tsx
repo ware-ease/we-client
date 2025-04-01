@@ -47,12 +47,12 @@ export const columns: ColumnDef<GoodRequest>[] = [
       <DataTableColumnHeader column={column} title='Loại yêu cầu' />
     ),
     cell: ({ row }) => {
-      const type = row.getValue('requestType');
+      const type = row.original.requestType;
       switch (type) {
         case 0:
           return <div className='text-blue-500 font-medium'>Nhập</div>;
         case 1:
-          return <div className='text-blue-500 font-medium'>Xuất</div>;
+          return <div className='text-orange-500 font-medium'>Xuất</div>;
         case 2:
           return <div className='text-yellow-500 font-medium'>Chuyển</div>;
         case 3:
@@ -155,13 +155,12 @@ export const columns: ColumnDef<GoodRequest>[] = [
         className='text-xs'
       />
     ),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     cell: ({ row }) => (
-      <div className='flex space-x-2'>
-        {/* Gắn nút mở dialog Edit/Delete rồi dùng {row.getValue('id')} để truyền id vào */}
-        <Edit className='text-yellow-500' size={20} />
-        {/* <ProductDeleteButton productId={row.getValue('id')} /> */}
-      </div>
+      <Link href={`requests/${row.original.id}`} className='flex space-x-2'>
+        {row.original.status?.toString() === '0' && (
+          <Edit className='text-yellow-500' size={20} />
+        )}
+      </Link>
     ),
   },
 ];

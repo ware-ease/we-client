@@ -27,6 +27,7 @@ const ReceiptCreate = () => {
     date: '',
     goodRequestId: '',
     goodNoteDetails: [],
+    requestedWarehouseId: '',
   });
 
   const { data: requests } = useQuery({
@@ -46,6 +47,7 @@ const ReceiptCreate = () => {
         note: row.note,
         batchId: row.batch,
       })),
+      requestedWarehouseId: currentWarehouse?.id,
     };
 
     const result = GoodNoteSchema.safeParse(finalFormData);

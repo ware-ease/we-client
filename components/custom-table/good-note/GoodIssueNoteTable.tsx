@@ -11,6 +11,9 @@ import {
 import { Link, usePathname } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
+import StatusUI from '@/components/app/StatusUI';
+import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
+import { Edit } from 'lucide-react';
 
 export const columns: ColumnDef<GoodNote>[] = [
   {
@@ -47,7 +50,8 @@ export const columns: ColumnDef<GoodNote>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Ngày thực hiện' />
     ),
-    cell: ({ row }) => new Date(row.getValue('date')).toLocaleString('vi-VN'),
+    cell: ({ row }) =>
+      new Date(row.getValue('date')).toLocaleDateString('vi-VN'),
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue?.from && !filterValue?.to) return true;
       const rowDate = new Date(row.getValue(columnId));
@@ -81,7 +85,7 @@ export const columns: ColumnDef<GoodNote>[] = [
     },
   },
   {
-    accessorKey: 'goodRequestId',
+    accessorKey: 'goodRequestCode',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Yêu cầu' />
     ),
@@ -105,6 +109,19 @@ export const columns: ColumnDef<GoodNote>[] = [
     ),
     meta: {
       title: 'Người nhận hàng',
+    },
+  },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Trạng thái' />
+    ),
+    cell: ({ row }) => {
+      return <StatusUI status={row.getValue('status')} />;
+    },
+    filterFn: statusFilterFn,
+    meta: {
+      title: 'Trạng thái',
     },
   },
   {
@@ -136,6 +153,23 @@ export const columns: ColumnDef<GoodNote>[] = [
       title: 'Ngày tạo',
       type: 'date',
     },
+  },
+  {
+    id: 'crud-actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Hành động'
+        className='text-xs'
+      />
+    ),
+    cell: ({ row }) => (
+      <Link href={`issue/${row.original.id}`} className='flex space-x-2'>
+        {row.original.status?.toString() === '0' && (
+          <Edit className='text-yellow-500' size={20} />
+        )}
+      </Link>
+    ),
   },
 ];
 

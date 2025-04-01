@@ -11,6 +11,7 @@ export interface GoodNote extends Base {
   goodRequestId?: string;
   goodRequestCode?: string;
   goodNoteDetails?: GoodNoteDetail[];
+  requestedWarehouseId?: string;
 }
 
 export interface GoodNoteDetail extends Base {

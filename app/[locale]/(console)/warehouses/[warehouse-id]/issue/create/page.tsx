@@ -5,14 +5,13 @@ import RequestComboBox from '@/components/combo-boxes/RequestComboBox';
 import { Button } from '@/components/shadcn-base/Button';
 import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
-import { useQuery } from '@tanstack/react-query';
-import { getAllGoodIssueRequests } from '@/services/goodRequestService';
 import { GoodNote } from '@/types/goodNote';
 import useFormData from '@/hooks/useFormData';
 import { useAddGoodIssueNote } from '@/hooks/queries/goodNoteQueries';
 import { toast } from 'react-toastify';
 import { GoodNoteSchema } from '@/lib/zod/schemas';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
+import { useGoodIssueRequests } from '@/hooks/queries/goodRequests';
 
 const IssueCreate = () => {
   const router = useRouter();
@@ -27,12 +26,10 @@ const IssueCreate = () => {
     date: '',
     goodRequestId: '',
     goodNoteDetails: [],
+    requestedWarehouseId: '',
   });
 
-  const { data: requests } = useQuery({
-    queryKey: ['requests'],
-    queryFn: getAllGoodIssueRequests,
-  });
+  const { data: requests } = useGoodIssueRequests();
 
   const { mutate } = useAddGoodIssueNote();
 
@@ -46,6 +43,7 @@ const IssueCreate = () => {
         note: row.note,
         batchId: row.batch,
       })),
+      requestedWarehouseId: currentWarehouse?.id,
     };
 
     console.log(data);

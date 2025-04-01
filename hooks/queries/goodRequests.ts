@@ -1,5 +1,6 @@
 import {
   createGoodRequest,
+  getAllGoodIssueRequests,
   getAllGoodReceiveRequests,
   getAllGoodRequests,
 } from '@/services/goodRequestService';
@@ -23,13 +24,23 @@ export const useGoodReceiveRequests = () =>
     refetchOnWindowFocus: false,
   });
 
+export const useGoodIssueRequests = () =>
+  useQuery({
+    queryKey: ['issueRequests'],
+    queryFn: getAllGoodIssueRequests,
+    staleTime: 300000,
+    refetchOnWindowFocus: false,
+  });
+
 export const useAddGoodRequest = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (grn: GoodRequest) => createGoodRequest(grn),
     onSuccess: () => {
       toast.success('Thêm thành công!');
-      queryClient.invalidateQueries({ queryKey: ['receiveNotes'] });
+      queryClient.invalidateQueries({ queryKey: ['requests'] });
+      queryClient.invalidateQueries({ queryKey: ['issueRequests'] });
+      queryClient.invalidateQueries({ queryKey: ['receiveRequests'] });
     },
     onError: () => {
       toast.error('Không thể thêm.');

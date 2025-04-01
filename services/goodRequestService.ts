@@ -13,7 +13,7 @@ export const getGoodRequestById = async (id: string): Promise<GoodRequest> => {
 
 export const getAllGoodReceiveRequests = async (): Promise<GoodRequest[]> => {
   const response = await axiosGet(
-    '/good-requests' + baseFilters + '&requestType=0',
+    '/good-requests' + baseFilters + '&requestType=0&status=0',
     {}
   );
   return response.data.data.records;
@@ -21,7 +21,7 @@ export const getAllGoodReceiveRequests = async (): Promise<GoodRequest[]> => {
 
 export const getAllGoodIssueRequests = async (): Promise<GoodRequest[]> => {
   const response = await axiosGet(
-    '/good-requests' + baseFilters + '&requestType=1',
+    '/good-requests' + baseFilters + '&requestType=1&status=0',
     {}
   );
   return response.data.data.records;
