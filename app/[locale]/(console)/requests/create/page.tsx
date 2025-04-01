@@ -45,6 +45,13 @@ const ReceiptCreate = () => {
     });
   };
 
+  const handlePartnerSelect = (value: string) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      partnerId: value,
+    }));
+  };
+
   const handleWarehouseSelect = (value: string) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -92,7 +99,11 @@ const ReceiptCreate = () => {
                   <div className='text-sm'>
                     {formData.requestType === 0 ? 'Nhà cung cấp' : 'Khách hàng'}
                   </div>
-                  <PartnerComboBox />
+                  <PartnerComboBox
+                    value={formData.partnerId ?? ''}
+                    onChange={(value) => handlePartnerSelect(value)}
+                    partnerType={formData.requestType === 0 ? 0 : 1}
+                  />
                 </div>
               )}
             </div>
