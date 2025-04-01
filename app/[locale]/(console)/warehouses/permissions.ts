@@ -9,6 +9,6 @@ const permissions = [
 const url = '/warehouses';
 
 export const WarehousesPermission: Permission[] = permissions.map((perm) => ({
-  key: perm,
+  code: perm,
   url: url,
 }));

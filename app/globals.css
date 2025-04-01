@@ -88,3 +88,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@font-face {
+  font-family: 'TimesNewRoman';
+  src: format('truetype');
+  font-display: swap;
+}
