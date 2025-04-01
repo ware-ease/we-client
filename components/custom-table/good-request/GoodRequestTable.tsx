@@ -8,6 +8,8 @@ import { GoodRequest } from '@/types/goodRequest';
 import { useGoodRequests } from '@/hooks/queries/goodRequests';
 import { Link, usePathname } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
+import StatusUI from '@/components/app/StatusUI';
+import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 
 export const columns: ColumnDef<GoodRequest>[] = [
   {
@@ -99,6 +101,19 @@ export const columns: ColumnDef<GoodRequest>[] = [
     ),
     meta: {
       title: 'Ghi chú',
+    },
+  },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Trạng thái' />
+    ),
+    cell: ({ row }) => {
+      return <StatusUI status={row.getValue('status')} />;
+    },
+    filterFn: statusFilterFn,
+    meta: {
+      title: 'Trạng thái',
     },
   },
   {

@@ -10,6 +10,7 @@ export type GoodRequest = {
   requestedWarehouseName?: string;
   note?: string;
   goodRequestDetails?: GoodRequestDetail[];
+  status?: number;
 };
 
 export type GoodRequestDetail = {

@@ -7,7 +7,7 @@ interface StatusUIProps {
 
 const StatusUI: React.FC<StatusUIProps> = ({ status }) => {
   const statusInfo = statusMap.find((item) => item.status === status) || {
-    label: 'Không xác định',
+    label: 'Đã hủy',
     color: 'bg-gray-500',
   };
 

@@ -7,7 +7,7 @@ export interface GoodNote extends Base {
   receiverName?: string;
   code?: string;
   date?: string;
-  status?: string;
+  status?: number;
   goodRequestId?: string;
   goodRequestCode?: string;
   goodNoteDetails?: GoodNoteDetail[];
