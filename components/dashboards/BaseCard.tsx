@@ -6,6 +6,7 @@ type RevenueCardProps = {
   amount: string;
   percentageChange: string;
   icon?: React.ComponentType<{ className?: string }>;
+  iconClass?: string; // Thêm prop để tùy chỉnh màu sắc cho icon
 };
 
 const BaseCard: FC<RevenueCardProps> = ({
@@ -13,12 +14,14 @@ const BaseCard: FC<RevenueCardProps> = ({
   amount,
   percentageChange,
   icon: Icon,
+  iconClass = '',
 }) => {
   return (
     <Card>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle className='text-sm font-medium'>{title}</CardTitle>
-        {Icon && <Icon className='h-4 w-4 text-muted-foreground' />}
+        {Icon && <Icon className={`h-4 w-4 ${iconClass}`} />}{' '}
+        {/* Áp dụng iconClass cho icon */}
       </CardHeader>
       <CardContent>
         <div className='text-2xl font-bold'>{amount}</div>
