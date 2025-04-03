@@ -5,6 +5,7 @@ import {
   Home,
   LayoutDashboardIcon,
   LogOut,
+  Map,
   PackageMinus,
   PackageOpen,
   PackagePlus,
@@ -87,6 +88,7 @@ export function AppSidebar() {
     '/receipt',
     '/issue',
     '/requests',
+    '/locations',
   ];
 
   const crudSuffix = ['/create', '/update', '/delete'];
@@ -116,6 +118,11 @@ export function AppSidebar() {
       title: t('Sidebar.export'),
       url: ensureUniquePath(pathname, '/issue'),
       icon: PackageMinus,
+    },
+    {
+      title: 'Vị trí',
+      url: ensureUniquePath(pathname, '/locations'),
+      icon: Map,
     },
   ];
 

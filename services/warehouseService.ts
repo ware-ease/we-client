@@ -1,4 +1,4 @@
-import { Warehouse } from '../types/warehouse';
+import { Location, Warehouse } from '../types/warehouse';
 import {
   axiosDelete,
   axiosGet,
@@ -34,4 +34,15 @@ export const updateWarehouse = async (
 
 export const deleteWarehouse = async (id: string): Promise<void> => {
   await axiosDelete(`/warehouses/${id}`, {});
+};
+
+export const createLocation = async (
+  location: Partial<{ locations: Location[] }>
+) => {
+  const response = await axiosPost(
+    '/warehouses/' + location.locations?.[0].warehouseId + '/location',
+    location,
+    {}
+  );
+  return response.data.data;
 };

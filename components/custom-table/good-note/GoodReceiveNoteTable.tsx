@@ -165,7 +165,7 @@ export const columns: ColumnDef<GoodNote>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className='flex space-x-2 items-center'>
+      <div className='flex space-x-1 items-center'>
         <Link href={`receipt/${row.original.id}`}>
           {row.original.status?.toString() === '0' && (
             <Edit className='text-yellow-500' size={20} />

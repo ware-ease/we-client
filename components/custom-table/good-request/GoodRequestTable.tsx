@@ -10,6 +10,7 @@ import { Link, usePathname } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
 import StatusUI from '@/components/app/StatusUI';
 import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
+import { ViewGoodRequestDialog } from '@/components/dialogs/ViewGoodRequestDialog';
 
 export const columns: ColumnDef<GoodRequest>[] = [
   {
@@ -156,11 +157,14 @@ export const columns: ColumnDef<GoodRequest>[] = [
       />
     ),
     cell: ({ row }) => (
-      <Link href={`requests/${row.original.id}`} className='flex space-x-2'>
-        {row.original.status?.toString() === '0' && (
-          <Edit className='text-yellow-500' size={20} />
-        )}
-      </Link>
+      <div className='flex space-x-1 items-center'>
+        <Link href={`requests/${row.original.id}`}>
+          {row.original.status?.toString() === '0' && (
+            <Edit className='text-yellow-500' size={20} />
+          )}
+        </Link>
+        <ViewGoodRequestDialog goodRequest={row.original} />
+      </div>
     ),
   },
 ];

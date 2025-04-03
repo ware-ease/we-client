@@ -1,3 +1,4 @@
+import { GoodNote } from './goodNote';
 import { Supplier } from './supplier';
 import { Warehouse } from './warehouse';
 
@@ -17,6 +18,7 @@ export type GoodRequest = {
   warehouse?: Warehouse;
   requestedWarehouse?: Warehouse;
   partner?: Supplier;
+  goodNote?: GoodNote;
 };
 
 export type GoodRequestDetail = {

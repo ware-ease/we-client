@@ -5,4 +5,14 @@ export type Warehouse = {
   area: number;
   operateFrom: string;
   phone: string;
+  locations: Location[];
+};
+
+export type Location = {
+  id: string;
+  level: number;
+  name: string;
+  code: string;
+  parentId?: string | null;
+  warehouseId?: string;
 };
