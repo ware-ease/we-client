@@ -39,7 +39,7 @@ export const useAddWarehouseLocation = () => {
     onSuccess: (value) => {
       toast.success('Thành công!');
       queryClient.invalidateQueries({
-        queryKey: ['warehouses', value.id],
+        queryKey: ['warehouse', value],
       });
     },
     onError: () => {

@@ -117,7 +117,7 @@ export default function WarehouseLocations() {
 
     locations.forEach((loc) => {
       if (!loc.id) {
-        console.warn('Location missing id, skipping:', loc);
+        // console.warn('Location missing id, skipping:', loc);
         return;
       }
       locationMap.set(loc.id, { ...loc, children: [] });

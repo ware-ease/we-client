@@ -4,8 +4,8 @@ export type Warehouse = {
   address: string;
   area: number;
   operateFrom: string;
-  phone: string;
-  locations: Location[];
+  phone?: string;
+  locations?: Location[];
 };
 
 export type Location = {

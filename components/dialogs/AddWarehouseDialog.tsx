@@ -21,7 +21,7 @@ const AddWarehouseDialog = () => {
   const t = useTranslations();
 
   const [formData, setFormData] = useState<Warehouse>({
-    id: '', // You might generate this on the backend
+    id: '',
     name: '',
     address: '',
     area: 0,
