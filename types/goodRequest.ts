@@ -1,3 +1,4 @@
+import { Supplier } from './supplier';
 import { Warehouse } from './warehouse';
 
 export type GoodRequest = {
@@ -15,6 +16,7 @@ export type GoodRequest = {
   status?: number;
   warehouse?: Warehouse;
   requestedWarehouse?: Warehouse;
+  partner?: Supplier;
 };
 
 export type GoodRequestDetail = {

@@ -44,13 +44,14 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
           <View className='text-blue-500' size={20} />
         </button>
       </DialogTrigger>
-      <DialogContent
-        className={`max-w-3xl max-h-screen overflow-auto`}
-        style={{ fontFamily: 'TimesNewRoman' }}
-      >
+      <DialogContent className={`max-w-3xl max-h-screen overflow-auto`}>
         <DialogTitle />
         <DialogDescription />
-        <div ref={contentRef} className='p-24'>
+        <div
+          ref={contentRef}
+          className='p-24'
+          style={{ fontFamily: 'Times New Roman' }}
+        >
           <DialogHeader>
             <div className='flex justify-between'>
               <div className='w-1/2'>
@@ -95,7 +96,8 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                     {goodNote.goodRequest?.requestedWarehouse?.address}
                   </p>
                   <p>
-                    <strong className='font-normal'>SĐT:</strong> ___________
+                    <strong className='font-normal'>SĐT:</strong>{' '}
+                    {goodNote.goodRequest?.partner?.phone}
                   </p>
                   {/* Destination Warehouse */}
                   <p className='mt-2'>
@@ -107,7 +109,8 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                     {goodNote.goodRequest?.warehouse?.address}
                   </p>
                   <p>
-                    <strong className='font-normal'>SĐT:</strong> ___________
+                    <strong className='font-normal'>SĐT:</strong>{' '}
+                    {goodNote.goodRequest?.requestedWarehouse?.phone}
                   </p>
                 </>
               ) : (
@@ -126,7 +129,8 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                     {goodNote.goodRequest?.requestedWarehouse?.address}
                   </p>
                   <p>
-                    <strong className='font-normal'>SĐT:</strong> ___________
+                    <strong className='font-normal'>SĐT:</strong>{' '}
+                    {goodNote.goodRequest?.requestedWarehouse?.phone}
                   </p>
                 </>
               )}
@@ -207,7 +211,7 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
 
         {/* Print & Export Button */}
         <Button onClick={() => handlePrint()} className='w-full mt-4'>
-          Print / Export PDF
+          In phiếu
         </Button>
       </DialogContent>
     </Dialog>

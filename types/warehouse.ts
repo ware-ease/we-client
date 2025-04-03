@@ -4,4 +4,5 @@ export type Warehouse = {
   address: string;
   area: number;
   operateFrom: string;
+  phone: string;
 };
