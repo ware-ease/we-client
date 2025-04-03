@@ -1,3 +1,5 @@
+import { Warehouse } from './warehouse';
+
 export type GoodRequest = {
   id?: string;
   code?: string;
@@ -11,6 +13,8 @@ export type GoodRequest = {
   note?: string;
   goodRequestDetails?: GoodRequestDetail[];
   status?: number;
+  warehouse?: Warehouse;
+  requestedWarehouse?: Warehouse;
 };
 
 export type GoodRequestDetail = {

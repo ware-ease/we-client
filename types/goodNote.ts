@@ -1,5 +1,6 @@
 import { Base } from './base/base-type';
 import { Batch } from './batch';
+import { GoodRequest } from './goodRequest';
 
 export interface GoodNote extends Base {
   noteType?: number;
@@ -12,6 +13,7 @@ export interface GoodNote extends Base {
   goodRequestCode?: string;
   goodNoteDetails?: GoodNoteDetail[];
   requestedWarehouseId?: string;
+  goodRequest?: GoodRequest;
 }
 
 export interface GoodNoteDetail extends Base {

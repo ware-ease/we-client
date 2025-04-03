@@ -25,6 +25,18 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
     contentRef,
   });
 
+  // Determine note type based on noteType property
+  const isImportNote = goodNote.noteType === 0; // Nhập Kho
+  const isExportNote = goodNote.noteType === 1; // Xuất Kho
+  const isInternalExportNote = goodNote.noteType === 2; // Xuất Nội Bộ
+
+  // Set the title based on note type
+  const noteTitle = isImportNote
+    ? 'PHIẾU NHẬP KHO'
+    : isExportNote
+    ? 'PHIẾU XUẤT KHO'
+    : 'PHIẾU XUẤT NỘI BỘ';
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -63,36 +75,79 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
             </div>
           </DialogHeader>
 
-          <div className=''>
+          <div>
             {/* Title */}
             <div className='text-center text-xl font-bold mt-20 text-[#2F5597]'>
-              PHIẾU NHẬP KHO
+              {noteTitle}
             </div>
 
-            {/* Supplier Info */}
+            {/* Info Section */}
             <div className='mt-4'>
-              <p>
-                <strong className='font-normal'>Nhà cung cấp:</strong>{' '}
-                {goodNote.shipperName || 'N/A'}
-              </p>
-              <p>
-                <strong className='font-normal'>Địa chỉ:</strong> {goodNote.id}
-              </p>
-              <p>
-                <strong className='font-normal'>SĐT:</strong> ___________
-              </p>
+              {isInternalExportNote ? (
+                <>
+                  {/* Source Warehouse */}
+                  <p>
+                    <strong className='font-normal'>Kho xuất:</strong>{' '}
+                    {goodNote.goodRequest?.requestedWarehouse?.name}
+                  </p>
+                  <p>
+                    <strong className='font-normal'>Địa chỉ:</strong>{' '}
+                    {goodNote.goodRequest?.requestedWarehouse?.address}
+                  </p>
+                  <p>
+                    <strong className='font-normal'>SĐT:</strong> ___________
+                  </p>
+                  {/* Destination Warehouse */}
+                  <p className='mt-2'>
+                    <strong className='font-normal'>Kho nhận:</strong>{' '}
+                    {goodNote.goodRequest?.warehouse?.name}
+                  </p>
+                  <p>
+                    <strong className='font-normal'>Địa chỉ:</strong>{' '}
+                    {goodNote.goodRequest?.warehouse?.address}
+                  </p>
+                  <p>
+                    <strong className='font-normal'>SĐT:</strong> ___________
+                  </p>
+                </>
+              ) : (
+                <>
+                  {/* Supplier or Recipient */}
+                  <p>
+                    <strong className='font-normal'>
+                      {isImportNote ? 'Nhà cung cấp:' : 'Người nhận hàng:'}
+                    </strong>{' '}
+                    {isImportNote
+                      ? goodNote.shipperName
+                      : goodNote.receiverName || 'N/A'}
+                  </p>
+                  <p>
+                    <strong className='font-normal'>Địa chỉ:</strong>{' '}
+                    {goodNote.goodRequest?.requestedWarehouse?.address}
+                  </p>
+                  <p>
+                    <strong className='font-normal'>SĐT:</strong> ___________
+                  </p>
+                </>
+              )}
             </div>
 
             {/* Table */}
             <table className='w-full mt-4 border border-black'>
               <thead>
-                <tr className='text-left'>
-                  <th className='border-r border-black p-2'>STT</th>
-                  <th className='border-r border-black p-2'>Mã hàng</th>
-                  <th className='border-r border-black p-2'>Tên hàng</th>
-                  <th className='border-r border-black p-2'>ĐVT</th>
-                  <th className='border-r border-black p-2'>Số lượng</th>
-                  <th className='p-2'>Ghi chú</th>
+                <tr className='text-left font-normal'>
+                  <th className='border-r border-black p-2 font-normal'>STT</th>
+                  <th className='border-r border-black p-2 font-normal'>
+                    Mã hàng
+                  </th>
+                  <th className='border-r border-black p-2 font-normal'>
+                    Tên hàng
+                  </th>
+                  <th className='border-r border-black p-2 font-normal'>ĐVT</th>
+                  <th className='border-r border-black p-2 font-normal'>
+                    Số lượng
+                  </th>
+                  <th className='p-2 font-normal'>Ghi chú</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,13 +183,21 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
             <div className='flex justify-between mt-2'>
               <div className='text-center w-1/2'>
                 <p>
-                  <strong>THỦ KHO</strong>
+                  <strong>
+                    {isInternalExportNote ? 'THỦ KHO XUẤT' : 'THỦ KHO'}
+                  </strong>
                 </p>
                 <p>(Ký, họ tên)</p>
               </div>
               <div className='text-center w-1/2'>
                 <p>
-                  <strong>NGƯỜI GIAO HÀNG</strong>
+                  <strong>
+                    {isImportNote
+                      ? 'NGƯỜI GIAO HÀNG'
+                      : isExportNote
+                      ? 'NGƯỜI NHẬN HÀNG'
+                      : 'THỦ KHO NHẬN'}
+                  </strong>
                 </p>
                 <p>(Ký, họ tên)</p>
               </div>

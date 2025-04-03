@@ -14,6 +14,7 @@ import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import StatusUI from '@/components/app/StatusUI';
 import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 import { Edit } from 'lucide-react';
+import { ViewGoodNoteDialog } from '@/components/dialogs/ViewGoodNoteDialog';
 
 export const columns: ColumnDef<GoodNote>[] = [
   {
@@ -164,11 +165,14 @@ export const columns: ColumnDef<GoodNote>[] = [
       />
     ),
     cell: ({ row }) => (
-      <Link href={`issue/${row.original.id}`} className='flex space-x-2'>
-        {row.original.status?.toString() === '0' && (
-          <Edit className='text-yellow-500' size={20} />
-        )}
-      </Link>
+      <div className='flex space-x-2 items-center'>
+        <Link href={`issue/${row.original.id}`}>
+          {row.original.status?.toString() === '0' && (
+            <Edit className='text-yellow-500' size={20} />
+          )}
+        </Link>
+        <ViewGoodNoteDialog goodNote={row.original} />
+      </div>
     ),
   },
 ];
