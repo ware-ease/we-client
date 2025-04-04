@@ -2,6 +2,7 @@ import {
   createLocation,
   createWarehouse,
   getAllWarehouses,
+  getWarehouseInventoriesById,
 } from '@/services/warehouseService';
 import { Location, Warehouse } from '@/types/warehouse';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -13,6 +14,15 @@ export const useWarehouses = () =>
     queryFn: getAllWarehouses,
     staleTime: 300000,
     refetchOnWindowFocus: false,
+  });
+
+export const useWarehousesInventories = (enabled: boolean, id: string) =>
+  useQuery({
+    queryKey: ['inventories', id],
+    queryFn: () => getWarehouseInventoriesById(id),
+    staleTime: 300000,
+    refetchOnWindowFocus: false,
+    enabled: enabled,
   });
 
 export const useAddWarehouse = () => {

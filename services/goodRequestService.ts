@@ -1,5 +1,5 @@
 import { GoodRequest } from '../types/goodRequest';
-import { axiosGet, axiosPost, baseFilters } from './baseService';
+import { axiosGet, axiosPost, axiosPut, baseFilters } from './baseService';
 
 export const getAllGoodRequests = async (): Promise<GoodRequest[]> => {
   const response = await axiosGet('/good-requests' + baseFilters, {});
@@ -31,5 +31,14 @@ export const createGoodRequest = async (
   data: GoodRequest
 ): Promise<GoodRequest> => {
   const response = await axiosPost('/good-requests', data, {});
+  return response.data.data;
+};
+
+export const confirmGoodRequest = async (id: string): Promise<GoodRequest> => {
+  const response = await axiosPut(
+    '/good-requests/' + id + '/status?requestStatus=1',
+    {},
+    {}
+  );
   return response.data.data;
 };

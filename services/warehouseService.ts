@@ -17,6 +17,13 @@ export const getWarehouseById = async (id: string): Promise<Warehouse> => {
   return response.data.data;
 };
 
+export const getWarehouseInventoriesById = async (
+  id: string
+): Promise<Warehouse> => {
+  const response = await axiosGet(`/warehouses/${id}/inventory`, {});
+  return response.data.data;
+};
+
 export const createWarehouse = async (
   warehouseData: Partial<Warehouse>
 ): Promise<Warehouse> => {
