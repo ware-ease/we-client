@@ -1,12 +1,12 @@
 'use client';
+import ViewProductDialog from '@/components/dialogs/ViewProductDialog';
+import { useProducts } from '@/hooks/queries/productQueries';
 import { Product } from '@/types/product';
 import { ColumnDef } from '@tanstack/react-table';
-import React from 'react';
-import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
-import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import { useProducts } from '@/hooks/queries/productQueries';
 import { Edit } from 'lucide-react';
 import AddProductDialog from '../../dialogs/AddProductDialog';
+import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
+import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import ProductDeleteButton from './ProductDeleteButton';
 
 export const columns: ColumnDef<Product>[] = [
@@ -123,13 +123,17 @@ export const columns: ColumnDef<Product>[] = [
         className='text-xs'
       />
     ),
-    cell: ({ row }) => (
-      <div className='flex space-x-2'>
-        {/* Gắn nút mở dialog Edit/Delete rồi dùng {row.getValue('id')} để truyền id vào */}
-        <Edit className='text-yellow-500' size={20} />
-        <ProductDeleteButton productId={row.getValue('id')} />
-      </div>
-    ),
+    cell: ({ row }) => {
+      const product = row.original;
+
+      return (
+        <div className='flex space-x-2'>
+          <Edit className='text-yellow-500 cursor-pointer' size={20} />
+          <ProductDeleteButton productId={row.getValue('id')} />
+          <ViewProductDialog product={product} />
+        </div>
+      );
+    },
   },
 ];
 
