@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import {
   Card,
   CardContent,
@@ -16,105 +16,68 @@ import {
   ChartTooltipContent,
 } from '../shadcn-base/Chart';
 
-export const description = 'An interactive bar chart';
+export const description =
+  'A bar chart showing export and import quantities per day';
 
 const chartData = [
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
-  { date: '2024-04-01', electronics: 500, fashion: 320, groceries: 450 },
-  { date: '2024-04-02', electronics: 470, fashion: 300, groceries: 420 },
-  { date: '2024-04-03', electronics: 460, fashion: 310, groceries: 430 },
-  { date: '2024-04-04', electronics: 520, fashion: 330, groceries: 470 },
-  { date: '2024-04-05', electronics: 580, fashion: 350, groceries: 490 },
-  { date: '2024-04-06', electronics: 540, fashion: 340, groceries: 460 },
-  { date: '2024-04-07', electronics: 510, fashion: 320, groceries: 430 },
+  { date: '2024-04-01', exported: 450, imported: 280 },
+  { date: '2024-04-02', exported: 470, imported: 300 },
+  { date: '2024-04-03', exported: 460, imported: 310 },
+  { date: '2024-04-04', exported: 520, imported: 330 },
+  { date: '2024-04-05', exported: 580, imported: 350 },
+  { date: '2024-04-06', exported: 540, imported: 340 },
+  { date: '2024-04-07', exported: 518, imported: 300 },
+  { date: '2024-04-08', exported: 490, imported: 290 },
+  { date: '2024-04-09', exported: 510, imported: 320 },
+  { date: '2024-04-10', exported: 530, imported: 310 },
+  { date: '2024-04-11', exported: 470, imported: 280 },
+  { date: '2024-04-12', exported: 500, imported: 300 },
+  { date: '2024-04-13', exported: 480, imported: 290 },
+  { date: '2024-04-14', exported: 520, imported: 330 },
+  { date: '2024-04-15', exported: 550, imported: 340 },
+  { date: '2024-04-16', exported: 490, imported: 310 },
+  { date: '2024-04-17', exported: 510, imported: 320 },
+  { date: '2024-04-18', exported: 470, imported: 280 },
+  { date: '2024-04-19', exported: 530, imported: 300 },
+  { date: '2024-04-20', exported: 560, imported: 340 },
+  { date: '2024-04-21', exported: 480, imported: 290 },
+  { date: '2024-04-22', exported: 500, imported: 310 },
+  { date: '2024-04-23', exported: 520, imported: 320 },
+  { date: '2024-04-24', exported: 490, imported: 300 },
+  { date: '2024-04-25', exported: 510, imported: 310 },
+  { date: '2024-04-26', exported: 540, imported: 330 },
+  { date: '2024-04-27', exported: 470, imported: 280 },
+  { date: '2024-04-28', exported: 500, imported: 300 },
+  { date: '2024-04-29', exported: 520, imported: 320 },
+  { date: '2024-04-30', exported: 550, imported: 340 },
+  { date: '2024-04-26', exported: 540, imported: 330 },
+  { date: '2024-04-27', exported: 470, imported: 280 },
+  { date: '2024-04-28', exported: 500, imported: 300 },
+  { date: '2024-04-29', exported: 520, imported: 320 },
+  { date: '2024-04-30', exported: 550, imported: 340 },
+  { date: '2024-04-26', exported: 540, imported: 330 },
+  { date: '2024-04-27', exported: 470, imported: 280 },
+  { date: '2024-04-28', exported: 500, imported: 300 },
+  { date: '2024-04-29', exported: 520, imported: 320 },
+  { date: '2024-04-30', exported: 550, imported: 340 },
 ];
 
 const chartConfig = {
-  electronics: {
-    label: 'Điện tử',
-    color: '#4F46E5', // Xanh dương đậm
+  exported: {
+    label: 'Xuất kho',
+    color: '#1E3A8A', // Xanh dương đậm (navy blue)
   },
-  fashion: {
-    label: 'Thời trang',
-    color: '#F59E0B', // Cam
-  },
-  groceries: {
-    label: 'Hàng tạp hóa',
-    color: '#10B981', // Xanh lá cây
+  imported: {
+    label: 'Nhập kho',
+    color: '#60A5FA', // Xanh dương nhạt (blue-400)
   },
 } satisfies ChartConfig;
 
 export function StockChart() {
-  const [activeChart, setActiveChart] =
-    React.useState<keyof typeof chartConfig>('electronics');
-
   const total = React.useMemo(
     () => ({
-      electronics: chartData.reduce((acc, curr) => acc + curr.electronics, 0),
-      fashion: chartData.reduce((acc, curr) => acc + curr.fashion, 0),
-      groceries: chartData.reduce((acc, curr) => acc + curr.groceries, 0),
+      exported: chartData.reduce((acc, curr) => acc + curr.exported, 0),
+      imported: chartData.reduce((acc, curr) => acc + curr.imported, 0),
     }),
     []
   );
@@ -130,9 +93,10 @@ export function StockChart() {
     <Card>
       <CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
         <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6'>
-          <CardTitle>Biểu đồ tồn kho</CardTitle>
+          <CardTitle>Số lượng hàng hóa xuất/nhập kho theo ngày</CardTitle>
           <CardDescription>
-            Hiển thị lượng tồn kho của các nhóm sản phẩm theo thời gian
+            Hiển thị số lượng hàng hóa xuất kho và nhập kho theo ngày trong
+            tháng
           </CardDescription>
         </div>
         <div className='flex'>
@@ -140,19 +104,17 @@ export function StockChart() {
             const chart = key as keyof typeof chartConfig;
             if (!chart || total[key as keyof typeof total] === 0) return null;
             return (
-              <button
+              <div
                 key={chart}
-                data-active={activeChart === chart}
-                className='data-[active=true]:bg-muted/50 relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6'
-                onClick={() => setActiveChart(chart)}
+                className='relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6'
               >
                 <span className='text-muted-foreground text-xs'>
                   {chartConfig[chart].label}
                 </span>
                 <span className='text-lg leading-none font-bold sm:text-3xl'>
-                  {total[key as keyof typeof total]?.toLocaleString()}
+                  {total[key as keyof typeof total]?.toLocaleString()} mặt hàng
                 </span>
-              </button>
+              </div>
             );
           })}
         </div>
@@ -186,11 +148,16 @@ export function StockChart() {
                 });
               }}
             />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              tickFormatter={(value) => `${value} mặt hàng`}
+            />
             <ChartTooltip
               content={
                 <ChartTooltipContent
                   className='w-[150px]'
-                  nameKey='stock'
                   labelFormatter={(value) => {
                     return new Date(value).toLocaleDateString('vi-VN', {
                       month: 'short',
@@ -201,7 +168,16 @@ export function StockChart() {
                 />
               }
             />
-            <Bar dataKey={activeChart} fill={chartConfig[activeChart].color} />
+            <Bar
+              dataKey='exported'
+              fill={chartConfig.exported.color}
+              name='Xuất kho'
+            />
+            <Bar
+              dataKey='imported'
+              fill={chartConfig.imported.color}
+              name='Nhập kho'
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>

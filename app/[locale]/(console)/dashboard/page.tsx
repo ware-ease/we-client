@@ -5,41 +5,45 @@ import BaseCard from '@/components/dashboards/BaseCard';
 import { PieCharts } from '@/components/dashboards/PieChart';
 import { StockChart } from '@/components/dashboards/StockChart';
 import {
-  LucideDollarSign,
+  LucideArrowDownToLine,
+  LucideArrowRightLeft,
+  LucideArrowUpFromLine,
   LucidePackage,
-  LucideShoppingCart,
-  LucideUsers,
 } from 'lucide-react';
 
 const Dashboard = () => {
   return (
     <div className='grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-4'>
+      {/* Tổng nhập kho trong tháng */}
       <BaseCard
-        title='Doanh thu tổng'
-        amount='$45,231.89'
-        percentageChange='+20.1% so với tháng trước'
-        icon={LucideDollarSign}
-        iconClass='text-blue-500'
-      />
-      <BaseCard
-        title='Đơn hàng mới'
-        amount='1,523'
-        percentageChange='+5.2% so với tuần trước'
-        icon={LucideShoppingCart}
+        title='Tổng nhập kho trong tháng'
+        amount='8,500 mặt hàng'
+        percentageChange='Tăng 3% so với tháng trước'
+        icon={LucideArrowDownToLine}
         iconClass='text-green-500'
       />
+      {/* Tổng xuất kho trong tháng */}
       <BaseCard
-        title='Giá trị tồn kho'
-        amount='$120,450'
-        percentageChange='+8.7% trong quý này'
-        icon={LucidePackage}
+        title='Tổng xuất kho trong tháng'
+        amount='9,200 mặt hàng'
+        percentageChange='Giảm 2% so với tháng trước'
+        icon={LucideArrowUpFromLine}
         iconClass='text-yellow-500'
       />
+      {/* Tổng tồn kho hiện tại */}
       <BaseCard
-        title='Tăng trưởng khách hàng'
-        amount='3,450'
-        percentageChange='+15.4% so với năm trước'
-        icon={LucideUsers}
+        title='Tổng tồn kho hiện tại'
+        amount='12,300 mặt hàng'
+        percentageChange='Giảm 5% so với đầu tháng'
+        icon={LucidePackage}
+        iconClass='text-blue-500'
+      />
+      {/* Tổng chuyển kho trong tháng */}
+      <BaseCard
+        title='Tổng chuyển kho trong tháng'
+        amount='1,200 mặt hàng'
+        percentageChange='Tăng 10% so với tháng trước'
+        icon={LucideArrowRightLeft}
         iconClass='text-purple-500'
       />
 
