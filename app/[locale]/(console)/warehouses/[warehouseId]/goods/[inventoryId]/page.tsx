@@ -135,6 +135,7 @@ const getInventoryLocations = (
   inventory: Inventory
 ): InventoryLocation[] => {
   // Placeholder: Replace with actual hook or API call
+  console.log(warehouse, inventory);
   return [
     { locationId: 'rack1', quantity: 2 },
     { locationId: 'rack2', quantity: 3 },

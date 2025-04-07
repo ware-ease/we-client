@@ -1,11 +1,12 @@
 import { Inventory } from '@/types/warehouse';
-import { axiosGet } from './baseService';
+// import { axiosGet } from './baseService';
 
 export const getWarehouseInventoryById = async (
   id: string
 ): Promise<Inventory> => {
   // const response = await axiosGet(`/warehouses/${id}/inventory`, {});
   // return response.data.data;
+  console.log('getWarehouseInventoryById', id);
 
   await new Promise((resolve) => setTimeout(resolve, 500));
 
