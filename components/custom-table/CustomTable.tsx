@@ -63,13 +63,13 @@ const CustomTable: React.FC<CustomTableProps> = ({
 
   const setInitialRows = () => {
     if (!products) return;
-    console.log(initialData);
 
     if (
       JSON.stringify(prevInitialData.current) !== JSON.stringify(initialData)
     ) {
       setRows(
         initialData.map((rowData, index) => {
+          const product = products.find((p) => p.id === rowData.productId);
           const row: Row = {
             sku: (
               <ProductComboBox
@@ -78,7 +78,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
               />
             ),
             name: <div className='p-2 truncate'>{rowData.name}</div>,
-            unit: <div className='p-2 truncate'>{rowData.unit}</div>,
+            unit: <div className='p-2 truncate'>{product?.unit}</div>,
             quantity: (
               <input
                 type='number'
@@ -126,6 +126,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
 
   useEffect(() => {
     const updatedData: RowData[] = rows.map((row, index) => {
+      console.log(row);
       const baseData = {
         id: initialData[index]?.id || `${index}`,
         sku: (row.sku as any).props.value ?? '',

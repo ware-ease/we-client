@@ -45,7 +45,7 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
         >
           {value
             ? requests
-                ?.filter((r) => r.warehouseId === warehouseId)
+                ?.filter((r) => r.requestedWarehouseId === warehouseId)
                 .find((req) => req.id === value)?.code
             : 'Chọn yêu cầu'}
           <ChevronsUpDown className='opacity-50' />
@@ -59,7 +59,7 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
             <CommandGroup>
               {requests ? (
                 requests
-                  .filter((r) => r.warehouseId === warehouseId)
+                  .filter((r) => r.requestedWarehouseId === warehouseId)
                   .map((req) => (
                     <CommandItem
                       key={req.id}
