@@ -1,28 +1,14 @@
-import { Inventory } from '@/types/warehouse';
-// import { axiosGet } from './baseService';
+import { Inventory, PutAwayGood } from '@/types/warehouse';
+import { axiosGet, axiosPost } from './baseService';
 
 export const getWarehouseInventoryById = async (
   id: string
 ): Promise<Inventory> => {
-  // const response = await axiosGet(`/warehouses/${id}/inventory`, {});
-  // return response.data.data;
-  console.log('getWarehouseInventoryById', id);
+  const response = await axiosGet(`/inventories/${id}`, {});
+  return response.data.data;
+};
 
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  // Return fake response for `/warehouses/${id}/inventory`
-  return {
-    id: '1b485996-92a6-43ee-ada9-7f4aaa9e5299',
-    currentQuantity: 5,
-    batchId: 'batch789',
-    batch: {
-      id: 'batch789',
-      productId: '',
-      name: '',
-      mfgDate: '',
-      expDate: '',
-      code: 'VCXIMANG01324',
-      // Add other Batch fields if needed (e.g., expiryDate, productId)
-    },
-  };
+export const putAwayGood = async (data: PutAwayGood) => {
+  const response = await axiosPost(`/inventory-location`, data, {});
+  return response.data.data;
 };

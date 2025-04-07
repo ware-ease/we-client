@@ -33,7 +33,7 @@ const AvatarButton = () => {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='mr-4'>
-        <Link href={'settings'} locale={lang}>
+        <Link href={'/settings'} locale={lang}>
           <DropdownMenuItem>{t('Sidebar.settings')}</DropdownMenuItem>
         </Link>
         <div onClick={handleLogout}>

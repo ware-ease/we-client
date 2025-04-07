@@ -3,7 +3,7 @@ import { ColumnDef } from '@tanstack/react-table';
 import React from 'react';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import { Link, usePathname } from '@/lib/i18n/routing';
+import { Link } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useWarehousesInventories } from '@/hooks/queries/warehouseQueries'; // Assuming this exists
@@ -79,7 +79,7 @@ export const columns: ColumnDef<Inventory>[] = [
     cell: ({ row }) => (
       <div className='flex space-x-1 items-center'>
         {/* Add actions like view or edit if needed */}
-        <Link href={`inventory/${row.original.id}`}>
+        <Link href={`goods/${row.original.id}`}>
           <Button variant='outline' size='sm'>
             Xem
           </Button>
@@ -96,7 +96,6 @@ interface InventoryTableProps {
 const InventoryTable: React.FC<InventoryTableProps> = ({
   onlyCurrentWarehouse = false,
 }) => {
-  const pathname = usePathname();
   const currentWarehouse = useCurrentWarehouse();
 
   // Fetch inventory data using useWarehousesInventories
@@ -109,9 +108,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
 
   return (
     <CustomDataTable columns={columns} data={tableData}>
-      <Link href={`${pathname}/create`}>
-        <Button>Thêm</Button>
-      </Link>
+      <div className='h-9'></div>
     </CustomDataTable>
   );
 };

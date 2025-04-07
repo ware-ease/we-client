@@ -16,6 +16,7 @@ export interface Inventory extends Base {
   currentQuantity: number;
   batchId?: string;
   batch: Batch;
+  inventoryLocations?: InventoryLocation[];
 }
 
 export interface Location extends Base {
@@ -25,4 +26,15 @@ export interface Location extends Base {
   code: string;
   parentId?: string | null;
   warehouseId?: string;
+}
+
+export interface InventoryLocation extends Base {
+  location: Location;
+  quantity: number;
+}
+
+export interface PutAwayGood extends Base {
+  inventoryId: string;
+  locationId: string;
+  quantity: number;
 }
