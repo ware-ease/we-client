@@ -2,6 +2,7 @@ import {
   createLocation,
   createWarehouse,
   getAllWarehouses,
+  getWarehouseById,
   getWarehouseInventoriesById,
 } from '@/services/warehouseService';
 import { Location, Warehouse } from '@/types/warehouse';
@@ -12,6 +13,14 @@ export const useWarehouses = () =>
   useQuery({
     queryKey: ['warehouses'],
     queryFn: getAllWarehouses,
+    staleTime: 300000,
+    refetchOnWindowFocus: false,
+  });
+
+export const useWarehouseById = (id: string) =>
+  useQuery({
+    queryKey: ['warehouse', id],
+    queryFn: () => getWarehouseById(id),
     staleTime: 300000,
     refetchOnWindowFocus: false,
   });
