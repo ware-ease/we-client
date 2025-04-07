@@ -111,7 +111,7 @@ const RequestCreate = () => {
             <div className='w-64'>
               <div className='text-sm'>Kho nhận yêu cầu</div>
               <WarehouseComboBox
-                value={formData.warehouseId ?? ''}
+                value={formData.requestedWarehouseId ?? ''}
                 onChange={(value) => handleWarehouseSelect(value)}
               />
             </div>

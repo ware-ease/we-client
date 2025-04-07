@@ -20,6 +20,7 @@ import { usePathname, useRouter } from '@/lib/i18n/routing';
 const ReceiptCreate = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const [initialData, setInitialData] = useState<RowData[]>([]);
   const [data, setData] = useState<RowData[]>([]);
   const [supplierName, setSupplierName] = useState<string>('');
   const { formData, handleChange, setFormData } = useFormData<GoodNote>({
@@ -118,7 +119,7 @@ const ReceiptCreate = () => {
           batchId: '',
         })
       );
-      setData(tableData);
+      setInitialData(tableData);
     }
   }, [reqDetails]);
 
@@ -193,7 +194,7 @@ const ReceiptCreate = () => {
         </div>
       </div>
       <div className=''>
-        <CustomTable initialData={data} onDataChange={setData} />
+        <CustomTable initialData={initialData} onDataChange={setData} />
       </div>
       <div className='flex w-full'>
         <div className='grow'></div>

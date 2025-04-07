@@ -6,7 +6,7 @@ import {
   PopoverTrigger,
 } from '../shadcn-base/Popover';
 import { Button } from '../shadcn-base/Button';
-import { Check, ChevronsUpDown, Settings } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
 import {
   Command,
   CommandEmpty,
@@ -36,8 +36,6 @@ const WarehouseComboBox: React.FC<WarehouseComboBoxProps> = ({
   if (isError) {
     return <Error />;
   }
-
-  const handleOnAdd = () => {};
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -88,14 +86,6 @@ const WarehouseComboBox: React.FC<WarehouseComboBoxProps> = ({
               ) : (
                 <Loading />
               )}
-              <CommandItem
-                className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
-                onSelect={() => handleOnAdd()}
-                aria-selected={false}
-              >
-                Thêm
-                <Settings className='ml-auto text-white' />
-              </CommandItem>
             </CommandGroup>
           </CommandList>
         </Command>
