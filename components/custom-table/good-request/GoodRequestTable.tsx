@@ -78,21 +78,21 @@ export const columns: ColumnDef<GoodRequest>[] = [
     },
   },
   {
-    accessorKey: 'requestedWarehouseName',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Kho nhận' />
-    ),
-    meta: {
-      title: 'Kho nhận',
-    },
-  },
-  {
     accessorKey: 'warehouseName',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Kho yêu cầu' />
     ),
     meta: {
       title: 'Kho yêu cầu',
+    },
+  },
+  {
+    accessorKey: 'requestedWarehouseName',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Kho nhận yêu cầu' />
+    ),
+    meta: {
+      title: 'Kho nhận yêu cầu',
     },
   },
   {

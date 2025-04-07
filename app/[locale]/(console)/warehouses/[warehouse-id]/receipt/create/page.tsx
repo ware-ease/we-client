@@ -1,12 +1,15 @@
 'use client';
 import { Input } from '@/components/shadcn-base/Input';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RequestComboBox from '../../../../../../../components/combo-boxes/RequestComboBox';
 import { Button } from '@/components/shadcn-base/Button';
 import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useQuery } from '@tanstack/react-query';
-import { getAllGoodReceiveRequests } from '@/services/goodRequestService';
+import {
+  getAllGoodReceiveRequests,
+  getGoodRequestById,
+} from '@/services/goodRequestService';
 import { GoodNote } from '@/types/goodNote';
 import useFormData from '@/hooks/useFormData';
 import { useAddGoodReceiveNote } from '@/hooks/queries/goodNoteQueries';
@@ -33,6 +36,12 @@ const ReceiptCreate = () => {
   const { data: requests } = useQuery({
     queryKey: ['requests'],
     queryFn: getAllGoodReceiveRequests,
+  });
+
+  const { data: reqDetails } = useQuery({
+    queryKey: ['requestDetails', formData.goodRequestId],
+    queryFn: () => getGoodRequestById(formData.goodRequestId || ''),
+    enabled: !!formData.goodRequestId,
   });
 
   const { mutate } = useAddGoodReceiveNote();
@@ -75,7 +84,43 @@ const ReceiptCreate = () => {
       goodRequestId: req?.id ?? '',
     }));
     setSupplierName(req?.partnerName ?? '');
+
+    // console.log(reqDetails);
+    // if (reqDetails?.goodRequestDetails) {
+    //   const tableData: RowData[] = reqDetails?.goodRequestDetails?.map(
+    //     (detail, index) => ({
+    //       id: `${index}`, // Temporary ID for table rendering
+    //       sku: detail.productId || '',
+    //       name: detail.productName || '',
+    //       unit: '', // Not provided in GoodRequestDetail; could fetch from products if needed
+    //       quantity: detail.quantity ? parseFloat(detail.quantity) : 0,
+    //       batch: '', // Leave blank for user to select via BatchComboBox
+    //       note: detail.productName || '',
+    //       productId: detail.productId || '',
+    //       batchId: '', // Leave blank initially
+    //     })
+    //   );
+    //   setData(tableData);
+    // }
   };
+  useEffect(() => {
+    if (reqDetails?.goodRequestDetails) {
+      const tableData: RowData[] = reqDetails.goodRequestDetails.map(
+        (detail, index) => ({
+          id: `${index}`,
+          sku: detail.productId || '',
+          name: detail.productName || '',
+          unit: '',
+          quantity: detail.quantity ? parseFloat(detail.quantity) : 0,
+          batch: '',
+          note: '',
+          productId: detail.productId || '',
+          batchId: '',
+        })
+      );
+      setData(tableData);
+    }
+  }, [reqDetails]);
 
   return (
     <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-4'>
@@ -148,7 +193,7 @@ const ReceiptCreate = () => {
         </div>
       </div>
       <div className=''>
-        <CustomTable onDataChange={setData} />
+        <CustomTable initialData={data} onDataChange={setData} />
       </div>
       <div className='flex w-full'>
         <div className='grow'></div>

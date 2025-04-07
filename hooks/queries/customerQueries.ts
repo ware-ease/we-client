@@ -24,6 +24,9 @@ export const useAddCustomer = () => {
     onSuccess: () => {
       toast.success('Thêm khách hàng thành công!');
       queryClient.invalidateQueries({ queryKey: ['customers'] });
+      queryClient.invalidateQueries({
+        queryKey: ['partners', 1],
+      });
     },
     onError: () => {
       toast.error('Không thể thêm khách hàng.');
@@ -46,6 +49,9 @@ export const useUpdateCustomer = () => {
     onSuccess: () => {
       toast.success('Cập nhật khách hàng thành công!');
       queryClient.invalidateQueries({ queryKey: ['customers'] });
+      queryClient.invalidateQueries({
+        queryKey: ['partners', 1],
+      });
     },
     onError: () => {
       toast.error('Không thể cập nhật khách hàng.');
@@ -60,6 +66,9 @@ export const useDeleteCustomer = () => {
     onSuccess: () => {
       toast.success('Xóa khách hàng thành công!');
       queryClient.invalidateQueries({ queryKey: ['customers'] });
+      queryClient.invalidateQueries({
+        queryKey: ['partners', 1],
+      });
     },
     onError: () => {
       toast.error('Không thể xóa khách hàng.');

@@ -25,6 +25,9 @@ export const useAddSupplier = () => {
       queryClient.invalidateQueries({
         queryKey: ['suppliers'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['partners', 0],
+      });
     },
     onError: () => {
       toast.error('Thất bại!');
@@ -42,6 +45,9 @@ export const useUpdateSupplier = () => {
       queryClient.invalidateQueries({
         queryKey: ['suppliers'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['partners', 0],
+      });
     },
     onError: () => {
       toast.error('Cập nhật thất bại!');
@@ -57,6 +63,9 @@ export const useDeleteSupplier = () => {
       toast.success('Thành công!');
       queryClient.invalidateQueries({
         queryKey: ['suppliers'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['partners', 0],
       });
     },
     onError: () => {

@@ -11,7 +11,7 @@ import { usePathname, useRouter } from '@/lib/i18n/routing';
 import RequestTypeComboBox from '@/components/combo-boxes/RequestTypeComboBox';
 import PartnerComboBox from '@/components/combo-boxes/PartnerComboBox';
 
-const ReceiptCreate = () => {
+const RequestCreate = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [data, setData] = useState<RowData[]>([]);
@@ -31,10 +31,9 @@ const ReceiptCreate = () => {
   const handleSubmit = () => {
     const finalFormData = {
       ...formData,
-      goodNoteDetails: data.map((row) => ({
-        quantity: parseFloat(row.quantity.toString()),
-        note: row.note,
-        batchId: row.batch,
+      goodRequestDetails: data.map((row) => ({
+        quantity: row.quantity.toString(),
+        productId: row.productId,
       })),
     };
 
@@ -55,7 +54,7 @@ const ReceiptCreate = () => {
   const handleWarehouseSelect = (value: string) => {
     setFormData((prevData) => ({
       ...prevData,
-      warehouseId: value,
+      requestedWarehouseId: value,
     }));
   };
 
@@ -129,7 +128,7 @@ const ReceiptCreate = () => {
         </div>
       </div>
       <div>
-        <CustomTable onDataChange={setData} />
+        <CustomTable isRequestDetails onDataChange={setData} />
       </div>
       <div className='flex w-full'>
         <div className='grow'></div>
@@ -139,4 +138,4 @@ const ReceiptCreate = () => {
   );
 };
 
-export default ReceiptCreate;
+export default RequestCreate;

@@ -11,8 +11,6 @@ import {
 import { Link, usePathname } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
-import StatusUI from '@/components/app/StatusUI';
-import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 import { Edit } from 'lucide-react';
 import { ViewGoodNoteDialog } from '@/components/dialogs/ViewGoodNoteDialog';
 
@@ -77,16 +75,16 @@ export const columns: ColumnDef<GoodNote>[] = [
     },
   },
   {
-    accessorKey: 'requestedWarehouseName',
+    accessorKey: 'goodRequest.requestedWarehouse.name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Kho nhận' />
+      <DataTableColumnHeader column={column} title='Kho xuất' />
     ),
     meta: {
-      title: 'Kho nhận',
+      title: 'Kho xuất',
     },
   },
   {
-    accessorKey: 'goodRequestCode',
+    accessorKey: 'goodRequest.code',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Yêu cầu' />
     ),
@@ -110,19 +108,6 @@ export const columns: ColumnDef<GoodNote>[] = [
     ),
     meta: {
       title: 'Người nhận hàng',
-    },
-  },
-  {
-    accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Trạng thái' />
-    ),
-    cell: ({ row }) => {
-      return <StatusUI status={row.getValue('status')} />;
-    },
-    filterFn: statusFilterFn,
-    meta: {
-      title: 'Trạng thái',
     },
   },
   {

@@ -28,7 +28,6 @@ export interface RowData {
 }
 
 const initialColumns: Column[] = [
-  // { header: 'STT', key: 'id', width: 48 },
   { header: 'Mã hàng', key: 'sku', width: 202 },
   { header: 'Tên hàng', key: 'name', width: 200 },
   { header: 'ĐVT', key: 'unit', width: 85 },
@@ -40,92 +39,123 @@ const initialColumns: Column[] = [
 interface CustomTableProps {
   onDataChange: (data: RowData[]) => void;
   initialData?: RowData[];
+  isRequestDetails?: boolean; // New optional param
 }
 
 const CustomTable: React.FC<CustomTableProps> = ({
   onDataChange,
-  initialData,
+  initialData = [],
+  isRequestDetails = false, // Default to false
 }) => {
   const { data: products } = useProducts();
-
-  const [columns, setColumns] = useState<Column[]>(initialColumns);
+  const [columns, setColumns] = useState<Column[]>(() =>
+    isRequestDetails
+      ? initialColumns.filter(
+          (col) => col.key !== 'batch' && col.key !== 'note'
+        )
+      : initialColumns
+  );
   const [rows, setRows] = useState<Row[]>([]);
   const resizingColumn = useRef<number | null>(null);
   const startX = useRef<number>(0);
   const newWidth = useRef<number>(0);
+  const prevInitialData = useRef<RowData[]>([]);
 
   const setInitialRows = () => {
     if (!products) return;
+    console.log(initialData);
 
-    setRows(
-      (initialData ?? []).map((rowData, index) => {
-        return {
-          sku: (
-            <ProductComboBox
-              value={rowData.productId || ''}
-              onChange={(value) => handleProductSelect(index, 'sku', value)}
-            />
-          ),
-          name: <div className='p-2 truncate'>{rowData.name}</div>,
-          unit: <div className='p-2 truncate'>{rowData.unit}</div>,
-          quantity: (
-            <input
-              type='number'
-              className='border-none w-full p-2'
-              value={rowData.quantity}
-              onChange={(e) => handleQuantityChange(index, e.target.value)}
-            />
-          ),
-          batch: (
-            <BatchComboBox
-              value={rowData.batchId || ''}
-              onChange={(batchValue) =>
-                handleBatchSelect(
-                  index,
-                  'batch',
-                  batchValue,
-                  rowData.productId || ''
-                )
-              }
-              productId={rowData.productId || ''}
-            />
-          ),
-          note: (
-            <input
-              type='text'
-              className='w-full p-2'
-              value={rowData.note}
-              onChange={(e) => handleNoteChange(index, e.target.value)}
-            />
-          ),
-        };
-      })
-    );
+    if (
+      JSON.stringify(prevInitialData.current) !== JSON.stringify(initialData)
+    ) {
+      setRows(
+        initialData.map((rowData, index) => {
+          const row: Row = {
+            sku: (
+              <ProductComboBox
+                value={rowData.productId || ''}
+                onChange={(value) => handleProductSelect(index, 'sku', value)}
+              />
+            ),
+            name: <div className='p-2 truncate'>{rowData.name}</div>,
+            unit: <div className='p-2 truncate'>{rowData.unit}</div>,
+            quantity: (
+              <input
+                type='number'
+                className='border-none w-full p-2'
+                value={rowData.quantity}
+                onChange={(e) => handleQuantityChange(index, e.target.value)}
+              />
+            ),
+          };
+          if (!isRequestDetails) {
+            row.batch = (
+              <BatchComboBox
+                value={rowData.batchId || ''}
+                onChange={(batchValue) =>
+                  handleBatchSelect(
+                    index,
+                    'batch',
+                    batchValue,
+                    rowData.productId || ''
+                  )
+                }
+                productId={rowData.productId || ''}
+              />
+            );
+            row.note = (
+              <input
+                type='text'
+                className='w-full p-2'
+                value={rowData.note}
+                onChange={(e) => handleNoteChange(index, e.target.value)}
+              />
+            );
+          }
+          return row;
+        })
+      );
+      prevInitialData.current = initialData;
+    }
   };
 
   useEffect(() => {
     setInitialRows();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [products]);
+  }, [products, initialData]);
 
   useEffect(() => {
-    const updatedData: RowData[] = rows.map((row) => ({
-      id: '',
-      sku: (row.sku as any).props.value ?? '',
-      name: (row.name as any).props.children ?? '',
-      unit: (row.unit as any).props.children ?? '',
-      quantity: (row.quantity as any).props.value ?? 0,
-      batch: (row.batch as any).props.value ?? '',
-      note: (row.note as any).props.value ?? '',
-    }));
+    const updatedData: RowData[] = rows.map((row, index) => {
+      const baseData = {
+        id: initialData[index]?.id || `${index}`,
+        sku: (row.sku as any).props.value ?? '',
+        name: (row.name as any).props.children ?? '',
+        unit: (row.unit as any).props.children ?? '',
+        quantity: (row.quantity as any).props.value ?? 0,
+        batch: '',
+        note: '',
+        productId: (row.sku as any).props.value ?? '',
+        batchId: '',
+      };
+      if (!isRequestDetails) {
+        return {
+          ...baseData,
+          batch: (row.batch as any).props.value ?? '',
+          note: (row.note as any).props.value ?? '',
+          productId: (row.sku as any).props.value ?? '',
+          batchId: (row.batch as any).props.value ?? '',
+        };
+      }
+      return baseData;
+    });
 
     onDataChange(updatedData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rows, onDataChange]);
 
   const addRow = () => {
-    setRows((prevRows) => [
-      ...prevRows,
-      {
+    setRows((prevRows) => {
+      const newRow: Row = {
         sku: (
           <ProductComboBox
             value=''
@@ -141,26 +171,32 @@ const CustomTable: React.FC<CustomTableProps> = ({
             type='number'
             className='border-none w-full p-2'
             value={0}
-            onChange={(e) => handleQuantityChange(rows.length, e.target.value)}
+            onChange={(e) =>
+              handleQuantityChange(prevRows.length, e.target.value)
+            }
           />
         ),
-        batch: <input type='text' className='w-full p-2' value='' disabled />,
-        note: (
+      };
+      if (!isRequestDetails) {
+        newRow.batch = (
+          <BatchComboBox value='' onChange={() => {}} productId='' />
+        );
+        newRow.note = (
           <input
             type='text'
             className='w-full p-2'
             value=''
-            onChange={(e) => handleNoteChange(rows.length, e.target.value)}
+            onChange={(e) => handleNoteChange(prevRows.length, e.target.value)}
           />
-        ),
-      },
-    ]);
+        );
+      }
+      return [...prevRows, newRow];
+    });
   };
 
   const handleQuantityChange = (rowIndex: number, value: string) => {
-    console.log(rowIndex);
-    setRows((prevRows) => {
-      return prevRows.map((row, index) =>
+    setRows((prevRows) =>
+      prevRows.map((row, index) =>
         index === rowIndex
           ? {
               ...row,
@@ -174,13 +210,14 @@ const CustomTable: React.FC<CustomTableProps> = ({
               ),
             }
           : row
-      );
-    });
+      )
+    );
   };
 
   const handleNoteChange = (rowIndex: number, value: string) => {
-    setRows((prevRows) => {
-      return prevRows.map((row, index) =>
+    if (isRequestDetails) return; // No note column in request details mode
+    setRows((prevRows) =>
+      prevRows.map((row, index) =>
         index === rowIndex
           ? {
               ...row,
@@ -194,8 +231,8 @@ const CustomTable: React.FC<CustomTableProps> = ({
               ),
             }
           : row
-      );
-    });
+      )
+    );
   };
 
   const handleProductSelect = (
@@ -226,20 +263,24 @@ const CustomTable: React.FC<CustomTableProps> = ({
                   {selectedProduct?.unit || ''}
                 </div>
               ),
-              batch: (
-                <BatchComboBox
-                  value=''
-                  onChange={(batchValue) =>
-                    handleBatchSelect(
-                      rowIndex,
-                      'batch',
-                      batchValue,
-                      selectedProduct?.id || ''
-                    )
-                  }
-                  productId={selectedProduct?.id || ''}
-                />
-              ),
+              ...(isRequestDetails
+                ? {}
+                : {
+                    batch: (
+                      <BatchComboBox
+                        value=''
+                        onChange={(batchValue) =>
+                          handleBatchSelect(
+                            rowIndex,
+                            'batch',
+                            batchValue,
+                            selectedProduct?.id || ''
+                          )
+                        }
+                        productId={selectedProduct?.id || ''}
+                      />
+                    ),
+                  }),
             }
           : row
       )
@@ -252,6 +293,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
     value: string,
     productId: string
   ) => {
+    if (isRequestDetails) return; // No batch column in request details mode
     setRows((prevRows) =>
       prevRows.map((row, index) =>
         index === rowIndex
@@ -273,8 +315,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
   };
 
   const deleteRow = (index: number) => {
-    //FIXME: fix STT khi them va xoa
-    setRows(rows.filter((_, i) => i !== index));
+    setRows((prevRows) => prevRows.filter((_, i) => i !== index));
   };
 
   const handleMouseDown = (index: number, e: React.MouseEvent) => {
@@ -313,7 +354,6 @@ const CustomTable: React.FC<CustomTableProps> = ({
       <div className='overflow-auto h-[45h] max-h-[45vh] max-w-[calc(100vw-2rem-var(--sidebar-width))]'>
         <div className='border min-w-max'>
           <div className='flex flex-col'>
-            {/* Header Row */}
             <div className='flex font-semibold border-b select-none'>
               {columns.map((col, index) => (
                 <div
@@ -324,17 +364,14 @@ const CustomTable: React.FC<CustomTableProps> = ({
                   <div className='p-2 whitespace-nowrap border-r last:border-none box-border w-full truncate'>
                     {col.header}
                   </div>
-                  {/* Resize Handle */}
                   <div
                     className='absolute right-0 top-0 h-full w-2 cursor-col-resize'
                     onMouseDown={(e) => handleMouseDown(index, e)}
                   />
                 </div>
               ))}
-              <div></div> {/* Empty space for delete button */}
+              <div></div>
             </div>
-
-            {/* Data Rows */}
             {products &&
               rows.map((row, rowIndex) => (
                 <div
@@ -361,7 +398,6 @@ const CustomTable: React.FC<CustomTableProps> = ({
           </div>
         </div>
       </div>
-
       {products && (
         <div className='py-4 flex justify-start'>
           <button

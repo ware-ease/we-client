@@ -1,5 +1,4 @@
 'use client';
-
 import * as React from 'react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/shadcn-base/Button';
@@ -18,6 +17,7 @@ import {
 } from '@/components/shadcn-base/Popover';
 import { cn } from '@/lib/utils/utils';
 import { GoodRequest } from '@/types/goodRequest';
+import { usePathname } from '@/lib/i18n/routing';
 
 interface RequestComboBoxProps {
   value: string;
@@ -30,6 +30,8 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
   onChange,
   requests,
 }) => {
+  const pathname = usePathname();
+  const warehouseId = pathname.split('/')[2];
   const [open, setOpen] = React.useState(false);
 
   return (
@@ -42,7 +44,9 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
           className='w-[200px] justify-between'
         >
           {value
-            ? requests?.find((req) => req.id === value)?.code
+            ? requests
+                ?.filter((r) => r.warehouseId === warehouseId)
+                .find((req) => req.id === value)?.code
             : 'Chọn yêu cầu'}
           <ChevronsUpDown className='opacity-50' />
         </Button>
@@ -54,24 +58,26 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
             <CommandEmpty>Hiện chưa có yêu cầu.</CommandEmpty>
             <CommandGroup>
               {requests ? (
-                requests.map((req) => (
-                  <CommandItem
-                    key={req.id}
-                    value={req.id}
-                    onSelect={(currentValue) => {
-                      onChange(currentValue === value ? '' : currentValue);
-                      setOpen(false);
-                    }}
-                  >
-                    {req.code}
-                    <Check
-                      className={cn(
-                        'ml-auto',
-                        value === req.id ? 'opacity-100' : 'opacity-0'
-                      )}
-                    />
-                  </CommandItem>
-                ))
+                requests
+                  .filter((r) => r.warehouseId === warehouseId)
+                  .map((req) => (
+                    <CommandItem
+                      key={req.id}
+                      value={req.id}
+                      onSelect={(currentValue) => {
+                        onChange(currentValue === value ? '' : currentValue);
+                        setOpen(false);
+                      }}
+                    >
+                      {req.code}
+                      <Check
+                        className={cn(
+                          'ml-auto',
+                          value === req.id ? 'opacity-100' : 'opacity-0'
+                        )}
+                      />
+                    </CommandItem>
+                  ))
               ) : (
                 <div className='flex justify-center items-center h-full w-full py-4'>
                   <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>
