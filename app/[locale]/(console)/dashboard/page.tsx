@@ -1,5 +1,4 @@
 'use client';
-
 import { AreaCharts } from '@/components/dashboards/AreaChart';
 import BaseCard from '@/components/dashboards/BaseCard';
 import { PieCharts } from '@/components/dashboards/PieChart';
