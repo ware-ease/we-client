@@ -1,11 +1,11 @@
 'use client';
-import { ColumnDef } from '@tanstack/react-table';
-import React from 'react';
-import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
-import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import AddAccountDialog from '../../dialogs/AddAccountDialog';
+import DetailAccountDialog from '@/components/dialogs/ViewAccountDialogs';
 import { useAccounts } from '@/hooks/queries/accountQueries';
 import { Account } from '@/types/account';
+import { ColumnDef } from '@tanstack/react-table';
+import AddAccountDialog from '../../dialogs/AddAccountDialog';
+import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
+import { CustomDataTable } from '../base-data-table/CustomDataTable';
 
 export const columns: ColumnDef<Account>[] = [
   {
@@ -130,22 +130,25 @@ export const columns: ColumnDef<Account>[] = [
       type: 'date',
     },
   },
-  // {
-  //   id: 'crud-actions',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title='Hành động'
-  //       className='text-xs'
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className='flex space-x-2'>
-  //       {/* Gắn nút mở dialog Edit/Delete rồi dùng {row.getValue('id')} để truyền id vào */}
-  //       <Edit className='text-yellow-500' size={20} />
-  //     </div>
-  //   ),
-  // },
+  {
+    id: 'crud-actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Hành động'
+        className='text-xs'
+      />
+    ),
+    cell: ({ row }) => {
+      const account = row.original;
+
+      return (
+        <div className='flex space-x-2'>
+          <DetailAccountDialog account={account} />
+        </div>
+      );
+    },
+  },
 ];
 
 const AccountTable = () => {
