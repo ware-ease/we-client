@@ -23,6 +23,9 @@ export type GoodRequest = {
 
 export type GoodRequestDetail = {
   productId?: string;
+  sku?: string;
   productName?: string;
+  brandName?: string;
+  unitName?: string;
   quantity?: string;
 };
