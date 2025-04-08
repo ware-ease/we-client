@@ -69,7 +69,7 @@ export const columns: ColumnDef<GoodRequest>[] = [
     },
   },
   {
-    accessorKey: 'partnerName',
+    accessorKey: 'partner.name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Đối tác' />
     ),
@@ -78,7 +78,7 @@ export const columns: ColumnDef<GoodRequest>[] = [
     },
   },
   {
-    accessorKey: 'warehouseName',
+    accessorKey: 'warehouse.name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Kho yêu cầu' />
     ),
@@ -87,7 +87,7 @@ export const columns: ColumnDef<GoodRequest>[] = [
     },
   },
   {
-    accessorKey: 'requestedWarehouseName',
+    accessorKey: 'requestedWarehouse.name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Kho nhận yêu cầu' />
     ),

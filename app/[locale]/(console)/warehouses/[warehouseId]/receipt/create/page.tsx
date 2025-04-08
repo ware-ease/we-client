@@ -112,7 +112,7 @@ const ReceiptCreate = () => {
           sku: detail.productId || '',
           name: detail.productName || '',
           unit: '',
-          quantity: detail.quantity ? parseFloat(detail.quantity) : 0,
+          quantity: detail.quantity ? detail.quantity : 0,
           batch: '',
           note: '',
           productId: detail.productId || '',

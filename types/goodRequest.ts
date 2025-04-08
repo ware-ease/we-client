@@ -1,3 +1,4 @@
+import { Base } from './base/base-type';
 import { GoodNote } from './goodNote';
 import { Supplier } from './supplier';
 import { Warehouse } from './warehouse';
@@ -21,11 +22,11 @@ export type GoodRequest = {
   goodNote?: GoodNote;
 };
 
-export type GoodRequestDetail = {
+export interface GoodRequestDetail extends Base {
   productId?: string;
   sku?: string;
   productName?: string;
   brandName?: string;
   unitName?: string;
-  quantity?: string;
-};
+  quantity?: number;
+}

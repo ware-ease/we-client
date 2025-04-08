@@ -193,7 +193,9 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
                       <strong className='font-normal'>
                         {isImportRequest ? 'Nhà cung cấp:' : ''}
                       </strong>{' '}
-                      {isImportRequest ? goodRequest.partnerName || 'N/A' : ''}
+                      {isImportRequest
+                        ? goodRequest.partner?.name || 'N/A'
+                        : ''}
                     </p>
                     <p>
                       <strong className='font-normal'>Địa chỉ:</strong>{' '}

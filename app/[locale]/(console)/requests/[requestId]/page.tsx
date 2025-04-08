@@ -1,21 +1,24 @@
 'use client';
 import { Input } from '@/components/shadcn-base/Input';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/shadcn-base/Button';
 import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
 import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
 import useFormData from '@/hooks/useFormData';
 import { GoodRequest } from '@/types/goodRequest';
-import { useAddGoodRequest } from '@/hooks/queries/goodRequests';
-import { usePathname, useRouter } from '@/lib/i18n/routing';
+import {
+  useGoodRequest,
+  useUpdateGoodRequest,
+} from '@/hooks/queries/goodRequests';
 import RequestTypeComboBox from '@/components/combo-boxes/RequestTypeComboBox';
 import PartnerComboBox from '@/components/combo-boxes/PartnerComboBox';
+import { useParams } from 'next/navigation';
 
-const RequestCreate = () => {
-  const router = useRouter();
-  const pathname = usePathname();
+const RequestDetail = () => {
+  const { requestId } = useParams();
   const [data, setData] = useState<RowData[]>([]);
   const { formData, handleChange, setFormData } = useFormData<GoodRequest>({
+    id: requestId as string,
     requestType: 0,
     partnerName: '',
     code: '',
@@ -26,22 +29,46 @@ const RequestCreate = () => {
     goodRequestDetails: [],
   });
 
-  const { mutate } = useAddGoodRequest();
+  const { mutate } = useUpdateGoodRequest();
+
+  const { data: goodRequest } = useGoodRequest(true, requestId as string);
+
+  useEffect(() => {
+    if (goodRequest) {
+      setFormData(goodRequest);
+    }
+  }, [goodRequest, setFormData]);
+
+  const initialData: RowData[] | undefined =
+    goodRequest?.goodRequestDetails?.map((detail) => ({
+      id: detail.id || '',
+      sku: detail.sku || '',
+      productId: detail.productId || '',
+      name: detail.productName || '',
+      unit: detail.unitName || '',
+      quantity: detail.quantity || 0,
+      batch: '',
+      batchId: '',
+      note: '',
+    }));
 
   const handleSubmit = () => {
     const finalFormData = {
-      ...formData,
+      id: requestId as string,
+      note: formData.note,
+      code: formData.code,
+      partnerId: formData.partnerId,
+      warehouseId: formData.warehouseId,
+      requestedWarehouseId: formData.requestedWarehouseId,
       goodRequestDetails: data.map((row) => ({
         quantity: row.quantity,
         productId: row.productId,
       })),
     };
 
-    mutate(finalFormData, {
-      onSuccess: () => {
-        router.push(pathname.replace('/create', ''));
-      },
-    });
+    console.log(finalFormData);
+
+    mutate(finalFormData);
   };
 
   const handlePartnerSelect = (value: string) => {
@@ -69,7 +96,7 @@ const RequestCreate = () => {
     <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-4'>
       <div className='flex flex-col w-full'>
         <div className='flex space-x-20 items-center w-full'>
-          <div className='text-4xl font-semibold text-primary'>Tạo yêu cầu</div>
+          <div className='text-4xl font-semibold text-primary'>Sửa yêu cầu</div>
         </div>
         <div className='flex space-x-20 py-5 pl-3'>
           <div className='flex flex-col space-y-2'>
@@ -89,6 +116,7 @@ const RequestCreate = () => {
               <RequestTypeComboBox
                 value={formData.requestType?.toString() ?? ''}
                 onChange={(value) => handleRequestTypeSelect(value)}
+                disabled
               />
             </div>
 
@@ -128,14 +156,18 @@ const RequestCreate = () => {
         </div>
       </div>
       <div>
-        <CustomTable isRequestDetails onDataChange={setData} />
+        <CustomTable
+          isRequestDetails
+          initialData={initialData}
+          onDataChange={setData}
+        />
       </div>
       <div className='flex w-full'>
         <div className='grow'></div>
-        <Button onClick={handleSubmit}>Tạo yêu cầu</Button>
+        <Button onClick={handleSubmit}>Sửa yêu cầu</Button>
       </div>
     </div>
   );
 };
 
-export default RequestCreate;
+export default RequestDetail;

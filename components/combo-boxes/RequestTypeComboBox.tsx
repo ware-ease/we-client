@@ -26,11 +26,13 @@ const requestTypes = [
 interface RequestTypeComboBoxProps {
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }
 
 const RequestTypeComboBox: React.FC<RequestTypeComboBoxProps> = ({
   value,
   onChange,
+  disabled,
 }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -44,6 +46,7 @@ const RequestTypeComboBox: React.FC<RequestTypeComboBoxProps> = ({
           aria-expanded={open}
           className='w-full justify-between'
           ref={triggerRef}
+          disabled={disabled}
         >
           {value ? requestTypes.find((p) => p.id === value)?.type : 'Chọn loại'}
           <ChevronsUpDown className='opacity-50 truncate' />

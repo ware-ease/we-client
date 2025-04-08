@@ -4,6 +4,8 @@ import {
   getAllGoodIssueRequests,
   getAllGoodReceiveRequests,
   getAllGoodRequests,
+  getGoodRequestById,
+  updateGoodRequest,
 } from '@/services/goodRequestService';
 import { GoodRequest } from '@/types/goodRequest';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -13,6 +15,13 @@ export const useGoodRequests = () =>
   useQuery({
     queryKey: ['requests'],
     queryFn: getAllGoodRequests,
+    staleTime: 300000,
+  });
+
+export const useGoodRequest = (enable: boolean, id: string) =>
+  useQuery({
+    queryKey: ['request', id],
+    queryFn: () => getGoodRequestById(id),
     staleTime: 300000,
   });
 
@@ -42,6 +51,22 @@ export const useAddGoodRequest = () => {
     },
     onError: () => {
       toast.error('Không thể thêm.');
+    },
+  });
+};
+
+export const useUpdateGoodRequest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (grn: GoodRequest) => updateGoodRequest(grn),
+    onSuccess: () => {
+      toast.success('Sửa thành công!');
+      queryClient.invalidateQueries({ queryKey: ['requests'] });
+      queryClient.invalidateQueries({ queryKey: ['issueRequests'] });
+      queryClient.invalidateQueries({ queryKey: ['receiveRequests'] });
+    },
+    onError: () => {
+      toast.error('Không thể sửa.');
     },
   });
 };
