@@ -13,7 +13,6 @@ export const useBatches = () =>
     queryKey: ['batches'],
     queryFn: () => getAllBatches(),
     staleTime: 300000, // 5 phút
-    refetchOnWindowFocus: false,
   });
 
 export const useBatchesByProductId = (productId?: string) =>
@@ -21,7 +20,6 @@ export const useBatchesByProductId = (productId?: string) =>
     queryKey: ['batches', productId],
     queryFn: () => getAllBatches(productId),
     staleTime: 300000, // 5 phút
-    refetchOnWindowFocus: false,
   });
 
 export const useAddBatch = () => {

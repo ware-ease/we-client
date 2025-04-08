@@ -18,7 +18,6 @@ export const useUnits = () =>
     queryKey: ['units'],
     queryFn: getAllUnits,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useAddUnit = () => {

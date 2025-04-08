@@ -16,7 +16,6 @@ export const useGoodReceiveNotes = (enabled: boolean) =>
     queryKey: ['receiveNotes'],
     queryFn: getAllGoodReceiveNotes,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
     enabled: enabled,
   });
 
@@ -25,7 +24,6 @@ export const useGoodReceiveNote = (enabled: boolean, id: string) =>
     queryKey: ['receiveNote', id],
     queryFn: () => getGoodNoteById(id),
     staleTime: 300000,
-    refetchOnWindowFocus: false,
     enabled: enabled,
   });
 
@@ -37,7 +35,6 @@ export const useCurrentWarehouseGoodReceiveNotes = (
     queryKey: ['receiveNotes'],
     queryFn: () => getAllCurrentWarehouseGoodReceiveNotes(currentWarehouseId),
     staleTime: 300000,
-    refetchOnWindowFocus: false,
     enabled: enabled,
   });
 
@@ -74,7 +71,6 @@ export const useGoodIssueNotes = (enabled: boolean) =>
     queryKey: ['issueNotes'],
     queryFn: getAllGoodIssueNotes,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
     enabled: enabled,
   });
 
@@ -83,7 +79,6 @@ export const useGoodIssueNote = (enabled: boolean, id: string) =>
     queryKey: ['issueNotes', id],
     queryFn: () => getGoodNoteById(id),
     staleTime: 300000,
-    refetchOnWindowFocus: false,
     enabled: enabled,
   });
 
@@ -95,7 +90,6 @@ export const useCurrentWarehouseGoodIssueNotes = (
     queryKey: ['issueNotes'],
     queryFn: () => getAllCurrentWarehouseGoodIssueNotes(currentWarehouseId),
     staleTime: 300000,
-    refetchOnWindowFocus: false,
     enabled: enabled,
   });
 

@@ -47,11 +47,18 @@ const Putaway: React.FC<PutawayProps> = ({
       0
     );
     const unassigned = inventory.currentQuantity - assignedTotal - netChange;
-    console.log('Unassigned Calc:', { assignedTotal, netChange, unassigned });
     return Math.max(0, unassigned);
   };
 
-  // Mock putaway handler (replace with real mutation later)
+  const calculateAssignedQuantity = () => {
+    const assignedTotal = inventoryLocations.reduce(
+      (sum, loc) => sum + loc.quantity,
+      0
+    );
+    console.log('Assigned Calc:', { assignedTotal });
+    return Math.max(0, assignedTotal);
+  };
+
   const handlePutAway = (locationId: string, quantity: number) => {
     if (quantity === 0) return;
     if (inventory.id === undefined) return;
@@ -63,13 +70,28 @@ const Putaway: React.FC<PutawayProps> = ({
   };
 
   return (
-    <div className=''>
-      <h2 className='text-lg font-semibold'>
-        Xếp hàng vào kho - Lấy hàng khỏi kho {warehouse.name}
+    <div className='bg-white shadow-md rounded-lg p-6 mx-auto'>
+      <h2 className='text-xl font-bold text-gray-800 mb-4'>
+        Xếp hàng vào kho - Lấy hàng khỏi kho{' '}
+        <span className='text-blue-600'>{warehouse.name}</span>
       </h2>
-      <div className='mb-0'>
-        <strong>Tổng số lượng chưa xếp vào kho:</strong>{' '}
-        {calculateUnassignedQuantity().toLocaleString('vi-VN')}
+      <div className='space-y-2 mb-6'>
+        <div className='text-sm text-gray-700'>
+          <strong className='font-semibold'>
+            Tổng số lượng chưa xếp vào kho:
+          </strong>{' '}
+          <span className='font-medium text-red-600'>
+            {calculateUnassignedQuantity().toLocaleString('vi-VN')}
+          </span>
+        </div>
+        <div className='text-sm text-gray-700'>
+          <strong className='font-semibold'>
+            Tổng số lượng đã xếp vào kho:
+          </strong>{' '}
+          <span className='font-medium text-green-600'>
+            {calculateAssignedQuantity().toLocaleString('vi-VN')}
+          </span>
+        </div>
       </div>
       <LocationTree
         locations={warehouse.locations || []}
@@ -78,7 +100,7 @@ const Putaway: React.FC<PutawayProps> = ({
         pendingChanges={pendingChanges}
         setPendingChanges={setPendingChanges}
         onPutAway={handlePutAway}
-        putAwayLoading={false}
+        putAwayLoading={putAwayGoods.isPending}
       />
     </div>
   );
@@ -128,7 +150,7 @@ const LocationTree: React.FC<LocationTreeProps> = ({
   const rootLocations = getChildLocations(locations, null);
 
   return (
-    <div className='text-sm overflow-y-auto'>
+    <div className='text-sm overflow-y-auto border-t border-gray-200 pt-4'>
       {rootLocations.map((location) => (
         <LocationNode
           key={location.id}
@@ -170,9 +192,8 @@ const LocationNode: React.FC<LocationNodeProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const childLocations = getChildLocations(allLocations, location.id);
-  const isLevel0 = location.parentId === null; // Check if root level
+  const isLevel0 = location.parentId === null;
 
-  // For level 0, sum quantities of all descendants; for others, use direct quantity
   const descendantIds = isLevel0
     ? getDescendantIds(allLocations, location.id)
     : [location.id];
@@ -191,7 +212,6 @@ const LocationNode: React.FC<LocationNodeProps> = ({
     quantity: 0,
   };
 
-  // Sync input state with pending changes
   const [quantity, setQuantity] = useState<number | ''>('');
 
   useEffect(() => {
@@ -213,14 +233,6 @@ const LocationNode: React.FC<LocationNodeProps> = ({
       adjustedQuantity +
       (pendingChange.quantity < 0 ? -pendingChange.quantity : 0);
     const adjustedValue = Math.max(-maxTakeOut, Math.min(value, maxPutIn));
-    console.log('Quantity Change:', {
-      value,
-      adjustedValue,
-      maxPutIn,
-      maxTakeOut,
-      unassignedQuantity,
-      adjustedQuantity,
-    });
     setQuantity(adjustedValue);
     setPendingChanges((prev) => {
       const existing = prev.find((change) => change.locationId === location.id);
@@ -245,12 +257,16 @@ const LocationNode: React.FC<LocationNodeProps> = ({
   };
 
   return (
-    <div className='ml-4'>
+    <div className='py-2 border-b border-gray-100 last:border-b-0'>
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <div className='flex items-center space-x-2 py-1'>
+        <div className='flex items-center space-x-2'>
           {childLocations.length > 0 && (
             <CollapsibleTrigger asChild>
-              <Button variant='ghost' size='sm' className='p-0'>
+              <Button
+                variant='ghost'
+                size='sm'
+                className='p-1 text-gray-500 hover:text-gray-700'
+              >
                 {isOpen ? (
                   <ChevronDown size={16} />
                 ) : (
@@ -259,13 +275,19 @@ const LocationNode: React.FC<LocationNodeProps> = ({
               </Button>
             </CollapsibleTrigger>
           )}
-          <span className='flex-1'>
+          <span
+            className={`flex-1 text-gray-700 ${
+              isLevel0 ? 'font-semibold' : ''
+            }`}
+          >
             {location.name} ({location.code}) -{' '}
             {isLevel0 ? 'Tổng trong khu: ' : 'Số lượng: '}{' '}
-            {adjustedQuantity.toLocaleString('vi-VN')}
+            <span className='font-medium text-gray-900'>
+              {adjustedQuantity.toLocaleString('vi-VN')}
+            </span>
           </span>
           {!isLevel0 && (
-            <div className='flex items-center space-x-1'>
+            <div className='flex items-center space-x-2'>
               <Input
                 type='number'
                 value={quantity}
@@ -273,7 +295,7 @@ const LocationNode: React.FC<LocationNodeProps> = ({
                   handleQuantityChange(parseInt(e.target.value) || 0)
                 }
                 placeholder={`${-adjustedQuantity} - ${unassignedQuantity}`}
-                className='w-24'
+                className='w-24 h-8 text-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500'
                 disabled={putAwayLoading}
               />
               <Button
@@ -281,6 +303,7 @@ const LocationNode: React.FC<LocationNodeProps> = ({
                 size='sm'
                 onClick={handlePutAwayClick}
                 disabled={putAwayLoading || quantity === '' || quantity === 0}
+                className='h-8 text-sm bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 hover:text-blue-700'
               >
                 Vào/Ra
               </Button>
@@ -288,7 +311,7 @@ const LocationNode: React.FC<LocationNodeProps> = ({
           )}
         </div>
         {childLocations.length > 0 && (
-          <CollapsibleContent>
+          <CollapsibleContent className='ml-6 mt-2'>
             {childLocations.map((child) => (
               <LocationNode
                 key={child.id}

@@ -13,7 +13,6 @@ export const useCategories = () =>
     queryKey: ['categories'],
     queryFn: getAllCategories,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useAddCategory = () => {

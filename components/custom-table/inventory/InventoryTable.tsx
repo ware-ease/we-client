@@ -8,6 +8,7 @@ import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useWarehousesInventories } from '@/hooks/queries/warehouseQueries'; // Assuming this exists
 import { Inventory } from '@/types/warehouse';
+import { View } from 'lucide-react';
 
 export const columns: ColumnDef<Inventory>[] = [
   {
@@ -79,10 +80,8 @@ export const columns: ColumnDef<Inventory>[] = [
     cell: ({ row }) => (
       <div className='flex space-x-1 items-center'>
         {/* Add actions like view or edit if needed */}
-        <Link href={`goods/${row.original.id}`}>
-          <Button variant='outline' size='sm'>
-            Xem
-          </Button>
+        <Link href={`inventories/${row.original.id}`}>
+          <View className='text-blue-500' size={20} />
         </Link>
       </div>
     ),
@@ -108,7 +107,9 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
 
   return (
     <CustomDataTable columns={columns} data={tableData}>
-      <div className='h-9'></div>
+      <Link href={'inventories/adjustment'} className='mr-2'>
+        <Button>Điều chỉnh tồn kho</Button>
+      </Link>
     </CustomDataTable>
   );
 };

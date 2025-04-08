@@ -6,5 +6,4 @@ export const usePartners = (partnerType: number) =>
     queryKey: ['partners', partnerType],
     queryFn: () => getAllPartners(partnerType),
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });

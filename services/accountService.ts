@@ -20,10 +20,13 @@ export const createAccount = async (
 };
 
 export const updateAccount = async (
-  id: string,
   accountData: Partial<Account>
 ): Promise<Account> => {
-  const response = await axiosPut(`/accounts/${id}`, accountData, {});
+  const response = await axiosPut(
+    `/accounts/${accountData.id}`,
+    accountData,
+    {}
+  );
   return response.data.data;
 };
 

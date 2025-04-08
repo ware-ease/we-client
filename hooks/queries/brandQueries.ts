@@ -13,7 +13,6 @@ export const useBrands = () =>
     queryKey: ['brands'],
     queryFn: getAllBrands,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useAddBrand = () => {

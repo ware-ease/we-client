@@ -6,7 +6,7 @@ const WarehouseGoods = () => {
   return (
     <div className='flex flex-col p-4 gap-6'>
       <div className='text-4xl font-semibold text-primary'>
-        Hàng hóa trong kho
+        Hàng hóa tồn kho
       </div>
       <InventoryTable onlyCurrentWarehouse />
     </div>

@@ -13,7 +13,6 @@ export const useSuppliers = () =>
     queryKey: ['suppliers'],
     queryFn: getAllSuppliers,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useAddSupplier = () => {

@@ -9,6 +9,6 @@ export const getWarehouseInventoryById = async (
 };
 
 export const putAwayGood = async (data: PutAwayGood) => {
-  const response = await axiosPost(`/inventory-location`, data, {});
+  const response = await axiosPost(`/inventories/inventory-location`, data, {});
   return response.data.data;
 };

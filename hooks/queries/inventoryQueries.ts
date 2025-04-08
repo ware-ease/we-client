@@ -11,7 +11,6 @@ export const useInventoryById = (id: string) =>
     queryKey: ['inventory', id],
     queryFn: () => getWarehouseInventoryById(id),
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const usePutAwayGoods = () => {

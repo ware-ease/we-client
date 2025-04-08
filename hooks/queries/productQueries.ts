@@ -12,7 +12,6 @@ export const useProducts = () =>
     queryKey: ['products'],
     queryFn: getAllProducts,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useAddProduct = () => {

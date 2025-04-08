@@ -14,7 +14,6 @@ export const useGoodRequests = () =>
     queryKey: ['requests'],
     queryFn: getAllGoodRequests,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useGoodReceiveRequests = () =>
@@ -22,7 +21,6 @@ export const useGoodReceiveRequests = () =>
     queryKey: ['receiveRequests'],
     queryFn: getAllGoodReceiveRequests,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useGoodIssueRequests = () =>
@@ -30,7 +28,6 @@ export const useGoodIssueRequests = () =>
     queryKey: ['issueRequests'],
     queryFn: getAllGoodIssueRequests,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useAddGoodRequest = () => {

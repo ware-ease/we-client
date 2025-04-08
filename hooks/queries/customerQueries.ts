@@ -13,7 +13,6 @@ export const useCustomers = () =>
     queryKey: ['customers'],
     queryFn: getAllCustomers,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useAddCustomer = () => {

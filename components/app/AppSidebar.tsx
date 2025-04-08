@@ -100,8 +100,8 @@ export function AppSidebar() {
       icon: LayoutDashboardIcon,
     },
     {
-      title: t('Sidebar.goods'),
-      url: ensureUniquePath(pathname, '/goods'),
+      title: 'Hàng hóa tồn kho',
+      url: ensureUniquePath(pathname, '/inventories'),
       icon: Boxes,
     },
     {

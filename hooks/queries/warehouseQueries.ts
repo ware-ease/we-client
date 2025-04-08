@@ -14,7 +14,6 @@ export const useWarehouses = () =>
     queryKey: ['warehouses'],
     queryFn: getAllWarehouses,
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useWarehouseById = (id: string) =>
@@ -22,7 +21,6 @@ export const useWarehouseById = (id: string) =>
     queryKey: ['warehouse', id],
     queryFn: () => getWarehouseById(id),
     staleTime: 300000,
-    refetchOnWindowFocus: false,
   });
 
 export const useWarehousesInventories = (enabled: boolean, id: string) =>
@@ -30,7 +28,6 @@ export const useWarehousesInventories = (enabled: boolean, id: string) =>
     queryKey: ['inventories', id],
     queryFn: () => getWarehouseInventoriesById(id),
     staleTime: 300000,
-    refetchOnWindowFocus: false,
     enabled: enabled,
   });
 
