@@ -1,103 +1,64 @@
+'use client';
+import { Link } from '@/lib/i18n/routing';
 import {
   BarChart,
   Box,
-  Calendar,
-  Clock,
   FileText,
   List,
   Truck,
   User,
+  Users,
 } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 
 const Home = () => {
-  const t = useTranslations();
-  const language = t('Languages.this'); // Lấy ngôn ngữ hiện tại
-
   return (
     <div className='flex flex-col max-h-full'>
       <div className='flex flex-col p-4 gap-6 max-h-full'>
         <div className='mb-6'>
-          <div className='text-4xl font-semibold text-primary'>
-            {t('Home.home')}
-          </div>
+          <div className='text-4xl font-semibold text-primary'>Trang chủ</div>
 
-          {/* Warehouse Management */}
+          {/* Quản lý kho */}
           <div className='flex flex-col p-4 gap-6 max-h-[80vh] overflow-y-auto'>
             <div className='p-4 text-xl text-primary'>
-              <h2 className='text-2xl font-semibold mb-4'>
-                {t('Home.warehouse')}
-              </h2>
+              <h2 className='text-2xl font-semibold mb-4'>Quản lý kho</h2>
               <div className='grid grid-cols-3 gap-4'>
-                <Link href={`/${language}/warehouse`} className='group'>
+                <Link href='/warehouses' className='group'>
                   <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
                     <Box className='text-red-500 w-6 h-6' />
                     <div>
                       <h2 className='font-medium group-hover:underline'>
-                        {t('Home.goods')}
+                        Kho hàng
                       </h2>
                       <p className='text-sm text-gray-500'>
-                        {t('Home.goodsTitle')}
+                        Xem và quản lý các kho hàng
                       </p>
                     </div>
                   </div>
                 </Link>
 
-                <Link href={`/${language}/warehouse/in`} className='group'>
-                  <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                    <Truck className='text-green-500 w-6 h-6' />
-                    <div>
-                      <h2 className='font-medium group-hover:underline'>
-                        {t('Home.warehousing')}
-                      </h2>
-                      <p className='text-sm text-gray-500'>
-                        {t('Home.warehousingTitle')}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-
-                <Link href={`/${language}/warehouse/out`} className='group'>
-                  <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                    <Truck className='text-blue-500 w-6 h-6 rotate-180' />
-                    <div>
-                      <h2 className='font-medium group-hover:underline'>
-                        {t('Home.out')}
-                      </h2>
-                      <p className='text-sm text-gray-500'>
-                        {t('Home.outTitle')}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-
-                <Link
-                  href={`/${language}/warehouse/inventory`}
-                  className='group'
-                >
+                <Link href='/products-home' className='group'>
                   <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
                     <List className='text-orange-500 w-6 h-6' />
                     <div>
                       <h2 className='font-medium group-hover:underline'>
-                        {t('Home.inventory')}
+                        Sản phẩm
                       </h2>
                       <p className='text-sm text-gray-500'>
-                        {t('Home.inventoryTitle')}
+                        Quản lý danh sách sản phẩm
                       </p>
                     </div>
                   </div>
                 </Link>
 
-                <Link href={`/${language}/warehouse/report`} className='group'>
+                <Link href='/requests' className='group'>
                   <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                    <BarChart className='text-purple-500 w-6 h-6' />
+                    <FileText className='text-blue-500 w-6 h-6' />
                     <div>
                       <h2 className='font-medium group-hover:underline'>
-                        {t('Home.report')}
+                        Yêu cầu
                       </h2>
                       <p className='text-sm text-gray-500'>
-                        {t('Home.reportTitle')}
+                        Theo dõi các yêu cầu nhập/xuất hàng
                       </p>
                     </div>
                   </div>
@@ -105,61 +66,61 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Other */}
+            {/* Quản lý khác */}
             <div className='p-4 text-xl text-primary'>
-              <h2 className='text-2xl font-semibold mb-4'>{t('Home.other')}</h2>
+              <h2 className='text-2xl font-semibold mb-4'>Quản lý khác</h2>
               <div className='grid grid-cols-3 gap-4'>
-                <Link href={`/${language}/tasks`} className='group'>
+                <Link href='/dashboard' className='group'>
                   <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                    <Calendar className='text-blue-500 w-6 h-6' />
+                    <BarChart className='text-purple-500 w-6 h-6' />
                     <div>
                       <h2 className='font-medium group-hover:underline'>
-                        {t('Home.tasks')}
+                        Bảng điều khiển
                       </h2>
                       <p className='text-sm text-gray-500'>
-                        {t('Home.tasksTitle')}
+                        Xem tổng quan và báo cáo
                       </p>
                     </div>
                   </div>
                 </Link>
 
-                <Link href={`/${language}/leave`} className='group'>
+                <Link href='/accounts' className='group'>
                   <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                    <Clock className='text-green-500 w-6 h-6' />
+                    <User className='text-green-500 w-6 h-6' />
                     <div>
                       <h2 className='font-medium group-hover:underline'>
-                        {t('Home.leave')}
+                        Tài khoản
                       </h2>
                       <p className='text-sm text-gray-500'>
-                        {t('Home.leaveTitle')}
+                        Quản lý tài khoản người dùng
                       </p>
                     </div>
                   </div>
                 </Link>
 
-                <Link href={`/${language}/attendance`} className='group'>
+                <Link href='/suppliers' className='group'>
                   <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                    <FileText className='text-orange-500 w-6 h-6' />
+                    <Truck className='text-blue-500 w-6 h-6' />
                     <div>
                       <h2 className='font-medium group-hover:underline'>
-                        {t('Home.attendance')}
+                        Nhà cung cấp
                       </h2>
                       <p className='text-sm text-gray-500'>
-                        {t('Home.attendanceTitle')}
+                        Quản lý danh sách nhà cung cấp
                       </p>
                     </div>
                   </div>
                 </Link>
 
-                <Link href={`/${language}/payroll`} className='group'>
+                <Link href='/customers' className='group'>
                   <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                    <User className='text-purple-500 w-6 h-6' />
+                    <Users className='text-orange-500 w-6 h-6' />
                     <div>
                       <h2 className='font-medium group-hover:underline'>
-                        {t('Home.payroll')}
+                        Khách hàng
                       </h2>
                       <p className='text-sm text-gray-500'>
-                        {t('Home.payrollTitle')}
+                        Quản lý danh sách khách hàng
                       </p>
                     </div>
                   </div>
