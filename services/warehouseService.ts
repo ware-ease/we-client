@@ -24,6 +24,17 @@ export const getWarehouseInventoriesById = async (
   return response.data.data;
 };
 
+export const getWarehouseInventoryAdjustments = async (
+  id: string
+): Promise<Warehouse> => {
+  const response = await axiosGet(
+    `/inventory-adjustments` + baseFilters + '&warehouseId=' + id,
+    {}
+  );
+
+  return response.data.data;
+};
+
 export const createWarehouse = async (
   warehouseData: Partial<Warehouse>
 ): Promise<Warehouse> => {

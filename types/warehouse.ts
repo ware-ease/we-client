@@ -38,3 +38,22 @@ export interface PutAwayGood extends Base {
   locationId: string;
   quantity: number;
 }
+
+export interface InventoryAdjustment extends Base {
+  type?: number;
+  date?: string;
+  reason?: string;
+  note?: string;
+  relatedDocument?: string;
+  warehouseId?: string;
+  warehouse?: Warehouse;
+  inventoryAdjustmentDetails: InventoryAdjustmentDetail[];
+}
+
+export interface InventoryAdjustmentDetail extends Base {
+  note?: string;
+  changeInQuantity?: number;
+  newQuantity?: number;
+  locationId?: string;
+  inventoryId?: string;
+}
