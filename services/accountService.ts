@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Account } from '../types/account';
-import { axiosDelete, axiosGet, axiosPost, axiosPut } from './baseService';
+import { Account, AccountUpdate } from '../types/account';
+import {
+  axiosDelete,
+  axiosGet,
+  axiosPatch,
+  axiosPost,
+  axiosPut,
+} from './baseService';
 
 export const getAllAccounts = async (): Promise<Account[]> => {
   const response = await axiosGet('/accounts', {});
@@ -19,10 +25,8 @@ export const createAccount = async (
   return response.data.data;
 };
 
-export const updateAccount = async (
-  accountData: Partial<Account>
-): Promise<Account> => {
-  const response = await axiosPut(
+export const updateAccount = async (accountData: Partial<AccountUpdate>) => {
+  const response = await axiosPatch(
     `/accounts/${accountData.id}`,
     accountData,
     {}

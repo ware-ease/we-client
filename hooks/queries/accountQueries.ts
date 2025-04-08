@@ -4,7 +4,7 @@ import {
   updateAccount,
 } from '@/services/accountService';
 import { getCurrentUser } from '@/services/authService';
-import { Account } from '@/types/account';
+import { Account, AccountUpdate } from '@/types/account';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -41,7 +41,7 @@ export const useAddAccount = () => {
 export const useUpdateAccount = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (a: Account) => updateAccount(a),
+    mutationFn: (a: AccountUpdate) => updateAccount(a),
     onSuccess: () => {
       toast.success('Thành công!');
       queryClient.invalidateQueries({

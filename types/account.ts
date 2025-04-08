@@ -26,3 +26,19 @@ export type Account = {
   permissions: Permission[];
   warehouses: any[];
 };
+
+export type AccountUpdate = {
+  id?: string;
+  email?: string;
+  profile?: Profile;
+};
+
+export type ProfileUpdate = {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  address?: string;
+  sex?: boolean;
+  nationality?: string;
+  avatarUrl?: string;
+};
