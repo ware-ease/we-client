@@ -1,6 +1,6 @@
 'use client';
 import { Input } from '@/components/shadcn-base/Input';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import RequestComboBox from '@/components/combo-boxes/RequestComboBox';
 import { Button } from '@/components/shadcn-base/Button';
 import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
@@ -12,14 +12,17 @@ import { toast } from 'react-toastify';
 import { GoodNoteSchema } from '@/lib/zod/schemas';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useGoodIssueRequests } from '@/hooks/queries/goodRequests';
+import { useQuery } from '@tanstack/react-query';
+import { getGoodRequestById } from '@/services/goodRequestService';
 
 const IssueCreate = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const [initialData, setInitialData] = useState<RowData[]>([]);
   const [data, setData] = useState<RowData[]>([]);
-  const [supplierName, setSupplierName] = useState<string>('');
+  const [receiverName, setReceiverName] = useState<string>('');
   const { formData, handleChange, setFormData } = useFormData<GoodNote>({
-    noteType: 0,
+    noteType: 1,
     shipperName: '',
     receiverName: '',
     code: '',
@@ -30,6 +33,12 @@ const IssueCreate = () => {
   });
 
   const { data: requests } = useGoodIssueRequests();
+
+  const { data: reqDetails } = useQuery({
+    queryKey: ['requestDetails', formData.goodRequestId],
+    queryFn: () => getGoodRequestById(formData.goodRequestId || ''),
+    enabled: !!formData.goodRequestId,
+  });
 
   const { mutate } = useAddGoodIssueNote();
 
@@ -67,6 +76,25 @@ const IssueCreate = () => {
     // resetForm();
   };
 
+  useEffect(() => {
+    if (reqDetails?.goodRequestDetails) {
+      const tableData: RowData[] = reqDetails.goodRequestDetails.map(
+        (detail, index) => ({
+          id: `${index}`,
+          sku: detail.productId || '',
+          name: detail.productName || '',
+          unit: '',
+          quantity: detail.quantity ? detail.quantity : 0,
+          batch: '',
+          note: '',
+          productId: detail.productId || '',
+          batchId: '',
+        })
+      );
+      setInitialData(tableData);
+    }
+  }, [reqDetails]);
+
   const handleRequestSelect = (value: string) => {
     const req = requests?.find((req) => req.id === value);
 
@@ -74,7 +102,7 @@ const IssueCreate = () => {
       ...prevData,
       goodRequestId: req?.id ?? '',
     }));
-    setSupplierName(req?.partnerName ?? '');
+    setReceiverName(req?.partner?.name ?? '');
   };
 
   return (
@@ -117,8 +145,8 @@ const IssueCreate = () => {
           </div>
           <div className='flex flex-col space-y-2'>
             <div className='w-64'>
-              <div className='text-sm'>Nhà cung cấp</div>
-              <Input value={supplierName} disabled />
+              <div className='text-sm'>Khách hàng</div>
+              <Input value={receiverName} disabled />
             </div>
             <div className='w-64'>
               <div className='text-sm'>Người giao hàng</div>
@@ -148,7 +176,7 @@ const IssueCreate = () => {
         </div>
       </div>
       <div className=''>
-        <CustomTable onDataChange={setData} />
+        <CustomTable initialData={initialData} onDataChange={setData} />
       </div>
       <div className='flex w-full'>
         <div className='grow'></div>

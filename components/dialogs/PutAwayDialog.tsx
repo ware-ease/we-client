@@ -292,7 +292,7 @@ const LocationNode: React.FC<LocationNodeProps> = ({
                 type='number'
                 value={quantity}
                 onChange={(e) =>
-                  handleQuantityChange(parseInt(e.target.value) || 0)
+                  handleQuantityChange(parseFloat(e.target.value) || 0)
                 }
                 placeholder={`${-adjustedQuantity} - ${unassignedQuantity}`}
                 className='w-24 h-8 text-sm border-gray-300 focus:ring-blue-500 focus:border-blue-500'

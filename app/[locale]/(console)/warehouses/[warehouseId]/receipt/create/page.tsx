@@ -104,6 +104,7 @@ const ReceiptCreate = () => {
     //   setData(tableData);
     // }
   };
+
   useEffect(() => {
     if (reqDetails?.goodRequestDetails) {
       const tableData: RowData[] = reqDetails.goodRequestDetails.map(
