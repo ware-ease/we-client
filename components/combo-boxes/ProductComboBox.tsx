@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils/utils';
 import { useProducts } from '@/hooks/queries/productQueries';
 import Loading from '../app/Loading';
 import Error from '../app/Error';
+import ProductDialog from '../dialogs/ProductDialog';
 
 interface ProductComboBoxProps {
   value: string;
@@ -88,14 +89,18 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
               ) : (
                 <Loading />
               )}
-              <CommandItem
-                className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
-                onSelect={() => handleOnAdd()}
-                aria-selected={false}
-              >
-                Thêm
-                <Settings className='ml-auto text-white' />
-              </CommandItem>
+              <ProductDialog>
+                <button className='w-full'>
+                  <CommandItem
+                    className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
+                    onSelect={() => handleOnAdd()}
+                    aria-selected={false}
+                  >
+                    Thêm
+                    <Settings className='ml-auto text-white' />
+                  </CommandItem>
+                </button>
+              </ProductDialog>
             </CommandGroup>
           </CommandList>
         </Command>

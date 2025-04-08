@@ -105,7 +105,7 @@ const ProductDialog = ({ children }: ProductDialogProps) => {
         </DialogHeader>
 
         {showForm ? (
-          <div className='border p-4 rounded-md bg-gray-50'>
+          <div className='border p-4 rounded-md bg-gray-50 max-h-[30vh] overflow-y-auto'>
             <div>
               <Label className='text-red-600'>Mã sản phẩm (SKU) *</Label>
               <Input
@@ -126,7 +126,7 @@ const ProductDialog = ({ children }: ProductDialogProps) => {
                 className='bg-white'
               />
             </div>
-            <div>
+            {/* <div>
               <Label>Hình ảnh URL</Label>
               <Input
                 value={newProduct.imageUrl}
@@ -135,7 +135,7 @@ const ProductDialog = ({ children }: ProductDialogProps) => {
                 }
                 className='bg-white'
               />
-            </div>
+            </div> */}
             <div>
               <Label>Loại sản phẩm</Label>
               <Input
