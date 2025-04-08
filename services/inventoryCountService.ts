@@ -8,8 +8,13 @@ import {
 } from './baseService';
 
 // Lấy tất cả inventory counts
-export const getAllInventoryCounts = async (): Promise<InventoryCount[]> => {
-  const response = await axiosGet(`/api/inventory-counts${baseFilters}`, {});
+export const getAllInventoryCounts = async (
+  warehouseId?: string
+): Promise<InventoryCount[]> => {
+  const query = warehouseId
+    ? `/api/inventory-counts${baseFilters}&warehouseId=${warehouseId}`
+    : `/api/inventory-counts${baseFilters}`;
+  const response = await axiosGet(query, {});
   return response.data.data.records;
 };
 

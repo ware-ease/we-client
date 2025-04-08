@@ -1,7 +1,7 @@
 import { Base } from './base/base-type';
 import { Product } from './product';
+import { Location } from './warehouse';
 // import { Schedule } from './schedule';
-// import { Location } from './location';
 
 export interface InventoryCount extends Base {
   scheduleId?: string;
@@ -13,7 +13,7 @@ export interface InventoryCount extends Base {
   startTime?: string;
   endTime?: string;
   schedule?: string;
-  location?: string;
+  location?: Location;
   inventoryCountDetails?: InventoryCountDetail[];
 }
 

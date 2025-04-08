@@ -1,7 +1,6 @@
 'use client';
-// import { ViewInventoryCountDialog } from '@/components/dialogs/ViewInventoryCountDialog';
 import { useInventoryCounts } from '@/hooks/queries/inventoryCountQueries';
-// import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
+import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { Link, usePathname } from '@/lib/i18n/routing';
 import { InventoryCount } from '@/types/inventoryCount';
 import { ColumnDef } from '@tanstack/react-table';
@@ -42,15 +41,29 @@ export const columns: ColumnDef<InventoryCount>[] = [
     },
   },
   {
-    accessorKey: 'checkTime',
+    accessorKey: 'date',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Thời điểm kiểm kê' />
     ),
-    cell: ({ row }) =>
-      new Date(row.getValue('checkTime')).toLocaleString('vi-VN'),
+    cell: ({ row }) => {
+      const date = row.getValue('date') as string;
+      const startTime = row.original.startTime;
+      if (!date) return 'N/A';
+      const dateTime = new Date(date);
+      if (startTime) {
+        const [hours, minutes] = startTime.split(':');
+        dateTime.setHours(parseInt(hours), parseInt(minutes));
+      }
+      return dateTime.toLocaleString('vi-VN');
+    },
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue?.from && !filterValue?.to) return true;
       const rowDate = new Date(row.getValue(columnId));
+      const startTime = row.original.startTime;
+      if (startTime) {
+        const [hours, minutes] = startTime.split(':');
+        rowDate.setHours(parseInt(hours), parseInt(minutes));
+      }
       const fromDate = filterValue.from ? new Date(filterValue.from) : null;
       const toDate = filterValue.to ? new Date(filterValue.to) : null;
 
@@ -72,30 +85,56 @@ export const columns: ColumnDef<InventoryCount>[] = [
     },
   },
   {
-    accessorKey: 'inspector',
+    accessorKey: 'status',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Người kiểm kê' />
+      <DataTableColumnHeader column={column} title='Trạng thái' />
     ),
+    cell: ({ row }) => {
+      const status = row.getValue('status') as string;
+      return status ? status.charAt(0).toUpperCase() + status.slice(1) : 'N/A';
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue) return true;
+      const status = row.getValue(columnId) as string;
+      return status?.toLowerCase().includes(filterValue.toLowerCase());
+    },
     meta: {
-      title: 'Người kiểm kê',
+      title: 'Trạng thái',
+      type: 'select',
+      options: [
+        { value: 'draft', label: 'Draft' },
+        { value: 'in_progress', label: 'In Progress' },
+        { value: 'completed', label: 'Completed' },
+      ],
     },
   },
   {
-    accessorKey: 'position',
+    accessorKey: 'location',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Chức vụ' />
+      <DataTableColumnHeader column={column} title='Vị trí' />
     ),
+    cell: ({ row }) => row.getValue('location') || 'N/A',
     meta: {
-      title: 'Chức vụ',
+      title: 'Vị trí',
     },
   },
   {
-    accessorKey: 'createdTime',
+    accessorKey: 'note',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Ghi chú' />
+    ),
+    cell: ({ row }) => row.getValue('note') || 'N/A',
+    meta: {
+      title: 'Ghi chú',
+    },
+  },
+  {
+    accessorKey: 'createdAt',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Ngày tạo' />
     ),
     cell: ({ row }) =>
-      new Date(row.getValue('createdTime')).toLocaleString('vi-VN'),
+      new Date(row.getValue('createdAt')).toLocaleString('vi-VN'),
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue?.from && !filterValue?.to) return true;
       const rowDate = new Date(row.getValue(columnId));
@@ -133,7 +172,6 @@ export const columns: ColumnDef<InventoryCount>[] = [
         <Link href={`inventory-count/${row.original.id}`}>
           <Edit className='text-yellow-500' size={20} />
         </Link>
-        {/* <ViewInventoryCountDialog inventoryCount={row.original} /> */}
       </div>
     ),
   },
@@ -147,17 +185,19 @@ const InventoryCountTable: React.FC<InventoryCountTableProps> = ({
   onlyCurrentWarehouse = false,
 }) => {
   const pathname = usePathname();
-  //   const currentWarehouse = useCurrentWarehouse();
+  const currentWarehouse = useCurrentWarehouse();
 
-  // Sử dụng hook để lấy tất cả inventory counts
-  const { data, isSuccess } = useInventoryCounts();
-  // !onlyCurrentWarehouse && currentWarehouse?.id !== undefined
+  // Fetch all inventory counts (when not limited to current warehouse)
+  const { data, isSuccess } = useInventoryCounts(
+    !onlyCurrentWarehouse && currentWarehouse?.id !== undefined // enabled
+  );
 
-  // Giả định bạn có hook để lấy inventory counts theo kho hiện tại
+  // Fetch inventory counts for the current warehouse
   const { data: currentWarehouseData, isSuccess: isCurrentWarehouseSuccess } =
-    useInventoryCounts();
-  //   onlyCurrentWarehouse && currentWarehouse?.id !== undefined,
-  //   currentWarehouse?.id ?? ''
+    useInventoryCounts(
+      onlyCurrentWarehouse && currentWarehouse?.id !== undefined, // enabled
+      currentWarehouse?.id
+    );
 
   const tableData = onlyCurrentWarehouse
     ? isCurrentWarehouseSuccess

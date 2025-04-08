@@ -10,12 +10,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
 // Hook để lấy tất cả inventory counts
-export const useInventoryCounts = () =>
+export const useInventoryCounts = (enabled: boolean, warehouseId?: string) =>
   useQuery({
-    queryKey: ['inventoryCounts'],
-    queryFn: () => getAllInventoryCounts(),
-    staleTime: 300000, // 5 phút
+    queryKey: ['inventoryCounts', warehouseId],
+    queryFn: () => getAllInventoryCounts(warehouseId),
+    staleTime: 300000,
     refetchOnWindowFocus: false,
+    enabled,
   });
 
 // Hook để lấy inventory count theo ID
