@@ -4,7 +4,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from '@/components/shadcn-base/Dialog';
-import { View } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { GoodRequest } from '@/types/goodRequest';
 import { Button } from '../shadcn-base/Button';
@@ -48,9 +48,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button>
-          <View className='text-blue-500' size={20} />
-        </button>
+        <Eye className='text-blue-500' size={20} />
       </DialogTrigger>
       <DialogContent className='max-w-4xl max-h-screen overflow-auto'>
         <DialogTitle />

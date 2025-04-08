@@ -13,6 +13,11 @@ import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { Edit } from 'lucide-react';
 import { ViewGoodNoteDialog } from '@/components/dialogs/ViewGoodNoteDialog';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/shadcn-base/Tooltip';
 
 export const columns: ColumnDef<GoodNote>[] = [
   {
@@ -166,10 +171,20 @@ export const columns: ColumnDef<GoodNote>[] = [
       <div className='flex space-x-1 items-center'>
         <Link href={`receipt/${row.original.id}`}>
           {row.original.status?.toString() === '0' && (
-            <Edit className='text-yellow-500' size={20} />
+            <Tooltip>
+              <TooltipTrigger>
+                <Edit className='text-yellow-500' size={20} />
+              </TooltipTrigger>
+              <TooltipContent>Sửa</TooltipContent>
+            </Tooltip>
           )}
         </Link>
-        <ViewGoodNoteDialog goodNote={row.original} />
+        <Tooltip>
+          <TooltipTrigger>
+            <ViewGoodNoteDialog goodNote={row.original} />
+          </TooltipTrigger>
+          <TooltipContent>Chi tiết</TooltipContent>
+        </Tooltip>
       </div>
     ),
   },

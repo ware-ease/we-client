@@ -11,6 +11,11 @@ import { Button } from '../../shadcn-base/Button';
 import StatusUI from '@/components/app/StatusUI';
 import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 import { ViewGoodRequestDialog } from '@/components/dialogs/ViewGoodRequestDialog';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/shadcn-base/Tooltip';
 
 export const columns: ColumnDef<GoodRequest>[] = [
   {
@@ -158,12 +163,22 @@ export const columns: ColumnDef<GoodRequest>[] = [
     ),
     cell: ({ row }) => (
       <div className='flex space-x-1 items-center'>
-        <Link href={`requests/${row.original.id}`}>
-          {row.original.status?.toString() === '0' && (
-            <Edit className='text-yellow-500' size={20} />
-          )}
-        </Link>
-        <ViewGoodRequestDialog goodRequest={row.original} />
+        {row.original.status?.toString() === '0' && (
+          <Tooltip>
+            <TooltipTrigger>
+              <Link href={`requests/${row.original.id}`}>
+                <Edit className='text-yellow-500' size={20} />
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent>Sửa</TooltipContent>
+          </Tooltip>
+        )}
+        <Tooltip>
+          <TooltipTrigger>
+            <ViewGoodRequestDialog goodRequest={row.original} />
+          </TooltipTrigger>
+          <TooltipContent>Chi tiết</TooltipContent>
+        </Tooltip>
       </div>
     ),
   },

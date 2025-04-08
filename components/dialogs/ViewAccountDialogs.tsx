@@ -24,7 +24,7 @@ const ViewAccountDialog: React.FC<DetailAccountDialogProps> = ({ account }) => {
     <div className='flex justify-end'>
       <Dialog>
         <DialogTrigger asChild>
-          <Eye className='text-blue-600 h-5 w-5 hover:cursor-pointer' />
+          <Eye className='text-blue-500 h-5 w-5 hover:cursor-pointer' />
         </DialogTrigger>
         <DialogContent
           className='flex flex-col w-full max-w-3xl p-6 m-4 bg-white rounded-2xl shadow-xl border border-gray-200'

@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 // import { Roboto } from 'next/font/google';
 import '../globals.css';
 import { AuthProvider } from '../../components/providers/AuthProvider';
+import { TooltipProvider } from '@/components/shadcn-base/Tooltip';
 
 export const metadata: Metadata = {
   title: 'WareEase',
@@ -34,8 +35,10 @@ export default async function NotRootLayout({
     <ReactQueryProvider>
       <AuthProvider>
         <NextIntlClientProvider messages={messages}>
-          <ToastContainer />
-          {children}
+          <TooltipProvider>
+            <ToastContainer />
+            {children}
+          </TooltipProvider>
         </NextIntlClientProvider>
       </AuthProvider>
     </ReactQueryProvider>

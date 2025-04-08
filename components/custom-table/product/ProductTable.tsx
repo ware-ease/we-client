@@ -7,7 +7,11 @@ import { Edit } from 'lucide-react';
 import AddProductDialog from '../../dialogs/AddProductDialog';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import ProductDeleteButton from './ProductDeleteButton';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/shadcn-base/Tooltip';
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -128,9 +132,19 @@ export const columns: ColumnDef<Product>[] = [
 
       return (
         <div className='flex space-x-2'>
-          <Edit className='text-yellow-500 cursor-pointer' size={20} />
-          <ProductDeleteButton productId={row.getValue('id')} />
-          <ViewProductDialog product={product} />
+          <Tooltip>
+            <TooltipTrigger>
+              <Edit className='text-yellow-500 cursor-pointer' size={20} />
+            </TooltipTrigger>
+            <TooltipContent>Sửa</TooltipContent>
+          </Tooltip>
+          {/* <ProductDeleteButton productId={row.getValue('id')} /> */}
+          <Tooltip>
+            <TooltipTrigger>
+              <ViewProductDialog product={product} />
+            </TooltipTrigger>
+            <TooltipContent>Chi tiết</TooltipContent>
+          </Tooltip>
         </div>
       );
     },

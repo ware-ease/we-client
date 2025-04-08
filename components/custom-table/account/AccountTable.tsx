@@ -6,6 +6,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import AddAccountDialog from '../../dialogs/AddAccountDialog';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/shadcn-base/Tooltip';
 
 export const columns: ColumnDef<Account>[] = [
   {
@@ -144,7 +149,12 @@ export const columns: ColumnDef<Account>[] = [
 
       return (
         <div className='flex space-x-2'>
-          <DetailAccountDialog account={account} />
+          <Tooltip>
+            <TooltipTrigger>
+              <DetailAccountDialog account={account} />
+            </TooltipTrigger>
+            <TooltipContent>Chi tiết</TooltipContent>
+          </Tooltip>
         </div>
       );
     },

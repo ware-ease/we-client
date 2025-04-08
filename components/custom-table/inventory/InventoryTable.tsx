@@ -8,7 +8,12 @@ import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useWarehousesInventories } from '@/hooks/queries/warehouseQueries'; // Assuming this exists
 import { Inventory } from '@/types/warehouse';
-import { View } from 'lucide-react';
+import { Eye } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/shadcn-base/Tooltip';
 
 export const columns: ColumnDef<Inventory>[] = [
   {
@@ -81,7 +86,12 @@ export const columns: ColumnDef<Inventory>[] = [
       <div className='flex space-x-1 items-center'>
         {/* Add actions like view or edit if needed */}
         <Link href={`inventories/${row.original.id}`}>
-          <View className='text-blue-500' size={20} />
+          <Tooltip>
+            <TooltipTrigger>
+              <Eye className='text-blue-500' size={20} />
+            </TooltipTrigger>
+            <TooltipContent>Chi tiết</TooltipContent>
+          </Tooltip>
         </Link>
       </div>
     ),
