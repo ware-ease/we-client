@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Account, AccountUpdate } from '../types/account';
+import { Permission } from '@/types/permission';
+import { Account, AccountUpdate, Group } from '../types/account';
 import {
   axiosDelete,
   axiosGet,
@@ -10,6 +11,16 @@ import {
 
 export const getAllAccounts = async (): Promise<Account[]> => {
   const response = await axiosGet('/accounts', {});
+  return response.data.data;
+};
+
+export const getAllPermissions = async (): Promise<Permission[]> => {
+  const response = await axiosGet('/permissions', {});
+  return response.data.data;
+};
+
+export const getAllGroups = async (): Promise<Group[]> => {
+  const response = await axiosGet('/groups', {});
   return response.data.data;
 };
 

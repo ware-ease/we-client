@@ -13,18 +13,27 @@ export type Profile = {
 
 export type Group = {
   id: string;
-  name: string;
+  name?: string;
   permissions: any;
 };
 
 export type Account = {
-  id: string;
+  id?: string;
   username: string;
   email: string;
   profile: Profile;
   groups: Group[];
-  permissions: Permission[];
-  warehouses: any[];
+  permissions?: Permission[];
+  warehouseIds?: Array<string>;
+};
+export type CreateAccount = {
+  id?: string;
+  username: string;
+  email: string;
+  profile: Profile;
+  groupId: string;
+  permissions?: Permission[];
+  warehouseIds?: Array<string>;
 };
 
 export type AccountUpdate = {

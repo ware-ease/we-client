@@ -1,10 +1,14 @@
+// @/hooks/queries/accountQueries.ts
 import {
   createAccount,
   getAllAccounts,
+  getAllGroups,
+  getAllPermissions,
   updateAccount,
 } from '@/services/accountService';
 import { getCurrentUser } from '@/services/authService';
-import { Account, AccountUpdate } from '@/types/account';
+import { getAllWarehouses } from '@/services/warehouseService';
+import { AccountUpdate, CreateAccount } from '@/types/account';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -25,7 +29,7 @@ export const useProfile = () =>
 export const useAddAccount = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (a: Account) => createAccount(a),
+    mutationFn: (a: CreateAccount) => createAccount(a),
     onSuccess: () => {
       toast.success('Thành công!');
       queryClient.invalidateQueries({
@@ -37,7 +41,6 @@ export const useAddAccount = () => {
     },
   });
 };
-
 export const useUpdateAccount = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -53,3 +56,24 @@ export const useUpdateAccount = () => {
     },
   });
 };
+
+export const usePermissions = () =>
+  useQuery({
+    queryKey: ['permissions'],
+    queryFn: getAllPermissions,
+    staleTime: 300000,
+  });
+
+export const useGroups = () =>
+  useQuery({
+    queryKey: ['groupsgroups'],
+    queryFn: getAllGroups,
+    staleTime: 300000,
+  });
+
+export const useWarehouses = () =>
+  useQuery({
+    queryKey: ['warehouses'],
+    queryFn: getAllWarehouses,
+    staleTime: 300000,
+  });
