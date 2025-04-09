@@ -1,10 +1,12 @@
 import {
   createLocation,
   createWarehouse,
+  deleteWarehouse,
   getAllWarehouses,
   getWarehouseById,
   getWarehouseInventoriesById,
   getWarehouseInventoryAdjustments,
+  updateWarehouse,
 } from '@/services/warehouseService';
 import { Location, Warehouse } from '@/types/warehouse';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -55,6 +57,44 @@ export const useAddWarehouse = () => {
     },
     onError: () => {
       toast.error('Thất bại!');
+    },
+  });
+};
+
+export const useUpdateWarehouse = () => {
+  // Added hook
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<Warehouse> }) =>
+      updateWarehouse(id, data),
+    onSuccess: (_, variables) => {
+      toast.success('Cập nhật thành công!');
+      queryClient.invalidateQueries({
+        queryKey: ['warehouse', variables.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['warehouses'],
+      });
+    },
+    onError: () => {
+      toast.error('Cập nhật thất bại!');
+    },
+  });
+};
+
+export const useDeleteWarehouse = () => {
+  // Added hook
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteWarehouse(id),
+    onSuccess: () => {
+      toast.success('Xóa thành công!');
+      queryClient.invalidateQueries({
+        queryKey: ['warehouses'],
+      });
+    },
+    onError: () => {
+      toast.error('Xóa thất bại!');
     },
   });
 };

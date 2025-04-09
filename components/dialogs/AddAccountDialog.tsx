@@ -95,6 +95,19 @@ const AddAccountDialog = () => {
     addAccount(accountData, {
       onSuccess: () => {
         setOpen(false);
+        // Reset form
+        setFormData({
+          userName: '',
+          email: '',
+          firstName: '',
+          lastName: '',
+          phone: '',
+          address: '',
+          sex: 'male',
+          nationality: '',
+          groupId: '',
+          warehouseIds: [],
+        });
       },
     });
   };
