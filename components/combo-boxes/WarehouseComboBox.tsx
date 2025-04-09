@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils/utils';
 import Loading from '../app/Loading';
 import Error from '../app/Error';
 import { useWarehouses } from '@/hooks/queries/warehouseQueries';
+import { useParams } from 'next/navigation';
 
 interface WarehouseComboBoxProps {
   value: string;
@@ -32,6 +33,7 @@ const WarehouseComboBox: React.FC<WarehouseComboBoxProps> = ({
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
   const { data: warehouses, isPending, isError } = useWarehouses();
+  const { warehouseId } = useParams();
 
   if (isError) {
     return <Error />;
@@ -65,24 +67,26 @@ const WarehouseComboBox: React.FC<WarehouseComboBoxProps> = ({
             <CommandEmpty>Không tìm thấy sản phẩm.</CommandEmpty>
             <CommandGroup>
               {!isPending ? (
-                warehouses.map((p, index) => (
-                  <CommandItem
-                    key={index}
-                    value={p.id}
-                    onSelect={(currentValue) => {
-                      onChange(currentValue === value ? '' : currentValue);
-                      setOpen(false);
-                    }}
-                  >
-                    {p.name}
-                    <Check
-                      className={cn(
-                        'ml-auto',
-                        value === p.id ? 'opacity-100' : 'opacity-0'
-                      )}
-                    />
-                  </CommandItem>
-                ))
+                warehouses
+                  .filter((w) => w.id !== warehouseId)
+                  .map((p, index) => (
+                    <CommandItem
+                      key={index}
+                      value={p.id}
+                      onSelect={(currentValue) => {
+                        onChange(currentValue === value ? '' : currentValue);
+                        setOpen(false);
+                      }}
+                    >
+                      {p.name}
+                      <Check
+                        className={cn(
+                          'ml-auto',
+                          value === p.id ? 'opacity-100' : 'opacity-0'
+                        )}
+                      />
+                    </CommandItem>
+                  ))
               ) : (
                 <Loading />
               )}

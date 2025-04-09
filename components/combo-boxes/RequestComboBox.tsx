@@ -59,7 +59,11 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
             <CommandGroup>
               {requests ? (
                 requests
-                  .filter((r) => r.requestedWarehouseId === warehouseId)
+                  .filter(
+                    (r) =>
+                      r.requestedWarehouseId === warehouseId ||
+                      (r.requestType === 2 && r.warehouseId === warehouseId)
+                  )
                   .map((req) => (
                     <CommandItem
                       key={req.id}

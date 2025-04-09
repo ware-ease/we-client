@@ -11,7 +11,10 @@ import { useAddGoodIssueNote } from '@/hooks/queries/goodNoteQueries';
 import { toast } from 'react-toastify';
 import { GoodNoteSchema } from '@/lib/zod/schemas';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
-import { useGoodIssueRequests } from '@/hooks/queries/goodRequests';
+import {
+  useGoodIssueRequests,
+  useGoodTransferRequests,
+} from '@/hooks/queries/goodRequests';
 import { useQuery } from '@tanstack/react-query';
 import { getGoodRequestById } from '@/services/goodRequestService';
 
@@ -33,6 +36,7 @@ const IssueCreate = () => {
   });
 
   const { data: requests } = useGoodIssueRequests();
+  const { data: transferReqs } = useGoodTransferRequests();
 
   const { data: reqDetails } = useQuery({
     queryKey: ['requestDetails', formData.goodRequestId],
@@ -96,13 +100,15 @@ const IssueCreate = () => {
   }, [reqDetails]);
 
   const handleRequestSelect = (value: string) => {
-    const req = requests?.find((req) => req.id === value);
+    const req = requests
+      ?.concat(transferReqs || [])
+      .find((req) => req.id === value);
 
     setFormData((prevData) => ({
       ...prevData,
       goodRequestId: req?.id ?? '',
     }));
-    setReceiverName(req?.partner?.name ?? '');
+    setReceiverName(req?.partner?.name || req?.warehouse?.name || '');
   };
 
   return (
@@ -116,7 +122,7 @@ const IssueCreate = () => {
             <div className='text-md'>Yêu cầu từ:</div>
             <RequestComboBox
               value={formData.goodRequestId ?? ''}
-              requests={requests}
+              requests={requests?.concat(transferReqs || [])}
               onChange={(value) => handleRequestSelect(value)}
             />
           </div>
@@ -160,7 +166,7 @@ const IssueCreate = () => {
           </div>
           <div className='flex flex-col space-y-2'>
             <div className='w-64'>
-              <div className='text-sm'>Kho nhập</div>
+              <div className='text-sm'>Kho xuất</div>
               <Input value={currentWarehouse?.name ?? ''} disabled />
             </div>
             <div className='w-64'>

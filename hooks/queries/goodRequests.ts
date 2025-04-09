@@ -4,6 +4,7 @@ import {
   getAllGoodIssueRequests,
   getAllGoodReceiveRequests,
   getAllGoodRequests,
+  getAllGoodTransferRequests,
   getGoodRequestById,
   updateGoodRequest,
 } from '@/services/goodRequestService';
@@ -33,6 +34,12 @@ export const useGoodIssueRequests = () =>
   useQuery({
     queryKey: ['issueRequests'],
     queryFn: getAllGoodIssueRequests,
+  });
+
+export const useGoodTransferRequests = () =>
+  useQuery({
+    queryKey: ['transferRequests'],
+    queryFn: getAllGoodTransferRequests,
   });
 
 export const useAddGoodRequest = () => {
