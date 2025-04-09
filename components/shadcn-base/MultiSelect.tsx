@@ -208,18 +208,19 @@ export const MultiSelect = React.forwardRef<
                     const option = options.find((o) => o.value === value);
                     const IconComponent = option?.icon;
                     return (
-                      <Badge
+                      <div
                         key={value}
                         className={cn(
                           isAnimating ? 'animate-bounce' : '',
-                          multiSelectVariants({ variant })
+                          multiSelectVariants({ variant }),
+                          'text-black flex items-center space-x-1 mr-2'
                         )}
                         style={{ animationDuration: `${animation}s` }}
                       >
                         {IconComponent && (
                           <IconComponent className='h-4 w-4 mr-2' />
                         )}
-                        {option?.label}
+                        <p className='text-black'>{option?.label}</p>
                         <XCircle
                           className='ml-2 h-4 w-4 cursor-pointer'
                           onClick={(event) => {
@@ -227,7 +228,7 @@ export const MultiSelect = React.forwardRef<
                             toggleOption(value);
                           }}
                         />
-                      </Badge>
+                      </div>
                     );
                   })}
                   {selectedValues.length > maxCount && (

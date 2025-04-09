@@ -32,7 +32,7 @@ import { CreateAccount } from '@/types/account';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { MultiSelect } from '../shadcn-base/MultiSelect ';
+import { MultiSelect } from '../shadcn-base/MultiSelect';
 
 const AddAccountDialog = () => {
   const t = useTranslations();
