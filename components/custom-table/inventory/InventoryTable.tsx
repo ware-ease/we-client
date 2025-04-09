@@ -5,7 +5,6 @@ import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import { Link } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
-import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useWarehousesInventories } from '@/hooks/queries/warehouseQueries'; // Assuming this exists
 import { Inventory } from '@/types/warehouse';
 import { Eye } from 'lucide-react';
@@ -14,6 +13,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
+import { useParams } from 'next/navigation';
 
 export const columns: ColumnDef<Inventory>[] = [
   {
@@ -64,6 +64,15 @@ export const columns: ColumnDef<Inventory>[] = [
     },
   },
   {
+    accessorKey: 'batch.product.unitName',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='ĐVT' />
+    ),
+    meta: {
+      title: 'ĐVT',
+    },
+  },
+  {
     accessorKey: 'currentQuantity',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Số lượng hiện tại' />
@@ -71,6 +80,26 @@ export const columns: ColumnDef<Inventory>[] = [
     cell: ({ row }) => row.original.currentQuantity.toLocaleString('vi-VN'), // Format number
     meta: {
       title: 'Số lượng hiện tại',
+    },
+  },
+  {
+    accessorKey: 'arrangedQuantity',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Số lượng đã xếp' />
+    ),
+    cell: ({ row }) => row.original.arrangedQuantity, // Format number
+    meta: {
+      title: 'Số lượng đã xếp',
+    },
+  },
+  {
+    accessorKey: 'notArrgangedQuantity',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Số lượng chưa xếp' />
+    ),
+    cell: ({ row }) => row.original.notArrgangedQuantity, // Format number
+    meta: {
+      title: 'Số lượng chưa xếp',
     },
   },
   {
@@ -105,19 +134,21 @@ interface InventoryTableProps {
 const InventoryTable: React.FC<InventoryTableProps> = ({
   onlyCurrentWarehouse = false,
 }) => {
-  const currentWarehouse = useCurrentWarehouse();
+  const { warehouseId } = useParams();
 
   // Fetch inventory data using useWarehousesInventories
   const { data, isSuccess } = useWarehousesInventories(
     true, // Assuming first param enables the query
-    onlyCurrentWarehouse && currentWarehouse?.id ? currentWarehouse.id : '' // Pass warehouseId based on onlyCurrentWarehouse
+    onlyCurrentWarehouse && (warehouseId as string)
+      ? (warehouseId as string)
+      : '' // Pass warehouseId based on onlyCurrentWarehouse
   );
 
   const tableData = isSuccess && data.inventories ? data.inventories : [];
 
   return (
     <CustomDataTable columns={columns} data={tableData}>
-      <Link href={'inventories/adjustment'} className='mr-2'>
+      <Link href={'inventories/adjustment'}>
         <Button>Điều chỉnh tồn kho</Button>
       </Link>
     </CustomDataTable>

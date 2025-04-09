@@ -14,6 +14,8 @@ export interface Warehouse extends Base {
 
 export interface Inventory extends Base {
   currentQuantity: number;
+  arrangedQuantity: number;
+  notArrgangedQuantity: number;
   batchId?: string;
   batch: Batch;
   inventoryLocations?: InventoryLocation[];

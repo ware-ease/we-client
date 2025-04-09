@@ -16,21 +16,18 @@ export const useWarehouses = () =>
   useQuery({
     queryKey: ['warehouses'],
     queryFn: getAllWarehouses,
-    staleTime: 300000,
   });
 
 export const useWarehouseById = (id: string) =>
   useQuery({
     queryKey: ['warehouse', id],
     queryFn: () => getWarehouseById(id),
-    staleTime: 300000,
   });
 
 export const useWarehousesInventories = (enabled: boolean, id: string) =>
   useQuery({
     queryKey: ['inventories', id],
     queryFn: () => getWarehouseInventoriesById(id),
-    staleTime: 300000,
     enabled: enabled,
   });
 
@@ -41,7 +38,6 @@ export const useWarehouseInventoryAdjustments = (
   useQuery({
     queryKey: ['adjustments', id],
     queryFn: () => getWarehouseInventoryAdjustments(id),
-    staleTime: 300000,
     enabled: enabled,
   });
 

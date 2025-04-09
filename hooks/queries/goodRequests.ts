@@ -15,28 +15,24 @@ export const useGoodRequests = () =>
   useQuery({
     queryKey: ['requests'],
     queryFn: getAllGoodRequests,
-    staleTime: 300000,
   });
 
 export const useGoodRequest = (enable: boolean, id: string) =>
   useQuery({
     queryKey: ['request', id],
     queryFn: () => getGoodRequestById(id),
-    staleTime: 300000,
   });
 
 export const useGoodReceiveRequests = () =>
   useQuery({
     queryKey: ['receiveRequests'],
     queryFn: getAllGoodReceiveRequests,
-    staleTime: 300000,
   });
 
 export const useGoodIssueRequests = () =>
   useQuery({
     queryKey: ['issueRequests'],
     queryFn: getAllGoodIssueRequests,
-    staleTime: 300000,
   });
 
 export const useAddGoodRequest = () => {

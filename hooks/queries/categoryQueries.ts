@@ -12,7 +12,6 @@ export const useCategories = () =>
   useQuery({
     queryKey: ['categories'],
     queryFn: getAllCategories,
-    staleTime: 300000,
   });
 
 export const useAddCategory = () => {

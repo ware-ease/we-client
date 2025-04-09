@@ -17,7 +17,6 @@ export const useUnits = () =>
   useQuery({
     queryKey: ['units'],
     queryFn: getAllUnits,
-    staleTime: 300000,
   });
 
 export const useAddUnit = () => {

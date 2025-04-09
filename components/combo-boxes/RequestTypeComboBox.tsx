@@ -19,8 +19,8 @@ import { cn } from '@/lib/utils/utils';
 const requestTypes = [
   { id: '0', type: 'Nhập hàng' },
   { id: '1', type: 'Xuất hàng' },
-  { id: '2', type: 'Chuyển hàng' },
-  { id: '3', type: 'Trả hàng' },
+  // { id: '2', type: 'Chuyển hàng' },
+  // { id: '3', type: 'Trả hàng' },
 ];
 
 interface RequestTypeComboBoxProps {

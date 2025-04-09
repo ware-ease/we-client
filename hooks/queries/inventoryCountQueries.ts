@@ -14,7 +14,6 @@ export const useInventoryCounts = (enabled: boolean, warehouseId?: string) =>
   useQuery({
     queryKey: ['inventoryCounts', warehouseId],
     queryFn: () => getAllInventoryCounts(warehouseId),
-    staleTime: 300000,
     refetchOnWindowFocus: false,
     enabled,
   });
@@ -24,7 +23,6 @@ export const useInventoryCountById = (id?: string) =>
   useQuery({
     queryKey: ['inventoryCounts', id],
     queryFn: () => getInventoryCountById(id!),
-    staleTime: 300000, // 5 phút
     refetchOnWindowFocus: false,
     enabled: !!id, // Chỉ chạy query nếu id tồn tại
   });

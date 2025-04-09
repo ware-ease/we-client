@@ -73,11 +73,12 @@ function LocationItem({ location }: { location: LocationNode }) {
           <Box className='mr-3 text-green-600' size={24} />
         )}
         <span className='font-semibold text-gray-800'>
-          {location.name} ({location.code})
+          {location.code} - {location.name}
         </span>
         <span className='ml-3 text-sm text-gray-500'>
-          [Level {location.level} -{' '}
-          {location.level === 0 ? 'No Putaway' : 'Putaway Capable'}]
+          {location.level === 0
+            ? 'Là khu vực - không thể chứa hàng'
+            : 'Có thể chứa hàng'}
         </span>
       </div>
 
@@ -209,7 +210,7 @@ export default function WarehouseLocations() {
   return (
     <div className='p-4'>
       <h1 className='text-4xl font-bold mb-4 text-gray-800'>
-        Các vị trí trong kho {currentWarehouse.name}
+        Quản lí vị trí trong kho: {currentWarehouse.name}
       </h1>
       <div className='flex items-center mb-4'>
         <input

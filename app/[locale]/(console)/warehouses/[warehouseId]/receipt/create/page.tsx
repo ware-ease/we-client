@@ -84,7 +84,7 @@ const ReceiptCreate = () => {
       ...prevData,
       goodRequestId: req?.id ?? '',
     }));
-    setSupplierName(req?.partnerName ?? '');
+    setSupplierName(req?.partner?.name ?? '');
 
     // console.log(reqDetails);
     // if (reqDetails?.goodRequestDetails) {

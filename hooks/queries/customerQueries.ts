@@ -12,7 +12,6 @@ export const useCustomers = () =>
   useQuery({
     queryKey: ['customers'],
     queryFn: getAllCustomers,
-    staleTime: 300000,
   });
 
 export const useAddCustomer = () => {

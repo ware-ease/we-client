@@ -16,14 +16,12 @@ export const useAccounts = () =>
   useQuery({
     queryKey: ['accounts'],
     queryFn: getAllAccounts,
-    staleTime: 300000,
   });
 
 export const useProfile = () =>
   useQuery({
     queryKey: ['user'],
     queryFn: getCurrentUser,
-    staleTime: 300000,
   });
 
 export const useAddAccount = () => {

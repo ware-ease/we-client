@@ -12,7 +12,6 @@ export const useBrands = () =>
   useQuery({
     queryKey: ['brands'],
     queryFn: getAllBrands,
-    staleTime: 300000,
   });
 
 export const useAddBrand = () => {

@@ -15,7 +15,6 @@ export const useGoodReceiveNotes = (enabled: boolean) =>
   useQuery({
     queryKey: ['receiveNotes'],
     queryFn: getAllGoodReceiveNotes,
-    staleTime: 300000,
     enabled: enabled,
   });
 
@@ -23,7 +22,6 @@ export const useGoodReceiveNote = (enabled: boolean, id: string) =>
   useQuery({
     queryKey: ['receiveNote', id],
     queryFn: () => getGoodNoteById(id),
-    staleTime: 300000,
     enabled: enabled,
   });
 
@@ -34,7 +32,6 @@ export const useCurrentWarehouseGoodReceiveNotes = (
   useQuery({
     queryKey: ['receiveNotes'],
     queryFn: () => getAllCurrentWarehouseGoodReceiveNotes(currentWarehouseId),
-    staleTime: 300000,
     enabled: enabled,
   });
 
@@ -70,7 +67,6 @@ export const useGoodIssueNotes = (enabled: boolean) =>
   useQuery({
     queryKey: ['issueNotes'],
     queryFn: getAllGoodIssueNotes,
-    staleTime: 300000,
     enabled: enabled,
   });
 
@@ -78,7 +74,6 @@ export const useGoodIssueNote = (enabled: boolean, id: string) =>
   useQuery({
     queryKey: ['issueNotes', id],
     queryFn: () => getGoodNoteById(id),
-    staleTime: 300000,
     enabled: enabled,
   });
 

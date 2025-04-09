@@ -13,7 +13,6 @@ export const useProductTypes = () =>
   useQuery({
     queryKey: ['product-types'],
     queryFn: getAllProductTypes,
-    staleTime: 300000,
   });
 
 export const useAddProductType = () => {

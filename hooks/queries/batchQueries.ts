@@ -12,14 +12,12 @@ export const useBatches = () =>
   useQuery({
     queryKey: ['batches'],
     queryFn: () => getAllBatches(),
-    staleTime: 300000, // 5 phút
   });
 
 export const useBatchesByProductId = (productId?: string) =>
   useQuery({
     queryKey: ['batches', productId],
     queryFn: () => getAllBatches(productId),
-    staleTime: 300000, // 5 phút
   });
 
 export const useAddBatch = () => {

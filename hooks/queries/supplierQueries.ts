@@ -12,7 +12,6 @@ export const useSuppliers = () =>
   useQuery({
     queryKey: ['suppliers'],
     queryFn: getAllSuppliers,
-    staleTime: 300000,
   });
 
 export const useAddSupplier = () => {
