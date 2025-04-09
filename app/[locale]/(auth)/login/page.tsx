@@ -27,7 +27,7 @@ const Login = () => {
       toast.success(t('Toast.success'), {
         autoClose: 3000,
       });
-      router.push(`/${t('Languages.this')}/dashboard`);
+      router.push(`/${t('Languages.this')}/home`);
     },
     onError: () => {
       toast.error(t('Toast.error'), {

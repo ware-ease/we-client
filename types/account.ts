@@ -1,4 +1,5 @@
 import { Permission } from './permission';
+import { Warehouse } from './warehouse';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type Profile = {
@@ -25,6 +26,7 @@ export type Account = {
   groups: Group[];
   permissions?: Permission[];
   warehouseIds?: Array<string>;
+  warehouses?: Warehouse[];
 };
 export type CreateAccount = {
   id?: string;
