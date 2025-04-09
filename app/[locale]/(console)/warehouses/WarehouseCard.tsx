@@ -1,11 +1,16 @@
 // import { Button } from '@/app/_components/shadcn-base/Button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/shadcn-base/Tooltip';
 import { Link } from '@/lib/i18n/routing';
 import {
   CalendarDays,
-  Edit,
+  Eye,
   LandPlot,
   MapPin,
-  Trash2,
+  Phone,
   Warehouse,
 } from 'lucide-react';
 import React from 'react';
@@ -16,6 +21,7 @@ interface WarehouseCardProps {
   address: string;
   area: string;
   operatedFrom: string;
+  phone: string;
 }
 
 const WarehouseCard: React.FC<WarehouseCardProps> = ({
@@ -24,6 +30,7 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({
   address,
   area,
   operatedFrom,
+  phone,
 }) => {
   return (
     <div className='flex border rounded-md hover:border-primary p-4 hover:bg-gray-50'>
@@ -38,26 +45,26 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({
             <p>Địa chỉ: {address}</p>
           </div>
         </div>
+      </div>
+      <div className='flex flex-col px-4 w-full justify-center'>
         <div className='text-sm text-gray-700'>
           <div className='flex items-center space-x-1'>
             <CalendarDays size={14} />
             <p>Hoạt động từ: {operatedFrom}</p>
           </div>
         </div>
-      </div>
-      <div className='flex flex-col px-4 w-full justify-center'>
         <div className='text-sm text-gray-700'>
           <div className='flex items-center space-x-1'>
             <LandPlot size={14} />
             <p>Diện tích: {area}</p>
           </div>
         </div>
-        {/* <div className='text-sm text-gray-700'>
+        <div className='text-sm text-gray-700'>
           <div className='flex items-center space-x-1'>
-            <Box size={14} />
-            <p>Sức chứa: khoảng {capacity}</p>
+            <Phone size={14} />
+            <p>Số điện thoại: {phone}</p>
           </div>
-        </div> */}
+        </div>
         {/* <div className='text-sm text-gray-700'>
           <div className='flex items-center space-x-1'>
             <SquareLibrary size={14} />
@@ -73,11 +80,16 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({
           Actions needed!
         </Button>
       </div> */}
-      <div className='flex flex-col justify-between'>
-        <Link href={idPath}>
-          <Edit className='hover:cursor-pointer text-yellow-400' />
-        </Link>
-        <Trash2 className='hover:cursor-pointer text-red-500' />
+      <div className='flex flex-col justify-center items-center'>
+        <Tooltip>
+          <TooltipTrigger>
+            <Link href={idPath}>
+              <Eye className='hover:cursor-pointer text-blue-500' />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>Chi tiết</TooltipContent>
+        </Tooltip>
+        {/* <Trash2 className='hover:cursor-pointer text-red-500' /> */}
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ import {
 } from '../shadcn-base/SideBar';
 import { Link, useRouter } from '@/lib/i18n/routing';
 import { useCurrentLanguage } from '@/hooks/useCurrentLanguage';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { logout } from '@/services/authService';
@@ -37,6 +37,7 @@ export function AppSidebar() {
   const pathname = usePathname();
   const t = useTranslations();
   const warehouse = useCurrentWarehouse();
+  const { warehouseId } = useParams();
   const router = useRouter();
   const { permissions } = useAuth();
 
@@ -58,70 +59,46 @@ export function AppSidebar() {
     router.push('/login');
   };
 
-  const ensureUniquePath = (base: string, page: string) => {
-    const pathSegments: string[] = base.split('/');
-    if (pathSegments.length > 5) {
-      return '/' + pathSegments[2] + '/' + pathSegments[3] + page;
-    }
-
-    crudSuffix.forEach((crudSuffix) => {
-      if (base.includes(crudSuffix)) {
-        base = base.substring(0, base.length - 7);
-      }
-    });
-
-    suffixList.forEach((suffix) => {
-      if (base.includes(suffix)) {
-        base = base.substring(0, base.length - suffix.length);
-      }
-    });
-
-    return base.slice(3) + page;
+  // Simplified ensureUniquePath using warehouseId directly
+  const ensureUniquePath = (page: string) => {
+    if (!warehouseId) return page; // Fallback if no warehouseId
+    return `/warehouses/${warehouseId}${page}`;
   };
-
-  // const pathSegments = pathname.split('/');
-  // const warehouseId = pathSegments[3];
-
-  const suffixList = [
-    '/dashboard',
-    '/goods',
-    '/receipt',
-    '/issue',
-    '/requests',
-    '/locations',
-  ];
-
-  const crudSuffix = ['/create', '/update', '/delete'];
 
   const warehouseItems = [
     {
+      title: 'Thông tin kho',
+      url: ensureUniquePath('/'),
+      icon: Warehouse,
+    },
+    {
       title: t('Sidebar.dashboard'),
-      url: ensureUniquePath(pathname, '/dashboard'),
+      url: ensureUniquePath('/dashboard'),
       icon: LayoutDashboardIcon,
     },
     {
       title: 'Hàng hóa tồn kho',
-      url: ensureUniquePath(pathname, '/inventories'),
+      url: ensureUniquePath('/inventories'),
       icon: Boxes,
     },
     {
       title: 'Yêu cầu',
-      url: ensureUniquePath(pathname, '/requests'),
+      url: ensureUniquePath('/requests'),
       icon: FileInput,
     },
     {
       title: t('Sidebar.import'),
-      url: ensureUniquePath(pathname, '/receipt'),
+      url: ensureUniquePath('/receipt'),
       icon: PackagePlus,
     },
     {
       title: t('Sidebar.export'),
-      url: ensureUniquePath(pathname, '/issue'),
+      url: ensureUniquePath('/issue'),
       icon: PackageMinus,
     },
     {
       title: 'Vị trí',
-      url: ensureUniquePath(pathname, '/locations'),
+      url: ensureUniquePath('/locations'),
       icon: Map,
     },
   ];
@@ -162,36 +139,11 @@ export function AppSidebar() {
       url: '/warehouses',
       icon: Warehouse,
     },
-    // {
-    //   title: t('Sidebar.warehouse'),
-    //   url: '/warehouse',
-    //   icon: Warehouse,
-    // },
-    // {
-    //   title: t('Sidebar.staffs'),
-    //   url: '/staffs',
-    //   icon: UserRoundPen,
-    // },
-    // {
-    //   title: t('Sidebar.goods'),
-    //   url: '/goods',
-    //   icon: Boxes,
-    // },
     {
       title: t('Sidebar.products'),
       url: '/products-home',
       icon: Boxes,
     },
-    // {
-    //   title: t('Sidebar.import'),
-    //   url: '/receipt',
-    //   icon: PackagePlus,
-    // },
-    // {
-    //   title: t('Sidebar.export'),
-    //   url: '/issue',
-    //   icon: PackageMinus,
-    // },
   ];
 
   const botItems = [
@@ -202,10 +154,26 @@ export function AppSidebar() {
     },
   ];
 
-  // const filteredWarehouseItems = warehouseItems.filter((item) =>
-  //   hasViewPermission(item.url)
-  // );
   const filteredItems = items.filter((item) => hasViewPermission(item.url));
+
+  // Updated isWarehouseItemActive using warehouseId
+  const isWarehouseItemActive = (itemUrl: string) => {
+    const cleanPath = pathname.slice(3); // Remove language prefix (e.g., '/vi')
+    const warehousePrefix = `/warehouses/${warehouseId}`;
+
+    // Extract the part after the warehouse ID
+    const pathAfterWarehouse = cleanPath.startsWith(warehousePrefix)
+      ? cleanPath.slice(warehousePrefix.length) || '/'
+      : cleanPath;
+
+    // For root ('/'), check if it's exactly the warehouse root
+    if (itemUrl === warehousePrefix + '/') {
+      return pathAfterWarehouse === '/' || pathAfterWarehouse === '';
+    }
+
+    // For other URLs, check if the path after the prefix matches the item URL
+    return pathAfterWarehouse === itemUrl.slice(warehousePrefix.length);
+  };
 
   return (
     <Sidebar collapsible='icon' className='max-h-full text-white text-3xl'>
@@ -232,7 +200,10 @@ export function AppSidebar() {
                 <SidebarMenu>
                   <SidebarMenuItem className='my-2'>
                     <Link href='/home' locale={lang}>
-                      <SidebarMenuButton className='flex items-center space-x-2 px-4'>
+                      <SidebarMenuButton
+                        isActive={pathname.slice(3) === '/home'}
+                        className='flex items-center space-x-2 px-4'
+                      >
                         <Home className='size-4' />
                         <span className='text-md'>{t('Home.home')}</span>
                       </SidebarMenuButton>
@@ -249,22 +220,19 @@ export function AppSidebar() {
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {warehouseItems.map((item, index) => {
-                    const isActive = pathname.slice(3).includes(item.url);
-                    return (
-                      <SidebarMenuItem className='my-2' key={index}>
-                        <Link href={item.url} locale={lang}>
-                          <SidebarMenuButton
-                            isActive={isActive}
-                            className='flex items-center space-x-2 px-4 hover:bg-gray-900'
-                          >
-                            <item.icon className='size-4' />
-                            <span className='text-md'>{item.title}</span>
-                          </SidebarMenuButton>
-                        </Link>
-                      </SidebarMenuItem>
-                    );
-                  })}
+                  {warehouseItems.map((item, index) => (
+                    <SidebarMenuItem className='my-2' key={index}>
+                      <Link href={item.url} locale={lang}>
+                        <SidebarMenuButton
+                          isActive={isWarehouseItemActive(item.url)}
+                          className='flex items-center space-x-2 px-4 hover:bg-gray-900'
+                        >
+                          <item.icon className='size-4' />
+                          <span className='text-md'>{item.title}</span>
+                        </SidebarMenuButton>
+                      </Link>
+                    </SidebarMenuItem>
+                  ))}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>

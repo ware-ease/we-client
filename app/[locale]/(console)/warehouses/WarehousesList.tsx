@@ -1,7 +1,5 @@
 'use client';
-import { Button } from '@/components/shadcn-base/Button';
 import { Input } from '@/components/shadcn-base/Input';
-import { TranslatedMessage } from '@/components/app/TranslatedMessage';
 import React from 'react';
 import WarehouseCard from './WarehouseCard';
 import AddWarehouseDialog from '@/components/dialogs/AddWarehouseDialog';
@@ -17,10 +15,7 @@ const WarehousesList = () => {
     <div className='flex flex-col rounded-md border w-full'>
       <div className='flex p-5 border-b-[1px] w-full justify-between'>
         <div className='flex w-[50%]'>
-          <Input className='w-1/3 mr-4' />
-          <Button className='w-[16%]'>
-            <TranslatedMessage tKey='Management.filter' />
-          </Button>
+          <Input className='w-1/2 mr-4' placeholder='Tìm kho theo tên...' />
         </div>
         <div className='flex w-[50%] justify-end'>
           <AddWarehouseDialog />
@@ -37,6 +32,7 @@ const WarehousesList = () => {
             operatedFrom={`${new Date(
               warehouse.operateFrom ?? ''
             ).toLocaleDateString('vi-VN')}`}
+            phone={warehouse.phone || ''}
           />
         ))}
       </div>
