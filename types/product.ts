@@ -10,7 +10,7 @@ export interface Product extends Base {
   brandName?: string;
   unit?: string;
   unitName?: string;
-  status?: boolean;
+  //status?: boolean;
 }
 
 export type ProductType = {

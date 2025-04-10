@@ -60,10 +60,10 @@ const ViewProductDialog: React.FC<ViewProductDialogProps> = ({ product }) => {
                   <Label className='text-sm text-gray-500'>Đơn vị</Label>
                   <p>{product.unitName || product.unit || '—'}</p>
                 </div>
-                <div>
+                {/* <div>
                   <Label className='text-sm text-gray-500'>Trạng thái</Label>
                   <p>{product.status ? 'Đang hoạt động' : 'Ngưng sử dụng'}</p>
-                </div>
+                </div> */}
               </div>
             </div>
 
