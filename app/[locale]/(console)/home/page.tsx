@@ -49,7 +49,7 @@ const Home = () => {
 
           {/* Quản lý kho */}
           {(canSeeWarehouses || canSeeProducts || canSeeRequests) && (
-            <div className='flex flex-col p-4 gap-6 max-h-[80vh] overflow-y-auto'>
+            <div className='flex flex-col gap-6 max-h-[80vh] overflow-y-auto'>
               <div className='p-4 text-xl text-primary'>
                 <h2 className='text-2xl font-semibold mb-4'>Quản lý kho</h2>
                 <div className='grid grid-cols-3 gap-4'>
