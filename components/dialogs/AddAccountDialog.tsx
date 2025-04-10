@@ -277,11 +277,13 @@ const AddAccountDialog = () => {
                 <SelectValue placeholder='Chọn nhóm người dùng' />
               </SelectTrigger>
               <SelectContent>
-                {groups.map((group) => (
-                  <SelectItem key={group.id} value={group.id}>
-                    {group.name}
-                  </SelectItem>
-                ))}
+                {groups
+                  .filter((group) => group.name !== 'Admin')
+                  .map((group) => (
+                    <SelectItem key={group.id} value={group.id}>
+                      {group.name}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
