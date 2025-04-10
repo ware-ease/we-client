@@ -46,25 +46,25 @@ export const columns: ColumnDef<Supplier>[] = [
       title: 'Số điện thoại',
     },
   },
-  {
-    accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Trạng thái' />
-    ),
-    cell: ({ row }) => {
-      const status = row.getValue('status');
-      return (
-        <span
-          className={`text-${status ? 'green-500' : 'red-500'} font-medium`}
-        >
-          {status ? 'Đang hoạt động' : 'Đã ngưng hoạt động'}
-        </span>
-      );
-    },
-    meta: {
-      title: 'Trạng thái',
-    },
-  },
+  // {
+  //   accessorKey: 'status',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Trạng thái' />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const status = row.getValue('status');
+  //     return (
+  //       <span
+  //         className={`text-${status ? 'green-500' : 'red-500'} font-medium`}
+  //       >
+  //         {status ? 'Đang hoạt động' : 'Đã ngưng hoạt động'}
+  //       </span>
+  //     );
+  //   },
+  //   meta: {
+  //     title: 'Trạng thái',
+  //   },
+  // },
   {
     accessorKey: 'createdTime',
     header: ({ column }) => (
