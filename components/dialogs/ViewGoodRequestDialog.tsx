@@ -170,7 +170,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
                     </p>
                     <p>
                       <strong className='font-normal'>SĐT:</strong>{' '}
-                      {goodRequest.partner?.phone || 'N/A'}
+                      {goodRequest.requestedWarehouse?.phone || 'N/A'}
                     </p>
                     <p className='mt-2'>
                       <strong className='font-normal'>Kho nhận:</strong>{' '}
