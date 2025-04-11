@@ -33,7 +33,8 @@ const AddWarehouseDialog = () => {
     setFormData((prev) => ({
       ...prev,
       // Convert numeric values for length and width
-      [name]: name === 'length' || name === 'width' ? Number(value) : value,
+      [name]: name === 'area' ? Number(value) : value,
+      [name]: name === 'operateFrom' ? value.toString() : value,
     }));
   };
 

@@ -4,7 +4,6 @@ import { Input } from '@/components/shadcn-base/Input';
 import { useTranslations } from 'next-intl';
 import { useMutation } from '@tanstack/react-query';
 import React, { useState } from 'react';
-import LanguageSelector from '@/components/app/LanguageSelector';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { LoginRequest } from '@/types/request/login';
@@ -43,9 +42,9 @@ const Login = () => {
   return (
     <div>
       <div className='flex flex-col items-center bg-white px-12 py-16 rounded-2xl bg-opacity-80 relative'>
-        <div className='absolute top-0 right-0 m-4'>
+        {/* <div className='absolute top-0 right-0 m-4'>
           <LanguageSelector />
-        </div>
+        </div> */}
         <div className='flex flex-col items-center gap-4 mb-8'>
           <div className='font-bold text-5xl'>WareEase</div>
           <div className='text-3xl'>{t('Login.welcome')}</div>
