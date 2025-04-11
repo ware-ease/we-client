@@ -1,11 +1,10 @@
 'use client';
+import AddCustomerDialog from '@/components/dialogs/AddCustomerDialog';
+import { useCustomers } from '@/hooks/queries/customerQueries';
+import { Customer } from '@/types/customer';
 import { ColumnDef } from '@tanstack/react-table';
-import React from 'react';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import AddSupplierDialog from '../../dialogs/AddSupplierDialog';
-import { Customer } from '@/types/customer';
-import { useCustomers } from '@/hooks/queries/customerQueries';
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -83,7 +82,7 @@ const CustomerTable = () => {
 
   return (
     <CustomDataTable columns={columns} data={isSuccess ? data : []}>
-      <AddSupplierDialog />
+      <AddCustomerDialog />
     </CustomDataTable>
   );
 };

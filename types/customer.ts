@@ -4,5 +4,5 @@ export type Customer = {
   email: string;
   phone: string;
   address: string;
-  status: 'active' | 'inactive' | 'banned';
+  //status: 'active' | 'inactive' | 'banned';
 };
