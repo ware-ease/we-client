@@ -5,7 +5,7 @@ import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import { GoodRequest } from '@/types/goodRequest';
 import { useGoodRequests } from '@/hooks/queries/goodRequests';
-import { Link, usePathname } from '@/lib/i18n/routing';
+import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
 import StatusUI from '@/components/app/StatusUI';
 import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
@@ -15,7 +15,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
+import { cn } from '@/lib/utils/utils';
 
 export const columns: ColumnDef<GoodRequest>[] = [
   {
@@ -176,6 +177,23 @@ export const columns: ColumnDef<GoodRequest>[] = [
 
 const GoodRequestWarehouseTable = () => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const statusParam = searchParams.get('status');
+  const statusFilter = statusParam !== null ? parseInt(statusParam) : null;
+
+  const setStatusFilter = (status: number | null) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (status === null) {
+      params.delete('status');
+    } else {
+      params.set('status', status.toString());
+    }
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
   const { warehouseId } = useParams();
   const { data, isSuccess } = useGoodRequests();
 
@@ -186,15 +204,53 @@ const GoodRequestWarehouseTable = () => {
         isSuccess
           ? data.filter(
               (r) =>
-                r.requestedWarehouseId === warehouseId ||
-                r.warehouseId === warehouseId
+                (r.requestedWarehouseId === warehouseId ||
+                  r.warehouseId === warehouseId) &&
+                (statusFilter === null || r.status === statusFilter)
             )
           : []
       }
     >
-      <Link href={`${pathname}/create`}>
-        <Button>Thêm</Button>
-      </Link>
+      <div className='w-full flex justify-between'>
+        <div className='space-x-2'>
+          <Button
+            onClick={() => setStatusFilter(null)}
+            className={cn(
+              'rounded-3xl text-blue-500 border-2 border-blue-500',
+              statusFilter === null
+                ? 'bg-blue-500 text-white hover:bg-blue-600'
+                : 'bg-white hover:bg-slate-50'
+            )}
+          >
+            Tất cả
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-yellow-500 border-2 border-yellow-500',
+              statusFilter === 0
+                ? 'bg-yellow-500 text-white hover:bg-yellow-600'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => setStatusFilter(0)}
+          >
+            Chờ xử lý
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-green-500 border-2 border-green-500',
+              statusFilter === 3
+                ? 'bg-green-500 text-white hover:bg-green-600'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => setStatusFilter(3)}
+          >
+            Hoàn thành
+          </Button>
+        </div>
+        <Link href={`${pathname}/create`}>
+          <Button>Thêm</Button>
+        </Link>
+      </div>
     </CustomDataTable>
   );
 };

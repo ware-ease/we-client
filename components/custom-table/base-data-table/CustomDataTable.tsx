@@ -59,7 +59,7 @@ export function CustomDataTable<TData, TValue>({
 
   return (
     <div className='flex flex-col space-y-4'>
-      <div className='flex justify-end flex-end'>{children}</div>
+      <div className='flex justify-end'>{children}</div>
       <div className='flex items-center'>
         <div className='flex space-x-4'>
           <DataTableFilterOptions table={table} />

@@ -24,10 +24,10 @@ type CardProps = React.ComponentProps<typeof Card>;
 
 const getUrlFromNotification = (notification: Notification) => {
   if (notification.type === NotificationType.GOOD_REQUEST_CREATED) {
-    return `/warehouses/${notification.warehouseId}/requests`;
+    return `/warehouses/${notification.warehouseId}/requests?status=0`;
   }
   if (notification.type === NotificationType.GOOD_REQUEST_UPDATED) {
-    return `/warehouses/${notification.warehouseId}/requests`;
+    return `/warehouses/${notification.warehouseId}/requests?status=0`;
   }
   if (notification.type === NotificationType.GOOD_REQUEST_CONFIRMED) {
     return `/requests`;

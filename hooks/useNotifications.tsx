@@ -12,10 +12,10 @@ import {
 import { database } from '@/lib/firebase/config';
 
 export enum NotificationType {
-  GOOD_REQUEST_CREATED = 1,
-  GOOD_REQUEST_UPDATED = 2,
-  GOOD_REQUEST_REJECTED = 3,
-  GOOD_REQUEST_CONFIRMED = 4,
+  GOOD_REQUEST_CREATED = 0,
+  GOOD_REQUEST_UPDATED = 1,
+  GOOD_REQUEST_REJECTED = 2,
+  GOOD_REQUEST_CONFIRMED = 3,
 }
 
 export interface Notification {
