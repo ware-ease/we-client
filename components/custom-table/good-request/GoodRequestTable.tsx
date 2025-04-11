@@ -9,7 +9,10 @@ import { useGoodRequests } from '@/hooks/queries/goodRequests';
 import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
 import StatusUI from '@/components/app/StatusUI';
-import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
+import {
+  requestTypeFilterFn,
+  statusFilterFn,
+} from '@/lib/tanstack-table/customFilterFn';
 import { ViewGoodRequestDialog } from '@/components/dialogs/ViewGoodRequestDialog';
 import {
   Tooltip,
@@ -71,8 +74,11 @@ export const columns: ColumnDef<GoodRequest>[] = [
           );
       }
     },
+    filterFn: requestTypeFilterFn,
     meta: {
       title: 'Loại yêu cầu',
+      type: 'select',
+      options: ['Nhập', 'Xuất', 'Chuyển'],
     },
   },
   {
@@ -122,6 +128,8 @@ export const columns: ColumnDef<GoodRequest>[] = [
     filterFn: statusFilterFn,
     meta: {
       title: 'Trạng thái',
+      type: 'select',
+      options: ['Chờ xử lý', 'Hoàn thành'],
     },
   },
   {

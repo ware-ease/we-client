@@ -23,7 +23,11 @@ export function DataTableFilterOptions<TData>({
     .filter((column) => column.getCanFilter() && column.getFilterValue())
     .map((column) => {
       const filterValue = column.getFilterValue();
-      const meta = column.columnDef.meta as { title?: string; type?: string };
+      const meta = column.columnDef.meta as {
+        title?: string;
+        type?: string;
+        options: string[];
+      };
       const title = meta?.title || column.id;
 
       if (typeof filterValue === 'object' && filterValue !== null) {
@@ -74,8 +78,13 @@ export function DataTableFilterOptions<TData>({
             .getAllColumns()
             .filter((column) => column.getCanFilter())
             .map((column) => {
-              const isDateColumn =
-                (column.columnDef.meta as { type?: string })?.type === 'date';
+              const meta = column.columnDef.meta as {
+                title?: string;
+                type?: string;
+                options?: string[];
+              };
+              const isSelectColumn = meta?.type === 'select';
+              const isDateColumn = meta?.type === 'date';
               const filterValue = column.getFilterValue();
               const isObject =
                 typeof filterValue === 'object' &&
@@ -123,6 +132,19 @@ export function DataTableFilterOptions<TData>({
                         }}
                       />
                     </div>
+                  ) : isSelectColumn ? (
+                    <select
+                      className='w-full p-2 text-sm border rounded-md'
+                      value={(filterValue as string) ?? ''}
+                      onChange={(e) => column.setFilterValue(e.target.value)}
+                    >
+                      <option value=''>Tất cả</option>
+                      {meta?.options?.map((option) => (
+                        <option key={option} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
                   ) : (
                     <Input
                       value={(filterValue as string) ?? ''}
