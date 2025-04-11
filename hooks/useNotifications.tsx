@@ -1,4 +1,4 @@
-// hooks/useNotifications.ts
+'use client';
 import { useEffect, useState, useCallback } from 'react';
 import {
   ref,
@@ -7,8 +7,9 @@ import {
   update,
   off,
   DataSnapshot,
+  onChildChanged,
 } from 'firebase/database';
-import { database } from '@/lib/firebase/config'; // Replace with your actual Firebase app export
+import { database } from '@/lib/firebase/config';
 
 export enum NotificationType {
   GOOD_REQUEST_CREATED = 1,
@@ -40,10 +41,10 @@ export function useNotifications(userId?: string) {
 
     const notifRef = ref(database, `notifications/${userId}`);
 
-    const listener = onChildAdded(notifRef, (snapshot: DataSnapshot) => {
+    const handleSnapshot = (snapshot: DataSnapshot) => {
       const data = snapshot.val();
       const notification: Notification = {
-        id: data.id,
+        id: snapshot.key!,
         title: data.title,
         message: data.message,
         type: data.type,
@@ -51,14 +52,24 @@ export function useNotifications(userId?: string) {
         timestamp: data.timestamp,
         read: data.read,
       };
-      setNotifications((prev) => {
-        const alreadyExists = prev.some((n) => n.id === data.id);
-        if (alreadyExists) return prev;
-        return [{ ...notification }, ...prev];
-      });
-    });
 
-    return () => off(notifRef, 'child_added', listener);
+      setNotifications((prev) => {
+        const existing = prev.find((n) => n.id === notification.id);
+        if (existing) {
+          return prev.map((n) => (n.id === notification.id ? notification : n));
+        } else {
+          return [notification, ...prev];
+        }
+      });
+    };
+
+    const addedListener = onChildAdded(notifRef, handleSnapshot);
+    const changedListener = onChildChanged(notifRef, handleSnapshot);
+
+    return () => {
+      off(notifRef, 'child_added', addedListener);
+      off(notifRef, 'child_changed', changedListener);
+    };
   }, [userId]);
 
   const sendNotification = useCallback(
@@ -85,9 +96,24 @@ export function useNotifications(userId?: string) {
     [userId]
   );
 
+  const markAllAsRead = useCallback(async () => {
+    if (!userId || notifications.length === 0) return;
+
+    const updates: { [key: string]: boolean } = {};
+    notifications.forEach((notification) => {
+      if (!notification.read) {
+        updates[`${notification.id}/read`] = true;
+      }
+    });
+
+    const notifRef = ref(database, `notifications/${userId}`);
+    await update(notifRef, updates);
+  }, [userId, notifications]);
+
   return {
     notifications,
     sendNotification,
     markAsRead,
+    markAllAsRead,
   };
 }

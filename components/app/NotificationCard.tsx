@@ -17,23 +17,23 @@ import {
   NotificationType,
   useNotifications,
 } from '@/hooks/useNotifications';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from '@/lib/i18n/routing';
 
 type CardProps = React.ComponentProps<typeof Card>;
 
 const getUrlFromNotification = (notification: Notification) => {
   if (notification.type === NotificationType.GOOD_REQUEST_CREATED) {
-    return `warehouses/${notification.warehouseId}/requests`;
+    return `/warehouses/${notification.warehouseId}/requests`;
   }
   if (notification.type === NotificationType.GOOD_REQUEST_UPDATED) {
-    return `warehouses/${notification.warehouseId}/requests`;
+    return `/warehouses/${notification.warehouseId}/requests`;
   }
   if (notification.type === NotificationType.GOOD_REQUEST_CONFIRMED) {
-    return `requests`;
+    return `/requests`;
   }
   if (notification.type === NotificationType.GOOD_REQUEST_REJECTED) {
-    return `requests`;
+    return `/requests`;
   }
 
   return '';
@@ -41,13 +41,17 @@ const getUrlFromNotification = (notification: Notification) => {
 
 export function NotificationCard({ className, ...props }: CardProps) {
   const { currentUser } = useAuth();
-  const { notifications } = useNotifications(currentUser?.id);
+  const { notifications, markAllAsRead } = useNotifications(currentUser?.id);
+  const [filteredNotifications, setFilteredNotifications] = useState<
+    Notification[]
+  >([]);
   const [showUnread, setShowUnread] = useState(true);
-  console.log(notifications);
 
-  const filteredNotifications = showUnread
-    ? notifications.filter((n) => !n.read)
-    : notifications;
+  useEffect(() => {
+    setFilteredNotifications(
+      showUnread ? notifications.filter((n) => !n.read) : notifications
+    );
+  }, [notifications, showUnread]);
 
   return (
     <Card className={cn('w-[380px]', className)} {...props}>
@@ -95,11 +99,13 @@ export function NotificationCard({ className, ...props }: CardProps) {
           )}
         </div>
       </CardContent>
-      <CardFooter>
-        <Button className='w-full'>
-          <Check /> Đánh dấu tất cả đã đọc
-        </Button>
-      </CardFooter>
+      {showUnread && filteredNotifications.length !== 0 && (
+        <CardFooter>
+          <Button className='w-full' onClick={markAllAsRead}>
+            <Check /> Đánh dấu tất cả đã đọc
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }
