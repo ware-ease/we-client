@@ -91,6 +91,15 @@ export function NotificationCard({ className, ...props }: CardProps) {
                   <p className='text-sm text-muted-foreground'>
                     {notification.message}
                   </p>
+                  <p className='text-xs text-gray-400'>
+                    {new Date(notification.timestamp).toLocaleString('vi-VN', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: 'numeric',
+                    })}
+                  </p>
                 </div>
               </Link>
             ))
