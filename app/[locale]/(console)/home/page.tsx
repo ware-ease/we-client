@@ -10,29 +10,26 @@ import {
   User,
   Users,
 } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const Home = () => {
   const { currentUser } = useAuth();
   const [userGroups, setUserGroups] = useState<string[]>([]);
 
-  // Sync userGroups with currentUser.groups on mount or change
   useEffect(() => {
     if (currentUser?.groups) {
-      const groupIds = currentUser.groups.map((group) => String(group.id)); // Ensure IDs are strings
+      const groupIds = currentUser.groups.map((group) => String(group.id));
       setUserGroups(groupIds);
     } else {
       setUserGroups([]);
     }
   }, [currentUser]);
 
-  // Define permissions based on group IDs
   const isAdmin = userGroups.includes('1');
   const isWarehouseKeeper = userGroups.includes('2');
   const isWarehouseStaff = userGroups.includes('3');
   const isSale = userGroups.includes('4');
 
-  // Define what each role can see
   const canSeeWarehouses = isAdmin || isWarehouseKeeper || isWarehouseStaff;
   const canSeeProducts = isAdmin || isWarehouseKeeper;
   const canSeeRequests = isAdmin || isSale;
@@ -42,147 +39,116 @@ const Home = () => {
   const canSeeCustomers = isAdmin || isSale;
 
   return (
-    <div className='flex flex-col max-h-full'>
-      <div className='flex flex-col p-4 gap-6 max-h-full'>
-        <div className='mb-6'>
-          <div className='text-4xl font-semibold text-primary'>Trang chủ</div>
-
-          {/* Quản lý kho */}
-          {(canSeeWarehouses || canSeeProducts || canSeeRequests) && (
-            <div className='flex flex-col gap-6 max-h-[80vh] overflow-y-auto'>
-              <div className='p-4 text-xl text-primary'>
-                <h2 className='text-2xl font-semibold mb-4'>Quản lý kho</h2>
-                <div className='grid grid-cols-3 gap-4'>
-                  {canSeeWarehouses && (
-                    <Link href='/warehouses' className='group'>
-                      <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                        <Box className='text-red-500 w-6 h-6' />
-                        <div>
-                          <h2 className='font-medium group-hover:underline'>
-                            Kho hàng
-                          </h2>
-                          <p className='text-sm text-gray-500'>
-                            Xem và quản lý các kho hàng
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  )}
-
-                  {canSeeProducts && (
-                    <Link href='/products-home' className='group'>
-                      <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                        <List className='text-orange-500 w-6 h-6' />
-                        <div>
-                          <h2 className='font-medium group-hover:underline'>
-                            Sản phẩm
-                          </h2>
-                          <p className='text-sm text-gray-500'>
-                            Quản lý danh sách sản phẩm
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  )}
-
-                  {canSeeRequests && (
-                    <Link href='/requests' className='group'>
-                      <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                        <FileText className='text-blue-500 w-6 h-6' />
-                        <div>
-                          <h2 className='font-medium group-hover:underline'>
-                            Yêu cầu
-                          </h2>
-                          <p className='text-sm text-gray-500'>
-                            Theo dõi các yêu cầu nhập/xuất hàng
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Quản lý khác */}
-          {(canSeeDashboard ||
-            canSeeAccounts ||
-            canSeeSuppliers ||
-            canSeeCustomers) && (
-            <div className='p-4 text-xl text-primary'>
-              <h2 className='text-2xl font-semibold mb-4'>Quản lý khác</h2>
-              <div className='grid grid-cols-3 gap-4'>
-                {canSeeDashboard && (
-                  <Link href='/dashboard' className='group'>
-                    <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                      <BarChart className='text-purple-500 w-6 h-6' />
-                      <div>
-                        <h2 className='font-medium group-hover:underline'>
-                          Bảng điều khiển
-                        </h2>
-                        <p className='text-sm text-gray-500'>
-                          Xem tổng quan và báo cáo
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                )}
-
-                {canSeeAccounts && (
-                  <Link href='/accounts' className='group'>
-                    <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                      <User className='text-green-500 w-6 h-6' />
-                      <div>
-                        <h2 className='font-medium group-hover:underline'>
-                          Tài khoản
-                        </h2>
-                        <p className='text-sm text-gray-500'>
-                          Quản lý tài khoản người dùng
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                )}
-
-                {canSeeSuppliers && (
-                  <Link href='/suppliers' className='group'>
-                    <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                      <Truck className='text-blue-500 w-6 h-6' />
-                      <div>
-                        <h2 className='font-medium group-hover:underline'>
-                          Nhà cung cấp
-                        </h2>
-                        <p className='text-sm text-gray-500'>
-                          Quản lý danh sách nhà cung cấp
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                )}
-
-                {canSeeCustomers && (
-                  <Link href='/customers' className='group'>
-                    <div className='h-full bg-white p-4 rounded-lg shadow-lg flex items-center space-x-4 hover:bg-gray-100 transition'>
-                      <Users className='text-orange-500 w-6 h-6' />
-                      <div>
-                        <h2 className='font-medium group-hover:underline'>
-                          Khách hàng
-                        </h2>
-                        <p className='text-sm text-gray-500'>
-                          Quản lý danh sách khách hàng
-                        </p>
-                      </div>
-                    </div>
-                  </Link>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
+    <main className='flex flex-col w-full max-w-7xl mx-auto px-4 py-6 space-y-10'>
+      {/* Header */}
+      <div className='space-y-1'>
+        <h1 className='text-4xl font-bold text-primary'>Trang chủ</h1>
+        <p className='text-gray-600 text-base'>
+          Chào mừng bạn đến với hệ thống quản lý kho WareEase!
+        </p>
       </div>
-    </div>
+
+      {/* Quản lý kho */}
+      {(canSeeWarehouses || canSeeProducts || canSeeRequests) && (
+        <section className='bg-gray-50 p-6 rounded-xl shadow-sm border space-y-4'>
+          <h2 className='text-2xl font-semibold text-gray-800'>Quản lý kho</h2>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {canSeeWarehouses && (
+              <CardLink
+                href='/warehouses'
+                icon={<Box className='text-red-500 w-6 h-6' />}
+                title='Kho hàng'
+                description='Xem và quản lý các kho hàng'
+              />
+            )}
+            {canSeeProducts && (
+              <CardLink
+                href='/products-home'
+                icon={<List className='text-orange-500 w-6 h-6' />}
+                title='Sản phẩm'
+                description='Quản lý danh sách sản phẩm'
+              />
+            )}
+            {canSeeRequests && (
+              <CardLink
+                href='/requests'
+                icon={<FileText className='text-blue-500 w-6 h-6' />}
+                title='Yêu cầu'
+                description='Theo dõi các yêu cầu nhập/xuất hàng'
+              />
+            )}
+          </div>
+        </section>
+      )}
+
+      {/* Quản lý khác */}
+      {(canSeeDashboard ||
+        canSeeAccounts ||
+        canSeeSuppliers ||
+        canSeeCustomers) && (
+        <section className='bg-gray-50 p-6 rounded-xl shadow-sm border space-y-4'>
+          <h2 className='text-2xl font-semibold text-gray-800'>Quản lý khác</h2>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {canSeeDashboard && (
+              <CardLink
+                href='/dashboard'
+                icon={<BarChart className='text-purple-500 w-6 h-6' />}
+                title='Bảng điều khiển'
+                description='Xem tổng quan và báo cáo'
+              />
+            )}
+            {canSeeAccounts && (
+              <CardLink
+                href='/accounts'
+                icon={<User className='text-green-500 w-6 h-6' />}
+                title='Tài khoản'
+                description='Quản lý tài khoản người dùng'
+              />
+            )}
+            {canSeeSuppliers && (
+              <CardLink
+                href='/suppliers'
+                icon={<Truck className='text-blue-500 w-6 h-6' />}
+                title='Nhà cung cấp'
+                description='Quản lý danh sách nhà cung cấp'
+              />
+            )}
+            {canSeeCustomers && (
+              <CardLink
+                href='/customers'
+                icon={<Users className='text-orange-500 w-6 h-6' />}
+                title='Khách hàng'
+                description='Quản lý danh sách khách hàng'
+              />
+            )}
+          </div>
+        </section>
+      )}
+    </main>
   );
 };
+
+// Tạo một component để render card link cho đẹp và tái sử dụng
+const CardLink = ({
+  href,
+  icon,
+  title,
+  description,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) => (
+  <Link href={href} className='group'>
+    <div className='h-full bg-white p-5 rounded-lg shadow hover:shadow-md transition-all flex space-x-4 items-center'>
+      {icon}
+      <div>
+        <h3 className='font-semibold group-hover:underline'>{title}</h3>
+        <p className='text-sm text-gray-500'>{description}</p>
+      </div>
+    </div>
+  </Link>
+);
 
 export default Home;

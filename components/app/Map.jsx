@@ -43,7 +43,7 @@ const SearchControl = () => {
 
 const Map = ({ center = [10.76, 106.66], zoom = 13 }) => {
   return (
-    <div className='w-full h-[500px] relative rounded-lg overflow-hidden'>
+    <div className='relative z-0 w-full h-[500px]'>
       <MapContainer
         center={center}
         zoom={zoom}

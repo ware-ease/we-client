@@ -16,6 +16,7 @@ import { Warehouse } from '@/types/warehouse';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import Map from '../app/Map';
 
 const AddWarehouseDialog = () => {
   const t = useTranslations();
@@ -61,7 +62,7 @@ const AddWarehouseDialog = () => {
       </DialogTrigger>
 
       <DialogContent
-        className='flex flex-col w-full max-w-2xl p-6 bg-white rounded-2xl shadow-xl border border-gray-200'
+        className='flex flex-col w-full max-w-2xl max-h-[90vh] p-6 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-y-auto'
         style={{ overflow: 'visible' }}
       >
         <DialogHeader>
@@ -133,6 +134,9 @@ const AddWarehouseDialog = () => {
                   required
                   className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
                 />
+              </div>
+              <div className='col-span-2'>
+                <Map />
               </div>
             </div>
           </div>
