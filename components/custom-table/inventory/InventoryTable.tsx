@@ -186,6 +186,15 @@ export const productsColumns: ColumnDef<ProductsView>[] = [
     },
   },
   {
+    accessorKey: 'product.unitName',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='ĐVT' />
+    ),
+    meta: {
+      title: 'ĐVT',
+    },
+  },
+  {
     accessorKey: 'currentQuantity',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Số lượng hiện tại' />
