@@ -290,22 +290,22 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
           <Button
             className={cn(
               'rounded-3xl text-blue-500 border-2 border-blue-500',
-              view === 'batches'
-                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                : 'bg-white hover:bg-slate-50'
-            )}
-            onClick={() => setViewFilter('batches')}
-          >
-            Lô hàng
-          </Button>
-          <Button
-            className={cn(
-              'rounded-3xl text-yellow-500 border-2 border-yellow-400',
               'bg-white hover:bg-slate-50'
             )}
             onClick={() => setViewFilter('products')}
           >
             Sản phẩm
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-yellow-500 border-2 border-yellow-400',
+              view === 'batches'
+                ? 'bg-yellow-400 text-white hover:bg-yellow-500'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => setViewFilter('batches')}
+          >
+            Lô hàng
           </Button>
         </div>
         <Link href={'inventories/adjustment'}>
@@ -320,22 +320,22 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
           <Button
             className={cn(
               'rounded-3xl text-blue-500 border-2 border-blue-500',
-              'bg-white hover:bg-slate-50'
-            )}
-            onClick={() => setViewFilter('batches')}
-          >
-            Lô hàng
-          </Button>
-          <Button
-            className={cn(
-              'rounded-3xl text-yellow-500 border-2 border-yellow-400',
               view === 'products'
-                ? 'bg-yellow-400 text-white hover:bg-yellow-500'
+                ? 'bg-blue-500 text-white hover:bg-blue-600'
                 : 'bg-white hover:bg-slate-50'
             )}
             onClick={() => setViewFilter('products')}
           >
             Sản phẩm
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-yellow-500 border-2 border-yellow-400',
+              'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => setViewFilter('batches')}
+          >
+            Lô hàng
           </Button>
         </div>
         <Link href={'inventories/adjustment'}>
