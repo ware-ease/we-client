@@ -199,18 +199,30 @@ const GoodRequestTable = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const statusParam = searchParams.get('status');
-  const statusFilter = statusParam !== null ? parseInt(statusParam) : null;
+  // Parse status params as an array
+  const statusParams = searchParams.get('status')
+    ? searchParams.get('status')!.split(',').map(Number)
+    : [];
 
-  const setStatusFilter = (status: number | null) => {
+  const toggleStatusFilter = (status: number) => {
+    const newStatuses = statusParams.includes(status)
+      ? statusParams.filter((s) => s !== status)
+      : [...statusParams, status];
+
     const params = new URLSearchParams(searchParams.toString());
 
-    if (status === null) {
-      params.delete('status');
+    if (newStatuses.length > 0) {
+      params.set('status', newStatuses.join(','));
     } else {
-      params.set('status', status.toString());
+      params.delete('status');
     }
 
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const selectAllStatuses = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('status');
     router.push(`${pathname}?${params.toString()}`);
   };
 
@@ -222,7 +234,9 @@ const GoodRequestTable = () => {
       data={
         isSuccess
           ? data.filter((item) =>
-              statusFilter === null ? true : item.status === statusFilter
+              statusParams.length === 0
+                ? true
+                : statusParams.includes(item.status || 0)
             )
           : []
       }
@@ -230,10 +244,10 @@ const GoodRequestTable = () => {
       <div className='w-full flex justify-between'>
         <div className='space-x-2'>
           <Button
-            onClick={() => setStatusFilter(null)}
+            onClick={selectAllStatuses}
             className={cn(
               'rounded-3xl text-blue-500 border-2 border-blue-500',
-              statusFilter === null
+              statusParams.length === 0
                 ? 'bg-blue-500 text-white hover:bg-blue-600'
                 : 'bg-white hover:bg-slate-50'
             )}
@@ -243,44 +257,44 @@ const GoodRequestTable = () => {
           <Button
             className={cn(
               'rounded-3xl text-yellow-500 border-2 border-yellow-500',
-              statusFilter === 0
+              statusParams.includes(0)
                 ? 'bg-yellow-500 text-white hover:bg-yellow-600'
                 : 'bg-white hover:bg-slate-50'
             )}
-            onClick={() => setStatusFilter(0)}
+            onClick={() => toggleStatusFilter(0)}
           >
             Chờ xử lý
           </Button>
           <Button
             className={cn(
               'rounded-3xl text-green-400 border-2 border-green-400',
-              statusFilter === 1
+              statusParams.includes(1)
                 ? 'bg-green-400 text-white hover:bg-green-400'
                 : 'bg-white hover:bg-slate-50'
             )}
-            onClick={() => setStatusFilter(1)}
+            onClick={() => toggleStatusFilter(1)}
           >
             Đã đồng ý
           </Button>
           <Button
             className={cn(
               'rounded-3xl text-red-500 border-2 border-red-500',
-              statusFilter === 2
+              statusParams.includes(2)
                 ? 'bg-red-500 text-white hover:bg-red-600'
                 : 'bg-white hover:bg-slate-50'
             )}
-            onClick={() => setStatusFilter(2)}
+            onClick={() => toggleStatusFilter(2)}
           >
             Đã từ chối
           </Button>
           <Button
             className={cn(
               'rounded-3xl text-green-500 border-2 border-green-500',
-              statusFilter === 3
+              statusParams.includes(3)
                 ? 'bg-green-500 text-white hover:bg-green-600'
                 : 'bg-white hover:bg-slate-50'
             )}
-            onClick={() => setStatusFilter(3)}
+            onClick={() => toggleStatusFilter(3)}
           >
             Hoàn thành
           </Button>
