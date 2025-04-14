@@ -1,3 +1,4 @@
+import Map from '@/components/app/Map';
 import { TranslatedMessage } from '@/components/app/TranslatedMessage';
 import WarehousesList from './WarehousesList';
 
@@ -11,6 +12,9 @@ const Warehouses = () => {
           </div>
         </div>
         <WarehousesList />
+        <div className=''>
+          <Map />
+        </div>
       </div>
     </div>
   );
