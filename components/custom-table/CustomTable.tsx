@@ -33,7 +33,7 @@ const initialColumns: Column[] = [
   { header: 'ĐVT', key: 'unit', width: 85 },
   { header: 'Số lượng', key: 'quantity', width: 100 },
   { header: 'Lô hàng', key: 'batch', width: 202 },
-  { header: 'Ghi chú', key: 'note', width: 370 },
+  { header: 'Ghi chú', key: 'note', width: 340 },
 ];
 
 interface CustomTableProps {
@@ -352,7 +352,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
 
   return (
     <div className='text-sm'>
-      <div className='overflow-auto h-[45h] max-h-[45vh] max-w-[calc(100vw-2rem-var(--sidebar-width))]'>
+      <div className='overflow-auto h-[45h] max-h-[45vh] max-w-[calc(100vw-7rem-var(--sidebar-width))]'>
         <div className='border min-w-max'>
           <div className='flex flex-col'>
             <div className='flex font-semibold border-b select-none'>

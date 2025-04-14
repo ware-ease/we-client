@@ -20,6 +20,7 @@ import { useProducts } from '@/hooks/queries/productQueries';
 import Loading from '../app/Loading';
 import Error from '../app/Error';
 import ProductDialog from '../dialogs/ProductDialog';
+import { removeVietnameseDiacritics } from '@/lib/utils/vietnameseConverter';
 
 interface ProductComboBoxProps {
   value: string;
@@ -62,7 +63,16 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
         className='p-0'
         style={{ width: triggerRef.current?.offsetWidth }}
       >
-        <Command>
+        <Command
+          filter={(value, search) => {
+            const realValue = products?.find((p) => p.id === value)?.name || '';
+
+            const normalizedRealValue = removeVietnameseDiacritics(realValue);
+            const normalizedSearch = removeVietnameseDiacritics(search);
+
+            return normalizedRealValue.includes(normalizedSearch) ? 1 : 0;
+          }}
+        >
           <CommandInput placeholder='Tìm sản phẩm...' className='h-9' />
           <CommandList>
             <CommandEmpty>Không tìm thấy sản phẩm.</CommandEmpty>
@@ -77,7 +87,7 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
                       setOpen(false);
                     }}
                   >
-                    {p.sku}
+                    {p.name}
                     <Check
                       className={cn(
                         'ml-auto',
@@ -89,19 +99,20 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
               ) : (
                 <Loading />
               )}
+            </CommandGroup>
+            <div className='border-t border-gray-200'>
               <ProductDialog>
                 <button className='w-full'>
-                  <CommandItem
-                    className='text-white bg-blue-500 hover:!bg-blue-700 hover:!text-white'
-                    onSelect={() => handleOnAdd()}
-                    aria-selected={false}
+                  <div
+                    className='flex items-center px-2 py-1.5 text-white bg-blue-500 hover:bg-blue-700 text-sm'
+                    onClick={() => handleOnAdd()}
                   >
                     Thêm
-                    <Settings className='ml-auto text-white' />
-                  </CommandItem>
+                    <Settings className='ml-auto h-4 w-4' />
+                  </div>
                 </button>
               </ProductDialog>
-            </CommandGroup>
+            </div>
           </CommandList>
         </Command>
       </PopoverContent>

@@ -17,10 +17,12 @@ import {
 } from '@/hooks/queries/goodRequests';
 import { useQuery } from '@tanstack/react-query';
 import { getGoodRequestById } from '@/services/goodRequestService';
+import { useAuth } from '@/components/providers/AuthProvider';
 
 const IssueCreate = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const { currentUser } = useAuth();
   const [initialData, setInitialData] = useState<RowData[]>([]);
   const [data, setData] = useState<RowData[]>([]);
   const [receiverName, setReceiverName] = useState<string>('');
@@ -34,6 +36,16 @@ const IssueCreate = () => {
     goodNoteDetails: [],
     requestedWarehouseId: '',
   });
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      shipperName:
+        currentUser?.profile?.lastName +
+          ' ' +
+          currentUser?.profile?.firstName || '',
+    }));
+  }, [currentUser, setFormData]);
 
   const { data: requests } = useGoodIssueRequests();
   const { data: transferReqs } = useGoodTransferRequests();
@@ -156,12 +168,7 @@ const IssueCreate = () => {
             </div>
             <div className='w-64'>
               <div className='text-sm'>Người giao hàng</div>
-              <Input
-                name='shipperName'
-                value={formData.shipperName}
-                onChange={handleChange}
-                required
-              />
+              <Input name='shipperName' value={formData.shipperName} disabled />
             </div>
           </div>
           <div className='flex flex-col space-y-2'>
