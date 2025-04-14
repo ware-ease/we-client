@@ -1,22 +1,40 @@
 'use client';
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import React, { useEffect } from 'react';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import { LatLngTuple } from 'leaflet';
 
-export default function Map() {
+// Hook to force map refresh
+const MapRefresher = () => {
+  const map = useMap();
+  useEffect(() => {
+    map.invalidateSize(); // Forces tile re-render on mount/resize
+  }, [map]);
+  return null;
+};
+
+interface MapProps {
+  center?: LatLngTuple;
+  zoom?: number;
+}
+
+const Map: React.FC<MapProps> = ({ center = [10.76, 106.66], zoom = 13 }) => {
   return (
-    <div className='w-full h-[250px] sm:h-[300px] md:h-[400px] rounded-xl overflow-hidden shadow-md'>
+    <div className='w-full h-[500px]'>
       <MapContainer
-        center={[10.762622, 106.660172]}
-        zoom={14}
-        className='w-full h-full'
+        center={center}
+        zoom={zoom}
+        scrollWheelZoom={true}
+        style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
-          attribution='&copy; OpenStreetMap'
+          attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-        <Marker position={[10.762622, 106.660172]}>
-          <Popup>Vị trí của bạn</Popup>
-        </Marker>
+        <MapRefresher />
       </MapContainer>
     </div>
   );
-}
+};
+
+export default Map;
