@@ -59,74 +59,98 @@ const AddWarehouseDialog = () => {
           Tạo kho
         </Button>
       </DialogTrigger>
+
       <DialogContent
-        className='flex flex-col w-full max-w-2xl p-6 m-4 bg-white rounded-lg shadow-lg border border-gray-200 overflow-auto'
-        style={{
-          position: 'fixed',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
+        className='flex flex-col w-full max-w-2xl p-6 bg-white rounded-2xl shadow-xl border border-gray-200'
+        style={{ overflow: 'visible' }}
       >
         <DialogHeader>
-          <DialogTitle className='text-xl font-semibold text-gray-800'>
+          <DialogTitle className='text-2xl font-semibold text-gray-800'>
             Tạo kho
           </DialogTitle>
         </DialogHeader>
-        <div className='grid grid-cols-2 gap-6'>
-          <div className='col-span-2'>
-            <Label htmlFor='name'>Tên kho</Label>
-            <Input
-              id='name'
-              name='name'
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div className='col-span-2'>
-            <Label htmlFor='address'>Địa chỉ</Label>
-            <Input
-              id='address'
-              name='address'
-              value={formData.address}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+
+        <div className='mt-4 space-y-6 text-sm text-gray-800'>
+          {/* --- THÔNG TIN KHO --- */}
           <div>
-            <Label htmlFor='length'>Diện tích</Label>
-            <Input
-              id='length'
-              name='length'
-              type='number'
-              value={formData.area}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-          <div>
-            <Label htmlFor='width'>Hoạt động từ</Label>
-            <Input
-              id='width'
-              name='width'
-              type='date'
-              value={formData.operateFrom}
-              onChange={handleInputChange}
-              required
-            />
+            <h3 className='text-base font-semibold text-gray-700 mb-2'>
+              Thông tin kho
+            </h3>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='col-span-2'>
+                <Label htmlFor='name' className='text-sm text-gray-500'>
+                  Tên kho
+                </Label>
+                <Input
+                  id='name'
+                  name='name'
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                />
+              </div>
+
+              <div className='col-span-2'>
+                <Label htmlFor='address' className='text-sm text-gray-500'>
+                  Địa chỉ
+                </Label>
+                <Input
+                  id='address'
+                  name='address'
+                  value={formData.address}
+                  onChange={handleInputChange}
+                  required
+                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                />
+              </div>
+
+              <div>
+                <Label htmlFor='length' className='text-sm text-gray-500'>
+                  Diện tích (m²)
+                </Label>
+                <Input
+                  id='length'
+                  name='area'
+                  type='number'
+                  value={formData.area}
+                  onChange={handleInputChange}
+                  required
+                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                />
+              </div>
+
+              <div>
+                <Label htmlFor='operateFrom' className='text-sm text-gray-500'>
+                  Hoạt động từ
+                </Label>
+                <Input
+                  id='operateFrom'
+                  name='operateFrom'
+                  type='date'
+                  value={formData.operateFrom}
+                  onChange={handleInputChange}
+                  required
+                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                />
+              </div>
+            </div>
           </div>
         </div>
+
         <DialogFooter className='mt-6 flex justify-end space-x-4'>
           <DialogClose asChild>
             <Button
               variant='secondary'
-              className='px-4 py-2 hover:bg-slate-200'
+              className='px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors'
             >
               {t('Dialog.cancel')}
             </Button>
           </DialogClose>
-          <Button className='px-4 py-2 rounded-lg' onClick={handleSubmit}>
+          <Button
+            className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
+            onClick={handleSubmit}
+          >
             {t('Dialog.yes.create')}
           </Button>
         </DialogFooter>
