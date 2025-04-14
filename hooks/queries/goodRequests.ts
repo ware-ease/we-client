@@ -86,7 +86,7 @@ export const useConfirmGoodRequest = () => {
       queryClient.invalidateQueries({ queryKey: ['receiveRequests'] });
     },
     onError: () => {
-      toast.error('Không thể xác nhận.');
+      toast.error('Không thể đồng ý.');
     },
   });
 };
@@ -102,7 +102,7 @@ export const useDeclineGoodRequest = () => {
       queryClient.invalidateQueries({ queryKey: ['receiveRequests'] });
     },
     onError: () => {
-      toast.error('Không thể xác nhận.');
+      toast.error('Không thể từ chối.');
     },
   });
 };

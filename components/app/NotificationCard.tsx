@@ -74,7 +74,7 @@ export function NotificationCard({ className, ...props }: CardProps) {
           </Button>
         </CardDescription>
       </CardHeader>
-      <CardContent className='grid gap-4'>
+      <CardContent className='grid gap-4 h-[60vh] overflow-y-auto'>
         <div>
           {filteredNotifications.length !== 0 ? (
             filteredNotifications.map((notification, index) => (
