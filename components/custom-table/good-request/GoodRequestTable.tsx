@@ -253,6 +253,28 @@ const GoodRequestTable = () => {
           </Button>
           <Button
             className={cn(
+              'rounded-3xl text-green-400 border-2 border-green-400',
+              statusFilter === 1
+                ? 'bg-green-400 text-white hover:bg-green-400'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => setStatusFilter(1)}
+          >
+            Đã đồng ý
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-red-500 border-2 border-red-500',
+              statusFilter === 2
+                ? 'bg-red-500 text-white hover:bg-red-600'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => setStatusFilter(2)}
+          >
+            Đã từ chối
+          </Button>
+          <Button
+            className={cn(
               'rounded-3xl text-green-500 border-2 border-green-500',
               statusFilter === 3
                 ? 'bg-green-500 text-white hover:bg-green-600'

@@ -10,7 +10,7 @@ interface HasRequestType {
 
 export const statusMap = [
   { status: 0, label: 'Chờ xử lý', color: 'bg-yellow-500' },
-  { status: 1, label: 'Đã đồng ý', color: 'bg-green-300' },
+  { status: 1, label: 'Đã đồng ý', color: 'bg-green-400' },
   { status: 2, label: 'Đã từ chối', color: 'bg-red-500' },
   { status: 3, label: 'Hoàn thành', color: 'bg-green-500' },
 ];

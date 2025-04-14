@@ -13,7 +13,7 @@ const StatusUI: React.FC<StatusUIProps> = ({ status }) => {
 
   return (
     <div
-      className={`flex items-center justify-center rounded-xl py-1 text-xs text-white font-medium ${statusInfo.color}`}
+      className={`flex items-center justify-center rounded-xl py-1 text-xs ${statusInfo.color} text-white font-medium`}
     >
       <span>{statusInfo.label}</span>
     </div>

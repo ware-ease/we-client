@@ -17,6 +17,8 @@ import {
 } from '@/components/shadcn-base/Tooltip';
 import { useParams, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils/utils';
+import ApproveRequestDialog from '@/components/dialogs/ApproveRequestDialog';
+import DeclineRequestDialog from '@/components/dialogs/DeclineRequestDialog';
 
 export const columns: ColumnDef<GoodRequest>[] = [
   {
@@ -170,6 +172,28 @@ export const columns: ColumnDef<GoodRequest>[] = [
           </TooltipTrigger>
           <TooltipContent>Chi tiết</TooltipContent>
         </Tooltip>
+        {row.original.status === 0 && (
+          <Tooltip>
+            <TooltipTrigger>
+              <ApproveRequestDialog
+                requestId={row.original.id || ''}
+                requestCode={row.original.code}
+              />
+            </TooltipTrigger>
+            <TooltipContent>Đồng ý</TooltipContent>
+          </Tooltip>
+        )}
+        {row.original.status === 0 && (
+          <Tooltip>
+            <TooltipTrigger>
+              <DeclineRequestDialog
+                requestId={row.original.id || ''}
+                requestCode={row.original.code}
+              />
+            </TooltipTrigger>
+            <TooltipContent>Từ chối</TooltipContent>
+          </Tooltip>
+        )}
       </div>
     ),
   },
@@ -234,6 +258,28 @@ const GoodRequestWarehouseTable = () => {
             onClick={() => setStatusFilter(0)}
           >
             Chờ xử lý
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-green-400 border-2 border-green-400',
+              statusFilter === 1
+                ? 'bg-green-400 text-white hover:bg-green-400'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => setStatusFilter(1)}
+          >
+            Đã đồng ý
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-red-500 border-2 border-red-500',
+              statusFilter === 2
+                ? 'bg-red-500 text-white hover:bg-red-600'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => setStatusFilter(2)}
+          >
+            Đã từ chối
           </Button>
           <Button
             className={cn(
