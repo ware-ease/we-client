@@ -20,7 +20,6 @@ const NotificationButton: React.FC<NotificationButtonProps> = ({
   const { currentUser } = useAuth();
   const { notifications } = useNotifications(currentUser?.id);
   const [unreadCount, setUnreadCount] = useState<number>(0);
-  console.log(notifications);
 
   useEffect(() => {
     setUnreadCount(notifications.filter((n) => !n.read).length);

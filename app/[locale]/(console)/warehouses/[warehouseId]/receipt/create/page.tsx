@@ -10,11 +10,9 @@ import {
   getAllGoodReceiveRequests,
   getGoodRequestById,
 } from '@/services/goodRequestService';
-import { GoodNote } from '@/types/goodNote';
+import { GoodReceiveNote } from '@/types/goodNote';
 import useFormData from '@/hooks/useFormData';
 import { useAddGoodReceiveNote } from '@/hooks/queries/goodNoteQueries';
-import { toast } from 'react-toastify';
-import { GoodNoteSchema } from '@/lib/zod/schemas';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useAuth } from '@/components/providers/AuthProvider';
 
@@ -25,15 +23,12 @@ const ReceiptCreate = () => {
   const [initialData, setInitialData] = useState<RowData[]>([]);
   const [data, setData] = useState<RowData[]>([]);
   const [supplierName, setSupplierName] = useState<string>('');
-  const { formData, handleChange, setFormData } = useFormData<GoodNote>({
-    noteType: 0,
+  const { formData, handleChange, setFormData } = useFormData<GoodReceiveNote>({
     shipperName: '',
     receiverName: '',
-    code: '',
     date: new Date().toISOString().split('T')[0],
     goodRequestId: '',
     goodNoteDetails: [],
-    requestedWarehouseId: '',
   });
 
   useEffect(() => {
@@ -67,19 +62,24 @@ const ReceiptCreate = () => {
       goodNoteDetails: data.map((row) => ({
         quantity: parseFloat(row.quantity.toString()),
         note: row.note,
-        batchId: row.batch,
+        newBatch: {
+          productId: row.productId,
+          name: 'Test',
+          mfgDate: new Date(row.mfgDate),
+          expDate: new Date(row.expDate),
+        },
       })),
       requestedWarehouseId: currentWarehouse?.id,
     };
 
-    const result = GoodNoteSchema.safeParse(finalFormData);
+    // const result = GoodNoteSchema.safeParse(finalFormData);
 
-    if (!result.success) {
-      result.error.errors.forEach((err) => {
-        toast.error(err.message);
-      });
-      return;
-    }
+    // if (!result.success) {
+    //   result.error.errors.forEach((err) => {
+    //     toast.error(err.message);
+    //   });
+    //   return;
+    // }
 
     mutate(finalFormData, {
       onSuccess: () => {
@@ -111,6 +111,8 @@ const ReceiptCreate = () => {
           note: '',
           productId: detail.productId || '',
           batchId: '',
+          mfgDate: '',
+          expDate: '',
         })
       );
       setInitialData(tableData);
@@ -145,10 +147,10 @@ const ReceiptCreate = () => {
               </label>
               <Input
                 name='code'
-                value={formData.code}
+                // value={formData.code}
+                disabled
                 onChange={handleChange}
                 className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
-                required
               />
             </div>
             <div>

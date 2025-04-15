@@ -25,3 +25,26 @@ export interface GoodNoteDetail extends Base {
   batch?: Batch;
   batchId?: string;
 }
+
+export interface GoodReceiveNote extends Base {
+  shipperName?: string;
+  receiverName?: string;
+  date?: string;
+  goodRequestId?: string;
+  goodNoteDetails?: GoodReceiveNoteDetail[];
+}
+
+export interface GoodReceiveNoteDetail extends Base {
+  quantity?: number;
+  note?: string;
+  newBatch?: NewBatch;
+}
+
+export interface NewBatch extends Base {
+  productId?: string;
+  code?: string;
+  name?: string;
+  inboundDate?: Date;
+  mfgDate?: Date;
+  expDate?: Date;
+}

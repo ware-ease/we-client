@@ -1,5 +1,6 @@
 import {
   createGoodNote,
+  createGoodReceiveNote,
   getAllCurrentWarehouseGoodIssueNotes,
   getAllCurrentWarehouseGoodReceiveNotes,
   getAllGoodIssueNotes,
@@ -7,7 +8,7 @@ import {
   getGoodNoteById,
   updateGoodNote,
 } from '@/services/goodNoteService';
-import { GoodNote } from '@/types/goodNote';
+import { GoodNote, GoodReceiveNote } from '@/types/goodNote';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -38,7 +39,7 @@ export const useCurrentWarehouseGoodReceiveNotes = (
 export const useAddGoodReceiveNote = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (grn: GoodNote) => createGoodNote(grn),
+    mutationFn: (grn: GoodReceiveNote) => createGoodReceiveNote(grn),
     onSuccess: () => {
       toast.success('Thêm thành công!');
       queryClient.invalidateQueries({ queryKey: ['receiveNotes'] });
