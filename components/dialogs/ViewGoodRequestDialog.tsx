@@ -13,6 +13,7 @@ import Image from 'next/image';
 import { useReactToPrint } from 'react-to-print';
 import {
   Carousel,
+  CarouselApi,
   CarouselContent,
   CarouselItem,
   CarouselNext,
@@ -30,16 +31,22 @@ export type GoodRequestDetail = {
 };
 
 export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
-  // const contentRef = useRef(null);
-
-  // // Function to handle printing/exporting to PDF
-  // const handlePrint = useReactToPrint({
-  //   contentRef,
-  // });
-
+  const [open, setOpen] = useState(false);
+  const [api, setApi] = useState<CarouselApi>();
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const contentRefs = useRef<RefObject<HTMLDivElement | null>[]>([]);
   const printRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!api) {
+      return;
+    }
+    api.on('select', () => {
+      // Do something on select.
+      setActiveSlideIndex(api.selectedScrollSnap());
+      console.log(api.selectedScrollSnap());
+    });
+  }, [api]);
 
   // Initialize contentRefs
   useEffect(() => {
@@ -51,8 +58,10 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
 
   // Sync printRef with active slide
   useEffect(() => {
-    printRef.current = contentRefs.current[activeSlideIndex]?.current || null;
-  }, [activeSlideIndex]);
+    printRef.current =
+      contentRefs.current[api?.selectedScrollSnap() || 0]?.current || null;
+    console.log(api?.selectedScrollSnap());
+  }, [api, activeSlideIndex]);
 
   // Handle printing for active slide
   const handlePrint = useReactToPrint({
@@ -75,7 +84,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
     : 'Chưa lập phiếu xuất';
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Eye className='text-blue-500' size={20} />
       </DialogTrigger>
@@ -150,14 +159,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
 
         {/* Good Note Section (if exists) */}
         {goodRequest.goodNotes && goodRequest.goodNotes.length > 0 ? (
-          <Carousel
-            className='w-full max-w-3xl mx-auto'
-            setApi={(api) => {
-              api?.on('select', () => {
-                setActiveSlideIndex(api.selectedScrollSnap());
-              });
-            }}
-          >
+          <Carousel className='w-full max-w-3xl mx-auto' setApi={setApi}>
             <CarouselContent>
               {goodRequest.goodNotes.map((goodNote, index) => (
                 <CarouselItem key={index} className=''>
