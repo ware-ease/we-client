@@ -27,7 +27,7 @@ const getUrlFromNotification = (notification: Notification) => {
     return `/warehouses/${notification.warehouseId}/requests?status=0`;
   }
   if (notification.type === NotificationType.GOOD_REQUEST_UPDATED) {
-    return `/warehouses/${notification.warehouseId}/requests?status=0`;
+    return `/warehouses/${notification.warehouseId}/requests?status=1`;
   }
   if (notification.type === NotificationType.GOOD_REQUEST_CONFIRMED) {
     return `/requests`;

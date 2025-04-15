@@ -120,7 +120,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
         </div>
 
         {/* Good Note Section (if exists) */}
-        {goodRequest.goodNote ? (
+        {goodRequest.goodNotes && goodRequest.goodNotes.length > 0 ? (
           <div
             ref={contentRef}
             className='p-24 border-t border-gray-200 mt-6'
@@ -139,13 +139,13 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
               <div className='text-right'>
                 <p>
                   <strong className='font-normal'>Số phiếu:</strong>{' '}
-                  {goodRequest.goodNote.code || 'N/A'}
+                  {goodRequest.goodNotes[0]?.code || 'N/A'}
                 </p>
                 <p>
                   <strong className='font-normal'>Ngày:</strong>{' '}
-                  {new Date(goodRequest.goodNote.date || '').toLocaleDateString(
-                    'vi-VN'
-                  )}
+                  {new Date(
+                    goodRequest.goodNotes[0]?.date || ''
+                  ).toLocaleDateString('vi-VN')}
                 </p>
               </div>
             </div>
@@ -230,7 +230,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {goodRequest.goodNote.goodNoteDetails?.map(
+                  {goodRequest.goodNotes[0]?.goodNoteDetails?.map(
                     (detail, index) => (
                       <tr key={index}>
                         <td className='border-r border-t border-black p-2'>
@@ -240,7 +240,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
                           {detail.batch?.product?.sku || 'N/A'}
                         </td>
                         <td className='border-r border-t border-black p-2'>
-                          {detail.batch?.name || 'N/A'}
+                          {detail.batch?.product?.name || 'N/A'}
                         </td>
                         <td className='border-r border-t border-black p-2'>
                           {detail.batch?.product?.unitName || 'N/A'}
@@ -293,7 +293,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
 
         {/* Buttons */}
         <div className='flex space-x-4 mt-4 px-6'>
-          {goodRequest.goodNote ? (
+          {goodRequest.goodNotes && goodRequest.goodNotes.length > 0 ? (
             <>
               <Button className='w-full' onClick={() => handlePrint()}>
                 In phiếu

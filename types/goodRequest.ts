@@ -19,7 +19,8 @@ export type GoodRequest = {
   warehouse?: Warehouse;
   requestedWarehouse?: Warehouse;
   partner?: Supplier;
-  goodNote?: GoodNote;
+  goodNotes?: GoodNote[];
+  goodNoteCount?: number;
 };
 
 export interface GoodRequestDetail extends Base {

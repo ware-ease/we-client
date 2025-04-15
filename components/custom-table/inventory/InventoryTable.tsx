@@ -16,6 +16,7 @@ import {
 import { useParams, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils/utils';
 import { Product } from '@/types/product';
+import { CustomDataTable2 } from '../base-data-table/CustomDataTable2';
 
 interface ProductsView {
   id: string;
@@ -314,7 +315,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
       </div>
     </CustomDataTable>
   ) : (
-    <CustomDataTable columns={productsColumns} data={productsViewData}>
+    <CustomDataTable2 columns={productsColumns} data={productsViewData}>
       <div className='w-full flex justify-between'>
         <div className='space-x-2'>
           <Button
@@ -342,7 +343,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
           <Button>Điều chỉnh tồn kho</Button>
         </Link>
       </div>
-    </CustomDataTable>
+    </CustomDataTable2>
   );
 };
 

@@ -162,7 +162,7 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                       {detail.batch?.product?.sku || 'N/A'}
                     </td>
                     <td className='border-r border-t border-black p-2'>
-                      {detail.batch?.name || 'N/A'}
+                      {detail.batch?.product?.name || 'N/A'}
                     </td>
                     <td className='border-r border-t border-black p-2'>
                       {detail.batch?.product?.unitName || 'N/A'}
