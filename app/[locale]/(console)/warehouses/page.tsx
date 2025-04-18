@@ -13,7 +13,7 @@ const Warehouses = () => {
         </div>
         <WarehousesList />
         <div className=''>
-          <Map />
+          <Map className='h-[300px]' />
         </div>
       </div>
     </div>

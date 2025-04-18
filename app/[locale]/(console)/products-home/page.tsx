@@ -2,7 +2,7 @@
 import BrandDialog from '@/components/dialogs/BrandDialog';
 import CategoryDialog from '@/components/dialogs/CategoryDialog';
 import ProductTypeDialog from '@/components/dialogs/ProductTypeDialog';
-import SupplierDialog from '@/components/dialogs/SupplierDialog';
+import UnitDialog from '@/components/dialogs/UnitDialog';
 import { Button } from '@/components/shadcn-base/Button';
 import {
   Card,
@@ -122,12 +122,12 @@ const ProductsHome = () => {
             </BrandDialog>
           </div>
           <div className='w-2/5'>
-            <SupplierDialog>
+            <UnitDialog>
               <Button className='w-full drop-shadow-xl'>
                 <Settings />
                 Đơn vị
               </Button>
-            </SupplierDialog>
+            </UnitDialog>
           </div>
         </div>
       </div>

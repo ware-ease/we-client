@@ -8,6 +8,8 @@ export interface Warehouse extends Base {
   area: number;
   operateFrom: string;
   phone?: string;
+  latitude?: number;
+  longitude?: number;
   locations?: Location[];
   inventories?: Inventory[];
 }

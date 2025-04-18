@@ -27,15 +27,41 @@ const AddWarehouseDialog = () => {
     address: '',
     area: 0,
     operateFrom: '',
+    latitude: 10.76,
+    longitude: 106.66,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    setFormData((prev) => {
+      let parsedValue: string | number = value;
+
+      switch (name) {
+        case 'area':
+          parsedValue = Number(value);
+          break;
+        case 'latitude':
+        case 'longitude':
+          parsedValue = parseFloat(value) || 0;
+          break;
+        case 'operateFrom':
+          parsedValue = value.toString();
+          break;
+      }
+
+      return {
+        ...prev,
+        [name]: parsedValue,
+      };
+    });
+  };
+
+  const handleLocationSelect = (coords: { lat: number; lng: number }) => {
     setFormData((prev) => ({
       ...prev,
-      // Convert numeric values for length and width
-      [name]: name === 'area' ? Number(value) : value,
-      [name]: name === 'operateFrom' ? value.toString() : value,
+      latitude: coords.lat,
+      longitude: coords.lng,
     }));
   };
 
@@ -61,22 +87,16 @@ const AddWarehouseDialog = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent
-        className='flex flex-col w-full max-w-2xl max-h-[90vh] p-6 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-y-auto'
-        style={{ overflow: 'visible' }}
-      >
+      <DialogContent className='flex flex-col w-full max-w-2xl max-h-[90vh] p-6 bg-white rounded-2xl shadow-xl border border-gray-200 overflow-y-auto'>
         <DialogHeader>
           <DialogTitle className='text-2xl font-semibold text-gray-800'>
             Tạo kho
           </DialogTitle>
         </DialogHeader>
 
-        <div className='mt-4 space-y-6 text-sm text-gray-800'>
+        <div className='mt-4 px-2  space-y-6 text-sm text-gray-800 overflow-y-auto'>
           {/* --- THÔNG TIN KHO --- */}
           <div>
-            <h3 className='text-base font-semibold text-gray-700 mb-2'>
-              Thông tin kho
-            </h3>
             <div className='grid grid-cols-2 gap-4'>
               <div className='col-span-2'>
                 <Label htmlFor='name' className='text-sm text-gray-500'>
@@ -135,8 +155,59 @@ const AddWarehouseDialog = () => {
                   className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
                 />
               </div>
+
+              {/* Map section */}
+              {/* Nếu có tọa độ, hiển thị input */}
+              {
+                <>
+                  <div>
+                    <Label htmlFor='latitude' className='text-sm text-gray-500'>
+                      Vĩ độ
+                    </Label>
+                    <Input
+                      id='latitude'
+                      name='latitude'
+                      type='number'
+                      step='0.000001'
+                      value={formData.latitude}
+                      onChange={handleInputChange}
+                      // readOnly
+                      className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                    />
+                  </div>
+
+                  <div>
+                    <Label
+                      htmlFor='longitude'
+                      className='text-sm text-gray-500'
+                    >
+                      Kinh độ
+                    </Label>
+                    <Input
+                      id='longitude'
+                      name='longitude'
+                      type='number'
+                      step='0.000001'
+                      value={formData.longitude}
+                      onChange={handleInputChange}
+                      // readOnly
+                      className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                    />
+                  </div>
+                </>
+              }
               <div className='col-span-2'>
-                <Map />
+                <Label className='text-sm text-gray-500'>
+                  Vị trí trên bản đồ
+                </Label>
+                <div className='mt-1 rounded-lg overflow-hidden border border-gray-200'>
+                  <Map
+                    className='h-[250px]'
+                    latitude={formData.latitude}
+                    longitude={formData.longitude}
+                    onLocationSelect={handleLocationSelect}
+                  />
+                </div>
               </div>
             </div>
           </div>
