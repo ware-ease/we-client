@@ -60,6 +60,8 @@ const ReceiptDetail = () => {
       batch: detail.batch?.code || '',
       batchId: detail.batchId || '',
       note: detail.note || '',
+      mfgDate: '',
+      expDate: '',
     })
   );
 

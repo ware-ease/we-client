@@ -13,7 +13,12 @@ const Warehouses = () => {
         </div>
         <WarehousesList />
         <div className=''>
-          <Map className='h-[300px]' />
+          <Map
+            className='h-[300px]'
+            onLocationSelect={() => {}}
+            latitude={10.76}
+            longitude={106.66}
+          />
         </div>
       </div>
     </div>

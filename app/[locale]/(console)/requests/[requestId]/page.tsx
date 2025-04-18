@@ -50,6 +50,8 @@ const RequestDetail = () => {
       batch: '',
       batchId: '',
       note: '',
+      expDate: '',
+      mfgDate: '',
     }));
 
   const handleSubmit = () => {

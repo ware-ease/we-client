@@ -105,6 +105,8 @@ const IssueCreate = () => {
           note: '',
           productId: detail.productId || '',
           batchId: '',
+          mfgDate: '',
+          expDate: '',
         })
       );
       setInitialData(tableData);
