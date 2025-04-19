@@ -86,7 +86,7 @@ const RequestCreate = () => {
                 value={formData.code}
                 onChange={handleChange}
                 className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
-                required
+                disabled
               />
             </div>
           </div>
