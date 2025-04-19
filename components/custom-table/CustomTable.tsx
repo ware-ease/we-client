@@ -25,6 +25,7 @@ export interface RowData {
   expDate: string;
   note: string;
   productId?: string;
+  isBatchManaged?: boolean;
 }
 
 const initialColumns: Column[] = [
@@ -81,6 +82,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
               <ProductComboBox
                 value={rowData.productId || ''}
                 onChange={(value) => handleProductSelect(index, 'sku', value)}
+                disabled={!isRequestDetails}
               />
             ),
             name: <div className='p-2 truncate'>{rowData.name}</div>,
@@ -101,6 +103,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                 className='w-full p-2'
                 value={rowData.batch}
                 onChange={(e) => handleBatchChange(index, e.target.value)}
+                disabled={!rowData.isBatchManaged}
               />
             );
             row.mfgDate = (
@@ -109,6 +112,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                 className='w-full p-2'
                 value={new Date().toISOString().split('T')[0]}
                 onChange={(e) => handleMfgDateChange(index, e.target.value)}
+                disabled={!rowData.isBatchManaged}
               />
             );
             row.expDate = (
@@ -117,6 +121,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                 className='w-full p-2'
                 value={new Date().toISOString().split('T')[0]}
                 onChange={(e) => handleExpDateChange(index, e.target.value)}
+                disabled={!rowData.isBatchManaged}
               />
             );
             row.note = (
@@ -181,6 +186,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
             onChange={(value) =>
               handleProductSelect(prevRows.length, 'sku', value)
             }
+            disabled={!isRequestDetails}
           />
         ),
         name: <div className='p-2 truncate'></div>,
@@ -325,6 +331,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                 <ProductComboBox
                   value={value}
                   onChange={(v) => handleProductSelect(rowIndex, key, v)}
+                  disabled={!isRequestDetails}
                 />
               ),
               name: (
@@ -343,7 +350,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                   className='w-full p-2'
                   value={new Date().toISOString().split('T')[0]}
                   onChange={(e) => handleMfgDateChange(index, e.target.value)}
-                  disabled={false}
+                  disabled={selectedProduct?.isBatchManaged === false}
                 />
               ),
               expDate: (
@@ -352,7 +359,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                   className='w-full p-2'
                   value={new Date().toISOString().split('T')[0]}
                   onChange={(e) => handleExpDateChange(index, e.target.value)}
-                  disabled={false}
+                  disabled={selectedProduct?.isBatchManaged === false}
                 />
               ),
               ...(isRequestDetails
@@ -366,6 +373,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                         onChange={(e) =>
                           handleBatchChange(index, e.target.value)
                         }
+                        disabled={selectedProduct?.isBatchManaged === false}
                       />
                     ),
                   }),

@@ -164,7 +164,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
               {goodRequest.goodNotes.map((goodNote, index) => (
                 <CarouselItem key={index} className=''>
                   <div
-                    className='p-24 border-t border-gray-200 mt-6'
+                    className='p-24 mt-6'
                     ref={contentRefs.current[index]}
                     style={{ fontFamily: 'Times New Roman' }}
                   >

@@ -1,4 +1,3 @@
-import Map from '@/components/app/Map';
 import { TranslatedMessage } from '@/components/app/TranslatedMessage';
 import WarehousesList from './WarehousesList';
 
@@ -12,14 +11,7 @@ const Warehouses = () => {
           </div>
         </div>
         <WarehousesList />
-        <div className=''>
-          <Map
-            className='h-[300px]'
-            onLocationSelect={() => {}}
-            latitude={10.76}
-            longitude={106.66}
-          />
-        </div>
+        <div className=''></div>
       </div>
     </div>
   );

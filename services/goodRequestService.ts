@@ -72,3 +72,12 @@ export const declineGoodRequest = async (id: string): Promise<GoodRequest> => {
   );
   return response.data.data;
 };
+
+export const completeGoodRequest = async (id: string): Promise<GoodRequest> => {
+  const response = await axiosPut(
+    '/good-requests/' + id + '/status?requestStatus=3',
+    {},
+    {}
+  );
+  return response.data.data;
+};

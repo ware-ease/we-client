@@ -25,11 +25,13 @@ import { removeVietnameseDiacritics } from '@/lib/utils/vietnameseConverter';
 interface ProductComboBoxProps {
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }
 
 const ProductComboBox: React.FC<ProductComboBoxProps> = ({
   value,
   onChange,
+  disabled = false,
 }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -50,6 +52,7 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
           aria-expanded={open}
           className='w-full justify-between border-none'
           ref={triggerRef}
+          disabled={disabled}
         >
           {isPending
             ? 'Chọn sản phẩm'

@@ -19,6 +19,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils/utils';
 import ApproveRequestDialog from '@/components/dialogs/ApproveRequestDialog';
 import DeclineRequestDialog from '@/components/dialogs/DeclineRequestDialog';
+import CompleteRequestDialog from '@/components/dialogs/CompleteRequestDialog';
 
 export const columns: ColumnDef<GoodRequest>[] = [
   {
@@ -201,6 +202,17 @@ export const columns: ColumnDef<GoodRequest>[] = [
               />
             </TooltipTrigger>
             <TooltipContent>Từ chối</TooltipContent>
+          </Tooltip>
+        )}
+        {row.original.status === 1 && (
+          <Tooltip>
+            <TooltipTrigger>
+              <CompleteRequestDialog
+                requestId={row.original.id || ''}
+                requestCode={row.original.code}
+              />
+            </TooltipTrigger>
+            <TooltipContent>Xác nhận hoàn thành</TooltipContent>
           </Tooltip>
         )}
       </div>

@@ -10,6 +10,7 @@ export interface Product extends Base {
   brandName?: string;
   unit?: string;
   unitName?: string;
+  isBatchManaged?: boolean;
   //status?: boolean;
 }
 

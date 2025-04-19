@@ -1,4 +1,5 @@
 import {
+  completeGoodRequest,
   confirmGoodRequest,
   createGoodRequest,
   declineGoodRequest,
@@ -103,6 +104,22 @@ export const useDeclineGoodRequest = () => {
     },
     onError: () => {
       toast.error('Không thể từ chối.');
+    },
+  });
+};
+
+export const useCompleteGoodRequest = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => completeGoodRequest(id),
+    onSuccess: () => {
+      toast.success('Đã hoàn thành!');
+      queryClient.invalidateQueries({ queryKey: ['requests'] });
+      queryClient.invalidateQueries({ queryKey: ['issueRequests'] });
+      queryClient.invalidateQueries({ queryKey: ['receiveRequests'] });
+    },
+    onError: () => {
+      toast.error('Không thể hoàn thành.');
     },
   });
 };
