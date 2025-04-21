@@ -75,7 +75,7 @@ const ViewProductDialog: React.FC<ViewProductDialogProps> = ({ product }) => {
               <div className='grid grid-cols-2 gap-4'>
                 <div>
                   <Label className='text-sm text-gray-500'>Loại sản phẩm</Label>
-                  <p>{product.productType || '—'}</p>
+                  <p>{product.productType?.name || '—'}</p>
                 </div>
                 <div>
                   <Label className='text-sm text-gray-500'>Danh mục</Label>
