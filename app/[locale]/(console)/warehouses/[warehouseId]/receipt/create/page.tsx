@@ -12,9 +12,13 @@ import {
 } from '@/services/goodRequestService';
 import { GoodReceiveNote } from '@/types/goodNote';
 import useFormData from '@/hooks/useFormData';
-import { useAddGoodReceiveNote } from '@/hooks/queries/goodNoteQueries';
+import {
+  useAddGoodInternalReceiptNote,
+  useAddGoodReceiveNote,
+} from '@/hooks/queries/goodNoteQueries';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { useGoodTransferRequests } from '@/hooks/queries/goodRequests';
 
 const ReceiptCreate = () => {
   const router = useRouter();
@@ -45,6 +49,7 @@ const ReceiptCreate = () => {
     queryKey: ['requests'],
     queryFn: getAllGoodReceiveRequests,
   });
+  const { data: transferReqs } = useGoodTransferRequests();
 
   const { data: reqDetails } = useQuery({
     queryKey: ['requestDetails', formData.goodRequestId],
@@ -53,6 +58,7 @@ const ReceiptCreate = () => {
   });
 
   const { mutate } = useAddGoodReceiveNote();
+  const { mutate: mutateInternal } = useAddGoodInternalReceiptNote();
 
   const currentWarehouse = useCurrentWarehouse();
 
@@ -72,24 +78,25 @@ const ReceiptCreate = () => {
       requestedWarehouseId: currentWarehouse?.id,
     };
 
-    // const result = GoodNoteSchema.safeParse(finalFormData);
-
-    // if (!result.success) {
-    //   result.error.errors.forEach((err) => {
-    //     toast.error(err.message);
-    //   });
-    //   return;
-    // }
-
-    mutate(finalFormData, {
-      onSuccess: () => {
-        router.push(pathname.replace('/create', ''));
-      },
-    });
+    if (transferReqs?.find((r) => r.id === formData.goodRequestId)) {
+      mutateInternal(finalFormData, {
+        onSuccess: () => {
+          router.push(pathname.replace('/create', ''));
+        },
+      });
+    } else {
+      mutate(finalFormData, {
+        onSuccess: () => {
+          router.push(pathname.replace('/create', ''));
+        },
+      });
+    }
   };
 
   const handleRequestSelect = (value: string) => {
-    const req = requests?.find((req) => req.id === value);
+    const req = requests
+      ?.concat(transferReqs || [])
+      .find((req) => req.id === value);
 
     setFormData((prevData) => ({
       ...prevData,
@@ -129,7 +136,9 @@ const ReceiptCreate = () => {
           <div className='w-64'>
             <RequestComboBox
               value={formData.goodRequestId ?? ''}
-              requests={requests}
+              requests={requests?.concat(
+                transferReqs?.filter((r) => r.status === 4) || []
+              )}
               onChange={(value) => handleRequestSelect(value)}
             />
           </div>
@@ -147,7 +156,7 @@ const ReceiptCreate = () => {
               </label>
               <Input
                 name='code'
-                // value={formData.code}
+                value={'Hệ thống tự tạo'}
                 disabled
                 onChange={handleChange}
                 className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'

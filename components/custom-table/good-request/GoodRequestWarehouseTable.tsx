@@ -21,6 +21,10 @@ import ApproveRequestDialog from '@/components/dialogs/ApproveRequestDialog';
 import DeclineRequestDialog from '@/components/dialogs/DeclineRequestDialog';
 import CompleteRequestDialog from '@/components/dialogs/CompleteRequestDialog';
 
+type MetaType = {
+  warehouseId: string;
+};
+
 export const columns: ColumnDef<GoodRequest>[] = [
   {
     id: 'stt',
@@ -174,49 +178,54 @@ export const columns: ColumnDef<GoodRequest>[] = [
         className='text-xs'
       />
     ),
-    cell: ({ row }) => (
-      <div className='flex space-x-1 items-center'>
-        <Tooltip>
-          <TooltipTrigger>
-            <ViewGoodRequestDialog goodRequest={row.original} />
-          </TooltipTrigger>
-          <TooltipContent>Chi tiết</TooltipContent>
-        </Tooltip>
-        {row.original.status === 0 && (
+    cell: ({ row, table }) => {
+      const warehouseId = (table.options.meta as MetaType).warehouseId;
+      return (
+        <div className='flex space-x-1 items-center'>
           <Tooltip>
             <TooltipTrigger>
-              <ApproveRequestDialog
-                requestId={row.original.id || ''}
-                requestCode={row.original.code}
-              />
+              <ViewGoodRequestDialog goodRequest={row.original} />
             </TooltipTrigger>
-            <TooltipContent>Đồng ý</TooltipContent>
+            <TooltipContent>Chi tiết</TooltipContent>
           </Tooltip>
-        )}
-        {row.original.status === 0 && (
-          <Tooltip>
-            <TooltipTrigger>
-              <DeclineRequestDialog
-                requestId={row.original.id || ''}
-                requestCode={row.original.code}
-              />
-            </TooltipTrigger>
-            <TooltipContent>Từ chối</TooltipContent>
-          </Tooltip>
-        )}
-        {row.original.status === 1 && (
-          <Tooltip>
-            <TooltipTrigger>
-              <CompleteRequestDialog
-                requestId={row.original.id || ''}
-                requestCode={row.original.code}
-              />
-            </TooltipTrigger>
-            <TooltipContent>Xác nhận hoàn thành</TooltipContent>
-          </Tooltip>
-        )}
-      </div>
-    ),
+          {row.original.status === 0 &&
+            row.original.requestedWarehouseId === warehouseId && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <ApproveRequestDialog
+                    requestId={row.original.id || ''}
+                    requestCode={row.original.code}
+                  />
+                </TooltipTrigger>
+                <TooltipContent>Đồng ý</TooltipContent>
+              </Tooltip>
+            )}
+          {row.original.status === 0 &&
+            row.original.requestedWarehouseId === warehouseId && (
+              <Tooltip>
+                <TooltipTrigger>
+                  <DeclineRequestDialog
+                    requestId={row.original.id || ''}
+                    requestCode={row.original.code}
+                  />
+                </TooltipTrigger>
+                <TooltipContent>Từ chối</TooltipContent>
+              </Tooltip>
+            )}
+          {row.original.status === 1 && (
+            <Tooltip>
+              <TooltipTrigger>
+                <CompleteRequestDialog
+                  requestId={row.original.id || ''}
+                  requestCode={row.original.code}
+                />
+              </TooltipTrigger>
+              <TooltipContent>Xác nhận hoàn thành</TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+      );
+    },
   },
 ];
 
@@ -258,6 +267,7 @@ const GoodRequestWarehouseTable = () => {
   return (
     <CustomDataTable
       columns={columns}
+      meta={{ warehouseId: warehouseId?.toString() }}
       data={
         isSuccess
           ? data.filter(

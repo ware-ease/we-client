@@ -83,7 +83,7 @@ const RequestCreate = () => {
               </label>
               <Input
                 name='code'
-                value={formData.code}
+                value={'Hệ thống tự tạo'}
                 onChange={handleChange}
                 className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
                 disabled

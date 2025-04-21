@@ -8,6 +8,7 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
+  TableMeta,
   useReactTable,
   VisibilityState,
 } from '@tanstack/react-table';
@@ -25,16 +26,22 @@ import { ReactNode, useState } from 'react';
 import { Button } from '../../shadcn-base/Button';
 import { DataTableFilterOptions } from './ColumnFilter';
 
+export interface CustomTableMeta<TData> extends TableMeta<TData> {
+  warehouseId?: string;
+}
+
 interface CustomDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   children?: ReactNode;
+  meta?: CustomTableMeta<TData>;
 }
 
 export function CustomDataTable<TData, TValue>({
   columns,
   data = [],
   children,
+  meta,
 }: CustomDataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -42,6 +49,7 @@ export function CustomDataTable<TData, TValue>({
 
   const table = useReactTable({
     data: data,
+    meta: meta,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

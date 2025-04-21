@@ -71,7 +71,7 @@ const WarehouseRequestCreate = () => {
               </label>
               <Input
                 name='code'
-                value={formData.code}
+                value={'Hệ thống tự tạo'}
                 onChange={handleChange}
                 className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
                 disabled
@@ -113,7 +113,7 @@ const WarehouseRequestCreate = () => {
           <div className='flex flex-col space-y-4'>
             <div>
               <label className='block text-sm font-medium text-gray-700 mb-1'>
-                Kho nhận yêu cầu
+                Kho chuyển
               </label>
               <WarehouseComboBox
                 value={formData.requestedWarehouseId ?? ''}

@@ -66,6 +66,24 @@ export const createGoodIssueNote = async (
   return response.data.data;
 };
 
+export const createGoodInternalReceiveNote = async (
+  data: GoodReceiveNote
+): Promise<GoodReceiveNote> => {
+  const response = await axiosPost(
+    '/good-notes/internal-receive-note',
+    data,
+    {}
+  );
+  return response.data.data;
+};
+
+export const createGoodInternalIssueNote = async (
+  data: GoodNote
+): Promise<GoodNote> => {
+  const response = await axiosPost('/good-notes/internal-issue-note', data, {});
+  return response.data.data;
+};
+
 export const updateGoodNote = async (data: GoodNote): Promise<GoodNote> => {
   const response = await axiosPatch('/good-notes/' + data.id, data, {});
   return response.data.data;

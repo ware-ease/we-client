@@ -1,4 +1,6 @@
 import {
+  createGoodInternalIssueNote,
+  createGoodInternalReceiveNote,
   createGoodIssueNote,
   createGoodReceiveNote,
   getAllCurrentWarehouseGoodIssueNotes,
@@ -9,7 +11,9 @@ import {
   updateGoodNote,
 } from '@/services/goodNoteService';
 import { GoodNote, GoodReceiveNote } from '@/types/goodNote';
+import { ResponseErrorType } from '@/types/response';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
 export const useGoodReceiveNotes = (enabled: boolean) =>
@@ -44,8 +48,9 @@ export const useAddGoodReceiveNote = () => {
       toast.success('Thêm thành công!');
       queryClient.invalidateQueries({ queryKey: ['receiveNotes'] });
     },
-    onError: () => {
-      toast.error('Không thể thêm.');
+    onError: (res: AxiosError<ResponseErrorType>) => {
+      console.log(res);
+      toast.error(res.response?.data?.message || 'Không thể thêm');
     },
   });
 };
@@ -97,8 +102,9 @@ export const useAddGoodIssueNote = () => {
       toast.success('Thêm thành công!');
       queryClient.invalidateQueries({ queryKey: ['issueNotes'] });
     },
-    onError: () => {
-      toast.error('Không thể thêm.');
+    onError: (res: AxiosError<ResponseErrorType>) => {
+      console.log(res);
+      toast.error(res.response?.data?.message || 'Không thể thêm');
     },
   });
 };
@@ -113,6 +119,36 @@ export const useUpdateGoodIssueNote = () => {
     },
     onError: () => {
       toast.error('Không thể sửa.');
+    },
+  });
+};
+
+export const useAddGoodInternalReceiptNote = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (grn: GoodReceiveNote) => createGoodInternalReceiveNote(grn),
+    onSuccess: () => {
+      toast.success('Thêm thành công!');
+      queryClient.invalidateQueries({ queryKey: ['receiveNotes'] });
+    },
+    onError: (res: AxiosError<ResponseErrorType>) => {
+      console.log(res);
+      toast.error(res.response?.data?.message || 'Không thể thêm');
+    },
+  });
+};
+
+export const useAddGoodInternalIssueNote = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (grn: GoodNote) => createGoodInternalIssueNote(grn),
+    onSuccess: () => {
+      toast.success('Thêm thành công!');
+      queryClient.invalidateQueries({ queryKey: ['issueNotes'] });
+    },
+    onError: (res: AxiosError<ResponseErrorType>) => {
+      console.log(res);
+      toast.error(res.response?.data?.message || 'Không thể thêm');
     },
   });
 };

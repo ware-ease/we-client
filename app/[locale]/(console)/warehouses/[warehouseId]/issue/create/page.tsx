@@ -6,9 +6,10 @@ import { Button } from '@/components/shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { GoodNote } from '@/types/goodNote';
 import useFormData from '@/hooks/useFormData';
-import { useAddGoodIssueNote } from '@/hooks/queries/goodNoteQueries';
-import { toast } from 'react-toastify';
-import { GoodNoteSchema } from '@/lib/zod/schemas';
+import {
+  useAddGoodInternalIssueNote,
+  useAddGoodIssueNote,
+} from '@/hooks/queries/goodNoteQueries';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import {
   useGoodIssueRequests,
@@ -57,6 +58,7 @@ const IssueCreate = () => {
   });
 
   const { mutate } = useAddGoodIssueNote();
+  const { mutate: mutateInternal } = useAddGoodInternalIssueNote();
 
   const currentWarehouse = useCurrentWarehouse();
 
@@ -66,30 +68,24 @@ const IssueCreate = () => {
       goodNoteDetails: data.map((row) => ({
         quantity: parseFloat(row.quantity.toString()),
         note: row.note,
-        batchId: row.batch,
+        productId: row.productId,
       })),
       requestedWarehouseId: currentWarehouse?.id,
     };
 
-    console.log(data);
-
-    console.log(finalFormData);
-
-    const result = GoodNoteSchema.safeParse(finalFormData);
-
-    if (!result.success) {
-      result.error.errors.forEach((err) => {
-        toast.error(err.message);
+    if (transferReqs?.find((r) => r.id === formData.goodRequestId)) {
+      mutateInternal(finalFormData, {
+        onSuccess: () => {
+          router.push(pathname.replace('/create', ''));
+        },
       });
-      return;
+    } else {
+      mutate(finalFormData, {
+        onSuccess: () => {
+          router.push(pathname.replace('/create', ''));
+        },
+      });
     }
-
-    mutate(finalFormData, {
-      onSuccess: () => {
-        router.push(pathname.replace('/create', ''));
-      },
-    });
-    // resetForm();
   };
 
   useEffect(() => {
@@ -153,7 +149,7 @@ const IssueCreate = () => {
               </label>
               <Input
                 name='code'
-                // value={formData.code}
+                value={'Hệ thống tự tạo'}
                 disabled
                 onChange={handleChange}
                 className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
