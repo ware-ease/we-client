@@ -3,7 +3,7 @@ import ViewProductDialog from '@/components/dialogs/ViewProductDialog';
 import { useProducts } from '@/hooks/queries/productQueries';
 import { Product } from '@/types/product';
 import { ColumnDef } from '@tanstack/react-table';
-import { Edit } from 'lucide-react';
+import { Check, Edit, X } from 'lucide-react';
 import AddProductDialog from '../../dialogs/AddProductDialog';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
@@ -86,6 +86,26 @@ export const columns: ColumnDef<Product>[] = [
     ),
     meta: {
       title: 'Đơn vị',
+    },
+  },
+  {
+    accessorKey: 'isBatchManaged',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Theo lô' />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div>
+          {row.original.isBatchManaged ? (
+            <Check className='text-green-500' size={20} />
+          ) : (
+            <X className='text-red-500' size={20} />
+          )}
+        </div>
+      );
+    },
+    meta: {
+      title: 'Theo lô',
     },
   },
   {
