@@ -4,7 +4,7 @@ export interface Product extends Base {
   sku?: string;
   name?: string;
   note?: string;
-  productType?: ProductType;
+  productType?: ProductType | string;
   category?: string;
   brand?: string;
   brandName?: string;

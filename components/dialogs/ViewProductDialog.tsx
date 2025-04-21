@@ -75,7 +75,7 @@ const ViewProductDialog: React.FC<ViewProductDialogProps> = ({ product }) => {
               <div className='grid grid-cols-2 gap-4'>
                 <div>
                   <Label className='text-sm text-gray-500'>Loại sản phẩm</Label>
-                  <p>{product.productType?.name || '—'}</p>
+                  <p>{(product.productType as string) || '—'}</p>
                 </div>
                 <div>
                   <Label className='text-sm text-gray-500'>Danh mục</Label>
@@ -84,6 +84,12 @@ const ViewProductDialog: React.FC<ViewProductDialogProps> = ({ product }) => {
                 <div>
                   <Label className='text-sm text-gray-500'>Thương hiệu</Label>
                   <p>{product.brandName || product.brand || '—'}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>
+                    Quản lý theo lô
+                  </Label>
+                  <p>{product.isBatchManaged ? 'Có' : 'Không'}</p>
                 </div>
               </div>
             </div>

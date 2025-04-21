@@ -18,6 +18,7 @@ import { useState } from 'react';
 import BrandComboBox from '../combo-boxes/BrandComboBox';
 import ProductTypeComboBox from '../combo-boxes/ProductTypeComboBox';
 import UnitComboBox from '../combo-boxes/UnitComboBox';
+import { RadioGroup, RadioGroupItem } from '../shadcn-base/RadioGroup';
 
 const AddProductDialog = () => {
   const t = useTranslations();
@@ -27,6 +28,7 @@ const AddProductDialog = () => {
     productTypeId: '',
     unitId: '',
     brandId: '',
+    isBatchManaged: 'true',
   });
 
   const productCreateMutation = useAddProduct();
@@ -55,6 +57,7 @@ const AddProductDialog = () => {
       productTypeId: '',
       unitId: '',
       brandId: '',
+      isBatchManaged: 'true',
     });
   };
 
@@ -136,13 +139,34 @@ const AddProductDialog = () => {
                   />
                 </div>
               </div>
-              <div className='col-span-2 relative z-10'>
+              <div className='relative z-10'>
                 <Label className='text-sm text-gray-500'>Hãng</Label>
                 <div className='mt-1 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 overflow-visible'>
                   <BrandComboBox
                     value={formData.brandId}
                     onChange={(value) => handleSelectChange(value, 'brandId')}
                   />
+                </div>
+              </div>
+              <div className='relative z-10'>
+                <Label className='text-sm text-gray-500'>Quản lý theo lô</Label>
+                <div className='mt-4 overflow-visible'>
+                  <RadioGroup
+                    className='flex space-x-4 mt-1'
+                    value={formData.isBatchManaged}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, isBatchManaged: value })
+                    }
+                  >
+                    <div className='flex items-center space-x-2'>
+                      <RadioGroupItem value='true' id='true' />
+                      <Label htmlFor='isBatchManaged'>Có</Label>
+                    </div>
+                    <div className='flex items-center space-x-2'>
+                      <RadioGroupItem value='false' id='false' />
+                      <Label htmlFor='isBatchManaged'>Không</Label>
+                    </div>
+                  </RadioGroup>
                 </div>
               </div>
             </div>
