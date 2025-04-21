@@ -6,7 +6,7 @@ const WarehouseCheckInventories = () => {
       <div className='text-4xl font-semibold text-primary'>
         Biên bản kiểm kê
       </div>
-      <InventoryCountTable onlyCurrentWarehouse />
+      <InventoryCountTable />
     </div>
   );
 };

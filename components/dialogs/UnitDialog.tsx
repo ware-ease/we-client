@@ -36,6 +36,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
   const [newUnit, setNewUnit] = useState<Partial<Unit>>({
     name: '',
     note: '',
+    type: 0,
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -77,6 +78,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
           id: newUnit.id,
           name: newUnit.name,
           note: newUnit.note ?? '',
+          type: newUnit.type,
         },
         {
           onSuccess: () => {
@@ -146,6 +148,16 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
                 className='bg-white'
               />
             </div>
+            <div>
+              <Label>Type</Label>
+              <Input
+                value={newUnit.type}
+                onChange={(e) =>
+                  setNewUnit({ ...newUnit, type: parseInt(e.target.value) })
+                }
+                className='bg-white'
+              />
+            </div>
             <div className='flex justify-end mt-3 space-x-2'>
               <Button onClick={handleSaveUnit}>
                 {newUnit.id ? 'Lưu thay đổi' : 'Lưu và chọn'}
@@ -153,7 +165,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
               <Button
                 variant='secondary'
                 onClick={() => {
-                  setNewUnit({ name: '', note: '' });
+                  setNewUnit({ name: '', note: '', type: 0 });
                   setShowForm(false);
                 }}
               >

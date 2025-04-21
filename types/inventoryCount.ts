@@ -6,7 +6,7 @@ import { Location } from './warehouse';
 export interface InventoryCount extends Base {
   scheduleId?: string;
   locationId?: string;
-  status?: 'draft' | 'in_progress' | 'completed';
+  status?: number;
   code?: string;
   note?: string;
   date?: string;

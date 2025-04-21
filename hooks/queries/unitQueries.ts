@@ -4,14 +4,16 @@ import {
   getAllUnits,
   updateUnit,
 } from '@/services/unitService';
+import { Unit } from '@/types/unit';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
-export type Unit = {
-  id?: string;
-  name: string;
-  note: string;
-};
+// export type Unit = {
+//   id?: string;
+//   name: string;
+//   note: string;
+//   type: number;
+// };
 
 export const useUnits = () =>
   useQuery({

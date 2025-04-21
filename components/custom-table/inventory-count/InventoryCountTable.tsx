@@ -1,11 +1,13 @@
 'use client';
-import { useInventoryCounts } from '@/hooks/queries/inventoryCountQueries';
-import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
-import { Link, usePathname } from '@/lib/i18n/routing';
+import StatusUI from '@/components/app/StatusUI';
+import { useGoodRequests } from '@/hooks/queries/goodRequests';
+import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
+import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
+import { cn } from '@/lib/utils/utils';
 import { InventoryCount } from '@/types/inventoryCount';
 import { ColumnDef } from '@tanstack/react-table';
 import { Edit } from 'lucide-react';
-import React from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
 import { Button } from '../../shadcn-base/Button';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
@@ -40,6 +42,32 @@ export const columns: ColumnDef<InventoryCount>[] = [
       title: 'Mã số',
     },
   },
+  // {
+  //   accessorKey: 'requestType',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Loại yêu cầu' />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const type = row.original.status;
+  //     switch (type) {
+  //       case 0:
+  //         return <div className='text-blue-500 font-medium'>Nhập</div>;
+  //       case 1:
+  //         return <div className='text-orange-500 font-medium'>Xuất</div>;
+  //       case 2:
+  //         return <div className='text-yellow-500 font-medium'>Chuyển</div>;
+  //       case 3:
+  //         return <div className='text-red-500 font-medium'>Trả hàng</div>;
+  //       default:
+  //         return (
+  //           <div className='text-gray-400 font-medium'>Không xác định</div>
+  //         );
+  //     }
+  //   },
+  //   meta: {
+  //     title: 'Loại yêu cầu',
+  //   },
+  // },
   {
     accessorKey: 'date',
     header: ({ column }) => (
@@ -85,30 +113,6 @@ export const columns: ColumnDef<InventoryCount>[] = [
     },
   },
   {
-    accessorKey: 'status',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Trạng thái' />
-    ),
-    cell: ({ row }) => {
-      const status = row.getValue('status') as string;
-      return status ? status.charAt(0).toUpperCase() + status.slice(1) : 'N/A';
-    },
-    filterFn: (row, columnId, filterValue) => {
-      if (!filterValue) return true;
-      const status = row.getValue(columnId) as string;
-      return status?.toLowerCase().includes(filterValue.toLowerCase());
-    },
-    meta: {
-      title: 'Trạng thái',
-      type: 'select',
-      options: [
-        { value: 'draft', label: 'Draft' },
-        { value: 'in_progress', label: 'In Progress' },
-        { value: 'completed', label: 'Completed' },
-      ],
-    },
-  },
-  {
     accessorKey: 'location',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Vị trí' />
@@ -126,6 +130,23 @@ export const columns: ColumnDef<InventoryCount>[] = [
     cell: ({ row }) => row.getValue('note') || 'N/A',
     meta: {
       title: 'Ghi chú',
+    },
+  },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Trạng thái'
+        // className='text-center'
+      />
+    ),
+    cell: ({ row }) => {
+      return <StatusUI status={row.getValue('status')} />;
+    },
+    filterFn: statusFilterFn,
+    meta: {
+      title: 'Trạng thái',
     },
   },
   {
@@ -177,41 +198,120 @@ export const columns: ColumnDef<InventoryCount>[] = [
   },
 ];
 
-interface InventoryCountTableProps {
-  onlyCurrentWarehouse?: boolean;
-}
-
-const InventoryCountTable: React.FC<InventoryCountTableProps> = ({
-  onlyCurrentWarehouse = false,
-}) => {
+//////////////////////////////////////////////
+const InventoryCountTable = () => {
   const pathname = usePathname();
-  const currentWarehouse = useCurrentWarehouse();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
-  // Fetch all inventory counts (when not limited to current warehouse)
-  const { data, isSuccess } = useInventoryCounts(
-    !onlyCurrentWarehouse && currentWarehouse?.id !== undefined // enabled
-  );
-
-  // Fetch inventory counts for the current warehouse
-  const { data: currentWarehouseData, isSuccess: isCurrentWarehouseSuccess } =
-    useInventoryCounts(
-      onlyCurrentWarehouse && currentWarehouse?.id !== undefined, // enabled
-      currentWarehouse?.id
-    );
-
-  const tableData = onlyCurrentWarehouse
-    ? isCurrentWarehouseSuccess
-      ? currentWarehouseData
-      : []
-    : isSuccess
-    ? data
+  // Parse status params as an array
+  const statusParams = searchParams.get('status')
+    ? searchParams.get('status')!.split(',').map(Number)
     : [];
 
+  const toggleStatusFilter = (status: number) => {
+    const newStatuses = statusParams.includes(status)
+      ? statusParams.filter((s) => s !== status)
+      : [...statusParams, status];
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (newStatuses.length > 0) {
+      params.set('status', newStatuses.join(','));
+    } else {
+      params.delete('status');
+    }
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const selectAllStatuses = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('status');
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const { warehouseId } = useParams();
+  const { data, isSuccess } = useGoodRequests();
+
   return (
-    <CustomDataTable columns={columns} data={tableData}>
-      <Link href={`${pathname}/create`}>
-        <Button>Thêm</Button>
-      </Link>
+    <CustomDataTable
+      columns={columns}
+      data={
+        isSuccess
+          ? data.filter(
+              (r) =>
+                (r.requestedWarehouseId === warehouseId ||
+                  r.warehouseId === warehouseId) &&
+                (statusParams.length === 0
+                  ? true
+                  : statusParams.includes(r.status || 0))
+            )
+          : []
+      }
+    >
+      <div className='w-full flex justify-between'>
+        <div className='space-x-2'>
+          <Button
+            onClick={selectAllStatuses}
+            className={cn(
+              'rounded-3xl text-blue-500 border-2 border-blue-500',
+              statusParams.length === 0
+                ? 'bg-blue-500 text-white hover:bg-blue-600'
+                : 'bg-white hover:bg-slate-50'
+            )}
+          >
+            Tất cả
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-yellow-500 border-2 border-yellow-500',
+              statusParams.includes(0)
+                ? 'bg-yellow-500 text-white hover:bg-yellow-600'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => toggleStatusFilter(0)}
+          >
+            Chờ xử lý
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-green-400 border-2 border-green-400',
+              statusParams.includes(1)
+                ? 'bg-green-400 text-white hover:bg-green-400'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => toggleStatusFilter(1)}
+          >
+            Đã đồng ý
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-red-500 border-2 border-red-500',
+              statusParams.includes(2)
+                ? 'bg-red-500 text-white hover:bg-red-600'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => toggleStatusFilter(2)}
+          >
+            Đã từ chối
+          </Button>
+          <Button
+            className={cn(
+              'rounded-3xl text-green-500 border-2 border-green-500',
+              statusParams.includes(3)
+                ? 'bg-green-500 text-white hover:bg-green-600'
+                : 'bg-white hover:bg-slate-50'
+            )}
+            onClick={() => toggleStatusFilter(3)}
+          >
+            Hoàn thành
+          </Button>
+        </div>
+        <Link href={`${pathname}/create`}>
+          <Button>Thêm</Button>
+        </Link>
+      </div>
     </CustomDataTable>
   );
 };
