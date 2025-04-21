@@ -17,7 +17,7 @@ const CheckInventoryCreate = () => {
     startTime: '',
     endTime: '',
     note: '',
-    status: 'draft',
+    status: 0,
     locationId: '',
     scheduleId: '',
     inventoryCountDetails: [],
