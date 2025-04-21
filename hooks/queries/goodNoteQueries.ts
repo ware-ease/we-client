@@ -1,5 +1,5 @@
 import {
-  createGoodNote,
+  createGoodIssueNote,
   createGoodReceiveNote,
   getAllCurrentWarehouseGoodIssueNotes,
   getAllCurrentWarehouseGoodReceiveNotes,
@@ -92,7 +92,7 @@ export const useCurrentWarehouseGoodIssueNotes = (
 export const useAddGoodIssueNote = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (grn: GoodNote) => createGoodNote(grn),
+    mutationFn: (grn: GoodNote) => createGoodIssueNote(grn),
     onSuccess: () => {
       toast.success('Thêm thành công!');
       queryClient.invalidateQueries({ queryKey: ['issueNotes'] });

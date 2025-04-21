@@ -3,7 +3,6 @@ import { Input } from '@/components/shadcn-base/Input';
 import React, { useEffect, useState } from 'react';
 import RequestComboBox from '@/components/combo-boxes/RequestComboBox';
 import { Button } from '@/components/shadcn-base/Button';
-import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { GoodNote } from '@/types/goodNote';
 import useFormData from '@/hooks/useFormData';
@@ -18,6 +17,9 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { getGoodRequestById } from '@/services/goodRequestService';
 import { useAuth } from '@/components/providers/AuthProvider';
+import CustomIssueTable, {
+  RowData,
+} from '@/components/custom-table/CustomIssueTable';
 
 const IssueCreate = () => {
   const router = useRouter();
@@ -27,11 +29,9 @@ const IssueCreate = () => {
   const [data, setData] = useState<RowData[]>([]);
   const [receiverName, setReceiverName] = useState<string>('');
   const { formData, handleChange, setFormData } = useFormData<GoodNote>({
-    noteType: 1,
     shipperName: '',
     receiverName: '',
-    code: '',
-    date: '',
+    date: new Date().toISOString().split('T')[0],
     goodRequestId: '',
     goodNoteDetails: [],
     requestedWarehouseId: '',
@@ -126,14 +126,13 @@ const IssueCreate = () => {
   };
 
   return (
-    <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-4'>
-      <div className='flex flex-col w-full'>
-        <div className='flex space-x-20 items-center w-full'>
-          <div className='text-4xl font-semibold text-primary'>
-            Phiếu xuất kho
-          </div>
-          <div className='flex items-center space-x-2 text-sm'>
-            <div className='text-md'>Yêu cầu từ:</div>
+    <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-6 bg-gray-50'>
+      {/* Header and Request ComboBox */}
+      <div className='flex items-center justify-between mb-6 bg-white p-6 rounded-lg shadow-sm'>
+        <h1 className='text-2xl font-bold text-gray-800'>Phiếu xuất kho</h1>
+        <div className='flex items-center space-x-4'>
+          <span className='text-sm text-gray-600 font-medium'>Yêu cầu từ:</span>
+          <div className='w-64'>
             <RequestComboBox
               value={formData.goodRequestId ?? ''}
               requests={requests?.concat(transferReqs || [])}
@@ -141,61 +140,105 @@ const IssueCreate = () => {
             />
           </div>
         </div>
-        <div className='flex space-x-20 py-5 pl-3'>
-          <div className='flex flex-col space-y-2'>
-            <div className='w-64'>
-              <div className='text-sm'>Mã phiếu</div>
+      </div>
+
+      {/* Form Fields */}
+      <div className='bg-white p-6 rounded-lg shadow-sm mb-6'>
+        <div className='grid grid-cols-3 gap-6'>
+          {/* Column 1 */}
+          <div className='flex flex-col space-y-4'>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Mã phiếu
+              </label>
               <Input
                 name='code'
-                value={formData.code}
+                // value={formData.code}
+                disabled
                 onChange={handleChange}
-                required
+                className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
               />
             </div>
-            <div className='w-64'>
-              <div className='text-sm'>Ngày tạo</div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Ngày tạo
+              </label>
               <Input
                 name='date'
-                value={formData.date}
+                defaultValue={formData.date}
                 type='date'
-                onChange={handleChange}
+                // onChange={handleChange}
+                className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
                 required
               />
             </div>
           </div>
-          <div className='flex flex-col space-y-2'>
-            <div className='w-64'>
-              <div className='text-sm'>Khách hàng</div>
-              <Input value={receiverName} disabled />
+
+          {/* Column 2 */}
+          <div className='flex flex-col space-y-4'>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Khách hàng
+              </label>
+              <Input
+                value={receiverName}
+                disabled
+                className='w-full border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
+              />
             </div>
-            <div className='w-64'>
-              <div className='text-sm'>Người giao hàng</div>
-              <Input name='shipperName' value={formData.shipperName} disabled />
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Người giao hàng
+              </label>
+              <Input
+                name='shipperName'
+                value={formData.shipperName}
+                className='w-full border-gray-300 rounded-md bg-gray-100 focus:ring-blue-500 focus:border-blue-500'
+                disabled
+              />
             </div>
           </div>
-          <div className='flex flex-col space-y-2'>
-            <div className='w-64'>
-              <div className='text-sm'>Kho xuất</div>
-              <Input value={currentWarehouse?.name ?? ''} disabled />
+
+          {/* Column 3 */}
+          <div className='flex flex-col space-y-4'>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Kho xuất
+              </label>
+              <Input
+                value={currentWarehouse?.name ?? ''}
+                disabled
+                className='w-full border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
+              />
             </div>
-            <div className='w-64'>
-              <div className='text-sm'>Người nhận hàng</div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700 mb-1'>
+                Người nhận hàng
+              </label>
               <Input
                 name='receiverName'
                 value={formData.receiverName}
                 onChange={handleChange}
-                required
+                className='w-full border-gray-300 rounded-md'
               />
             </div>
           </div>
         </div>
       </div>
-      <div className=''>
-        <CustomTable initialData={initialData} onDataChange={setData} />
+
+      {/* Table */}
+      <div className='bg-white p-6 rounded-lg shadow-sm mb-6'>
+        <CustomIssueTable initialData={initialData} onDataChange={setData} />
       </div>
-      <div className='flex w-full'>
-        <div className='grow'></div>
-        <Button onClick={handleSubmit}>Tạo phiếu</Button>
+
+      {/* Submit Button */}
+      <div className='flex justify-end'>
+        <Button
+          onClick={handleSubmit}
+          className='bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md'
+        >
+          Tạo phiếu
+        </Button>
       </div>
     </div>
   );
