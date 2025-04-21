@@ -5,7 +5,6 @@ import {
   Home,
   LayoutDashboardIcon,
   LogOut,
-  Map,
   PackageMinus,
   PackageOpen,
   PackagePlus,
@@ -96,11 +95,11 @@ export function AppSidebar() {
       url: ensureUniquePath('/issue'),
       icon: PackageMinus,
     },
-    {
-      title: 'Vị trí',
-      url: ensureUniquePath('/locations'),
-      icon: Map,
-    },
+    // {
+    //   title: 'Vị trí',
+    //   url: ensureUniquePath('/locations'),
+    //   icon: Map,
+    // },
   ];
 
   const items = [

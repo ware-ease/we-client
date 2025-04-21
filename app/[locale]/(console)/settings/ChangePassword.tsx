@@ -2,6 +2,7 @@
 import PasswordStrength, {
   checkPasswordStrength,
 } from '@/components/app/PasswordStrength';
+import { useAuth } from '@/components/providers/AuthProvider';
 import { Button } from '@/components/shadcn-base/Button';
 import { Input } from '@/components/shadcn-base/Input';
 import { changePassword } from '@/services/accountService';
@@ -15,6 +16,7 @@ import { toast } from 'react-toastify';
 const ChangePassword = () => {
   const t = useTranslations();
   const router = useRouter();
+  const { currentUser } = useAuth();
 
   const [oldPassword, setOldPassword] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
@@ -71,15 +73,19 @@ const ChangePassword = () => {
         <div className='p-4 flex flex-col gap-3 w-1/2'>
           <div className='flex'>
             <div className='flex items-center w-2/5'>{t('Login.username')}</div>
-            <Input className='border-gray-300 w-3/5' />
+            <Input
+              className='border-gray-300 w-3/5'
+              value={currentUser?.username}
+              disabled
+            />
           </div>
           <div className='relative h-full w-full'>
-            <Button
+            {/* <Button
               disabled
               className='bg-red-700 hover:bg-red-950 absolute bottom-0 right-0'
             >
               {t('Settings.update')}
-            </Button>
+            </Button> */}
           </div>
         </div>
         <div className='p-4 flex flex-col gap-3 w-1/2'>
