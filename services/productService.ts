@@ -13,6 +13,11 @@ export const getAllProducts = async (): Promise<Product[]> => {
   return response.data.data.records;
 };
 
+export const getProductById = async (id: string): Promise<Product> => {
+  const response = await axiosGet('/products/' + id, {});
+  return response.data.data;
+};
+
 export const createProduct = async (
   data: ProductCreate
 ): Promise<ProductCreate> => {

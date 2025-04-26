@@ -8,6 +8,7 @@ import {
   PackageMinus,
   PackageOpen,
   PackagePlus,
+  ReceiptText,
   Settings,
   UsersRound,
   Warehouse,
@@ -94,6 +95,11 @@ export function AppSidebar() {
       title: t('Sidebar.export'),
       url: ensureUniquePath('/issue'),
       icon: PackageMinus,
+    },
+    {
+      title: 'Kiểm kê',
+      url: ensureUniquePath('/inventory-count'),
+      icon: ReceiptText,
     },
     // {
     //   title: 'Vị trí',

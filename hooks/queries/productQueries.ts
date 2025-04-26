@@ -2,6 +2,7 @@ import {
   createProduct,
   deleteProduct,
   getAllProducts,
+  getProductById,
 } from '@/services/productService';
 import { ProductCreate } from '@/types/request/product';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -11,6 +12,12 @@ export const useProducts = () =>
   useQuery({
     queryKey: ['products'],
     queryFn: getAllProducts,
+  });
+
+export const useProduct = (id: string) =>
+  useQuery({
+    queryKey: ['products', id],
+    queryFn: () => getProductById(id),
   });
 
 export const useAddProduct = () => {

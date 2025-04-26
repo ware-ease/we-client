@@ -23,6 +23,7 @@ interface ProductsView {
   product?: Product;
   unitName: string;
   currentQuantity: number;
+  productId?: string;
 }
 
 export const columns: ColumnDef<Inventory>[] = [
@@ -217,7 +218,7 @@ export const productsColumns: ColumnDef<ProductsView>[] = [
     cell: ({ row }) => (
       <div className='flex space-x-1 items-center'>
         {/* Add actions like view or edit if needed */}
-        <Link href={`/products/${row.original.id}`}>
+        <Link href={`/products/${row.original.productId}`}>
           <Tooltip>
             <TooltipTrigger>
               <Eye className='text-blue-500' size={20} />
@@ -268,6 +269,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
         groupedProducts.push({
           id: inv.batch.product?.sku || '',
           product: inv.batch.product,
+          productId: inv.batch.productId,
           unitName: inv.batch.product?.unitName || '',
           currentQuantity: inv.currentQuantity,
         });
