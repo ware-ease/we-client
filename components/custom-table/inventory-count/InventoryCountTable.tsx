@@ -1,13 +1,13 @@
 'use client';
 import StatusUI from '@/components/app/StatusUI';
-import { useGoodRequests } from '@/hooks/queries/goodRequests';
+import { useInventoryCounts } from '@/hooks/queries/inventoryCountQueries';
 import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
 import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 import { cn } from '@/lib/utils/utils';
 import { InventoryCount } from '@/types/inventoryCount';
 import { ColumnDef } from '@tanstack/react-table';
 import { Edit } from 'lucide-react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Button } from '../../shadcn-base/Button';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
@@ -42,32 +42,6 @@ export const columns: ColumnDef<InventoryCount>[] = [
       title: 'Mã số',
     },
   },
-  // {
-  //   accessorKey: 'requestType',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='Loại yêu cầu' />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const type = row.original.status;
-  //     switch (type) {
-  //       case 0:
-  //         return <div className='text-blue-500 font-medium'>Nhập</div>;
-  //       case 1:
-  //         return <div className='text-orange-500 font-medium'>Xuất</div>;
-  //       case 2:
-  //         return <div className='text-yellow-500 font-medium'>Chuyển</div>;
-  //       case 3:
-  //         return <div className='text-red-500 font-medium'>Trả hàng</div>;
-  //       default:
-  //         return (
-  //           <div className='text-gray-400 font-medium'>Không xác định</div>
-  //         );
-  //     }
-  //   },
-  //   meta: {
-  //     title: 'Loại yêu cầu',
-  //   },
-  // },
   {
     accessorKey: 'date',
     header: ({ column }) => (
@@ -231,21 +205,23 @@ const InventoryCountTable = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const { warehouseId } = useParams();
-  const { data, isSuccess } = useGoodRequests();
+  //const { warehouseId } = useParams();
+  const { data: inventoryCounts, isSuccess } = useInventoryCounts(
+    true
+    //warehouseId
+  );
+  console.log(inventoryCounts);
 
   return (
     <CustomDataTable
       columns={columns}
+      // meta={{ warehouseId: warehouseId?.toString() }}
       data={
         isSuccess
-          ? data.filter(
-              (r) =>
-                (r.requestedWarehouseId === warehouseId ||
-                  r.warehouseId === warehouseId) &&
-                (statusParams.length === 0
-                  ? true
-                  : statusParams.includes(r.status || 0))
+          ? inventoryCounts.filter((r) =>
+              statusParams.length === 0
+                ? true
+                : statusParams.includes(r.status || 0)
             )
           : []
       }

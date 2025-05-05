@@ -12,8 +12,8 @@ export const getAllInventoryCounts = async (
   warehouseId?: string
 ): Promise<InventoryCount[]> => {
   const query = warehouseId
-    ? `/api/inventory-counts${baseFilters}&warehouseId=${warehouseId}`
-    : `/api/inventory-counts${baseFilters}`;
+    ? `/inventory-counts${baseFilters}&warehouseId=${warehouseId}`
+    : `/inventory-counts${baseFilters}`;
   const response = await axiosGet(query, {});
   return response.data.data.records;
 };
@@ -22,7 +22,7 @@ export const getAllInventoryCounts = async (
 export const getInventoryCountById = async (
   id: string
 ): Promise<InventoryCount> => {
-  const response = await axiosGet(`/api/inventory-counts/${id}`, {});
+  const response = await axiosGet(`inventory-counts/${id}`, {});
   return response.data.data;
 };
 
@@ -30,7 +30,7 @@ export const getInventoryCountById = async (
 export const createInventoryCount = async (
   data: InventoryCount
 ): Promise<InventoryCount> => {
-  const response = await axiosPost('/api/inventory-counts', data, {});
+  const response = await axiosPost('/inventory-counts', data, {});
   return response.data.data;
 };
 
@@ -39,11 +39,11 @@ export const updateInventoryCount = async (
   id: string,
   data: InventoryCount
 ): Promise<InventoryCount> => {
-  const response = await axiosPatch(`/api/inventory-counts/${id}`, data, {});
+  const response = await axiosPatch(`/inventory-counts/${id}`, data, {});
   return response.data.data;
 };
 
 // Xóa inventory count
 export const deleteInventoryCount = async (id: string): Promise<void> => {
-  await axiosDelete(`/api/inventory-counts/${id}`, {});
+  await axiosDelete(`/inventory-counts/${id}`, {});
 };
