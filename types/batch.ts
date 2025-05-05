@@ -6,6 +6,7 @@ export type Batch = {
   supplierId?: string;
   code: string;
   name: string;
+  inboundDate: string;
   mfgDate: string;
   expDate: string;
   product?: Product;

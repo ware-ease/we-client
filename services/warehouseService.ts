@@ -1,4 +1,4 @@
-import { Location, Warehouse } from '../types/warehouse';
+import { Inventory, Location, Warehouse } from '../types/warehouse';
 import {
   axiosDelete,
   axiosGet,
@@ -22,6 +22,22 @@ export const getWarehouseInventoriesById = async (
 ): Promise<Warehouse> => {
   const response = await axiosGet(`/warehouses/${id}/inventory`, {});
   return response.data.data;
+};
+
+export const getWarehouseInventoriesByProductId = async (
+  warehouseId: string,
+  productId: string
+): Promise<Inventory[]> => {
+  const response = await axiosGet(
+    `/inventories` +
+      baseFilters +
+      `&warehouseId=` +
+      warehouseId +
+      '&productId=' +
+      productId,
+    {}
+  );
+  return response.data.data.records;
 };
 
 export const getWarehouseInventoryAdjustments = async (
