@@ -24,6 +24,7 @@ interface ProductsView {
   unitName: string;
   currentQuantity: number;
   productId?: string;
+  warehouseId: string;
 }
 
 export const columns: ColumnDef<Inventory>[] = [
@@ -74,36 +75,71 @@ export const columns: ColumnDef<Inventory>[] = [
       title: 'Mã lô',
     },
   },
-  // {
-  //   accessorKey: 'batch.inboundDate',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='Ngày nhập' />
-  //   ),
-  //   cell: ({ row }) =>
-  //     new Date(row.getValue('batch.inboundDate')).toLocaleDateString('vi-VN'),
-  //   filterFn: (row, columnId, filterValue) => {
-  //     if (!filterValue?.from && !filterValue?.to) return true;
-  //     const rowDate = new Date(row.getValue(columnId));
-  //     const fromDate = filterValue.from ? new Date(filterValue.from) : null;
-  //     const toDate = filterValue.to ? new Date(filterValue.to) : null;
+  {
+    accessorKey: 'batch.inboundDate',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Ngày nhập' />
+    ),
+    cell: ({ row }) =>
+      new Date(row.original.batch.inboundDate).toLocaleDateString('vi-VN'),
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue?.from && !filterValue?.to) return true;
+      const rowDate = new Date(row.getValue(columnId));
+      const fromDate = filterValue.from ? new Date(filterValue.from) : null;
+      const toDate = filterValue.to ? new Date(filterValue.to) : null;
 
-  //     if (toDate) {
-  //       toDate.setHours(23, 59, 59, 999);
-  //     }
+      if (toDate) {
+        toDate.setHours(23, 59, 59, 999);
+      }
 
-  //     if (fromDate && toDate) {
-  //       return rowDate >= fromDate && rowDate <= toDate;
-  //     }
-  //     if (fromDate) return rowDate >= fromDate;
-  //     if (toDate) return rowDate <= toDate;
+      if (fromDate && toDate) {
+        return rowDate >= fromDate && rowDate <= toDate;
+      }
+      if (fromDate) return rowDate >= fromDate;
+      if (toDate) return rowDate <= toDate;
 
-  //     return true;
-  //   },
-  //   meta: {
-  //     title: 'Ngày nhập',
-  //     type: 'date',
-  //   },
-  // },
+      return true;
+    },
+    meta: {
+      title: 'Ngày nhập',
+      type: 'date',
+    },
+  },
+  {
+    accessorKey: 'batch.expDate',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Hạn sử dụng' />
+    ),
+    cell: ({ row }) => (
+      <div>
+        {row.original.batch.expDate !== '0001-01-01'
+          ? new Date(row.original.batch.expDate).toLocaleDateString('vi-VN')
+          : 'Không có'}
+      </div>
+    ),
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue?.from && !filterValue?.to) return true;
+      const rowDate = new Date(row.getValue(columnId));
+      const fromDate = filterValue.from ? new Date(filterValue.from) : null;
+      const toDate = filterValue.to ? new Date(filterValue.to) : null;
+
+      if (toDate) {
+        toDate.setHours(23, 59, 59, 999);
+      }
+
+      if (fromDate && toDate) {
+        return rowDate >= fromDate && rowDate <= toDate;
+      }
+      if (fromDate) return rowDate >= fromDate;
+      if (toDate) return rowDate <= toDate;
+
+      return true;
+    },
+    meta: {
+      title: 'Hạn sử dụng',
+      type: 'date',
+    },
+  },
   {
     accessorKey: 'batch.product.unitName',
     header: ({ column }) => (
@@ -218,7 +254,9 @@ export const productsColumns: ColumnDef<ProductsView>[] = [
     cell: ({ row }) => (
       <div className='flex space-x-1 items-center'>
         {/* Add actions like view or edit if needed */}
-        <Link href={`/products/${row.original.productId}`}>
+        <Link
+          href={`/products/${row.original.productId}?currentWarehouseId=${row.original.warehouseId}`}
+        >
           <Tooltip>
             <TooltipTrigger>
               <Eye className='text-blue-500' size={20} />
@@ -272,6 +310,7 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
           productId: inv.batch.productId,
           unitName: inv.batch.product?.unitName || '',
           currentQuantity: inv.currentQuantity,
+          warehouseId: warehouseId as string,
         });
       }
     });

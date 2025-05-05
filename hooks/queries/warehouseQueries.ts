@@ -5,6 +5,7 @@ import {
   getAllWarehouses,
   getWarehouseById,
   getWarehouseInventoriesById,
+  getWarehouseInventoriesByProductId,
   getWarehouseInventoryAdjustments,
   updateWarehouse,
 } from '@/services/warehouseService';
@@ -28,6 +29,17 @@ export const useWarehousesInventories = (enabled: boolean, id: string) =>
   useQuery({
     queryKey: ['inventories', id],
     queryFn: () => getWarehouseInventoriesById(id),
+    enabled: enabled,
+  });
+
+export const useWarehousesInventoriesByProductID = (
+  enabled: boolean,
+  warehouseId: string,
+  productId: string
+) =>
+  useQuery({
+    queryKey: ['inventories', warehouseId, productId],
+    queryFn: () => getWarehouseInventoriesByProductId(warehouseId, productId),
     enabled: enabled,
   });
 
