@@ -4,10 +4,11 @@ import CustomInventoryCheckTable from '@/components/custom-table/CustomInventory
 import { Button } from '@/components/shadcn-base/Button';
 import { Input } from '@/components/shadcn-base/Input';
 import { useAddInventoryCount } from '@/hooks/queries/inventoryCountQueries';
+import { useWarehousesInventories } from '@/hooks/queries/warehouseQueries';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import useFormData from '@/hooks/useFormData';
 import { InventoryCount } from '@/types/inventoryCount';
-import { usePathname, useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
@@ -40,10 +41,20 @@ type RowData = {
 };
 
 const CheckInventoryCreate = () => {
+  const { warehouseId } = useParams();
   const router = useRouter();
   const pathname = usePathname();
   const { mutate } = useAddInventoryCount();
   const currentWarehouse = useCurrentWarehouse();
+
+  const { data: inventoryData, isLoading } = useWarehousesInventories(
+    true, // Assuming first param enables the query
+    (warehouseId as string) ? (warehouseId as string) : '' // Pass warehouseId based on onlyCurrentWarehouse
+  );
+
+  // const { data: inventoryData, isLoading } = useWarehousesInventories(
+  //   currentWarehouse?.id ?? ''
+  // );
 
   const { formData, handleChange } = useFormData<InventoryCount>({
     code: '',
@@ -186,9 +197,16 @@ const CheckInventoryCreate = () => {
 
       {/* Table phần kiểm kê */}
       <div className='mt-8'>
-        <CustomInventoryCheckTable onDataChange={setData} />
+        {isLoading ? (
+          <div>Đang tải danh sách tồn kho...</div>
+        ) : (
+          <CustomInventoryCheckTable
+            initialData={[]}
+            inventories={inventoryData?.inventories || []}
+            onDataChange={setData}
+          />
+        )}
       </div>
-
       {/* Nút submit */}
       <div className='flex w-full justify-end mt-8'>
         <Button

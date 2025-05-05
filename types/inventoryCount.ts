@@ -21,6 +21,7 @@ export interface InventoryCountDetail extends Base {
   errorTicketId?: string;
   productId?: string;
   inventoryCountId?: string;
+  inventoryId?: string;
   expectedQuantity?: number;
   countedQuantity?: number;
   note?: string;

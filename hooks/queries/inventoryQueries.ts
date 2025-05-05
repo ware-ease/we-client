@@ -12,6 +12,16 @@ export const useInventoryById = (id: string) =>
     queryFn: () => getWarehouseInventoryById(id),
   });
 
+// export const useInventoriesByWarehouse = (
+//   warehouseId: string,
+//   options?: { enabled?: boolean }
+// ) =>
+//   useQuery<Inventory[], Error>({
+//     queryKey: ['inventories', warehouseId],
+//     queryFn: () => getWarehouseInventories(warehouseId),
+//     enabled: options?.enabled,
+//   });
+
 export const usePutAwayGoods = () => {
   const queryClient = useQueryClient();
   return useMutation({
