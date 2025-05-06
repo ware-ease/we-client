@@ -1,26 +1,17 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Printer } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
+import { StockCard as StockCardType } from '@/types/warehouse';
+import { Button } from '@/components/shadcn-base/Button';
+import { Input } from '@/components/shadcn-base/Input';
 
-interface StockCardData {
-  productCode: string;
-  productName: string;
-  unitName: string;
-  warehouseName: string;
-  details: {
-    date: string;
-    code: string;
-    description: string;
-    import: number;
-    export: number;
-    stock: number;
-    note: string;
-  }[];
-}
-
-const StockCard: React.FC<{ data: StockCardData }> = ({ data }) => {
+const StockCard: React.FC<{ data: StockCardType }> = ({ data }) => {
   const contentRef = useRef(null);
+  const [dateStart, setDateStart] = useState<string>('');
+  const [dateEnd, setDateEnd] = useState<string>('');
+
+  console.log(data);
 
   // Print function for browser print dialog
   const handlePrint = useReactToPrint({
@@ -29,12 +20,36 @@ const StockCard: React.FC<{ data: StockCardData }> = ({ data }) => {
   });
 
   // Format date or return 'Không có' for invalid dates
-  const formatDate = (date: string) => {
+  const formatDate = (date: string | undefined) => {
     if (!date || typeof date !== 'string') return 'Không có';
     const parsedDate = new Date(date);
     return isNaN(parsedDate.getTime())
       ? 'Không có'
       : parsedDate.toLocaleDateString('vi-VN');
+  };
+
+  // Filter details based on expDate and inboundDate
+  const filteredDetails = data.details.filter((detail) => {
+    // Expiration date filter
+    let expDatePass = true;
+    if (dateStart && detail.date) {
+      const expDate = new Date(detail.date);
+      const start = new Date(dateStart);
+      expDatePass = !isNaN(expDate.getTime()) && expDate >= start;
+    }
+    if (dateEnd && detail.date) {
+      const expDate = new Date(detail.date);
+      const end = new Date(dateEnd);
+      expDatePass = expDatePass && !isNaN(expDate.getTime()) && expDate <= end;
+    }
+
+    return expDatePass;
+  });
+
+  // Clear all filters
+  const clearFilters = () => {
+    setDateStart('');
+    setDateEnd('');
   };
 
   return (
@@ -53,6 +68,35 @@ const StockCard: React.FC<{ data: StockCardData }> = ({ data }) => {
             </button>
           </div>
         </div>
+
+        {/* Filter Section */}
+        <div className='mb-4 grid grid-cols-1 md:grid-cols-2 gap-4'>
+          <div>
+            <h3 className='text-lg font-semibold text-gray-700 mb-2'>
+              Ngày nhập xuất
+            </h3>
+            <div className='flex space-x-2'>
+              <Input
+                type='date'
+                value={dateStart}
+                onChange={(e) => setDateStart(e.target.value)}
+                className='border border-gray-300 rounded p-2 w-full'
+                placeholder='Từ ngày'
+              />
+              <Input
+                type='date'
+                value={dateEnd}
+                onChange={(e) => setDateEnd(e.target.value)}
+                className='border border-gray-300 rounded p-2 w-full'
+                placeholder='Đến ngày'
+              />
+              <Button className='h-full' onClick={clearFilters}>
+                Xóa bộ lọc
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
           <div>
             <p className='text-gray-600'>
@@ -103,8 +147,8 @@ const StockCard: React.FC<{ data: StockCardData }> = ({ data }) => {
               </tr>
             </thead>
             <tbody>
-              {data.details.length > 0 ? (
-                data.details.map((detail, index) => (
+              {filteredDetails.length > 0 ? (
+                filteredDetails.map((detail, index) => (
                   <tr key={index} className='hover:bg-gray-50'>
                     <td className='border border-gray-200 p-2'>
                       {formatDate(detail.date)}
@@ -136,7 +180,7 @@ const StockCard: React.FC<{ data: StockCardData }> = ({ data }) => {
               ) : (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={9}
                     className='border border-gray-200 p-2 text-center text-gray-600'
                   >
                     Không có giao dịch
@@ -190,6 +234,12 @@ const StockCard: React.FC<{ data: StockCardData }> = ({ data }) => {
                 <th className='border border-black p-2 text-right'>Nhập</th>
                 <th className='border border-black p-2 text-right'>Xuất</th>
                 <th className='border border-black p-2 text-right'>Tồn</th>
+                <th className='border border-black p-2 text-left'>
+                  Ngày nhập kho
+                </th>
+                <th className='border border-black p-2 text-left'>
+                  Ngày hết hạn
+                </th>
                 <th className='border border-black p-2 text-left'>Ghi chú</th>
               </tr>
             </thead>
@@ -225,7 +275,7 @@ const StockCard: React.FC<{ data: StockCardData }> = ({ data }) => {
               ) : (
                 <tr>
                   <td
-                    colSpan={7}
+                    colSpan={9}
                     className='border border-black p-2 text-center'
                   >
                     Không có giao dịch

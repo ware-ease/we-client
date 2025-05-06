@@ -61,3 +61,19 @@ export interface InventoryAdjustmentDetail extends Base {
   locationId?: string;
   inventoryId?: string;
 }
+
+export interface StockCard {
+  productCode: string;
+  productName: string;
+  unitName: string;
+  warehouseName: string;
+  details: {
+    date: string;
+    code: string;
+    description: string;
+    import: number;
+    export: number;
+    stock: number;
+    note: string;
+  }[];
+}

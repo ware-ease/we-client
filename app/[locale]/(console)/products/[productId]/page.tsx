@@ -2,40 +2,16 @@
 import { useProduct } from '@/hooks/queries/productQueries';
 import { useBatchesByProductId } from '@/hooks/queries/batchQueries';
 import { useWarehouses } from '@/hooks/queries/accountQueries';
-import { useWarehousesInventoriesByProductID } from '@/hooks/queries/warehouseQueries';
+import {
+  useWarehousesInventoriesByProductID,
+  useWarehousesStockCardByProductID,
+} from '@/hooks/queries/warehouseQueries';
 import { useParams, useSearchParams } from 'next/navigation';
 import React, { useState, useMemo, useEffect } from 'react';
 import { Loader2, Pencil, Filter } from 'lucide-react';
 import { Product } from '@/types/product';
 import StockCard from './StockCard';
 import { useRouter } from '@/lib/i18n/routing';
-
-const stockCardData = {
-  productCode: 'JTT18SNDU',
-  productName: 'Sơn dầu Jotun',
-  unitName: 'Thùng 18L',
-  warehouseName: 'Kho Sài Gòn',
-  details: [
-    {
-      date: '2025-04-13T08:33:38.366',
-      code: 'TNK13041',
-      description: 'nhập thiếu 100',
-      import: 99,
-      export: 0,
-      stock: 99,
-      note: 'LOT0002',
-    },
-    {
-      date: '2025-04-15T08:33:38.366',
-      code: 'TNK15042',
-      description: 'nhập đủ',
-      import: 100,
-      export: 0,
-      stock: 199,
-      note: 'LOT0004',
-    },
-  ],
-};
 
 const ProductDetail = () => {
   const { productId } = useParams();
@@ -55,6 +31,12 @@ const ProductDetail = () => {
     (searchParams.get('currentWarehouseId') as string) || ''
   );
   const { data: inventories } = useWarehousesInventoriesByProductID(
+    currentWarehouseId !== undefined,
+    currentWarehouseId || '',
+    productIdStr || ''
+  );
+
+  const { data: stockCard } = useWarehousesStockCardByProductID(
     currentWarehouseId !== undefined,
     currentWarehouseId || '',
     productIdStr || ''
@@ -364,7 +346,7 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      <StockCard data={stockCardData} />
+      {stockCard && <StockCard data={stockCard} />}
 
       {/* Product Edit Modal */}
       {isEditModalOpen && (

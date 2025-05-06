@@ -7,6 +7,7 @@ import {
   getWarehouseInventoriesById,
   getWarehouseInventoriesByProductId,
   getWarehouseInventoryAdjustments,
+  getWarehouseStockCardByProductId,
   updateWarehouse,
 } from '@/services/warehouseService';
 import { Location, Warehouse } from '@/types/warehouse';
@@ -40,6 +41,17 @@ export const useWarehousesInventoriesByProductID = (
   useQuery({
     queryKey: ['inventories', warehouseId, productId],
     queryFn: () => getWarehouseInventoriesByProductId(warehouseId, productId),
+    enabled: enabled,
+  });
+
+export const useWarehousesStockCardByProductID = (
+  enabled: boolean,
+  warehouseId: string,
+  productId: string
+) =>
+  useQuery({
+    queryKey: ['stockcard', warehouseId, productId],
+    queryFn: () => getWarehouseStockCardByProductId(warehouseId, productId),
     enabled: enabled,
   });
 
