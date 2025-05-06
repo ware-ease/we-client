@@ -3,11 +3,12 @@ import { useProduct } from '@/hooks/queries/productQueries';
 import { useBatchesByProductId } from '@/hooks/queries/batchQueries';
 import { useWarehouses } from '@/hooks/queries/accountQueries';
 import { useWarehousesInventoriesByProductID } from '@/hooks/queries/warehouseQueries';
-import { useParams, useSearchParams, useRouter } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import React, { useState, useMemo } from 'react';
 import { Loader2, Pencil } from 'lucide-react';
 import { Product } from '@/types/product';
 import StockCard from './StockCard';
+import { useRouter } from '@/lib/i18n/routing';
 
 const stockCardData = {
   productCode: 'JTT18SNDU',
@@ -152,8 +153,7 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className='container mx-auto p-4 max-w-6xl'>
-      {/* Top Section: Warehouse Selection */}
+    <div className='mx-auto p-4 max-w-6xl'>
       <div className='w-full mb-4'>
         <div className='bg-white border border-gray-200 shadow-md rounded-xl hover:shadow-lg transition-all duration-200 m-4 p-5'>
           <h2 className='text-2xl font-semibold text-gray-800 mb-4'>
@@ -185,9 +185,7 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      {/* Middle Section: Product and Batches */}
       <div className='flex flex-col md:flex-row gap-4 mb-4'>
-        {/* Product Details Card */}
         <div className='flex-1 bg-white border border-gray-200 shadow-md rounded-xl hover:shadow-lg transition-all duration-200 m-4 p-5'>
           <div className='bg-gradient-to-r from-blue-500 to-blue-700 p-5 rounded-t-xl text-white'>
             <h1 className='text-2xl font-bold'>{product.name}</h1>
@@ -220,8 +218,6 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-
-        {/* Batches Card */}
         <div className='flex-1 bg-white border border-gray-200 shadow-md rounded-xl hover:shadow-lg transition-all duration-200 m-4 p-5'>
           <h2 className='text-2xl font-semibold text-gray-800 mb-4'>
             Danh sách lô

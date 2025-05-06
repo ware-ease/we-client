@@ -19,12 +19,14 @@ export default function ConsoleLayout({
     //     <>{children}</>
     //   </div>
     // </div>
-    <SidebarProvider className='flex w-screen h-screen max-w-screen max-h-screen'>
+    <SidebarProvider className='flex w-screen h-screen'>
       <ProtectedRoute>
         <AppSidebar />
         <div className='flex flex-col w-full'>
           <Nav />
-          <div className='w-full max-h-[100%] overflow-y-auto'>{children}</div>
+          <div className='w-full h-[calc(100%-3rem)] overflow-y-auto'>
+            {children}
+          </div>
         </div>
       </ProtectedRoute>
     </SidebarProvider>

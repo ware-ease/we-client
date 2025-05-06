@@ -8,7 +8,7 @@ const Nav = () => {
   // const t = useTranslations();
 
   return (
-    <div className='flex w-full h-12 flex-grow-1 items-center justify-between'>
+    <div className='flex w-full h-[48px] flex-grow-1 items-center justify-between'>
       <SidebarTrigger className='p-5' />
       <div className='flex items-center h-full mr-6 space-x-2'>
         {/* <LanguageSelector size={20} /> */}
