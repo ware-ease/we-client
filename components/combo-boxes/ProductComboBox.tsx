@@ -21,23 +21,31 @@ import Loading from '../app/Loading';
 import Error from '../app/Error';
 import ProductDialog from '../dialogs/ProductDialog';
 import { removeVietnameseDiacritics } from '@/lib/utils/vietnameseConverter';
+import { Product } from '@/types/product';
 
 interface ProductComboBoxProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  products?: Product[];
 }
 
 const ProductComboBox: React.FC<ProductComboBoxProps> = ({
   value,
   onChange,
   disabled = false,
+  products: initialProducts,
 }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
-  const { data: products, isPending, isError } = useProducts();
+  const { data: fetchedProducts, isPending, isError } = useProducts();
 
-  if (isError) {
+  // Use initialProducts if provided, otherwise use fetchedProducts
+  const products = initialProducts || fetchedProducts || [];
+  const effectiveIsPending = initialProducts ? false : isPending;
+  const effectiveIsError = initialProducts ? false : isError;
+
+  if (effectiveIsError) {
     return <Error />;
   }
 
@@ -50,11 +58,11 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className='w-full justify-between border-none'
+          className='w-full justify-between border-none transform-none'
           ref={triggerRef}
           disabled={disabled}
         >
-          {isPending
+          {effectiveIsPending
             ? 'Chọn sản phẩm'
             : value
             ? products.find((p) => p.id === value)?.sku
@@ -63,16 +71,14 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className='p-0'
+        className='p-0 transform-none'
         style={{ width: triggerRef.current?.offsetWidth }}
       >
         <Command
           filter={(value, search) => {
-            const realValue = products?.find((p) => p.id === value)?.name || '';
-
+            const realValue = products.find((p) => p.id === value)?.name || '';
             const normalizedRealValue = removeVietnameseDiacritics(realValue);
             const normalizedSearch = removeVietnameseDiacritics(search);
-
             return normalizedRealValue.includes(normalizedSearch) ? 1 : 0;
           }}
         >
@@ -80,10 +86,10 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
           <CommandList>
             <CommandEmpty>Không tìm thấy sản phẩm.</CommandEmpty>
             <CommandGroup>
-              {!isPending ? (
-                products.map((p, index) => (
+              {!effectiveIsPending ? (
+                products.map((p) => (
                   <CommandItem
-                    key={index}
+                    key={p.id}
                     value={p.id}
                     onSelect={(currentValue) => {
                       onChange(currentValue === value ? '' : currentValue);

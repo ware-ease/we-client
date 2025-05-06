@@ -31,10 +31,16 @@ const RequestCreate = () => {
   const handleSubmit = () => {
     const finalFormData = {
       ...formData,
-      goodRequestDetails: data.map((row) => ({
-        quantity: row.quantity,
-        productId: row.productId,
-      })),
+      goodRequestDetails: Object.values(
+        data.reduce((acc, row) => {
+          const { productId, quantity } = row;
+          if (productId) {
+            acc[productId] = acc[productId] || { productId, quantity: 0 };
+            acc[productId].quantity += Number(quantity) || 0;
+          }
+          return acc;
+        }, {} as Record<string, { productId: string; quantity: number }>)
+      ),
     };
 
     mutate(finalFormData, {
