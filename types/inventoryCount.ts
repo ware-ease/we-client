@@ -6,6 +6,7 @@ import { Product } from './product';
 export interface InventoryCount extends Base {
   scheduleId?: string;
   locationId?: string;
+  warehouseId?: string;
   status?: number;
   code?: string;
   note?: string;
