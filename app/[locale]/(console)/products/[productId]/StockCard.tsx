@@ -5,6 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 import { StockCard as StockCardType } from '@/types/warehouse';
 import { Button } from '@/components/shadcn-base/Button';
 import { Input } from '@/components/shadcn-base/Input';
+import Image from 'next/image';
 
 const StockCard: React.FC<{ data: StockCardType }> = ({ data }) => {
   const contentRef = useRef(null);
@@ -53,7 +54,7 @@ const StockCard: React.FC<{ data: StockCardType }> = ({ data }) => {
   };
 
   return (
-    <div className='container mx-auto p-4 max-w-6xl'>
+    <div className='container mx-auto max-w-6xl'>
       {/* Display View */}
       <div className='bg-white border border-gray-200 shadow-md rounded-xl p-6 mb-4'>
         <div className='flex justify-between items-center mb-4'>
@@ -97,7 +98,7 @@ const StockCard: React.FC<{ data: StockCardType }> = ({ data }) => {
           </div>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+        {/* <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
           <div>
             <p className='text-gray-600'>
               <strong className='text-gray-700'>Kho:</strong>{' '}
@@ -118,7 +119,7 @@ const StockCard: React.FC<{ data: StockCardType }> = ({ data }) => {
               {data.unitName}
             </p>
           </div>
-        </div>
+        </div> */}
         <div className='overflow-x-auto'>
           <table className='w-full border-collapse border border-gray-200'>
             <thead>
@@ -195,57 +196,69 @@ const StockCard: React.FC<{ data: StockCardType }> = ({ data }) => {
       {/* Print View */}
       <div className='hidden print:block' ref={contentRef}>
         <div
-          className='p-8 bg-white'
-          style={{ width: '210mm', minHeight: '297mm' }}
+          className='p-24 bg-white'
+          style={{ fontFamily: 'Times New Roman' }}
         >
           {/* Header */}
-          <div className='flex justify-between mb-6'>
-            <div>
-              <h1 className='text-2xl font-bold'>TNT PROJECTS</h1>
-              {/* Placeholder for logo */}
-              <div className='w-24 h-24 bg-gray-200 flex items-center justify-center text-gray-500'>
-                Logo
+          <div className='mb-6 w-full'>
+            <div className='flex justify-between'>
+              <div className='w-1/2'>
+                <Image
+                  src='/TNTProjects.svg'
+                  alt='Company Logo'
+                  width={1080}
+                  height={1080}
+                  className='w-[45%] h-auto'
+                />
               </div>
-            </div>
-            <div className='text-right'>
-              <h1 className='text-3xl font-bold'>THẺ KHO</h1>
-              <p className='mt-2'>
-                <strong>Kho:</strong> {data.warehouseName}
-              </p>
-              <p>
-                <strong>Mã hàng:</strong> {data.productCode}
-              </p>
-              <p>
-                <strong>Tên hàng:</strong> {data.productName}
-              </p>
-              <p>
-                <strong>Đơn vị tính:</strong> {data.unitName}
-              </p>
+              <div className='text-left'>
+                <p>
+                  <strong className='font-normal'>THẺ KHO</strong>
+                </p>
+                <p>
+                  <strong className='font-normal'>Kho:</strong>{' '}
+                  {data.warehouseName || ''}
+                </p>
+                <p>
+                  <strong className='font-normal'>Mã hàng:</strong>{' '}
+                  {data.productCode || ''}
+                </p>
+                <p>
+                  <strong className='font-normal'>Tên hàng:</strong>{' '}
+                  {data.productName || ''}
+                </p>
+                <p>
+                  <strong className='font-normal'>Đơn vị tính:</strong>{' '}
+                  {data.unitName || ''}
+                </p>
+              </div>
             </div>
           </div>
 
+          <div className='text-center text-xl font-bold mt-20 text-[#2F5597]'>
+            THẺ KHO
+          </div>
+
           {/* Table */}
-          <table className='w-full border-collapse border border-black'>
+          <table className='w-full border border-black mt-4'>
             <thead>
-              <tr className='bg-gray-100'>
-                <th className='border border-black p-2 text-left'>Ngày</th>
-                <th className='border border-black p-2 text-left'>Chứng từ</th>
-                <th className='border border-black p-2 text-left'>Diễn giải</th>
-                <th className='border border-black p-2 text-right'>Nhập</th>
-                <th className='border border-black p-2 text-right'>Xuất</th>
-                <th className='border border-black p-2 text-right'>Tồn</th>
-                <th className='border border-black p-2 text-left'>
-                  Ngày nhập kho
+              <tr className='text-left font-normal'>
+                <th className='border-r border-black p-2 font-normal'>Ngày</th>
+                <th className='border-r border-black p-2 font-normal'>
+                  Chứng từ
                 </th>
-                <th className='border border-black p-2 text-left'>
-                  Ngày hết hạn
+                <th className='border-r border-black p-2 font-normal'>
+                  Diễn giải
                 </th>
-                <th className='border border-black p-2 text-left'>Ghi chú</th>
+                <th className='border-r border-black p-2 font-normal'>Nhập</th>
+                <th className='border-r border-black p-2 font-normal'>Xuất</th>
+                <th className='border-r border-black p-2 font-normal'>Tồn</th>
+                <th className='p-2 font-normal'>Ghi chú</th>
               </tr>
             </thead>
             <tbody>
-              {data.details.length > 0 ? (
-                data.details.map((detail, index) => (
+              {filteredDetails.length > 0 ? (
+                filteredDetails.map((detail, index) => (
                   <tr key={index}>
                     <td className='border border-black p-2'>
                       {formatDate(detail.date)}
@@ -287,9 +300,17 @@ const StockCard: React.FC<{ data: StockCardType }> = ({ data }) => {
 
           {/* Footer */}
           <div className='mt-8 text-center'>
-            <p className='text-lg font-semibold'>THỦ KHO</p>
-            <p>(Ký, họ tên)</p>
-            <div className='mt-4 h-12 border-b border-black w-40 mx-auto'></div>
+            <div className='flex justify-end mt-10 mr-6'>
+              <div className='text-center w-1/2'>Ngày...Tháng...Năm...</div>
+            </div>
+            <div className='flex justify-end mt-2 w-full'>
+              <div className='text-center w-1/2'>
+                <p>
+                  <strong>{'THỦ KHO'}</strong>
+                </p>
+                <p>(Ký, họ tên)</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
