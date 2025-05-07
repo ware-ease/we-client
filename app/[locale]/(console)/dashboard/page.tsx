@@ -3,7 +3,7 @@ import { AreaCharts } from '@/components/dashboards/AreaChart';
 import BaseCard from '@/components/dashboards/BaseCard';
 import { PieCharts } from '@/components/dashboards/PieChart';
 import { StockChart } from '@/components/dashboards/StockChart';
-import { getDashboardCards } from '@/services/dashboard';
+import { getDashboardCards } from '@/services/dashboardService';
 import {
   LucideArrowDownToLine,
   LucideArrowRightLeft,
