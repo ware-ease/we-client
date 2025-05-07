@@ -70,6 +70,7 @@ const CheckInventoryCreate = () => {
   const handleSubmit = () => {
     const finalFormData: InventoryCount = {
       ...formData,
+      warehouseId: currentWarehouse?.id ?? '',
       status: 0,
       inventoryCountDetails: data.map((row) => ({
         inventoryId: row.inventoryId,

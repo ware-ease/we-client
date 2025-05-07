@@ -1,6 +1,7 @@
 'use client';
 import StatusUI from '@/components/app/StatusUI';
 import { useInventoryCounts } from '@/hooks/queries/inventoryCountQueries';
+import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
 import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 import { cn } from '@/lib/utils/utils';
@@ -124,28 +125,35 @@ export const columns: ColumnDef<InventoryCount>[] = [
     },
   },
   {
-    accessorKey: 'createdAt',
+    accessorKey: 'createdTime',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Ngày tạo' />
     ),
-    cell: ({ row }) =>
-      new Date(row.getValue('createdAt')).toLocaleString('vi-VN'),
+    cell: ({ row }) => {
+      const createdTime = row.getValue('createdTime') as string;
+      if (!createdTime) return 'N/A';
+      const [datePart, timePart] = createdTime.split(' ');
+      const [day, month, year] = datePart.split('/');
+      const formattedDate = new Date(`${year}-${month}-${day}T${timePart}`);
+      return formattedDate.toLocaleString('vi-VN');
+    },
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue?.from && !filterValue?.to) return true;
-      const rowDate = new Date(row.getValue(columnId));
+
+      const createdTime = row.getValue(columnId) as string;
+      if (!createdTime) return false;
+
+      const [datePart, timePart] = createdTime.split(' ');
+      const [day, month, year] = datePart.split('/');
+      const rowDate = new Date(`${year}-${month}-${day}T${timePart}`);
+
       const fromDate = filterValue.from ? new Date(filterValue.from) : null;
       const toDate = filterValue.to ? new Date(filterValue.to) : null;
+      if (toDate) toDate.setHours(23, 59, 59, 999);
 
-      if (toDate) {
-        toDate.setHours(23, 59, 59, 999);
-      }
-
-      if (fromDate && toDate) {
-        return rowDate >= fromDate && rowDate <= toDate;
-      }
+      if (fromDate && toDate) return rowDate >= fromDate && rowDate <= toDate;
       if (fromDate) return rowDate >= fromDate;
       if (toDate) return rowDate <= toDate;
-
       return true;
     },
     meta: {
@@ -177,7 +185,8 @@ const InventoryCountTable = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-
+  const currentWarehouse = useCurrentWarehouse();
+  const warehouseId = currentWarehouse?.id;
   // Parse status params as an array
   const statusParams = searchParams.get('status')
     ? searchParams.get('status')!.split(',').map(Number)
@@ -205,11 +214,11 @@ const InventoryCountTable = () => {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  //const { warehouseId } = useParams();
   const { data: inventoryCounts, isSuccess } = useInventoryCounts(
-    true
-    //warehouseId
+    !!warehouseId, // chỉ chạy khi có warehouseId
+    warehouseId
   );
+
   console.log(inventoryCounts);
 
   return (
