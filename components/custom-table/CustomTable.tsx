@@ -134,29 +134,31 @@ const CustomTable: React.FC<CustomTableProps> = ({
                 className='w-full p-2'
                 value={rowData.batch}
                 onChange={(e) => handleBatchChange(index, e.target.value)}
-                disabled={!rowData.isBatchManaged}
+                disabled={rowData.isBatchManaged === false}
               />
             );
             row.mfgDate = (
               <input
                 type='date'
+                max={new Date().toISOString().split('T')[0]}
                 className='w-full p-2'
                 value={
                   rowData.mfgDate || new Date().toISOString().split('T')[0]
                 }
                 onChange={(e) => handleMfgDateChange(index, e.target.value)}
-                disabled={!rowData.isBatchManaged}
+                disabled={rowData.isBatchManaged === false}
               />
             );
             row.expDate = (
               <input
                 type='date'
+                min={new Date().toISOString().split('T')[0]}
                 className='w-full p-2'
                 value={
                   rowData.expDate || new Date().toISOString().split('T')[0]
                 }
                 onChange={(e) => handleExpDateChange(index, e.target.value)}
-                disabled={!rowData.isBatchManaged}
+                disabled={rowData.isBatchManaged === false}
               />
             );
             row.note = (
@@ -251,10 +253,22 @@ const CustomTable: React.FC<CustomTableProps> = ({
           />
         );
         newRow.mfgDate = (
-          <input type='date' className='w-full p-2' value='' disabled />
+          <input
+            type='date'
+            max={new Date().toISOString().split('T')[0]}
+            className='w-full p-2'
+            value=''
+            disabled
+          />
         );
         newRow.expDate = (
-          <input type='date' className='w-full p-2' value='' disabled />
+          <input
+            type='date'
+            min={new Date().toISOString().split('T')[0]}
+            className='w-full p-2'
+            value=''
+            disabled
+          />
         );
         newRow.note = (
           <input
@@ -321,6 +335,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
               mfgDate: (
                 <input
                   type='date'
+                  max={new Date().toISOString().split('T')[0]}
                   className='border-none w-full p-2'
                   value={value}
                   onChange={(e) => handleMfgDateChange(index, e.target.value)}
@@ -342,6 +357,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
               expDate: (
                 <input
                   type='date'
+                  min={new Date().toISOString().split('T')[0]}
                   className='border-none w-full p-2'
                   value={value}
                   onChange={(e) => handleExpDateChange(index, e.target.value)}
@@ -401,6 +417,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                 mfgDate: (
                   <input
                     type='date'
+                    max={new Date().toISOString().split('T')[0]}
                     className='w-full p-2'
                     value={new Date().toISOString().split('T')[0]}
                     onChange={(e) => handleMfgDateChange(index, e.target.value)}
@@ -410,6 +427,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                 expDate: (
                   <input
                     type='date'
+                    min={new Date().toISOString().split('T')[0]}
                     className='w-full p-2'
                     value={new Date().toISOString().split('T')[0]}
                     onChange={(e) => handleExpDateChange(index, e.target.value)}
