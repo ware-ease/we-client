@@ -143,7 +143,13 @@ export const columns: ColumnDef<Account>[] = [
       <DataTableColumnHeader column={column} title='Trạng thái' />
     ),
     cell: ({ row }) => {
-      return <AccountStatusUI status={row.getValue('status')} />;
+      return (
+        <AccountStatusUI
+          status={row.original.status || 0}
+          accountId={row.original.id || ''}
+          username={row.original.username}
+        />
+      );
     },
     filterFn: accountStatusFilterFn,
     meta: {

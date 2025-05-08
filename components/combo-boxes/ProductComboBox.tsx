@@ -76,13 +76,19 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
       >
         <Command
           filter={(value, search) => {
-            const realValue = products.find((p) => p.id === value)?.name || '';
-            const normalizedRealValue = removeVietnameseDiacritics(realValue);
+            const valueName = products.find((p) => p.id === value)?.name || '';
+            const valueSku = products.find((p) => p.id === value)?.sku || '';
+            console.log(valueSku);
+            const normalizedValueName = removeVietnameseDiacritics(valueName);
+            const normalizedValueSku = removeVietnameseDiacritics(valueSku);
             const normalizedSearch = removeVietnameseDiacritics(search);
-            return normalizedRealValue.includes(normalizedSearch) ? 1 : 0;
+            return normalizedValueName.includes(normalizedSearch) ||
+              normalizedValueSku.includes(normalizedSearch)
+              ? 1
+              : 0;
           }}
         >
-          <CommandInput placeholder='Tìm sản phẩm...' className='h-9' />
+          <CommandInput placeholder='Nhập Tên/SKU...' className='h-9' />
           <CommandList>
             <CommandEmpty>Không tìm thấy sản phẩm.</CommandEmpty>
             <CommandGroup>

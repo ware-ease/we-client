@@ -1,24 +1,25 @@
-import { accountStatusMap } from '@/lib/tanstack-table/customFilterFn';
+'use client';
 import React from 'react';
+import UpdateAccountStatusDialog from '../dialogs/UpdateAccountStatusDialog';
 
 interface StatusUIProps {
   status: number;
+  accountId: string;
+  username: string;
 }
 
-const AccountStatusUI: React.FC<StatusUIProps> = ({ status }) => {
-  const statusInfo = accountStatusMap.find(
-    (item) => item.status === status
-  ) || {
-    label: 'Đã bị khóa',
-    color: 'bg-red-500',
-  };
-
+const AccountStatusUI: React.FC<StatusUIProps> = ({
+  status,
+  accountId,
+  username,
+}) => {
+  console.log(status);
   return (
-    <div
-      className={`flex items-center justify-center rounded-xl py-1 text-xs ${statusInfo.color} text-white font-medium`}
-    >
-      <span>{statusInfo.label}</span>
-    </div>
+    <UpdateAccountStatusDialog
+      accountId={accountId}
+      username={username}
+      currentStatus={status}
+    />
   );
 };
 

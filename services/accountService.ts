@@ -45,6 +45,15 @@ export const updateAccount = async (accountData: Partial<AccountUpdate>) => {
   return response.data.data;
 };
 
+export const updateAccountStatus = async (id: string, status: number) => {
+  const response = await axiosPut(
+    `/accounts/${id}/status?status=${status}`,
+    {},
+    {}
+  );
+  return response.data.data;
+};
+
 export const deleteAccount = async (id: string): Promise<void> => {
   await axiosDelete(`/accounts/${id}`, {});
 };

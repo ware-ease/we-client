@@ -29,14 +29,14 @@ export interface RowData {
 }
 
 const initialColumns: Column[] = [
-  { header: 'Mã hàng', key: 'sku', width: 180 },
+  { header: 'Mã hàng', key: 'sku', width: 220 },
   { header: 'Tên hàng', key: 'name', width: 200 },
   { header: 'ĐVT', key: 'unit', width: 85 },
   { header: 'Số lượng', key: 'quantity', width: 80 },
   { header: 'Mã lô', key: 'batch', width: 80 },
   { header: 'NSX', key: 'mfgDate', width: 120 },
   { header: 'HSD', key: 'expDate', width: 120 },
-  { header: 'Ghi chú', key: 'note', width: 240 },
+  { header: 'Ghi chú', key: 'note', width: 200 },
 ];
 
 interface CustomTableProps {

@@ -5,10 +5,15 @@ import {
   getAllGroups,
   getAllPermissions,
   updateAccount,
+  updateAccountStatus,
 } from '@/services/accountService';
 import { getCurrentUser } from '@/services/authService';
 import { getAllWarehouses } from '@/services/warehouseService';
-import { AccountUpdate, CreateAccount } from '@/types/account';
+import {
+  AccountStatusUpdate,
+  AccountUpdate,
+  CreateAccount,
+} from '@/types/account';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -47,6 +52,25 @@ export const useUpdateAccount = () => {
       toast.success('Thành công!');
       queryClient.invalidateQueries({
         queryKey: ['user'],
+      });
+    },
+    onError: () => {
+      toast.error('Thất bại!');
+    },
+  });
+};
+
+export const useUpdateAccountStatus = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (a: AccountStatusUpdate) => updateAccountStatus(a.id, a.status),
+    onSuccess: () => {
+      toast.success('Thành công!');
+      queryClient.invalidateQueries({
+        queryKey: ['user'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['accounts'],
       });
     },
     onError: () => {

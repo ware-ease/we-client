@@ -45,6 +45,11 @@ export type AccountUpdate = {
   profile?: Profile;
 };
 
+export type AccountStatusUpdate = {
+  id: string;
+  status: number;
+};
+
 export type ProfileUpdate = {
   firstName?: string;
   lastName?: string;
