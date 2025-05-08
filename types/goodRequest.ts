@@ -21,6 +21,7 @@ export type GoodRequest = {
   partner?: Supplier;
   goodNotes?: GoodNote[];
   goodNoteCount?: number;
+  statusNote?: string;
 };
 
 export interface GoodRequestDetail extends Base {
@@ -30,4 +31,9 @@ export interface GoodRequestDetail extends Base {
   brandName?: string;
   unitName?: string;
   quantity?: number;
+}
+
+export interface DeclineGoodRequest {
+  id: string;
+  reason: string;
 }

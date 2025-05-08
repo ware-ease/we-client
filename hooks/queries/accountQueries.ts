@@ -53,6 +53,9 @@ export const useUpdateAccount = () => {
       queryClient.invalidateQueries({
         queryKey: ['user'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['accounts'],
+      });
     },
     onError: () => {
       toast.error('Thất bại!');
@@ -75,6 +78,12 @@ export const useUpdateAccountStatus = () => {
     },
     onError: () => {
       toast.error('Thất bại!');
+      queryClient.invalidateQueries({
+        queryKey: ['user'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['accounts'],
+      });
     },
   });
 };

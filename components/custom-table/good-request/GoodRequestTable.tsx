@@ -123,7 +123,13 @@ export const columns: ColumnDef<GoodRequest>[] = [
       <DataTableColumnHeader column={column} title='Trạng thái' />
     ),
     cell: ({ row }) => {
-      return <StatusUI status={row.getValue('status')} />;
+      return (
+        <StatusUI
+          status={row.getValue('status')}
+          code={row.original.code || ''}
+          reason={row.original.statusNote}
+        />
+      );
     },
     filterFn: statusFilterFn,
     meta: {

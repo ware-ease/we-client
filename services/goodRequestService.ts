@@ -64,9 +64,12 @@ export const confirmGoodRequest = async (id: string): Promise<GoodRequest> => {
   return response.data.data;
 };
 
-export const declineGoodRequest = async (id: string): Promise<GoodRequest> => {
+export const declineGoodRequest = async (
+  id: string,
+  reason?: string
+): Promise<GoodRequest> => {
   const response = await axiosPut(
-    '/good-requests/' + id + '/status?requestStatus=2',
+    '/good-requests/' + id + `/status?requestStatus=2&statusNote=${reason}`,
     {},
     {}
   );

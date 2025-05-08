@@ -10,7 +10,7 @@ import {
   getGoodRequestById,
   updateGoodRequest,
 } from '@/services/goodRequestService';
-import { GoodRequest } from '@/types/goodRequest';
+import { DeclineGoodRequest, GoodRequest } from '@/types/goodRequest';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -95,7 +95,7 @@ export const useConfirmGoodRequest = () => {
 export const useDeclineGoodRequest = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => declineGoodRequest(id),
+    mutationFn: (d: DeclineGoodRequest) => declineGoodRequest(d.id, d.reason),
     onSuccess: () => {
       toast.success('Từ chối thành công!');
       queryClient.invalidateQueries({ queryKey: ['requests'] });
