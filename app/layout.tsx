@@ -23,8 +23,8 @@ export default async function RootLayout({
   const { locale } = await params;
 
   return (
-    <html lang={locale} className={inter.className}>
-      <body>{children}</body>
+    <html lang={locale} className={`${inter.className}`}>
+      <body className='overflow-hidden'>{children}</body>
     </html>
   );
 }

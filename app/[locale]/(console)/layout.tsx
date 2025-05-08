@@ -24,7 +24,7 @@ export default function ConsoleLayout({
         <AppSidebar />
         <div className='flex flex-col w-full'>
           <Nav />
-          <div className='w-full h-[calc(100%-3rem)] overflow-y-auto'>
+          <div className='w-full h-[calc(100vh-3rem)] overflow-y-auto'>
             {children}
           </div>
         </div>
