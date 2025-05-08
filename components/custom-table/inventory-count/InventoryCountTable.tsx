@@ -1,5 +1,4 @@
 'use client';
-import StatusUI from '@/components/app/StatusUI';
 import { useInventoryCounts } from '@/hooks/queries/inventoryCountQueries';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
@@ -117,7 +116,8 @@ export const columns: ColumnDef<InventoryCount>[] = [
       />
     ),
     cell: ({ row }) => {
-      return <StatusUI status={row.getValue('status')} />;
+      // return <StatusUI status={row.getValue('status')} />;
+      return row.original.status;
     },
     filterFn: statusFilterFn,
     meta: {
