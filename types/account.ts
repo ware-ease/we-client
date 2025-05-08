@@ -27,6 +27,7 @@ export type Account = {
   permissions?: Permission[];
   warehouseIds?: Array<string>;
   warehouses?: Warehouse[];
+  status?: number;
 };
 export type CreateAccount = {
   id?: string;

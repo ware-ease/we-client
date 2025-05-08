@@ -11,6 +11,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
+import AccountStatusUI from '@/components/app/AccountStatusUI';
+import { accountStatusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 
 export const columns: ColumnDef<Account>[] = [
   {
@@ -133,6 +135,21 @@ export const columns: ColumnDef<Account>[] = [
     meta: {
       title: 'Ngày tạo',
       type: 'date',
+    },
+  },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Trạng thái' />
+    ),
+    cell: ({ row }) => {
+      return <AccountStatusUI status={row.getValue('status')} />;
+    },
+    filterFn: accountStatusFilterFn,
+    meta: {
+      title: 'Trạng thái',
+      type: 'select',
+      options: ['Chưa xác thực', 'Đã xác thực', 'Đã khóa'],
     },
   },
   {
