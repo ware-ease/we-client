@@ -5,6 +5,12 @@ import { Customer } from '@/types/customer';
 import { ColumnDef } from '@tanstack/react-table';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/shadcn-base/Tooltip';
+import UpdateCustomerDialog from '@/components/dialogs/UpdateCustomerDialog';
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -74,6 +80,26 @@ export const columns: ColumnDef<Customer>[] = [
       title: 'Ngày tạo',
       type: 'date',
     },
+  },
+  {
+    id: 'crud-actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Hành động'
+        className='text-xs'
+      />
+    ),
+    cell: ({ row }) => (
+      <div className='flex space-x-1 items-center'>
+        <Tooltip>
+          <TooltipTrigger>
+            <UpdateCustomerDialog customer={row.original} />
+          </TooltipTrigger>
+          <TooltipContent>Sửa</TooltipContent>
+        </Tooltip>
+      </div>
+    ),
   },
 ];
 

@@ -6,6 +6,12 @@ import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import AddSupplierDialog from '../../dialogs/AddSupplierDialog';
 import { useSuppliers } from '@/hooks/queries/supplierQueries';
 import { Supplier } from '@/types/supplier';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/shadcn-base/Tooltip';
+import UpdateSupplierDialog from '@/components/dialogs/UpdateSupplierDialog';
 
 export const columns: ColumnDef<Supplier>[] = [
   {
@@ -46,25 +52,27 @@ export const columns: ColumnDef<Supplier>[] = [
       title: 'Số điện thoại',
     },
   },
-  // {
-  //   accessorKey: 'status',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='Trạng thái' />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const status = row.getValue('status');
-  //     return (
-  //       <span
-  //         className={`text-${status ? 'green-500' : 'red-500'} font-medium`}
-  //       >
-  //         {status ? 'Đang hoạt động' : 'Đã ngưng hoạt động'}
-  //       </span>
-  //     );
-  //   },
-  //   meta: {
-  //     title: 'Trạng thái',
-  //   },
-  // },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Trạng thái' />
+    ),
+    cell: ({ row }) => {
+      const status = row.getValue('status');
+      return (
+        <span
+          className={`bg-${
+            status ? 'green-500' : 'red-500'
+          } font-medium text-white flex items-center justify-center rounded-xl py-1 text-xs w-2/3`}
+        >
+          {status ? 'Đang hoạt động' : 'Ngưng hoạt động'}
+        </span>
+      );
+    },
+    meta: {
+      title: 'Trạng thái',
+    },
+  },
   {
     accessorKey: 'createdTime',
     header: ({ column }) => (
@@ -94,6 +102,26 @@ export const columns: ColumnDef<Supplier>[] = [
       title: 'Ngày tạo',
       type: 'date',
     },
+  },
+  {
+    id: 'crud-actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Hành động'
+        className='text-xs'
+      />
+    ),
+    cell: ({ row }) => (
+      <div className='flex space-x-1 items-center'>
+        <Tooltip>
+          <TooltipTrigger>
+            <UpdateSupplierDialog supplier={row.original} />
+          </TooltipTrigger>
+          <TooltipContent>Sửa</TooltipContent>
+        </Tooltip>
+      </div>
+    ),
   },
 ];
 

@@ -5,5 +5,5 @@ export interface Supplier extends Base {
   email: string;
   phone: string;
   address: string;
-  // status: boolean;
+  status: boolean;
 }

@@ -101,10 +101,10 @@ export const columns: ColumnDef<Batch>[] = [
   {
     accessorKey: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Tên lô' />
+      <DataTableColumnHeader column={column} title='Nhập từ phiếu' />
     ),
     meta: {
-      title: 'Tên lô',
+      title: 'Nhập từ phiếu',
     },
   },
   {

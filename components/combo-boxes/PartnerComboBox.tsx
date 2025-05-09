@@ -69,24 +69,26 @@ const PartnerComboBox: React.FC<PartnerComboBoxProps> = ({
             <CommandEmpty>Không tìm thấy đối tác.</CommandEmpty>
             <CommandGroup>
               {!isPending ? (
-                partners.map((p) => (
-                  <CommandItem
-                    key={p.id}
-                    value={p.id}
-                    onSelect={(currentValue) => {
-                      onChange(currentValue === value ? '' : currentValue);
-                      setOpen(false);
-                    }}
-                  >
-                    {p.name}
-                    <Check
-                      className={cn(
-                        'ml-auto',
-                        value === p.id ? 'opacity-100' : 'opacity-0'
-                      )}
-                    />
-                  </CommandItem>
-                ))
+                partners
+                  .filter((p) => p.status === true)
+                  .map((p) => (
+                    <CommandItem
+                      key={p.id}
+                      value={p.id}
+                      onSelect={(currentValue) => {
+                        onChange(currentValue === value ? '' : currentValue);
+                        setOpen(false);
+                      }}
+                    >
+                      {p.name}
+                      <Check
+                        className={cn(
+                          'ml-auto',
+                          value === p.id ? 'opacity-100' : 'opacity-0'
+                        )}
+                      />
+                    </CommandItem>
+                  ))
               ) : (
                 <div className='flex justify-center items-center h-full w-full py-4'>
                   <div className='w-6 h-6 border-4 border-gray-300 border-t-primary rounded-full animate-spin'></div>

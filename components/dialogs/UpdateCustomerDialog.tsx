@@ -11,27 +11,14 @@ import {
 } from '@/components/shadcn-base/Dialog';
 import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
+import { Customer } from '@/types/customer';
 import { Edit } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 
-interface Customer {
-  id: string;
-  name: string;
-  phone: string;
-  email: string;
-  address?: string;
-}
-
 type UpdateCustomerDialogProps = {
-  customer: Customer & {
-    id: string;
-    name: string;
-    phone: string;
-    email: string;
-    address?: string;
-  };
+  customer: Customer;
 };
 
 const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
@@ -78,12 +65,12 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
         >
           <DialogHeader>
             <DialogTitle className='text-xl font-semibold text-gray-800'>
-              {t('Chỉnh sửa thông tin khách hàng')}
+              Chỉnh sửa thông tin khách hàng
             </DialogTitle>
           </DialogHeader>
           <div className='grid grid-cols-1 gap-6'>
             <div>
-              <Label htmlFor='name'>{t('Tên khách hàng')}</Label>
+              <Label htmlFor='name'>Tên khách hàng</Label>
               <Input
                 id='name'
                 name='name'
@@ -93,7 +80,7 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
               />
             </div>
             <div>
-              <Label htmlFor='phone'>{t('Số điện thoại')}</Label>
+              <Label htmlFor='phone'>Số điện thoại</Label>
               <Input
                 id='phone'
                 name='phone'
@@ -103,7 +90,7 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
               />
             </div>
             <div>
-              <Label htmlFor='email'>{t('Email')}</Label>
+              <Label htmlFor='email'>Email</Label>
               <Input
                 id='email'
                 name='email'
@@ -114,7 +101,7 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
               />
             </div>
             <div>
-              <Label htmlFor='address'>{t('Địa chỉ')}</Label>
+              <Label htmlFor='address'>Địa chỉ</Label>
               <Input
                 id='address'
                 name='address'
