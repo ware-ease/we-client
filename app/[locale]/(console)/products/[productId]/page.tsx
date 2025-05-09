@@ -225,7 +225,7 @@ const ProductDetail = () => {
                   Sửa
                 </button>
                 <Link
-                  href={`/report/stockcard?productId=${productId}`}
+                  href={`/report/stockcard?productId=${productId}&warehouseId=${currentWarehouseId}`}
                   className='flex items-center bg-transparent border border-blue-500 text-blue-500 px-4 py-2 rounded-3xl hover:bg-blue-100 transition-colors text-sm'
                 >
                   <FileText className='w-4 h-4' />
