@@ -100,7 +100,8 @@ const CustomTable: React.FC<CustomTableProps> = ({
       setRows(
         initialData.map((rowData, index) => {
           const product = products.find((p) => p.id === rowData.productId);
-          // Filter products for this row (exclude other rows' selections)
+          rowData.isBatchManaged = product?.isBatchManaged;
+
           const filteredProducts = products.filter(
             (p) =>
               p.id === rowData.productId ||
@@ -139,11 +140,13 @@ const CustomTable: React.FC<CustomTableProps> = ({
             );
             row.mfgDate = (
               <input
-                type='date'
+                type={rowData.isBatchManaged ? 'date' : 'text'}
                 max={new Date().toISOString().split('T')[0]}
                 className='w-full p-2'
                 value={
-                  rowData.mfgDate || new Date().toISOString().split('T')[0]
+                  rowData.isBatchManaged
+                    ? rowData.mfgDate || new Date().toISOString().split('T')[0]
+                    : ''
                 }
                 onChange={(e) => handleMfgDateChange(index, e.target.value)}
                 disabled={rowData.isBatchManaged === false}
@@ -151,11 +154,13 @@ const CustomTable: React.FC<CustomTableProps> = ({
             );
             row.expDate = (
               <input
-                type='date'
+                type={rowData.isBatchManaged ? 'date' : 'text'}
                 min={new Date().toISOString().split('T')[0]}
                 className='w-full p-2'
                 value={
-                  rowData.expDate || new Date().toISOString().split('T')[0]
+                  rowData.isBatchManaged
+                    ? rowData.expDate || new Date().toISOString().split('T')[0]
+                    : ''
                 }
                 onChange={(e) => handleExpDateChange(index, e.target.value)}
                 disabled={rowData.isBatchManaged === false}

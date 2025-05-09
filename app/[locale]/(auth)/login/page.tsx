@@ -29,7 +29,7 @@ const Login = () => {
       router.push(`/${t('Languages.this')}/home`);
     },
     onError: () => {
-      toast.error(t('Toast.error'), {
+      toast.error('Tên đăng nhập hoặc mật khẩu không đúng!', {
         autoClose: 3000,
       });
     },

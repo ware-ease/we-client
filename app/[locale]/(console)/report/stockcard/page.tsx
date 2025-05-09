@@ -10,6 +10,8 @@ import { useWarehousesStockCardByProductID } from '@/hooks/queries/warehouseQuer
 import { useWarehouses } from '@/hooks/queries/accountQueries';
 import { useProducts } from '@/hooks/queries/productQueries';
 import { useRouter } from '@/lib/i18n/routing';
+import ProductComboBox from '@/components/combo-boxes/ProductComboBox';
+import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
 
 const ReportStockCard = () => {
   const searchParams = useSearchParams();
@@ -18,10 +20,10 @@ const ReportStockCard = () => {
   const [dateStart, setDateStart] = useState<string>('');
   const [dateEnd, setDateEnd] = useState<string>('');
   const [warehouseId, setWarehouseId] = useState<string>(
-    searchParams.get('warehouseId') as string
+    (searchParams.get('warehouseId') as string) || ''
   );
   const [productId, setProductId] = useState<string>(
-    searchParams.get('productId') as string
+    (searchParams.get('productId') as string) || ''
   );
 
   const { data: warehouses } = useWarehouses();
@@ -66,19 +68,19 @@ const ReportStockCard = () => {
     setDateEnd('');
   };
 
-  const handleWarehouseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newWarehouseId = e.target.value;
+  const handleWarehouseChange = (e: string) => {
+    const newWarehouseId = e;
     setWarehouseId(newWarehouseId);
     router.push(
-      `/report/stockcard?productId=${productId}&currentWarehouseId=${newWarehouseId}`
+      `/report/stockcard?productId=${productId}&warehouseId=${newWarehouseId}`
     );
   };
 
-  const handleProductChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newProductId = e.target.value;
+  const handleProductChange = (e: string) => {
+    const newProductId = e;
     setProductId(newProductId);
     router.push(
-      `/report/stockcard?productId=${newProductId}&currentWarehouseId=${warehouseId}`
+      `/report/stockcard?productId=${newProductId}&warehouseId=${warehouseId}`
     );
   };
 
@@ -139,68 +141,54 @@ const ReportStockCard = () => {
               <h3 className='text-lg font-semibold text-gray-700 mb-2'>
                 Kho hiện tại
               </h3>
-              <select
-                value={warehouseId}
-                onChange={handleWarehouseChange}
-                className='w-full border text-black font-small border-gray-200 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors'
-                disabled={!warehouses || warehouses.length === 0}
-              >
-                {warehouses && warehouses.length > 0 ? (
-                  warehouses.map((warehouse) => (
-                    <option key={warehouse.id} value={warehouse.id}>
-                      {warehouse.name}
-                    </option>
-                  ))
-                ) : (
-                  <option value=''>Không có kho</option>
-                )}
-              </select>
+              {warehouses && (
+                <div className='w-full'>
+                  <WarehouseComboBox
+                    value={warehouseId}
+                    onlyAssignedWarehouses
+                    onChange={(e) => handleWarehouseChange(e)}
+                  />
+                </div>
+              )}
             </div>
-            <div>
+            <div className='flex-1'>
               <h3 className='text-lg font-semibold text-gray-700 mb-2'>
                 Sản phẩm
               </h3>
-              <select
-                value={productId}
-                onChange={handleProductChange}
-                className='w-full border text-black font-small border-gray-200 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors'
-                disabled={!products || products.length === 0}
-              >
-                {products && products.length > 0 ? (
-                  products.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.sku} - {p.name}
-                    </option>
-                  ))
-                ) : (
-                  <option value=''>Không có kho</option>
-                )}
-              </select>
+              {products && (
+                <div className='w-full'>
+                  <ProductComboBox
+                    value={productId}
+                    products={products}
+                    onChange={(e) => handleProductChange(e)}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
-        {/* <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
           <div>
             <p className='text-gray-600'>
               <strong className='text-gray-700'>Kho:</strong>{' '}
-              {data.warehouseName}
+              {data?.warehouseName}
             </p>
             <p className='text-gray-600'>
               <strong className='text-gray-700'>Mã hàng:</strong>{' '}
-              {data.productCode}
+              {data?.productCode}
             </p>
           </div>
           <div>
             <p className='text-gray-600'>
               <strong className='text-gray-700'>Tên hàng:</strong>{' '}
-              {data.productName}
+              {data?.productName}
             </p>
             <p className='text-gray-600'>
               <strong className='text-gray-700'>Đơn vị tính:</strong>{' '}
-              {data.unitName}
+              {data?.unitName}
             </p>
           </div>
-        </div> */}
+        </div>
         <div className='overflow-x-auto'>
           <table className='w-full border-collapse border border-gray-200'>
             <thead>
@@ -229,7 +217,7 @@ const ReportStockCard = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredDetails ? (
+              {filteredDetails && filteredDetails.length > 0 ? (
                 filteredDetails?.map((detail, index) => (
                   <tr key={index} className='hover:bg-gray-50'>
                     <td className='border border-gray-200 p-2'>
@@ -265,7 +253,7 @@ const ReportStockCard = () => {
                     colSpan={9}
                     className='border border-gray-200 p-2 text-center text-gray-600'
                   >
-                    Không có giao dịch
+                    Không có dữ liệu.
                   </td>
                 </tr>
               )}

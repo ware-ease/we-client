@@ -119,7 +119,7 @@ export const useCompleteGoodRequest = () => {
       queryClient.invalidateQueries({ queryKey: ['receiveRequests'] });
     },
     onError: () => {
-      toast.error('Không thể hoàn thành.');
+      toast.error('Không thể hoàn thành vì chưa có phiếu nhập.');
     },
   });
 };
