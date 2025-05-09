@@ -9,6 +9,7 @@ import { GoodRequest } from '@/types/goodRequest';
 import { useAddGoodRequest } from '@/hooks/queries/goodRequests';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
+import { mapGoodRequestDetails } from '@/lib/utils/mapGoodDetails';
 
 const WarehouseRequestCreate = () => {
   const router = useRouter();
@@ -31,13 +32,14 @@ const WarehouseRequestCreate = () => {
   const handleSubmit = () => {
     const finalFormData = {
       ...formData,
-      goodRequestDetails: data.map((row) => ({
-        quantity: row.quantity,
-        productId: row.productId,
-      })),
+      goodRequestDetails: mapGoodRequestDetails(data),
       warehouseId: currentWarehouse?.id,
       requestType: 2,
     };
+
+    if (finalFormData.goodRequestDetails.length === 0) {
+      return;
+    }
 
     mutate(finalFormData, {
       onSuccess: () => {

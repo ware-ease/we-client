@@ -26,6 +26,7 @@ export interface RowData {
   note: string;
   productId?: string;
   isBatchManaged?: boolean;
+  unitType: number;
 }
 
 const initialColumns: Column[] = [
@@ -168,9 +169,15 @@ const CustomIssueTable: React.FC<CustomTableProps> = ({
           batchId: (row.batch as any).props.value ?? '',
           mfgDate: '',
           expDate: '',
+          unitType:
+            products?.find((p) => p.id === baseData.productId)?.unitType || 0,
         };
       }
-      return baseData;
+      return {
+        ...baseData,
+        unitType:
+          products?.find((p) => p.id === baseData.productId)?.unitType || 0,
+      };
     });
 
     onDataChange(updatedData);

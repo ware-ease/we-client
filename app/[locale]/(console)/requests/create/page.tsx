@@ -10,6 +10,7 @@ import { useAddGoodRequest } from '@/hooks/queries/goodRequests';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import RequestTypeComboBox from '@/components/combo-boxes/RequestTypeComboBox';
 import PartnerComboBox from '@/components/combo-boxes/PartnerComboBox';
+import { mapGoodRequestDetails } from '@/lib/utils/mapGoodDetails';
 
 const RequestCreate = () => {
   const router = useRouter();
@@ -31,17 +32,12 @@ const RequestCreate = () => {
   const handleSubmit = () => {
     const finalFormData = {
       ...formData,
-      goodRequestDetails: Object.values(
-        data.reduce((acc, row) => {
-          const { productId, quantity } = row;
-          if (productId) {
-            acc[productId] = acc[productId] || { productId, quantity: 0 };
-            acc[productId].quantity += Number(quantity) || 0;
-          }
-          return acc;
-        }, {} as Record<string, { productId: string; quantity: number }>)
-      ),
+      goodRequestDetails: mapGoodRequestDetails(data),
     };
+
+    if (finalFormData.goodRequestDetails.length === 0) {
+      return;
+    }
 
     mutate(finalFormData, {
       onSuccess: () => {

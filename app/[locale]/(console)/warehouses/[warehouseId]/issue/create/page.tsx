@@ -21,6 +21,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import CustomIssueTable, {
   RowData,
 } from '@/components/custom-table/CustomIssueTable';
+import { mapGoodNoteDetails } from '@/lib/utils/mapGoodDetails';
 
 const IssueCreate = () => {
   const router = useRouter();
@@ -65,13 +66,13 @@ const IssueCreate = () => {
   const handleSubmit = () => {
     const finalFormData = {
       ...formData,
-      goodNoteDetails: data.map((row) => ({
-        quantity: parseFloat(row.quantity.toString()),
-        note: row.note,
-        productId: row.productId,
-      })),
+      goodNoteDetails: mapGoodNoteDetails(data),
       requestedWarehouseId: currentWarehouse?.id,
     };
+
+    if (finalFormData.goodNoteDetails.length === 0) {
+      return;
+    }
 
     if (transferReqs?.find((r) => r.id === formData.goodRequestId)) {
       mutateInternal(finalFormData, {
@@ -103,6 +104,7 @@ const IssueCreate = () => {
           batchId: '',
           mfgDate: '',
           expDate: '',
+          unitType: detail.unitType || 0,
         })
       );
       setInitialData(tableData);

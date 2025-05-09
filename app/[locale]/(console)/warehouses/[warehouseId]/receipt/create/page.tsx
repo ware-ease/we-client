@@ -19,6 +19,7 @@ import {
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useGoodTransferRequests } from '@/hooks/queries/goodRequests';
+import { mapGoodNoteDetails } from '@/lib/utils/mapGoodDetails';
 
 const ReceiptCreate = () => {
   const router = useRouter();
@@ -65,18 +66,13 @@ const ReceiptCreate = () => {
   const handleSubmit = () => {
     const finalFormData = {
       ...formData,
-      goodNoteDetails: data.map((row) => ({
-        quantity: parseFloat(row.quantity.toString()),
-        note: row.note,
-        newBatch: {
-          productId: row.productId,
-          name: 'Test',
-          mfgDate: new Date(row.mfgDate),
-          expDate: new Date(row.expDate),
-        },
-      })),
+      goodNoteDetails: mapGoodNoteDetails(data),
       requestedWarehouseId: currentWarehouse?.id,
     };
+
+    if (finalFormData.goodNoteDetails.length === 0) {
+      return;
+    }
 
     if (transferReqs?.find((r) => r.id === formData.goodRequestId)) {
       mutateInternal(finalFormData, {
@@ -120,6 +116,7 @@ const ReceiptCreate = () => {
           batchId: '',
           mfgDate: '',
           expDate: '',
+          unitType: detail.unitType || 0,
         })
       );
       setInitialData(tableData);

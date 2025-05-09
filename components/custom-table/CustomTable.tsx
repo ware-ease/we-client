@@ -26,6 +26,7 @@ export interface RowData {
   note: string;
   productId?: string;
   isBatchManaged?: boolean;
+  unitType: number;
 }
 
 const initialColumns: Column[] = [
@@ -210,9 +211,15 @@ const CustomTable: React.FC<CustomTableProps> = ({
           expDate: (row.expDate as any).props.value ?? '',
           isBatchManaged: products?.find((p) => p.id === baseData.productId)
             ?.isBatchManaged,
+          unitType:
+            products?.find((p) => p.id === baseData.productId)?.unitType || 0,
         };
       }
-      return baseData;
+      return {
+        ...baseData,
+        unitType:
+          products?.find((p) => p.id === baseData.productId)?.unitType || 0,
+      };
     });
 
     onDataChange(updatedData);

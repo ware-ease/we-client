@@ -19,7 +19,6 @@ import { cn } from '@/lib/utils/utils';
 import Loading from '../app/Loading';
 import Error from '../app/Error';
 import { useWarehouses } from '@/hooks/queries/warehouseQueries';
-import { useWarehouses as useAssignedWarehouses } from '@/hooks/queries/accountQueries';
 import { useParams } from 'next/navigation';
 import { useAuth } from '../providers/AuthProvider';
 import { Warehouse } from '@/types/warehouse';
@@ -42,11 +41,6 @@ const WarehouseComboBox: React.FC<WarehouseComboBoxProps> = ({
   >([]);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
   const { data: warehouses, isPending, isError } = useWarehouses();
-  const {
-    data: assignedWarehouses,
-    isPending: isAssignedPending,
-    isError: isAssignedError,
-  } = useAssignedWarehouses();
 
   useEffect(() => {
     const isAdmin = currentUser?.groups?.some((group) => group.id === '1');
@@ -63,7 +57,7 @@ const WarehouseComboBox: React.FC<WarehouseComboBoxProps> = ({
 
   const { warehouseId } = useParams();
 
-  if (isError || isAssignedError) {
+  if (isError) {
     return <Error />;
   }
 
@@ -74,12 +68,10 @@ const WarehouseComboBox: React.FC<WarehouseComboBoxProps> = ({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className={`w-full justify-between ${
-            assignedWarehouses ? 'border-none' : ''
-          }`}
+          className={`w-full justify-between border-none`}
           ref={triggerRef}
         >
-          {isPending || isAssignedPending
+          {isPending
             ? 'Chọn kho'
             : value
             ? warehouses.find((p) => p.id === value)?.name
@@ -96,7 +88,7 @@ const WarehouseComboBox: React.FC<WarehouseComboBoxProps> = ({
           <CommandList>
             <CommandEmpty>Không tìm thấy sản phẩm.</CommandEmpty>
             <CommandGroup>
-              {!isPending && !isAssignedPending ? (
+              {!isPending ? (
                 onlyAssignedWarehouses ? (
                   filteredWarehouses
                     .filter((w) => w.id !== warehouseId)

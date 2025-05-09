@@ -31,6 +31,7 @@ export interface GoodRequestDetail extends Base {
   brandName?: string;
   unitName?: string;
   quantity?: number;
+  unitType?: number;
 }
 
 export interface DeclineGoodRequest {
