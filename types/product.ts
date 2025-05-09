@@ -12,6 +12,7 @@ export interface Product extends Base {
   unitName?: string;
   unitType?: number;
   isBatchManaged?: boolean;
+  totalQuantity?: number;
   //status?: boolean;
 }
 

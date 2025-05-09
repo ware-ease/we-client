@@ -62,6 +62,7 @@ const ReceiptDetail = () => {
       note: detail.note || '',
       mfgDate: '',
       expDate: '',
+      unitType: 0,
     })
   );
 

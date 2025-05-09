@@ -7,6 +7,7 @@ import {
   getWarehouseInventoriesById,
   getWarehouseInventoriesByProductId,
   getWarehouseInventoryAdjustments,
+  getWarehouseProductsById,
   getWarehouseStockBook,
   getWarehouseStockCardByProductId,
   updateWarehouse,
@@ -31,6 +32,13 @@ export const useWarehousesInventories = (enabled: boolean, id: string) =>
   useQuery({
     queryKey: ['inventories', id],
     queryFn: () => getWarehouseInventoriesById(id),
+    enabled: enabled,
+  });
+
+export const useWarehousesProducts = (enabled: boolean, id: string) =>
+  useQuery({
+    queryKey: ['warehouse-products', id],
+    queryFn: () => getWarehouseProductsById(id),
     enabled: enabled,
   });
 

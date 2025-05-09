@@ -52,6 +52,7 @@ const RequestDetail = () => {
       note: '',
       expDate: '',
       mfgDate: '',
+      unitType: detail.unitType || 0,
     }));
 
   const handleSubmit = () => {

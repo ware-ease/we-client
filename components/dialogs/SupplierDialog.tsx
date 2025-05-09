@@ -85,7 +85,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
           email: newSupplier.email,
           phone: newSupplier.phone ?? '',
           address: newSupplier.address ?? '',
-          // status: newSupplier.status ?? 'active',
+          status: newSupplier.status ?? false,
         },
         {
           onSuccess: () => {

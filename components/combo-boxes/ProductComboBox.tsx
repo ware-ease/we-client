@@ -28,6 +28,7 @@ interface ProductComboBoxProps {
   onChange: (value: string) => void;
   disabled?: boolean;
   products?: Product[];
+  fullInfo?: boolean;
 }
 
 const ProductComboBox: React.FC<ProductComboBoxProps> = ({
@@ -35,6 +36,7 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
   onChange,
   disabled = false,
   products: initialProducts,
+  fullInfo = false,
 }) => {
   const [open, setOpen] = React.useState(false);
   const triggerRef = React.useRef<HTMLButtonElement>(null);
@@ -91,7 +93,7 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
           <CommandInput placeholder='Nhập Tên/SKU...' className='h-9' />
           <CommandList>
             <CommandEmpty>Không tìm thấy sản phẩm.</CommandEmpty>
-            <CommandGroup>
+            <CommandGroup className='overflow-x-auto'>
               {!effectiveIsPending ? (
                 products.map((p) => (
                   <CommandItem
@@ -102,7 +104,9 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
                       setOpen(false);
                     }}
                   >
-                    {p.name}
+                    {fullInfo
+                      ? `${p.name}, tồn kho: ${p.totalQuantity}`
+                      : p.name}
                     <Check
                       className={cn(
                         'ml-auto',

@@ -20,6 +20,7 @@ import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useGoodTransferRequests } from '@/hooks/queries/goodRequests';
 import { mapGoodNoteDetails } from '@/lib/utils/mapGoodDetails';
+import { toast } from 'react-toastify';
 
 const ReceiptCreate = () => {
   const router = useRouter();
@@ -71,6 +72,11 @@ const ReceiptCreate = () => {
     };
 
     if (finalFormData.goodNoteDetails.length === 0) {
+      return;
+    }
+
+    if (finalFormData.shipperName?.trim() === '') {
+      toast.error('Vui lòng điền tên người giao hàng');
       return;
     }
 

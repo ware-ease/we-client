@@ -226,7 +226,13 @@ const IssueCreate = () => {
 
       {/* Table */}
       <div className='bg-white p-6 rounded-lg shadow-sm mb-6'>
-        <CustomIssueTable initialData={initialData} onDataChange={setData} />
+        {currentWarehouse && (
+          <CustomIssueTable
+            warehouseId={currentWarehouse.id}
+            initialData={initialData}
+            onDataChange={setData}
+          />
+        )}
       </div>
 
       {/* Submit Button */}

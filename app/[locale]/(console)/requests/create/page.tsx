@@ -2,7 +2,7 @@
 import { Input } from '@/components/shadcn-base/Input';
 import React, { useState } from 'react';
 import { Button } from '@/components/shadcn-base/Button';
-import CustomTable, { RowData } from '@/components/custom-table/CustomTable';
+import { RowData } from '@/components/custom-table/CustomTable';
 import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
 import useFormData from '@/hooks/useFormData';
 import { GoodRequest } from '@/types/goodRequest';
@@ -11,6 +11,8 @@ import { usePathname, useRouter } from '@/lib/i18n/routing';
 import RequestTypeComboBox from '@/components/combo-boxes/RequestTypeComboBox';
 import PartnerComboBox from '@/components/combo-boxes/PartnerComboBox';
 import { mapGoodRequestDetails } from '@/lib/utils/mapGoodDetails';
+import CustomRequestTable from '@/components/custom-table/CustomRequestTable';
+import CustomReceiptRequestTable from '@/components/custom-table/CustomReceiptRequestTable';
 
 const RequestCreate = () => {
   const router = useRouter();
@@ -147,7 +149,15 @@ const RequestCreate = () => {
 
       {/* Table */}
       <div className='bg-white p-6 rounded-lg shadow-sm mb-6'>
-        <CustomTable isRequestDetails onDataChange={setData} />
+        {formData.requestType === 1 && formData.requestedWarehouseId ? (
+          <CustomRequestTable
+            warehouseId={formData.requestedWarehouseId}
+            isRequestDetails
+            onDataChange={setData}
+          />
+        ) : (
+          <CustomReceiptRequestTable isRequestDetails onDataChange={setData} />
+        )}
       </div>
 
       {/* Submit Button */}

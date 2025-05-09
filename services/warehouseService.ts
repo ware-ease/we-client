@@ -1,3 +1,4 @@
+import { Product } from '@/types/product';
 import {
   Inventory,
   Location,
@@ -27,6 +28,13 @@ export const getWarehouseInventoriesById = async (
   id: string
 ): Promise<Warehouse> => {
   const response = await axiosGet(`/warehouses/${id}/inventory`, {});
+  return response.data.data;
+};
+
+export const getWarehouseProductsById = async (
+  id: string
+): Promise<Product[]> => {
+  const response = await axiosGet(`/warehouses/${id}/products`, {});
   return response.data.data;
 };
 
