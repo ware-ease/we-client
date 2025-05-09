@@ -2,6 +2,7 @@
 import {
   Boxes,
   FileInput,
+  FileText,
   Home,
   LayoutDashboardIcon,
   LogOut,
@@ -148,6 +149,11 @@ export function AppSidebar() {
       title: t('Sidebar.products'),
       url: '/products-home',
       icon: Boxes,
+    },
+    {
+      title: 'Báo cáo',
+      url: '/report',
+      icon: FileText,
     },
   ];
 

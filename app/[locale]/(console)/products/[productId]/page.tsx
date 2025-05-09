@@ -7,7 +7,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import React, { useState, useMemo, useEffect } from 'react';
 import { Check, FileText, Loader2, Pencil, X } from 'lucide-react';
 import { Product } from '@/types/product';
-import { useRouter } from '@/lib/i18n/routing';
+import { Link, useRouter } from '@/lib/i18n/routing';
 import ProductBatchTable from '@/components/custom-table/batch/BatchProductTable';
 import { Batch } from '@/types/batch';
 import Loading from '@/components/app/Loading';
@@ -224,10 +224,13 @@ const ProductDetail = () => {
                   <Pencil className='w-4 h-4' />
                   Sửa
                 </button>
-                <button className='flex items-center bg-transparent border border-blue-500 text-blue-500 px-4 py-2 rounded-3xl hover:bg-blue-100 transition-colors text-sm'>
+                <Link
+                  href={`/report/stockcard?productId=${productId}`}
+                  className='flex items-center bg-transparent border border-blue-500 text-blue-500 px-4 py-2 rounded-3xl hover:bg-blue-100 transition-colors text-sm'
+                >
                   <FileText className='w-4 h-4' />
-                  Báo cáo
-                </button>
+                  Thẻ kho
+                </Link>
               </div>
             </div>
           </div>

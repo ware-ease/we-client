@@ -4,6 +4,7 @@ import { Link } from '@/lib/i18n/routing';
 import {
   BarChart,
   Box,
+  FileChartColumn,
   FileText,
   List,
   Truck,
@@ -37,6 +38,7 @@ const Home = () => {
   const canSeeAccounts = isAdmin || isWarehouseKeeper;
   const canSeeSuppliers = isAdmin || isSale;
   const canSeeCustomers = isAdmin || isSale;
+  const canSeeReport = isAdmin || isWarehouseKeeper;
 
   return (
     <main className='flex flex-col w-full max-w-7xl mx-auto px-4 py-6 space-y-10'>
@@ -121,6 +123,14 @@ const Home = () => {
                 description='Quản lý danh sách khách hàng'
               />
             )}
+            {canSeeReport && (
+              <CardLink
+                href='/report'
+                icon={<FileChartColumn className='text-yellow-500 w-6 h-6' />}
+                title='Báo cáo'
+                description='Quản lý báo cáo kho và hệ thống'
+              />
+            )}
           </div>
         </section>
       )}
@@ -128,7 +138,6 @@ const Home = () => {
   );
 };
 
-// Tạo một component để render card link cho đẹp và tái sử dụng
 const CardLink = ({
   href,
   icon,
