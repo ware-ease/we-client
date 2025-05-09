@@ -521,7 +521,7 @@ const CustomReceiptRequestTable: React.FC<CustomTableProps> = ({
       <div className='overflow-auto max-h-[45vh] max-w-[calc(100vw-7rem-var(--sidebar-width))] transform-none'>
         <div className='border min-w-max'>
           <div className='flex flex-col'>
-            <div className='flex font-semibold border-b select-none'>
+            <div className='flex font-semibold border-b select-none bg-gray-100'>
               {columns.map((col, index) => (
                 <div
                   key={index}

@@ -201,6 +201,10 @@ const ProductDetail = () => {
                 {(product.productType as string) || 'Không có'}
               </p>
               <p className='text-gray-600'>
+                <strong className='text-gray-700'>Hãng sản xuất:</strong>{' '}
+                {(product.brand as string) || 'Không có'}
+              </p>
+              <p className='text-gray-600'>
                 <strong className='text-gray-700'>Mô tả:</strong>{' '}
                 {product.note || 'Không có'}
               </p>
@@ -216,7 +220,7 @@ const ProductDetail = () => {
                   <X className='text-red-500 ml-1' />
                 )}
               </p>
-              <div className='flex mt-2 space-x-2'>
+              <div className='flex mt-4 space-x-2'>
                 <button
                   onClick={() => setIsEditModalOpen(true)}
                   className='flex items-center bg-transparent border border-yellow-500 text-yellow-500 px-4 py-2 rounded-3xl hover:bg-yellow-100 transition-colors text-sm'

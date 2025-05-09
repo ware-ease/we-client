@@ -456,7 +456,7 @@ const CustomIssueTable: React.FC<CustomTableProps> = ({
       <div className='overflow-auto h-[45h] max-h-[45vh] max-w-[calc(100vw-7rem-var(--sidebar-width))]'>
         <div className='border min-w-max'>
           <div className='flex flex-col'>
-            <div className='flex font-semibold border-b select-none'>
+            <div className='flex font-semibold border-b select-none bg-gray-100'>
               {columns.map((col, index) => (
                 <div
                   key={index}
