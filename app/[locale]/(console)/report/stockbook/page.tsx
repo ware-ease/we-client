@@ -3,38 +3,32 @@ import React, { useRef, useState } from 'react';
 import { Download, Printer } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 import { Button } from '@/components/shadcn-base/Button';
-import { Input } from '@/components/shadcn-base/Input';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useWarehousesStockCardByProductID } from '@/hooks/queries/warehouseQueries';
-import { useWarehouses } from '@/hooks/queries/accountQueries';
-import { useProducts } from '@/hooks/queries/productQueries';
+import { useWarehousesStockBook } from '@/hooks/queries/warehouseQueries';
 import { useRouter } from '@/lib/i18n/routing';
+import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
 
 const ReportStockBook = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const contentRef = useRef(null);
-  const [dateStart, setDateStart] = useState<string>('');
-  const [dateEnd, setDateEnd] = useState<string>('');
+  const [month, setMonth] = useState<string>('');
+  const [year, setYear] = useState<string>('');
   const [warehouseId, setWarehouseId] = useState<string>(
     searchParams.get('warehouseId') as string
   );
-  const [productId, setProductId] = useState<string>(
-    searchParams.get('productId') as string
-  );
 
-  const { data: warehouses } = useWarehouses();
-  const { data: products } = useProducts();
-  const { data } = useWarehousesStockCardByProductID(
-    true,
+  const { data: stockbook } = useWarehousesStockBook(
+    !!warehouseId && !!month && !!year,
     warehouseId,
-    productId
+    month ? parseInt(month) : 0,
+    year ? parseInt(year) : 0
   );
 
   const handlePrint = useReactToPrint({
     contentRef,
-    documentTitle: `The_Kho_${data?.productCode}`,
+    documentTitle: `The_Kho_${stockbook?.warehouseName || 'StockBook'}`,
   });
 
   const formatDate = (date: string | undefined) => {
@@ -45,42 +39,27 @@ const ReportStockBook = () => {
       : parsedDate.toLocaleDateString('vi-VN');
   };
 
-  const filteredDetails = data?.details.filter((detail) => {
-    let expDatePass = true;
-    if (dateStart && detail.date) {
-      const expDate = new Date(detail.date);
-      const start = new Date(dateStart);
-      expDatePass = !isNaN(expDate.getTime()) && expDate >= start;
-    }
-    if (dateEnd && detail.date) {
-      const expDate = new Date(detail.date);
-      const end = new Date(dateEnd);
-      expDatePass = expDatePass && !isNaN(expDate.getTime()) && expDate <= end;
-    }
-
-    return expDatePass;
-  });
-
   const clearFilters = () => {
-    setDateStart('');
-    setDateEnd('');
+    setMonth('');
+    setYear('');
   };
 
-  const handleWarehouseChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newWarehouseId = e.target.value;
+  const handleWarehouseChange = (e: string) => {
+    const newWarehouseId = e;
     setWarehouseId(newWarehouseId);
-    router.push(
-      `/report/stockcard?productId=${productId}&currentWarehouseId=${newWarehouseId}`
-    );
+    router.push(`/report/stockbook?warehouseId=${newWarehouseId}`);
   };
 
-  const handleProductChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newProductId = e.target.value;
-    setProductId(newProductId);
-    router.push(
-      `/report/stockcard?productId=${newProductId}&currentWarehouseId=${warehouseId}`
-    );
-  };
+  // Generate month and year options
+  const months = Array.from({ length: 12 }, (_, i) => ({
+    value: (i + 1).toString(),
+    label: `Tháng ${i + 1}`,
+  }));
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: currentYear - 2019 }, (_, i) => ({
+    value: (2020 + i).toString(),
+    label: (2020 + i).toString(),
+  }));
 
   return (
     <div className='p-6'>
@@ -117,20 +96,30 @@ const ReportStockBook = () => {
               Chọn kỳ xuất nhập tồn
             </h3>
             <div className='flex space-x-2'>
-              <Input
-                type='date'
-                value={dateStart}
-                onChange={(e) => setDateStart(e.target.value)}
-                className='border border-gray-300 rounded p-2 w-full'
-                placeholder='Từ ngày'
-              />
-              <Input
-                type='date'
-                value={dateEnd}
-                onChange={(e) => setDateEnd(e.target.value)}
-                className='border border-gray-300 rounded p-2 w-full'
-                placeholder='Đến ngày'
-              />
+              <select
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+                className='w-full border border-gray-300 rounded p-2 text-black'
+              >
+                <option value=''>Chọn tháng</option>
+                {months.map((m) => (
+                  <option key={m.value} value={m.value}>
+                    {m.label}
+                  </option>
+                ))}
+              </select>
+              <select
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+                className='w-full border border-gray-300 rounded p-2 text-black'
+              >
+                <option value=''>Chọn năm</option>
+                {years.map((y) => (
+                  <option key={y.value} value={y.value}>
+                    {y.label}
+                  </option>
+                ))}
+              </select>
               <Button className='h-full' onClick={clearFilters}>
                 Xóa bộ lọc
               </Button>
@@ -141,78 +130,49 @@ const ReportStockBook = () => {
               <h3 className='text-lg font-semibold text-gray-700 mb-2'>
                 Kho hiện tại
               </h3>
-              {warehouseId && (
-                <select
+              <div className='w-full'>
+                <WarehouseComboBox
                   value={warehouseId}
-                  onChange={handleWarehouseChange}
-                  className='w-full border text-black font-small border-gray-200 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors'
-                  disabled={!warehouses || warehouses.length === 0}
-                >
-                  {warehouses && warehouses.length > 0 ? (
-                    warehouses.map((warehouse) => (
-                      <option key={warehouse.id} value={warehouse.id}>
-                        {warehouse.name}
-                      </option>
-                    ))
-                  ) : (
-                    <option value=''>Không có kho</option>
-                  )}
-                </select>
-              )}
-            </div>
-            <div>
-              <h3 className='text-lg font-semibold text-gray-700 mb-2'>
-                Sản phẩm
-              </h3>
-              {productId && (
-                <select
-                  value={productId}
-                  onChange={handleProductChange}
-                  className='w-full border text-black font-small border-gray-200 rounded-lg px-2 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-colors'
-                  disabled={!products || products.length === 0}
-                >
-                  {products && products.length > 0 ? (
-                    products.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.sku} - {p.name}
-                      </option>
-                    ))
-                  ) : (
-                    <option value=''>Không có kho</option>
-                  )}
-                </select>
-              )}
+                  onlyAssignedWarehouses
+                  onChange={(e) => handleWarehouseChange(e)}
+                />
+              </div>
             </div>
           </div>
         </div>
-        {/* <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
           <div>
             <p className='text-gray-600'>
               <strong className='text-gray-700'>Kho:</strong>{' '}
-              {data.warehouseName}
+              {stockbook?.warehouseName}
             </p>
             <p className='text-gray-600'>
-              <strong className='text-gray-700'>Mã hàng:</strong>{' '}
-              {data.productCode}
+              <strong className='text-gray-700'>Địa chỉ:</strong>{' '}
+              {stockbook?.address}
             </p>
           </div>
           <div>
             <p className='text-gray-600'>
-              <strong className='text-gray-700'>Tên hàng:</strong>{' '}
-              {data.productName}
-            </p>
-            <p className='text-gray-600'>
-              <strong className='text-gray-700'>Đơn vị tính:</strong>{' '}
-              {data.unitName}
+              <strong className='text-gray-700'>Người phụ trách:</strong>{' '}
+              {stockbook?.inCharge}
             </p>
           </div>
-        </div> */}
+        </div>
         <div className='overflow-x-auto'>
           <table className='w-full border-collapse border border-gray-200'>
             <thead>
               <tr className='bg-gray-100'>
                 <th className='border border-gray-200 p-2 text-left text-gray-700'>
                   Ngày
+                </th>
+                <th className='border border-gray-200 p-2 text-left text-gray-700'>
+                  Mã hàng
+                </th>
+                <th className='border border-gray-200 p-2 text-left text-gray-700'>
+                  Tên hàng
+                </th>
+                <th className='border border-gray-200 p-2 text-left text-gray-700'>
+                  Mã lô
                 </th>
                 <th className='border border-gray-200 p-2 text-left text-gray-700'>
                   Chứng từ
@@ -227,19 +187,28 @@ const ReportStockBook = () => {
                   Xuất
                 </th>
                 <th className='border border-gray-200 p-2 text-right text-gray-700'>
-                  Tồn
+                  Tồn đầu kỳ
                 </th>
-                <th className='border border-gray-200 p-2 text-left text-gray-700'>
-                  Ghi chú
+                <th className='border border-gray-200 p-2 text-right text-gray-700'>
+                  Tồn cuối kỳ
                 </th>
               </tr>
             </thead>
             <tbody>
-              {filteredDetails ? (
-                filteredDetails?.map((detail, index) => (
+              {stockbook?.details && stockbook?.details.length > 0 ? (
+                stockbook.details.map((detail, index) => (
                   <tr key={index} className='hover:bg-gray-50'>
                     <td className='border border-gray-200 p-2'>
                       {formatDate(detail.date)}
+                    </td>
+                    <td className='border border-gray-200 p-2'>
+                      {detail.sku || ''}
+                    </td>
+                    <td className='border border-gray-200 p-2'>
+                      {detail.productName || ''}
+                    </td>
+                    <td className='border border-gray-200 p-2'>
+                      {detail.batchCode || ''}
                     </td>
                     <td className='border border-gray-200 p-2'>
                       {detail.code}
@@ -258,17 +227,17 @@ const ReportStockBook = () => {
                         : ''}
                     </td>
                     <td className='border border-gray-200 p-2 text-right'>
-                      {detail.stock.toLocaleString('vi-VN')}
+                      {detail.openingStock.toLocaleString('vi-VN')}
                     </td>
-                    <td className='border border-gray-200 p-2'>
-                      {detail.note || ''}
+                    <td className='border border-gray-200 p-2 text-right'>
+                      {detail.closingStock.toLocaleString('vi-VN')}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan={9}
+                    colSpan={8}
                     className='border border-gray-200 p-2 text-center text-gray-600'
                   >
                     Không có giao dịch
@@ -298,37 +267,44 @@ const ReportStockBook = () => {
               </div>
               <div className='text-left'>
                 <p>
-                  <strong className='font-normal'>THẺ KHO</strong>
+                  <strong className='font-normal'>SỔ KHO</strong>
                 </p>
                 <p>
-                  <strong className='font-normal'>Kho:</strong>{' '}
-                  {data?.warehouseName || ''}
-                </p>
-                <p>
-                  <strong className='font-normal'>Mã hàng:</strong>{' '}
-                  {data?.productCode || ''}
-                </p>
-                <p>
-                  <strong className='font-normal'>Tên hàng:</strong>{' '}
-                  {data?.productName || ''}
-                </p>
-                <p>
-                  <strong className='font-normal'>Đơn vị tính:</strong>{' '}
-                  {data?.unitName || ''}
+                  <strong className='font-normal'>Tháng:</strong> {month}/{year}
                 </p>
               </div>
             </div>
           </div>
 
           <div className='text-center text-xl font-bold mt-20 text-[#2F5597]'>
-            THẺ KHO
+            SỔ KHO
+          </div>
+          <div>
+            <p>
+              <strong className='font-normal'>Tên kho:</strong>{' '}
+              {stockbook?.warehouseName || ''}
+            </p>
+            <p>
+              <strong className='font-normal'>Địa chỉ:</strong>{' '}
+              {stockbook?.address || ''}
+            </p>
+            <p>
+              <strong className='font-normal'>Người phụ trách:</strong>{' '}
+              {stockbook?.inCharge || ''}
+            </p>
           </div>
 
-          {/* Table */}
           <table className='w-full border border-black mt-4'>
             <thead>
               <tr className='text-left font-normal'>
                 <th className='border-r border-black p-2 font-normal'>Ngày</th>
+                <th className='border-r border-black p-2 font-normal'>
+                  Mã hàng
+                </th>
+                <th className='border-r border-black p-2 font-normal'>
+                  Tên hàng
+                </th>
+                <th className='border-r border-black p-2 font-normal'>Mã lô</th>
                 <th className='border-r border-black p-2 font-normal'>
                   Chứng từ
                 </th>
@@ -337,16 +313,27 @@ const ReportStockBook = () => {
                 </th>
                 <th className='border-r border-black p-2 font-normal'>Nhập</th>
                 <th className='border-r border-black p-2 font-normal'>Xuất</th>
-                <th className='border-r border-black p-2 font-normal'>Tồn</th>
-                <th className='p-2 font-normal'>Ghi chú</th>
+                <th className='border-r border-black p-2 font-normal'>
+                  Tồn đầu kỳ
+                </th>
+                <th className='p-2 font-normal'>Tồn cuối kỳ</th>
               </tr>
             </thead>
             <tbody>
-              {filteredDetails ? (
-                filteredDetails?.map((detail, index) => (
+              {stockbook?.details && stockbook?.details.length > 0 ? (
+                stockbook.details.map((detail, index) => (
                   <tr key={index}>
                     <td className='border border-black p-2'>
                       {formatDate(detail.date)}
+                    </td>
+                    <td className='border border-black p-2'>
+                      {detail.sku || ''}
+                    </td>
+                    <td className='border border-black p-2'>
+                      {detail.productName || ''}
+                    </td>
+                    <td className='border border-black p-2'>
+                      {detail.batchCode || ''}
                     </td>
                     <td className='border border-black p-2'>{detail.code}</td>
                     <td className='border border-black p-2'>
@@ -363,17 +350,17 @@ const ReportStockBook = () => {
                         : ''}
                     </td>
                     <td className='border border-black p-2 text-right'>
-                      {detail.stock.toLocaleString('vi-VN')}
+                      {detail.openingStock.toLocaleString('vi-VN')}
                     </td>
-                    <td className='border border-black p-2'>
-                      {detail.note || ''}
+                    <td className='border border-black p-2 text-right'>
+                      {detail.closingStock.toLocaleString('vi-VN')}
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
                   <td
-                    colSpan={9}
+                    colSpan={8}
                     className='border border-black p-2 text-center'
                   >
                     Không có giao dịch
@@ -389,7 +376,7 @@ const ReportStockBook = () => {
             <div className='flex justify-end mt-2 w-full'>
               <div className='text-center w-1/2'>
                 <p>
-                  <strong>{'THỦ KHO'}</strong>
+                  <strong>THỦ KHO</strong>
                 </p>
                 <p>(Ký, họ tên)</p>
               </div>

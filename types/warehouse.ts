@@ -77,3 +77,22 @@ export interface StockCard {
     note: string;
   }[];
 }
+
+export interface StockBook {
+  address: string;
+  inCharge: string;
+  warehouseName: string;
+  details: {
+    date: string;
+    code: string;
+    description: string;
+    import: number;
+    export: number;
+    openingStock: number;
+    closingStock: number;
+    note: string;
+    productName: string;
+    sku: string;
+    batchCode: string;
+  }[];
+}

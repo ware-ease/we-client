@@ -7,7 +7,6 @@ import { Input } from '@/components/shadcn-base/Input';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useWarehousesStockCardByProductID } from '@/hooks/queries/warehouseQueries';
-import { useWarehouses } from '@/hooks/queries/accountQueries';
 import { useProducts } from '@/hooks/queries/productQueries';
 import { useRouter } from '@/lib/i18n/routing';
 import ProductComboBox from '@/components/combo-boxes/ProductComboBox';
@@ -26,7 +25,6 @@ const ReportStockCard = () => {
     (searchParams.get('productId') as string) || ''
   );
 
-  const { data: warehouses } = useWarehouses();
   const { data: products } = useProducts();
   const { data } = useWarehousesStockCardByProductID(
     true,
@@ -141,15 +139,13 @@ const ReportStockCard = () => {
               <h3 className='text-lg font-semibold text-gray-700 mb-2'>
                 Kho hiện tại
               </h3>
-              {warehouses && (
-                <div className='w-full'>
-                  <WarehouseComboBox
-                    value={warehouseId}
-                    onlyAssignedWarehouses
-                    onChange={(e) => handleWarehouseChange(e)}
-                  />
-                </div>
-              )}
+              <div className='w-full'>
+                <WarehouseComboBox
+                  value={warehouseId}
+                  onlyAssignedWarehouses
+                  onChange={(e) => handleWarehouseChange(e)}
+                />
+              </div>
             </div>
             <div className='flex-1'>
               <h3 className='text-lg font-semibold text-gray-700 mb-2'>

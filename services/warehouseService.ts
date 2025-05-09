@@ -1,4 +1,10 @@
-import { Inventory, Location, StockCard, Warehouse } from '../types/warehouse';
+import {
+  Inventory,
+  Location,
+  StockBook,
+  StockCard,
+  Warehouse,
+} from '../types/warehouse';
 import {
   axiosDelete,
   axiosGet,
@@ -51,6 +57,24 @@ export const getWarehouseStockCardByProductId = async (
       warehouseId +
       '&productId=' +
       productId,
+    {}
+  );
+  return response.data.data;
+};
+
+export const getWarehouseStockBook = async (
+  warehouseId: string,
+  month: number,
+  year: number
+): Promise<StockBook> => {
+  const response = await axiosGet(
+    `/warehouses/stock-book` +
+      `?warehouseId=` +
+      warehouseId +
+      '&month=' +
+      month +
+      '&year=' +
+      year,
     {}
   );
   return response.data.data;
