@@ -1,19 +1,19 @@
 'use client';
+import AccountStatusUI from '@/components/app/AccountStatusUI';
+import CreatedByUI from '@/components/app/CreatedByUI';
 import DetailAccountDialog from '@/components/dialogs/ViewAccountDialogs';
-import { useAccounts } from '@/hooks/queries/accountQueries';
-import { Account } from '@/types/account';
-import { ColumnDef } from '@tanstack/react-table';
-import AddAccountDialog from '../../dialogs/AddAccountDialog';
-import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
-import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
-import AccountStatusUI from '@/components/app/AccountStatusUI';
+import { useAccounts } from '@/hooks/queries/accountQueries';
 import { accountStatusFilterFn } from '@/lib/tanstack-table/customFilterFn';
-import CreatedByUI from '@/components/app/CreatedByUI';
+import { Account } from '@/types/account';
+import { ColumnDef } from '@tanstack/react-table';
+import AddAccountDialog from '../../dialogs/AddAccountDialog';
+import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
+import { CustomDataTable } from '../base-data-table/CustomDataTable';
 
 export const columns: ColumnDef<Account>[] = [
   {
@@ -50,6 +50,83 @@ export const columns: ColumnDef<Account>[] = [
       title: 'Tên',
     },
   },
+  {
+    id: 'groups',
+    accessorFn: ({ groups }) =>
+      groups?.map((g) => g.name).join(', ') || 'Không có',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Nhóm' className='text-xs' />
+    ),
+    cell: ({ row }) => {
+      const groups = row.original.groups;
+      if (!groups?.length)
+        return <span className='text-gray-400'>Không có</span>;
+
+      const getGroupColor = (id: string) => {
+        switch (id) {
+          case '1':
+            return 'bg-blue-100 text-blue-800';
+          case '2':
+            return 'bg-green-100 text-green-800';
+          case '3':
+            return 'bg-yellow-100 text-yellow-800';
+          case '4':
+            return 'bg-purple-100 text-purple-800';
+          default:
+            return 'bg-gray-100 text-gray-800';
+        }
+      };
+
+      return (
+        <div className='flex flex-wrap gap-1'>
+          {groups.map((group) => (
+            <span
+              key={group.id}
+              className={`px-2 py-0.5 rounded-full text-xs font-medium ${getGroupColor(
+                group.id
+              )}`}
+            >
+              {group.name}
+            </span>
+          ))}
+        </div>
+      );
+    },
+    meta: {
+      title: 'Nhóm',
+    },
+  },
+
+  // {
+  //   id: 'warehouses',
+  //   // accessorFn: ({warehouses }) => `${warehouses[]} ${profile.firstName}`,
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title='Kho phụ trách'
+  //       className='text-xs'
+  //     />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const account = row.original;
+  //     const isWarehouseUser = account.groups.some(
+  //       (g) => g.id === '2' || g.id === '3'
+  //     );
+
+  //     if (!isWarehouseUser || !account.warehouses?.length) return null;
+
+  //     return (
+  //       <ul className='list-disc list-inside text-sm text-gray-700'>
+  //         {account.warehouses.map((wh) => (
+  //           <li key={wh.id}>{wh.name}</li>
+  //         ))}
+  //       </ul>
+  //     );
+  //   },
+  //   meta: {
+  //     title: 'Kho phụ trách',
+  //   },
+  // },
   {
     accessorKey: 'profile.nationality',
     header: ({ column }) => (
@@ -189,6 +266,7 @@ export const columns: ColumnDef<Account>[] = [
 
 const AccountTable = () => {
   const { data, isSuccess } = useAccounts();
+  console.log(data);
 
   return (
     <CustomDataTable columns={columns} data={isSuccess ? data : []}>
