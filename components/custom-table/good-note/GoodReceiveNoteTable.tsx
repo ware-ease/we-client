@@ -18,6 +18,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
+import CreatedByUI from '@/components/app/CreatedByUI';
 
 export const columns: ColumnDef<GoodNote>[] = [
   {
@@ -136,6 +137,30 @@ export const columns: ColumnDef<GoodNote>[] = [
     meta: {
       title: 'Ngày tạo',
       type: 'date',
+    },
+  },
+  {
+    id: 'createdBy',
+    accessorFn: ({ createdByFullName }) =>
+      `${createdByFullName || 'Người bí ẩn'}`,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Tạo bởi'
+        className='text-xs'
+      />
+    ),
+    cell: ({ row }) => (
+      <CreatedByUI
+        fullName={row.original.createdByFullName || 'Ware Ease'}
+        group={row.original.createdByGroup || 'Hệ thống'}
+        avatarUrl={
+          row.original.createdByAvatarUrl || 'https://github.com/shadcn.png'
+        }
+      />
+    ),
+    meta: {
+      title: 'Tạo bởi',
     },
   },
   {

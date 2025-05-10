@@ -71,7 +71,7 @@ export const columns: ColumnDef<Supplier>[] = [
         <span
           className={`bg-${
             status ? 'green-500' : 'red-500'
-          } font-medium text-white flex items-center justify-center rounded-xl py-1 text-xs w-2/3`}
+          } font-medium text-white flex items-center justify-center rounded-xl py-1 text-xs`}
         >
           {status ? 'Đang hoạt động' : 'Ngưng hoạt động'}
         </span>

@@ -3,7 +3,7 @@ import { GoodNote } from './goodNote';
 import { Supplier } from './supplier';
 import { Warehouse } from './warehouse';
 
-export type GoodRequest = {
+export interface GoodRequest extends Base {
   id?: string;
   code?: string;
   requestType?: number;
@@ -22,7 +22,7 @@ export type GoodRequest = {
   goodNotes?: GoodNote[];
   goodNoteCount?: number;
   statusNote?: string;
-};
+}
 
 export interface GoodRequestDetail extends Base {
   productId?: string;
