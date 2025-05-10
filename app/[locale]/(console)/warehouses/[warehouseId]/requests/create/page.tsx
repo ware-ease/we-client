@@ -11,7 +11,6 @@ import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { mapGoodRequestDetails } from '@/lib/utils/mapGoodDetails';
 import CustomRequestTable from '@/components/custom-table/CustomRequestTable';
-import CustomReceiptRequestTable from '@/components/custom-table/CustomReceiptRequestTable';
 
 const WarehouseRequestCreate = () => {
   const router = useRouter();
@@ -142,14 +141,12 @@ const WarehouseRequestCreate = () => {
 
       {/* Table */}
       <div className='bg-white p-6 rounded-lg shadow-sm mb-6'>
-        {formData.requestedWarehouseId ? (
+        {formData.requestedWarehouseId && (
           <CustomRequestTable
             warehouseId={formData.requestedWarehouseId}
             isRequestDetails
             onDataChange={setData}
           />
-        ) : (
-          <CustomReceiptRequestTable isRequestDetails onDataChange={setData} />
         )}
       </div>
 

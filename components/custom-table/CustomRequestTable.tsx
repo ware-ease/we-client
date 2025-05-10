@@ -581,6 +581,11 @@ const CustomRequestTable: React.FC<CustomTableProps> = ({
           </button>
         </div>
       )}
+      {!products && (
+        <div className='flex items-center justify-center w-full h-40 border-r border-l border-b'>
+          Kho này hiện tại không có hàng!
+        </div>
+      )}
     </div>
   );
 };

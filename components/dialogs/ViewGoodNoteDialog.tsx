@@ -2,7 +2,6 @@
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTrigger,
 } from '@/components/shadcn-base/Dialog';
 import { useRef } from 'react';
@@ -18,39 +17,197 @@ interface GoodNoteDialogProps {
 }
 
 export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
-  const contentRef = useRef(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
-  // Function to handle printing/exporting to PDF
+  // Function to handle printing
   const handlePrint = useReactToPrint({
     contentRef,
+    documentTitle: `GoodNote_${goodNote.code}`,
   });
 
-  // Determine note type based on noteType property
+  // Determine note type
   const isImportNote = goodNote.noteType === 0; // Nhập Kho
   const isExportNote = goodNote.noteType === 1; // Xuất Kho
   const isInternalExportNote = goodNote.noteType === 2; // Xuất Nội Bộ
 
   // Set the title based on note type
   const noteTitle = isImportNote
-    ? 'PHIẾU NHẬP KHO'
+    ? 'Phiếu Nhập Kho'
     : isExportNote
-    ? 'PHIẾU XUẤT KHO'
-    : 'PHIẾU XUẤT NỘI BỘ';
+    ? 'Phiếu Xuất Kho'
+    : 'Phiếu Xuất Nội Bộ';
+
+  console.log(goodNote);
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Eye className='text-blue-500' size={20} />
+        <Eye
+          className='text-blue-500 hover:text-blue-700 cursor-pointer'
+          size={20}
+        />
       </DialogTrigger>
-      <DialogContent className={`max-w-3xl max-h-screen overflow-auto`}>
+      <DialogContent className='max-w-3xl max-h-[90vh] overflow-auto'>
         <DialogTitle />
         <DialogDescription />
-        <div
-          ref={contentRef}
-          className='p-24'
-          style={{ fontFamily: 'Times New Roman' }}
-        >
-          <DialogHeader>
+        <div className='p-6'>
+          {/* Header */}
+          <div className='flex justify-between items-center mb-6'>
+            <h2 className='text-2xl font-semibold text-gray-800'>
+              {noteTitle}
+            </h2>
+            <div className='text-sm text-gray-600'>
+              <p>
+                <strong>Số phiếu:</strong> {goodNote.code}
+              </p>
+              <p>
+                <strong>Ngày:</strong>{' '}
+                {new Date(goodNote.date || '').toLocaleDateString('vi-VN')}
+              </p>
+            </div>
+          </div>
+
+          {/* Info Section */}
+          <div className='bg-gray-50 p-4 rounded-lg mb-6'>
+            {isInternalExportNote ? (
+              <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+                {/* Source Warehouse */}
+                <div>
+                  <h3 className='text-lg font-medium text-gray-700 mb-2'>
+                    Kho xuất
+                  </h3>
+                  <p>
+                    <strong>Tên:</strong>{' '}
+                    {goodNote.goodRequest?.requestedWarehouse?.name || 'N/A'}
+                  </p>
+                  <p>
+                    <strong>Địa chỉ:</strong>{' '}
+                    {goodNote.goodRequest?.requestedWarehouse?.address || 'N/A'}
+                  </p>
+                  <p>
+                    <strong>SĐT:</strong>{' '}
+                    {goodNote.goodRequest?.partner?.phone || 'N/A'}
+                  </p>
+                </div>
+                {/* Destination Warehouse */}
+                <div>
+                  <h3 className='text-lg font-medium text-gray-700 mb-2'>
+                    Kho nhận
+                  </h3>
+                  <p>
+                    <strong>Tên:</strong>{' '}
+                    {goodNote.goodRequest?.warehouse?.name || 'N/A'}
+                  </p>
+                  <p>
+                    <strong>Địa chỉ:</strong>{' '}
+                    {goodNote.goodRequest?.warehouse?.address || 'N/A'}
+                  </p>
+                  <p>
+                    <strong>SĐT:</strong>{' '}
+                    {goodNote.goodRequest?.requestedWarehouse?.phone || 'N/A'}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <h3 className='text-lg font-medium text-gray-700 mb-2'>
+                  {goodNote.goodRequest?.requestedWarehouse?.name}
+                </h3>
+                <p>
+                  <strong>
+                    {isImportNote ? 'Nhà cung cấp:' : 'Người nhận hàng'}
+                  </strong>{' '}
+                  {isImportNote
+                    ? goodNote.shipperName
+                    : goodNote.receiverName || 'N/A'}
+                </p>
+                <p>
+                  <strong>Địa chỉ kho:</strong>{' '}
+                  {goodNote.goodRequest?.requestedWarehouse?.address || 'N/A'}
+                </p>
+                <p>
+                  <strong>SĐT:</strong>{' '}
+                  {goodNote.goodRequest?.requestedWarehouse?.phone || 'N/A'}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Table */}
+          <div className='overflow-x-auto'>
+            <table className='w-full border-collapse border border-gray-200'>
+              <thead>
+                <tr className='bg-gray-100'>
+                  <th className='border border-gray-200 p-2 text-left text-gray-700'>
+                    STT
+                  </th>
+                  <th className='border border-gray-200 p-2 text-left text-gray-700'>
+                    Mã hàng
+                  </th>
+                  <th className='border border-gray-200 p-2 text-left text-gray-700'>
+                    Tên hàng
+                  </th>
+                  <th className='border border-gray-200 p-2 text-left text-gray-700'>
+                    ĐVT
+                  </th>
+                  <th className='border border-gray-200 p-2 text-right text-gray-700'>
+                    Số lượng
+                  </th>
+                  <th className='border border-gray-200 p-2 text-left text-gray-700'>
+                    Ghi chú
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {goodNote.goodNoteDetails?.length ? (
+                  goodNote.goodNoteDetails.map((detail, index) => (
+                    <tr key={index} className='hover:bg-gray-50'>
+                      <td className='border border-gray-200 p-2'>
+                        {index + 1}
+                      </td>
+                      <td className='border border-gray-200 p-2'>
+                        {detail.batch?.product?.sku || 'N/A'}
+                      </td>
+                      <td className='border border-gray-200 p-2'>
+                        {detail.batch?.product?.name || 'N/A'}
+                      </td>
+                      <td className='border border-gray-200 p-2'>
+                        {detail.batch?.product?.unitName || 'N/A'}
+                      </td>
+                      <td className='border border-gray-200 p-2 text-right'>
+                        {detail.quantity}
+                      </td>
+                      <td className='border border-gray-200 p-2'>
+                        {detail.note || ''}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan={6}
+                      className='border border-gray-200 p-2 text-center text-gray-600'
+                    >
+                      Không có chi tiết
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Action Button */}
+          <Button
+            onClick={() => handlePrint()}
+            className='w-full mt-6 bg-blue-500 hover:bg-blue-600'
+          >
+            In phiếu
+          </Button>
+        </div>
+
+        {/* Hidden Print Layout */}
+        <div className='hidden print:block' ref={contentRef}>
+          <div className='p-24' style={{ fontFamily: 'Times New Roman' }}>
             <div className='flex justify-between'>
               <div className='w-1/2'>
                 <Image
@@ -72,19 +229,14 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                 </p>
               </div>
             </div>
-          </DialogHeader>
 
-          <div>
-            {/* Title */}
             <div className='text-center text-xl font-bold mt-20 text-[#2F5597]'>
               {noteTitle}
             </div>
 
-            {/* Info Section */}
             <div className='mt-4'>
               {isInternalExportNote ? (
                 <>
-                  {/* Source Warehouse */}
                   <p>
                     <strong className='font-normal'>Kho xuất:</strong>{' '}
                     {goodNote.goodRequest?.requestedWarehouse?.name}
@@ -97,7 +249,6 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                     <strong className='font-normal'>SĐT:</strong>{' '}
                     {goodNote.goodRequest?.partner?.phone}
                   </p>
-                  {/* Destination Warehouse */}
                   <p className='mt-2'>
                     <strong className='font-normal'>Kho nhận:</strong>{' '}
                     {goodNote.goodRequest?.warehouse?.name}
@@ -113,7 +264,6 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                 </>
               ) : (
                 <>
-                  {/* Supplier or Recipient */}
                   <p>
                     <strong className='font-normal'>
                       {isImportNote ? 'Nhà cung cấp:' : 'Người nhận hàng:'}
@@ -123,7 +273,13 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                       : goodNote.receiverName || 'N/A'}
                   </p>
                   <p>
-                    <strong className='font-normal'>Địa chỉ:</strong>{' '}
+                    <strong className='font-normal'>
+                      {isImportNote ? 'Kho nhập:' : 'Kho xuất:'}
+                    </strong>{' '}
+                    {goodNote.goodRequest?.requestedWarehouse?.name}
+                  </p>
+                  <p>
+                    <strong className='font-normal'>Địa chỉ kho:</strong>{' '}
                     {goodNote.goodRequest?.requestedWarehouse?.address}
                   </p>
                   <p>
@@ -134,7 +290,6 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
               )}
             </div>
 
-            {/* Table */}
             <table className='w-full mt-4 border border-black'>
               <thead>
                 <tr className='text-left font-normal'>
@@ -178,7 +333,6 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
               </tbody>
             </table>
 
-            {/* Footer */}
             <div className='flex justify-end mt-10 mr-6'>
               <div>Ngày...Tháng...Năm...</div>
             </div>
@@ -206,11 +360,6 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
             </div>
           </div>
         </div>
-
-        {/* Print & Export Button */}
-        <Button onClick={() => handlePrint()} className='w-full mt-4'>
-          In phiếu
-        </Button>
       </DialogContent>
     </Dialog>
   );

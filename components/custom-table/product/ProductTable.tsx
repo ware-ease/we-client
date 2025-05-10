@@ -91,7 +91,7 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: 'isBatchManaged',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Theo lô' />
+      <DataTableColumnHeader column={column} title='Có HSD' />
     ),
     cell: ({ row }) => {
       return (
@@ -105,7 +105,7 @@ export const columns: ColumnDef<Product>[] = [
       );
     },
     meta: {
-      title: 'Theo lô',
+      title: 'Có HSD',
     },
   },
   {
