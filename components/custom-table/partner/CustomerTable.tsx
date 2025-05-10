@@ -1,16 +1,17 @@
 'use client';
 import AddCustomerDialog from '@/components/dialogs/AddCustomerDialog';
-import { useCustomers } from '@/hooks/queries/customerQueries';
-import { Customer } from '@/types/customer';
-import { ColumnDef } from '@tanstack/react-table';
-import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
-import { CustomDataTable } from '../base-data-table/CustomDataTable';
+import UpdateCustomerDialog from '@/components/dialogs/UpdateCustomerDialog';
+import ViewCustomerDialog from '@/components/dialogs/ViewCustomerDialog';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
-import UpdateCustomerDialog from '@/components/dialogs/UpdateCustomerDialog';
+import { useCustomers } from '@/hooks/queries/customerQueries';
+import { Customer } from '@/types/customer';
+import { ColumnDef } from '@tanstack/react-table';
+import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
+import { CustomDataTable } from '../base-data-table/CustomDataTable';
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -81,7 +82,13 @@ export const columns: ColumnDef<Customer>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className='flex space-x-1 items-center'>
+      <div className='flex space-x-2 items-center'>
+        <Tooltip>
+          <TooltipTrigger>
+            <ViewCustomerDialog customer={row.original} />
+          </TooltipTrigger>
+          <TooltipContent>Xem</TooltipContent>
+        </Tooltip>
         <Tooltip>
           <TooltipTrigger>
             <UpdateCustomerDialog customer={row.original} />
@@ -95,6 +102,7 @@ export const columns: ColumnDef<Customer>[] = [
 
 const CustomerTable = () => {
   const { data, isSuccess } = useCustomers();
+  console.log(data);
 
   return (
     <CustomDataTable columns={columns} data={isSuccess ? data : []}>

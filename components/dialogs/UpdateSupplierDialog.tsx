@@ -104,7 +104,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
                     className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
                   />
                 </div>
-                <div>
+                {/* <div>
                   <Label htmlFor='email' className='text-sm text-gray-500'>
                     Email
                   </Label>
@@ -129,7 +129,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
                     onChange={handleInputChange}
                     className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
                   />
-                </div>
+                </div> */}
                 {/* <div className='col-span-2 flex items-center space-x-2 mt-2'>
                   <Checkbox
                     id='status'
