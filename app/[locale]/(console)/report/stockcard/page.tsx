@@ -6,8 +6,10 @@ import { Button } from '@/components/shadcn-base/Button';
 import { Input } from '@/components/shadcn-base/Input';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useWarehousesStockCardByProductID } from '@/hooks/queries/warehouseQueries';
-import { useProducts } from '@/hooks/queries/productQueries';
+import {
+  useWarehousesProducts,
+  useWarehousesStockCardByProductID,
+} from '@/hooks/queries/warehouseQueries';
 import { useRouter } from '@/lib/i18n/routing';
 import ProductComboBox from '@/components/combo-boxes/ProductComboBox';
 import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
@@ -25,7 +27,10 @@ const ReportStockCard = () => {
     (searchParams.get('productId') as string) || ''
   );
 
-  const { data: products } = useProducts();
+  const { data: products } = useWarehousesProducts(
+    warehouseId !== undefined,
+    warehouseId
+  );
   const { data } = useWarehousesStockCardByProductID(
     true,
     warehouseId,
@@ -46,19 +51,21 @@ const ReportStockCard = () => {
   };
 
   const filteredDetails = data?.details.filter((detail) => {
-    let expDatePass = true;
+    let inboundDatePass = true;
     if (dateStart && detail.date) {
-      const expDate = new Date(detail.date);
+      const inboundDate = new Date(detail.date);
       const start = new Date(dateStart);
-      expDatePass = !isNaN(expDate.getTime()) && expDate >= start;
+      start.setHours(0, 0, 0, 0);
+      inboundDatePass = inboundDate >= start;
     }
     if (dateEnd && detail.date) {
-      const expDate = new Date(detail.date);
+      const inboundDate = new Date(detail.date);
       const end = new Date(dateEnd);
-      expDatePass = expDatePass && !isNaN(expDate.getTime()) && expDate <= end;
+      end.setHours(23, 59, 59, 99);
+      inboundDatePass = inboundDatePass && inboundDate <= end;
     }
 
-    return expDatePass;
+    return inboundDatePass;
   });
 
   const clearFilters = () => {

@@ -21,7 +21,7 @@ export const columns: ColumnDef<Account>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Tên đăng nhập' />
     ),
-    cell: ({ row }) => <strong>{row.original.username}</strong>,
+    cell: ({ row }) => <p className='font-medium'>{row.original.username}</p>,
     meta: {
       title: 'Tên đăng nhập',
     },
@@ -150,8 +150,8 @@ export const columns: ColumnDef<Account>[] = [
     ),
     cell: ({ row }) => (
       <CreatedByUI
-        fullName={row.original.createdByFullName || 'Người bí ẩn'}
-        group={row.original.createdByGroup || 'Nhóm'}
+        fullName={row.original.createdByFullName || 'Ware Ease'}
+        group={row.original.createdByGroup || 'Hệ thống'}
         avatarUrl={
           row.original.createdByAvatarUrl || 'https://github.com/shadcn.png'
         }
