@@ -52,7 +52,7 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
     <div className='flex justify-end'>
       <Dialog>
         <DialogTrigger asChild>
-          <Edit className='text-yellow-600 h-4 w-4 hover:cursor-pointer' />
+          <Edit className='text-yellow-600 h-5 w-5 hover:cursor-pointer' />
         </DialogTrigger>
 
         <DialogContent

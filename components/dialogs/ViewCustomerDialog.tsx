@@ -22,7 +22,7 @@ const ViewCustomerDialog: React.FC<ViewCustomerDialogProps> = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Eye className='text-blue-600 h-4 w-4 hover:cursor-pointer' />
+        <Eye className='text-blue-600 h-5 w-5 hover:cursor-pointer' />
       </DialogTrigger>
 
       <DialogContent
