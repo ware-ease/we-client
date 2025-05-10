@@ -1,17 +1,17 @@
 'use client';
-import { ColumnDef } from '@tanstack/react-table';
-import React from 'react';
-import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
-import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import AddSupplierDialog from '../../dialogs/AddSupplierDialog';
-import { useSuppliers } from '@/hooks/queries/supplierQueries';
-import { Supplier } from '@/types/supplier';
+import UpdateSupplierDialog from '@/components/dialogs/UpdateSupplierDialog';
+import ViewSupplierDialog from '@/components/dialogs/ViewSupplierDialog';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
-import UpdateSupplierDialog from '@/components/dialogs/UpdateSupplierDialog';
+import { useSuppliers } from '@/hooks/queries/supplierQueries';
+import { Supplier } from '@/types/supplier';
+import { ColumnDef } from '@tanstack/react-table';
+import AddSupplierDialog from '../../dialogs/AddSupplierDialog';
+import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
+import { CustomDataTable } from '../base-data-table/CustomDataTable';
 
 export const columns: ColumnDef<Supplier>[] = [
   {
@@ -42,6 +42,24 @@ export const columns: ColumnDef<Supplier>[] = [
       title: 'Số điện thoại',
     },
   },
+  // {
+  //   accessorKey: 'email',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Email' />
+  //   ),
+  //   meta: {
+  //     title: 'Email',
+  //   },
+  // },
+  // {
+  //   accessorKey: 'address',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Địa chỉ' />
+  //   ),
+  //   meta: {
+  //     title: 'Địa chỉ',
+  //   },
+  // },
   {
     accessorKey: 'status',
     header: ({ column }) => (
@@ -103,7 +121,13 @@ export const columns: ColumnDef<Supplier>[] = [
       />
     ),
     cell: ({ row }) => (
-      <div className='flex space-x-1 items-center'>
+      <div className='flex space-x-2 items-center'>
+        <Tooltip>
+          <TooltipTrigger>
+            <ViewSupplierDialog supplier={row.original} />
+          </TooltipTrigger>
+          <TooltipContent>Xem</TooltipContent>
+        </Tooltip>
         <Tooltip>
           <TooltipTrigger>
             <UpdateSupplierDialog supplier={row.original} />
@@ -117,6 +141,7 @@ export const columns: ColumnDef<Supplier>[] = [
 
 const SupplierTable = () => {
   const { data, isSuccess } = useSuppliers();
+  // console.log(data);
 
   return (
     <CustomDataTable columns={columns} data={isSuccess ? data : []}>

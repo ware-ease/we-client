@@ -54,8 +54,9 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
         <DialogTrigger asChild>
           <Edit className='text-yellow-600 h-4 w-4 hover:cursor-pointer' />
         </DialogTrigger>
+
         <DialogContent
-          className='flex flex-col w-full max-w-2xl p-6 m-4 bg-white rounded-lg shadow-lg border border-gray-200 overflow-auto'
+          className='flex flex-col w-full max-w-2xl p-6 bg-white rounded-2xl shadow-xl border border-gray-200 max-h-[80vh] overflow-y-auto'
           style={{
             position: 'fixed',
             top: '50%',
@@ -64,63 +65,96 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
           }}
         >
           <DialogHeader>
-            <DialogTitle className='text-xl font-semibold text-gray-800'>
-              Chỉnh sửa thông tin nhà cung cấp
+            <DialogTitle className='text-2xl font-semibold text-gray-800'>
+              Chỉnh sửa nhà cung cấp
             </DialogTitle>
           </DialogHeader>
-          <div className='grid grid-cols-1 gap-6'>
+
+          <div className='mt-4 space-y-6 text-sm text-gray-800'>
+            {/* --- THÔNG TIN NHÀ CUNG CẤP --- */}
             <div>
-              <Label htmlFor='name'>Tên nhà cung cấp</Label>
-              <Input
-                id='name'
-                name='name'
-                value={formData.name}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor='phone'>Số điện thoại</Label>
-              <Input
-                id='phone'
-                name='phone'
-                value={formData.phone}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor='email'>Email</Label>
-              <Input
-                id='email'
-                name='email'
-                type='email'
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-            <div>
-              <Label htmlFor='address'>Địa chỉ</Label>
-              <Input
-                id='address'
-                name='address'
-                value={formData.address}
-                onChange={handleInputChange}
-              />
+              <h3 className='text-base font-semibold text-gray-700 mb-2'>
+                Thông tin nhà cung cấp
+              </h3>
+              <div className='grid grid-cols-2 gap-4'>
+                <div>
+                  <Label htmlFor='name' className='text-sm text-gray-500'>
+                    Tên nhà cung cấp
+                  </Label>
+                  <Input
+                    id='name'
+                    name='name'
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                  />
+                </div>
+                <div>
+                  <Label htmlFor='phone' className='text-sm text-gray-500'>
+                    Số điện thoại
+                  </Label>
+                  <Input
+                    id='phone'
+                    name='phone'
+                    type='tel'
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    required
+                    className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                  />
+                </div>
+                <div>
+                  <Label htmlFor='email' className='text-sm text-gray-500'>
+                    Email
+                  </Label>
+                  <Input
+                    id='email'
+                    name='email'
+                    type='email'
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    required
+                    className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                  />
+                </div>
+                <div>
+                  <Label htmlFor='address' className='text-sm text-gray-500'>
+                    Địa chỉ
+                  </Label>
+                  <Input
+                    id='address'
+                    name='address'
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                  />
+                </div>
+                {/* <div className='col-span-2 flex items-center space-x-2 mt-2'>
+                  <Checkbox
+                    id='status'
+                    checked={formData.status}
+                    onCheckedChange={handleCheckboxChange}
+                  />
+                  <Label htmlFor='status' className='text-sm text-gray-500'>
+                    Hoạt động
+                  </Label>
+                </div> */}
+              </div>
             </div>
           </div>
+
           <DialogFooter className='mt-6 flex justify-end space-x-4'>
             <DialogClose asChild>
               <Button
                 variant='secondary'
-                className='px-4 py-2 hover:bg-slate-200'
+                className='px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors'
               >
                 {t('Dialog.cancel')}
               </Button>
             </DialogClose>
             <Button
-              className='px-4 py-2 rounded-lg'
+              className='px-4 py-2 transition-colors'
               onClick={handleUpdateClick}
             >
               {t('Dialog.yes.update')}
