@@ -160,7 +160,7 @@ const InventoryAdjustmentTable: React.FC<InventoryAdjustmentTableProps> = ({
 
   return (
     <CustomDataTable columns={columns} data={tableData}>
-      <Link href={'adjustment/create'} className='mr-2'>
+      <Link href={'adjustment/create'}>
         <Button>Điều chỉnh</Button>
       </Link>
     </CustomDataTable>
