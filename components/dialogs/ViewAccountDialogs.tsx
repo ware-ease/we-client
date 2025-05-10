@@ -25,6 +25,12 @@ type DetailAccountDialogProps = {
 };
 
 const ViewAccountDialog: React.FC<DetailAccountDialogProps> = ({ account }) => {
+  // const [updatedAt, setUpdatedAt] = useState<string>(account.updatedAt || '');
+
+  // const handleStatusUpdate = (updatedAccount: { updatedAt: string }) => {
+  //   setUpdatedAt(updatedAccount.updatedAt);
+  // };
+
   const getStatusLabel = (status: number) => {
     switch (status) {
       case 0:

@@ -29,6 +29,7 @@ export interface Account extends Base {
   warehouseIds?: Array<string>;
   warehouses?: Warehouse[];
   status?: number;
+  updatedAt?: string;
 }
 export type CreateAccount = {
   id?: string;
