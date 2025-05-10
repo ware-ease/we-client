@@ -24,7 +24,7 @@ export const requestTypeMap = [
 
 export const accountStatusMap = [
   { status: 0, label: 'Chưa xác thực', color: 'bg-yellow-500' },
-  { status: 1, label: 'Đã xác thực', color: 'bg-green-400' },
+  { status: 1, label: 'Đã xác thực', color: 'bg-green-500' },
   { status: 2, label: 'Đã bị khóa', color: 'bg-red-500' },
 ];
 
