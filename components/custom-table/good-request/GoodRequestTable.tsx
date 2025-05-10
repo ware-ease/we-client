@@ -21,6 +21,7 @@ import {
 } from '@/components/shadcn-base/Tooltip';
 import { useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils/utils';
+import CreatedByUI from '@/components/app/CreatedByUI';
 
 export const columns: ColumnDef<GoodRequest>[] = [
   {
@@ -146,6 +147,30 @@ export const columns: ColumnDef<GoodRequest>[] = [
     meta: {
       title: 'Ngày tạo',
       type: 'date',
+    },
+  },
+  {
+    id: 'createdBy',
+    accessorFn: ({ createdByFullName }) =>
+      `${createdByFullName || 'Người bí ẩn'}`,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Tạo bởi'
+        className='text-xs'
+      />
+    ),
+    cell: ({ row }) => (
+      <CreatedByUI
+        fullName={row.original.createdByFullName || 'Ware Ease'}
+        group={row.original.createdByGroup || 'Hệ thống'}
+        avatarUrl={
+          row.original.createdByAvatarUrl || 'https://github.com/shadcn.png'
+        }
+      />
+    ),
+    meta: {
+      title: 'Tạo bởi',
     },
   },
   {
