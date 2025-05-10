@@ -29,26 +29,6 @@ interface ProductsView {
 
 export const columns: ColumnDef<Inventory>[] = [
   {
-    id: 'stt',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='STT' className='text-xs' />
-    ),
-    cell: ({ row }) => row.index + 1,
-    meta: {
-      title: 'STT',
-    },
-  },
-  {
-    accessorKey: 'id',
-    enableHiding: false,
-    enableColumnFilter: false,
-    header: () => null,
-    cell: () => null,
-    meta: {
-      title: 'ID',
-    },
-  },
-  {
     accessorKey: 'batch.product.sku',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Mã sản phẩm' />
@@ -185,26 +165,6 @@ export const columns: ColumnDef<Inventory>[] = [
 ];
 
 export const productsColumns: ColumnDef<ProductsView>[] = [
-  {
-    id: 'stt',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='STT' className='text-xs' />
-    ),
-    cell: ({ row }) => row.index + 1,
-    meta: {
-      title: 'STT',
-    },
-  },
-  {
-    accessorKey: 'id',
-    enableHiding: false,
-    enableColumnFilter: false,
-    header: () => null,
-    cell: () => null,
-    meta: {
-      title: 'ID',
-    },
-  },
   {
     accessorKey: 'product.sku',
     header: ({ column }) => (

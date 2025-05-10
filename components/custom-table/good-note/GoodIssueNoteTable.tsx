@@ -21,26 +21,6 @@ import {
 
 export const columns: ColumnDef<GoodNote>[] = [
   {
-    id: 'stt',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='STT' className='text-xs' />
-    ),
-    cell: ({ row }) => row.index + 1,
-    meta: {
-      title: 'STT',
-    },
-  },
-  {
-    accessorKey: 'id',
-    enableHiding: false,
-    enableColumnFilter: false,
-    header: () => null,
-    cell: () => null,
-    meta: {
-      title: 'ID',
-    },
-  },
-  {
     accessorKey: 'code',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Mã phiếu' />

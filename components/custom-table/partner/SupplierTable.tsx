@@ -25,16 +25,6 @@ export const columns: ColumnDef<Supplier>[] = [
     },
   },
   {
-    accessorKey: 'id',
-    enableHiding: false,
-    enableColumnFilter: false,
-    header: () => null,
-    cell: () => null,
-    meta: {
-      title: 'ID',
-    },
-  },
-  {
     accessorKey: 'name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Tên' />

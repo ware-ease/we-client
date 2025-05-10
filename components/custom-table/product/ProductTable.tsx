@@ -15,26 +15,6 @@ import {
 
 export const columns: ColumnDef<Product>[] = [
   {
-    id: 'stt',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='STT' className='text-xs' />
-    ),
-    cell: ({ row }) => row.index + 1,
-    meta: {
-      title: 'STT',
-    },
-  },
-  {
-    accessorKey: 'id',
-    enableHiding: false,
-    enableColumnFilter: false,
-    header: () => null,
-    cell: () => null,
-    meta: {
-      title: 'ID',
-    },
-  },
-  {
     accessorKey: 'sku',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='SKU' />

@@ -10,26 +10,6 @@ import { useBatches } from '@/hooks/queries/batchQueries';
 
 export const columns: ColumnDef<Batch>[] = [
   {
-    id: 'stt',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='STT' className='text-xs' />
-    ),
-    cell: ({ row }) => row.index + 1,
-    meta: {
-      title: 'STT',
-    },
-  },
-  {
-    accessorKey: 'id',
-    enableHiding: false,
-    enableColumnFilter: false,
-    header: () => null,
-    cell: () => null,
-    meta: {
-      title: 'ID',
-    },
-  },
-  {
     accessorKey: 'code',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Mã phiếu' />

@@ -1,3 +1,4 @@
+import { Base } from './base/base-type';
 import { Permission } from './permission';
 import { Warehouse } from './warehouse';
 
@@ -18,7 +19,7 @@ export type Group = {
   permissions: any;
 };
 
-export type Account = {
+export interface Account extends Base {
   id?: string;
   username: string;
   email: string;
@@ -28,7 +29,7 @@ export type Account = {
   warehouseIds?: Array<string>;
   warehouses?: Warehouse[];
   status?: number;
-};
+}
 export type CreateAccount = {
   id?: string;
   username: string;

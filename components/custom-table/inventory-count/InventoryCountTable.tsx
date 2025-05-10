@@ -24,16 +24,6 @@ export const columns: ColumnDef<InventoryCount>[] = [
     },
   },
   {
-    accessorKey: 'id',
-    enableHiding: false,
-    enableColumnFilter: false,
-    header: () => null,
-    cell: () => null,
-    meta: {
-      title: 'ID',
-    },
-  },
-  {
     accessorKey: 'code',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Mã số' />

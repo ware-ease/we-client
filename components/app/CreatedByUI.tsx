@@ -14,14 +14,14 @@ const CreatedByUI: React.FC<CreatedByUIProps> = ({
   fullName,
 }) => {
   return (
-    <div className='flex items-center'>
-      <Avatar>
+    <div className='flex items-center text-xs space-x-2'>
+      <Avatar className='h-8 w-8'>
         <AvatarImage src={avatarUrl || 'https://github.com/shadcn.png'} />
         <AvatarFallback>CN</AvatarFallback>
       </Avatar>
       <div className='flex flex-col gap-1'>
-        <div>{fullName}</div>
-        <div>{group}</div>
+        <div className='text-sm font-medium'>{fullName}</div>
+        <div className='text-xs text-slate-600'>{group}</div>
       </div>
     </div>
   );

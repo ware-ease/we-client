@@ -69,16 +69,64 @@ TableRow.displayName = 'TableRow';
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => (
-  <th
-    ref={ref}
-    className={cn(
-      'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
-      className
-    )}
-    {...props}
-  />
-));
+>(({ className, children, ...props }, ref) => {
+  const thRef = React.useRef<HTMLTableCellElement>(null);
+  const isResizing = React.useRef(false);
+  const startX = React.useRef(0);
+  const startWidth = React.useRef(0);
+
+  const startResize = (e: React.MouseEvent<HTMLDivElement>) => {
+    isResizing.current = true;
+    startX.current = e.clientX;
+    startWidth.current = thRef.current?.offsetWidth || 100;
+  };
+
+  React.useEffect(() => {
+    const resize = (e: MouseEvent) => {
+      if (!isResizing.current || !thRef.current) return;
+      const newWidth = startWidth.current + (e.clientX - startX.current);
+      if (newWidth >= 50) {
+        // Minimum width 50px
+        thRef.current.style.width = `${newWidth}px`;
+      }
+    };
+
+    const stopResize = () => {
+      isResizing.current = false;
+    };
+
+    document.addEventListener('mousemove', resize);
+    document.addEventListener('mouseup', stopResize);
+
+    return () => {
+      document.removeEventListener('mousemove', resize);
+      document.removeEventListener('mouseup', stopResize);
+    };
+  }, []);
+  return (
+    <th
+      ref={(node) => {
+        thRef.current = node;
+        if (typeof ref === 'function') {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      }}
+      className={cn(
+        'relative border-r h-10 text-left font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+        className
+      )}
+      {...props}
+    >
+      <div className='pl-4'>{children}</div>
+      <div
+        className='absolute right-0 top-0 h-full w-1 bg-transparent cursor-col-resize'
+        onMouseDown={startResize}
+      />
+    </th>
+  );
+});
 TableHead.displayName = 'TableHead';
 
 const TableCell = React.forwardRef<

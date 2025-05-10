@@ -13,33 +13,15 @@ import {
 } from '@/components/shadcn-base/Tooltip';
 import AccountStatusUI from '@/components/app/AccountStatusUI';
 import { accountStatusFilterFn } from '@/lib/tanstack-table/customFilterFn';
+import CreatedByUI from '@/components/app/CreatedByUI';
 
 export const columns: ColumnDef<Account>[] = [
-  {
-    id: 'stt',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='STT' className='text-xs' />
-    ),
-    cell: ({ row }) => row.index + 1,
-    meta: {
-      title: 'STT',
-    },
-  },
-  {
-    accessorKey: 'id',
-    enableHiding: false,
-    enableColumnFilter: false,
-    header: () => null,
-    cell: () => null,
-    meta: {
-      title: 'ID',
-    },
-  },
   {
     accessorKey: 'username',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Tên đăng nhập' />
     ),
+    cell: ({ row }) => <strong>{row.original.username}</strong>,
     meta: {
       title: 'Tên đăng nhập',
     },
@@ -54,18 +36,15 @@ export const columns: ColumnDef<Account>[] = [
     },
   },
   {
-    accessorKey: 'profile.lastName',
+    accessorFn: ({ profile }) => `${profile.lastName} ${profile.firstName}`,
+    id: 'fullName',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Họ' />
+      <DataTableColumnHeader column={column} title='Tên' className='text-xs' />
     ),
-    meta: {
-      title: 'Họ',
-    },
-  },
-  {
-    accessorKey: 'profile.firstName',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Tên' />
+    cell: ({ row }) => (
+      <>
+        {row.original.profile.lastName} {row.original.profile.firstName}
+      </>
     ),
     meta: {
       title: 'Tên',
@@ -156,6 +135,30 @@ export const columns: ColumnDef<Account>[] = [
       title: 'Trạng thái',
       type: 'select',
       options: ['Chưa xác thực', 'Đã xác thực', 'Đã khóa'],
+    },
+  },
+  {
+    id: 'createdBy',
+    accessorFn: ({ createdByFullName }) =>
+      `${createdByFullName || 'Người bí ẩn'}`,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Tạo bởi'
+        className='text-xs'
+      />
+    ),
+    cell: ({ row }) => (
+      <CreatedByUI
+        fullName={row.original.createdByFullName || 'Người bí ẩn'}
+        group={row.original.createdByGroup || 'Nhóm'}
+        avatarUrl={
+          row.original.createdByAvatarUrl || 'https://github.com/shadcn.png'
+        }
+      />
+    ),
+    meta: {
+      title: 'Tạo bởi',
     },
   },
   {
