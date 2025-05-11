@@ -1,4 +1,6 @@
-// import { Button } from '@/app/_components/shadcn-base/Button';
+'use client';
+
+import { Card } from '@/components/shadcn-base/Card';
 import {
   Tooltip,
   TooltipContent,
@@ -33,65 +35,44 @@ const WarehouseCard: React.FC<WarehouseCardProps> = ({
   phone,
 }) => {
   return (
-    <div className='flex border rounded-md hover:border-primary p-4 hover:bg-gray-50'>
-      <div className='flex px-6'>
-        <Warehouse size={72} />
-      </div>
-      <div className='flex flex-col px-4 w-full justify-center'>
-        <div className='text-md text-primary font-semibold'>{name}</div>
-        <div className='text-sm text-gray-700'>
-          <div className='flex items-center space-x-1'>
-            <MapPin size={14} />
-            <p>Địa chỉ: {address}</p>
-          </div>
+    <Card className='p-4 flex flex-col gap-3 rounded-xl border hover:shadow-md transition'>
+      <div className='flex justify-between items-center'>
+        <div className='flex items-center gap-2'>
+          <Warehouse className='text-blue-600' size={28} />
+          <h2 className='text-base font-semibold text-gray-800'>{name}</h2>
         </div>
-      </div>
-      <div className='flex flex-col px-4 w-full justify-center'>
-        <div className='text-sm text-gray-700'>
-          <div className='flex items-center space-x-1'>
-            <CalendarDays size={14} />
-            <p>Hoạt động từ: {operatedFrom}</p>
-          </div>
-        </div>
-        <div className='text-sm text-gray-700'>
-          <div className='flex items-center space-x-1'>
-            <LandPlot size={14} />
-            <p>Diện tích: {area}</p>
-          </div>
-        </div>
-        <div className='text-sm text-gray-700'>
-          <div className='flex items-center space-x-1'>
-            <Phone size={14} />
-            <p>Số điện thoại: {phone}</p>
-          </div>
-        </div>
-        {/* <div className='text-sm text-gray-700'>
-          <div className='flex items-center space-x-1'>
-            <SquareLibrary size={14} />
-            <p>Number of shelves: 100</p>
-          </div>
-        </div> */}
-      </div>
-      {/* <div className='flex flex-col px-4 w-full justify-center gap-2'>
-        <Button className='text-sm bg-green-600 hover:bg-green-600 w-3/4'>
-          Operating
-        </Button>
-        <Button className='text-sm bg-red-600 hover:bg-red-600 w-3/4'>
-          Actions needed!
-        </Button>
-      </div> */}
-      <div className='flex flex-col justify-center items-center'>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <Link href={idPath}>
-              <Eye className='hover:cursor-pointer text-blue-500' />
+              <Eye
+                className='text-blue-500 hover:scale-105 transition cursor-pointer'
+                size={20}
+              />
             </Link>
           </TooltipTrigger>
           <TooltipContent>Chi tiết</TooltipContent>
         </Tooltip>
-        {/* <Trash2 className='hover:cursor-pointer text-red-500' /> */}
       </div>
-    </div>
+
+      <div className='grid grid-cols-1 gap-1 text-sm text-gray-600'>
+        <div className='flex items-center gap-2'>
+          <MapPin size={14} />
+          <span>{address}</span>
+        </div>
+        <div className='flex items-center gap-2'>
+          <CalendarDays size={14} />
+          <span>Hoạt động từ: {operatedFrom}</span>
+        </div>
+        <div className='flex items-center gap-2'>
+          <LandPlot size={14} />
+          <span>Diện tích: {area}</span>
+        </div>
+        <div className='flex items-center gap-2'>
+          <Phone size={14} />
+          <span>SĐT: {phone}</span>
+        </div>
+      </div>
+    </Card>
   );
 };
 
