@@ -17,6 +17,7 @@ import { useParams, useSearchParams } from 'next/navigation';
 import { cn } from '@/lib/utils/utils';
 import { Product } from '@/types/product';
 import { CustomDataTable2 } from '../base-data-table/CustomDataTable2';
+import ExpireDateUI from '@/components/app/ExpireDateUI';
 
 interface ProductsView {
   id: string;
@@ -90,13 +91,9 @@ export const columns: ColumnDef<Inventory>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Hạn sử dụng' />
     ),
-    cell: ({ row }) => (
-      <div>
-        {row.original.batch.expDate !== '0001-01-01'
-          ? new Date(row.original.batch.expDate).toLocaleDateString('vi-VN')
-          : 'Không có'}
-      </div>
-    ),
+    cell: ({ row }) => {
+      return <ExpireDateUI expDate={row.original.batch.expDate} />;
+    },
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue?.from && !filterValue?.to) return true;
       const rowDate = new Date(row.getValue(columnId));
@@ -286,7 +283,12 @@ const InventoryTable: React.FC<InventoryTableProps> = ({
     isSuccess && batchesViewData.inventories ? batchesViewData.inventories : [];
 
   return view === 'batches' ? (
-    <CustomDataTable columns={columns} data={tableData}>
+    <CustomDataTable
+      columns={columns}
+      data={tableData.toSorted((a, b) => {
+        return a.batch.expDate < b.batch.expDate ? -1 : 1;
+      })}
+    >
       <div className='w-full flex justify-between'>
         <div className='space-x-2'>
           <Button
