@@ -1,4 +1,5 @@
 'use client';
+import CreatedByUI from '@/components/app/CreatedByUI';
 import { useInventoryCounts } from '@/hooks/queries/inventoryCountQueries';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
@@ -6,12 +7,11 @@ import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 import { cn } from '@/lib/utils/utils';
 import { InventoryCount } from '@/types/inventoryCount';
 import { ColumnDef } from '@tanstack/react-table';
-import { Edit } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import { Button } from '../../shadcn-base/Button';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import CreatedByUI from '@/components/app/CreatedByUI';
+import StatusStepper from './StatusStepper';
 
 export const columns: ColumnDef<InventoryCount>[] = [
   {
@@ -100,21 +100,22 @@ export const columns: ColumnDef<InventoryCount>[] = [
   {
     accessorKey: 'status',
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title='Trạng thái'
-        // className='text-center'
-      />
+      <DataTableColumnHeader column={column} title='Trạng thái' />
     ),
     cell: ({ row }) => {
-      // return <StatusUI status={row.getValue('status')} />;
-      return row.original.status;
+      return (
+        <StatusStepper
+          status={row.original.status!}
+          inventoryCounts={row.original}
+        />
+      );
     },
     filterFn: statusFilterFn,
     meta: {
       title: 'Trạng thái',
     },
   },
+
   {
     id: 'createdBy',
     accessorFn: ({ createdByFullName }) =>
@@ -176,23 +177,23 @@ export const columns: ColumnDef<InventoryCount>[] = [
       type: 'date',
     },
   },
-  {
-    id: 'crud-actions',
-    header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title='Hành động'
-        className='text-xs'
-      />
-    ),
-    cell: ({ row }) => (
-      <div className='flex space-x-2 items-center'>
-        <Link href={`inventory-count/${row.original.id}`}>
-          <Edit className='text-yellow-500' size={20} />
-        </Link>
-      </div>
-    ),
-  },
+  // {
+  //   id: 'crud-actions',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader
+  //       column={column}
+  //       title='Hành động'
+  //       className='text-xs'
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className='flex space-x-2 items-center'>
+  //       <Link href={`inventory-count/${row.original.id}`}>
+  //         <Edit className='text-yellow-500' size={20} />
+  //       </Link>
+  //     </div>
+  //   ),
+  // },
 ];
 
 //////////////////////////////////////////////

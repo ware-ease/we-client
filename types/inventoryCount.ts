@@ -1,7 +1,6 @@
+import { Scheduler } from 'timers/promises';
 import { Base } from './base/base-type';
 import { Product } from './product';
-//import { Location } from './warehouse';
-// import { Schedule } from './schedule';
 
 export interface InventoryCount extends Base {
   scheduleId?: string;
@@ -13,8 +12,8 @@ export interface InventoryCount extends Base {
   date?: string;
   startTime?: string;
   endTime?: string;
-  schedule?: string;
-  // location?: Location;
+  schedule?: Scheduler;
+  location?: Location;
   inventoryCountDetails?: InventoryCountDetail[];
 }
 
@@ -29,4 +28,5 @@ export interface InventoryCountDetail extends Base {
   errorTicket?: string;
   product?: Product;
   inventoryCount?: InventoryCount;
+  accountId?: string;
 }
