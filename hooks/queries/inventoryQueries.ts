@@ -1,4 +1,8 @@
 import {
+  getBatchLocations,
+  getInventories,
+  getInventoryById,
+  getLocations,
   getWarehouseInventoryById,
   putAwayGood,
 } from '@/services/inventoryService';
@@ -37,3 +41,26 @@ export const usePutAwayGoods = () => {
     },
   });
 };
+export const useInventories = () =>
+  useQuery({
+    queryKey: ['inventories'],
+    queryFn: getInventories,
+  });
+
+export const useLocations = (locationId: string) =>
+  useQuery({
+    queryKey: ['locations', locationId],
+    queryFn: () => getLocations(locationId),
+  });
+
+export const useInventoryDetails = (inventoryId: string) =>
+  useQuery({
+    queryKey: ['inventoryDetails', inventoryId],
+    queryFn: () => getInventoryById(inventoryId),
+  });
+
+export const useBatchLocations = (batchId: string) =>
+  useQuery({
+    queryKey: ['batchLocations', batchId],
+    queryFn: () => getBatchLocations(batchId),
+  });

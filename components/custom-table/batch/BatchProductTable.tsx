@@ -1,9 +1,16 @@
 'use client';
+
+import ViewInventoryDialog from '@/components/dialogs/ViewInventoryDialog';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/shadcn-base/Tooltip';
+import { Inventory } from '@/types/warehouse';
 import { ColumnDef } from '@tanstack/react-table';
 import React from 'react';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import { Inventory } from '@/types/warehouse';
 
 export const columns: ColumnDef<Inventory>[] = [
   {
@@ -98,6 +105,26 @@ export const columns: ColumnDef<Inventory>[] = [
     meta: {
       title: 'Số lượng trong kho hiện tại',
     },
+  },
+  {
+    id: 'crud-actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title='Hành động'
+        className='text-xs'
+      />
+    ),
+    cell: ({ row }) => (
+      <div className='flex space-x-2 items-center'>
+        <Tooltip>
+          <TooltipTrigger>
+            <ViewInventoryDialog inventory={row.original} />
+          </TooltipTrigger>
+          <TooltipContent>Chi tiết</TooltipContent>
+        </Tooltip>
+      </div>
+    ),
   },
 ];
 

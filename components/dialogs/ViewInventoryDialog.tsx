@@ -1,143 +1,234 @@
-import { Card, CardContent } from '../shadcn-base/Card';
+'use client';
+
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/components/shadcn-base/Avatar';
+import { Button } from '@/components/shadcn-base/Button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '../shadcn-base/Dialog';
-import { Label } from '../shadcn-base/Label';
-import { Separator } from '../shadcn-base/Separator';
+  DialogTrigger,
+} from '@/components/shadcn-base/Dialog';
+import { Label } from '@/components/shadcn-base/Label';
+import { Inventory } from '@/types/warehouse';
+import { Eye } from 'lucide-react';
+import React from 'react';
 
-const inventoryData = {
-  currentQuantity: 197,
-  arrangedQuantity: null,
-  notArrgangedQuantity: null,
-  warehouse: {
-    name: 'Kho Sài Gòn',
-    phone: '01234345869',
-    address: 'Quận 3, Thành phố Hồ Chí Minh',
-    latitude: 10.78235378,
-    longitude: 106.68648041,
-    area: 1000,
-    operateFrom: '2025-03-20T06:45:00',
-  },
-  batch: {
-    code: 'B20250509-1',
-    name: 'Test',
-    mfgDate: '2025-05-09',
-    expDate: '2025-05-27',
-    inboundDate: '2025-05-09',
-    product: {
-      sku: 'CDVCUONDD',
-      name: 'Dây điện Cadivi',
-      unitName: 'Cuộn',
-      brandName: 'Cadivi',
-    },
-  },
+type ViewInventoryDialogProps = {
+  inventory: Inventory;
+  //  {
+  //   currentQuantity: number;
+  //   arrangedQuantity: number | null;
+  //   notArrgangedQuantity: number | null;
+  //   warehouseId: string;
+  //   warehouse: Warehouse;
+  //   batchId: string;
+  //   batch: Batch;
+  //   id: string;
+  //   createdBy: string | null;
+  //   createdTime: string;
+  //   createdByAvatarUrl: string | null;
+  //   createdByFullName: string | null;
+  //   createdByGroup: string | null;
+  // };
 };
 
-const ViewInventoryDialog = () => {
+const ViewInventoryDialog: React.FC<ViewInventoryDialogProps> = ({
+  inventory,
+}) => {
   const {
     currentQuantity,
     arrangedQuantity,
     notArrgangedQuantity,
     warehouse,
     batch,
-  } = inventoryData;
+  } = inventory;
+
+  const formatDate = (dateStr?: string) => {
+    return dateStr ? new Date(dateStr).toLocaleString('vi-VN') : 'Không có';
+  };
 
   return (
-    <Dialog open>
-      <DialogContent className='max-w-3xl'>
-        <DialogHeader>
-          <DialogTitle>Chi tiết tồn kho</DialogTitle>
-        </DialogHeader>
-        <Separator className='my-2' />
+    <div className='flex justify-end'>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Eye className='text-blue-500 h-5 w-5 hover:cursor-pointer' />
+        </DialogTrigger>
+        <DialogContent
+          className='flex flex-col w-full max-w-3xl max-h-[80vh] overflow-y-auto p-6 m-4 bg-white rounded-2xl shadow-xl border border-gray-200'
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <DialogHeader>
+            <DialogTitle className='text-2xl font-semibold text-gray-800'>
+              Chi tiết tồn kho
+            </DialogTitle>
+          </DialogHeader>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          {/* Thông tin sản phẩm */}
-          <Card>
-            <CardContent className='p-4 space-y-2'>
-              <h3 className='font-semibold text-lg'>Sản phẩm</h3>
-              <div>
-                <Label>Tên:</Label> {batch.product.name}
+          <div className='mt-4 space-y-6 text-sm text-gray-800'>
+            {/* --- THÔNG TIN TỒN KHO --- */}
+            <div>
+              <h3 className='text-base font-semibold text-gray-700 mb-2'>
+                Thông tin tồn kho
+              </h3>
+              <div className='grid grid-cols-2 gap-4'>
+                <div>
+                  <Label className='text-sm text-gray-500'>Hiện có</Label>
+                  <p>{currentQuantity}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Đã sắp xếp</Label>
+                  <p>{arrangedQuantity ?? 'Chưa có thông tin'}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Chưa sắp xếp</Label>
+                  <p>{notArrgangedQuantity ?? 'Chưa có thông tin'}</p>
+                </div>
               </div>
-              <div>
-                <Label>SKU:</Label> {batch.product.sku}
-              </div>
-              <div>
-                <Label>Thương hiệu:</Label> {batch.product.brandName}
-              </div>
-              <div>
-                <Label>Đơn vị:</Label> {batch.product.unitName}
-              </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Thông tin lô */}
-          <Card>
-            <CardContent className='p-4 space-y-2'>
-              <h3 className='font-semibold text-lg'>Lô hàng</h3>
-              <div>
-                <Label>Mã lô:</Label> {batch.code}
+            {/* --- THÔNG TIN SẢN PHẨM --- */}
+            <div>
+              <h3 className='text-base font-semibold text-gray-700 mb-2'>
+                Thông tin sản phẩm
+              </h3>
+              <div className='grid grid-cols-2 gap-4'>
+                <div>
+                  <Label className='text-sm text-gray-500'>Tên</Label>
+                  <p>{batch.product?.name}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>SKU</Label>
+                  <p>{batch.product?.sku}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Thương hiệu</Label>
+                  <p>{batch.product?.brandName}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Đơn vị</Label>
+                  <p>{batch.product?.unitName}</p>
+                </div>
               </div>
-              <div>
-                <Label>Tên:</Label> {batch.name}
-              </div>
-              <div>
-                <Label>NSX:</Label> {batch.mfgDate}
-              </div>
-              <div>
-                <Label>HSD:</Label> {batch.expDate}
-              </div>
-              <div>
-                <Label>Ngày nhập kho:</Label> {batch.inboundDate}
-              </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Thông tin kho */}
-          <Card>
-            <CardContent className='p-4 space-y-2'>
-              <h3 className='font-semibold text-lg'>Kho</h3>
-              <div>
-                <Label>Tên:</Label> {warehouse.name}
+            {/* --- THÔNG TIN LÔ --- */}
+            <div>
+              <h3 className='text-base font-semibold text-gray-700 mb-2'>
+                Thông tin lô
+              </h3>
+              <div className='grid grid-cols-2 gap-4'>
+                <div>
+                  <Label className='text-sm text-gray-500'>Mã lô</Label>
+                  <p>{batch.code}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Tên</Label>
+                  <p>{batch.name}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>NSX</Label>
+                  <p>{batch.mfgDate}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>HSD</Label>
+                  <p>{batch.expDate}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Ngày nhập kho</Label>
+                  <p>{batch.inboundDate}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Ngày tạo</Label>
+                  <p>{formatDate(batch.createdTime)}</p>
+                </div>
               </div>
-              <div>
-                <Label>Điện thoại:</Label> {warehouse.phone}
-              </div>
-              <div>
-                <Label>Địa chỉ:</Label> {warehouse.address}
-              </div>
-              <div>
-                <Label>Diện tích:</Label> {warehouse.area} m²
-              </div>
-              <div>
-                <Label>Bắt đầu hoạt động:</Label>{' '}
-                {new Date(warehouse.operateFrom).toLocaleString('vi-VN')}
-              </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Số lượng */}
-          <Card>
-            <CardContent className='p-4 space-y-2'>
-              <h3 className='font-semibold text-lg'>Số lượng</h3>
-              <div>
-                <Label>Hiện có:</Label> {currentQuantity}
+            {/* --- THÔNG TIN KHO --- */}
+            <div>
+              <h3 className='text-base font-semibold text-gray-700 mb-2'>
+                Thông tin kho
+              </h3>
+              <div className='grid grid-cols-2 gap-4'>
+                <div>
+                  <Label className='text-sm text-gray-500'>Tên</Label>
+                  <p>{warehouse.name}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Điện thoại</Label>
+                  <p>{warehouse.phone ?? 'Không có'}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Địa chỉ</Label>
+                  <p>{warehouse.address}</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Diện tích</Label>
+                  <p>{warehouse.area} m²</p>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>
+                    Bắt đầu hoạt động
+                  </Label>
+                  <p>{formatDate(warehouse.operateFrom)}</p>
+                </div>
               </div>
-              <div>
-                <Label>Đã sắp xếp:</Label>{' '}
-                {arrangedQuantity ?? 'Chưa có thông tin'}
+            </div>
+
+            {/* --- NGƯỜI TẠO & THỜI GIAN --- */}
+            <div>
+              <h3 className='text-base font-semibold text-gray-700 mb-2'>
+                Thông tin tạo
+              </h3>
+              <div className='grid grid-cols-2 gap-4 items-center'>
+                <div className='flex items-center gap-3'>
+                  <Avatar className='h-10 w-10'>
+                    <AvatarImage src={inventory.createdByAvatarUrl} />
+                    <AvatarFallback>
+                      {inventory.createdByFullName?.[0] ?? '?'}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className='font-medium'>
+                      {inventory.createdByFullName ?? 'Không rõ'}
+                    </p>
+                    <p className='text-xs text-gray-500'>
+                      {inventory.createdByGroup ?? 'Không có'}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <Label className='text-sm text-gray-500'>Ngày tạo</Label>
+                  <p>{formatDate(inventory.createdTime)}</p>
+                </div>
               </div>
-              <div>
-                <Label>Chưa sắp xếp:</Label>{' '}
-                {notArrgangedQuantity ?? 'Chưa có thông tin'}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </DialogContent>
-    </Dialog>
+            </div>
+          </div>
+
+          <DialogFooter className='mt-6 flex justify-end'>
+            <DialogClose asChild>
+              <Button
+                variant='secondary'
+                className='px-4 py-2 hover:bg-slate-200'
+              >
+                Đóng
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 

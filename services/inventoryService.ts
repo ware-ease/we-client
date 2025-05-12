@@ -22,3 +22,22 @@ export const getWarehouseInventories = async (
   );
   return response.data.data;
 };
+export const getInventories = async () => {
+  const response = await fetch(`/api/inventories`);
+  return response.json();
+};
+
+export const getLocations = async (locationId: string) => {
+  const response = await fetch(`/api/inventories/locations/${locationId}`);
+  return response.json();
+};
+
+export const getInventoryById = async (inventoryId: string) => {
+  const response = await fetch(`/api/inventories/${inventoryId}`);
+  return response.json();
+};
+
+export const getBatchLocations = async (batchId: string) => {
+  const response = await fetch(`/api/inventories/batch/${batchId}/locations`);
+  return response.json();
+};
