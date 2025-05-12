@@ -31,10 +31,10 @@ export interface AdjustmentRowData {
 const initialColumns: Column[] = [
   { header: 'Mã hàng', key: 'sku', width: 260 },
   // { header: 'Tên hàng', key: 'productName', width: 200 },
-  { header: 'ĐVT', key: 'unitName', width: 100 },
+  { header: 'ĐVT', key: 'unitName', width: 90 },
   { header: 'Mã lô', key: 'batch', width: 100 },
   { header: 'Số lượng', key: 'quantity', width: 80 },
-  { header: '+/-', key: 'changeInQuantity', width: 40 },
+  { header: '+/-', key: 'changeInQuantity', width: 50 },
   { header: 'HSD', key: 'expDate', width: 100 },
   { header: 'Ghi chú', key: 'note', width: 120 },
 ];
