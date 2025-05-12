@@ -184,7 +184,6 @@ const CheckInventoryCreate = () => {
               <div>Đang tải danh sách tồn kho...</div>
             ) : (
               <CustomInventoryCheckTable
-                initialData={[]}
                 inventories={inventoryData?.inventories || []}
                 onDataChange={setData}
               />

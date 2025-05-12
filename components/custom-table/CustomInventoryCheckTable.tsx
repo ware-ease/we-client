@@ -18,6 +18,7 @@ interface Row {
 interface InventoryDetail {
   note: string;
   accountId: string;
+  countedQuantity: number;
   inventoryId: string;
   errorTicketId: string;
 }
@@ -117,6 +118,7 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
       accountId: initialData[index]?.accountId || '',
       inventoryId: (row.inventoryId as any).props.value ?? '',
       errorTicketId: initialData[index]?.errorTicketId || '',
+      countedQuantity: 0,
     }));
     onDataChange(updatedData);
   }, [rows, onDataChange]);
@@ -266,7 +268,7 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
                   <input
                     type='text'
                     className='w-full p-2'
-                    value={row.note?.toString() || ''}
+                    value={(row.note as any).props.value || ''}
                     onChange={(e) => handleNoteChange(i, e.target.value)}
                   />
                 </td>
