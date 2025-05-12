@@ -2,8 +2,8 @@ import { Unit } from '../types/unit';
 import {
   axiosDelete,
   axiosGet,
+  axiosPatch,
   axiosPost,
-  axiosPut,
   baseFilters,
 } from './baseService';
 
@@ -26,7 +26,7 @@ export const updateUnit = async (
   id: string,
   unitData: Partial<Unit>
 ): Promise<Unit> => {
-  const response = await axiosPut(`/units/${id}`, unitData, {});
+  const response = await axiosPatch(`/units/${id}`, unitData, {});
   return response.data.data;
 };
 

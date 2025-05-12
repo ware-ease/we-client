@@ -17,7 +17,7 @@ import {
   useUpdateUnit,
 } from '@/hooks/queries/unitQueries';
 import { Unit } from '@/types/unit';
-import { Edit, Search, Trash2, X } from 'lucide-react';
+import { Edit, Search, Trash2 } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -47,10 +47,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [editingUnit, setEditingUnit] = useState<string | null>(null);
-  const [editedUnit, setEditedUnit] = useState<Partial<Unit>>({});
   const [unitToDelete, setUnitToDelete] = useState<Unit | null>(null);
-  const [unitValue, setUnitValue] = useState<string>('');
   const addUnitMutation = useAddUnit();
   const updateUnitMutation = useUpdateUnit();
   const deleteUnitMutation = useDeleteUnit();
@@ -58,6 +55,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
   useEffect(() => {
     setFilteredUnits(units);
   }, [units]);
+  console.log(newUnit);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -70,8 +68,8 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
   };
 
   const handleEditUnit = (unit: Unit) => {
-    setNewUnit(unit); // Gán unit hiện tại vào newUnit để chỉnh sửa
-    setShowForm(true); // Hiển thị form
+    setNewUnit(unit);
+    setShowForm(true);
   };
 
   const handleSaveUnit = () => {
@@ -85,13 +83,13 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
         {
           id: newUnit.id,
           name: newUnit.name,
-          note: newUnit.note ?? '',
+          note: newUnit.note || '',
           type: newUnit.type,
         },
         {
           onSuccess: () => {
-            toast.success('Cập nhật đơn vị thành công!');
             setShowForm(false);
+            setNewUnit({ name: '', note: '', type: 0 });
           },
           onError: () => {
             toast.error('Không thể cập nhật đơn vị.');
@@ -101,20 +99,14 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
     } else {
       addUnitMutation.mutate({ ...newUnit } as Unit, {
         onSuccess: () => {
-          toast.success('Thêm đơn vị thành công!');
           setShowForm(false);
-          setNewUnit({ name: '', note: '' });
+          setNewUnit({ name: '', note: '', type: 0 });
         },
         onError: () => {
           toast.error('Không thể thêm đơn vị.');
         },
       });
     }
-  };
-
-  const handleCancelEdit = () => {
-    setEditingUnit(null);
-    setEditedUnit({});
   };
 
   const handleDeleteUnit = () => {
@@ -162,7 +154,6 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
                 <Select
                   onValueChange={(value) => {
                     setNewUnit({ ...newUnit, type: parseInt(value) });
-                    setUnitValue(''); // reset lại giá trị khi đổi loại
                   }}
                   value={newUnit.type?.toString() ?? ''}
                 >
@@ -175,36 +166,6 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
                   </SelectContent>
                 </Select>
               </div>
-
-              {newUnit.type !== undefined && (
-                <div>
-                  <Label>Nhập giá trị</Label>
-                  <Input
-                    value={unitValue}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      const val = e.target.value;
-                      const isInteger = /^[0-9]*$/;
-                      const isDecimal = /^[0-9]*\.?[0-9]*$/;
-
-                      if (
-                        (newUnit.type === 0 &&
-                          (val === '' || isInteger.test(val))) ||
-                        (newUnit.type === 1 &&
-                          (val === '' || isDecimal.test(val)))
-                      ) {
-                        setUnitValue(val);
-                      }
-                    }}
-                    className='bg-white'
-                    type='text'
-                    placeholder={
-                      newUnit.type === 0
-                        ? 'Chỉ nhập số nguyên'
-                        : 'Nhập số thập phân'
-                    }
-                  />
-                </div>
-              )}
             </div>
 
             <div className='flex justify-end mt-3 space-x-2'>
@@ -230,6 +191,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
             + Tạo đơn vị mới
           </Button>
         )}
+
         <div className='relative'>
           <Search className='absolute left-3 top-2.5 text-gray-400' size={16} />
           <Input
@@ -253,48 +215,27 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(null)}
                 >
-                  {editingUnit === unit.id ? (
-                    <div className='flex items-center space-x-2 w-full'>
-                      <Input
-                        value={editedUnit.name || ''}
-                        onChange={(e) =>
-                          setEditedUnit({
-                            ...editedUnit,
-                            name: e.target.value,
-                          })
-                        }
-                        className='flex-1'
+                  <span className='text-gray-700'>{unit.name}</span>
+                  {hoveredIndex === index && (
+                    <div className='flex space-x-2'>
+                      <Edit
+                        className='text-blue-600 h-4 w-4 cursor-pointer'
+                        onClick={() => handleEditUnit(unit)}
                       />
-                      <X
-                        className='text-gray-600 h-5 w-5 cursor-pointer'
-                        onClick={handleCancelEdit}
-                      />
+                      <DeleteDialog
+                        onConfirmDelete={handleDeleteUnit}
+                        title='Xóa đơn vị'
+                        description='Bạn có chắc chắn muốn xóa đơn vị này không?'
+                        isLoading={deleteUnitMutation.isPending}
+                      >
+                        <Trash2
+                          className='text-red-600 h-4 w-4 cursor-pointer'
+                          onClick={() => {
+                            setUnitToDelete(unit);
+                          }}
+                        />
+                      </DeleteDialog>
                     </div>
-                  ) : (
-                    <>
-                      <span className='text-gray-700'>{unit.name}</span>
-                      {hoveredIndex === index && (
-                        <div className='flex space-x-2'>
-                          <Edit
-                            className='text-blue-600 h-4 w-4 cursor-pointer'
-                            onClick={() => handleEditUnit(unit)}
-                          />
-                          <DeleteDialog
-                            onConfirmDelete={handleDeleteUnit}
-                            title='Xóa đơn vị'
-                            description='Bạn có chắc chắn muốn xóa đơn vị này không?'
-                            isLoading={deleteUnitMutation.isPending}
-                          >
-                            <Trash2
-                              className='text-red-600 h-4 w-4 cursor-pointer'
-                              onClick={() => {
-                                setUnitToDelete(unit);
-                              }}
-                            />
-                          </DeleteDialog>
-                        </div>
-                      )}
-                    </>
                   )}
                 </li>
               ))

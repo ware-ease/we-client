@@ -126,7 +126,7 @@ export const columns: ColumnDef<Supplier>[] = [
           <TooltipTrigger>
             <ViewSupplierDialog supplier={row.original} />
           </TooltipTrigger>
-          <TooltipContent>Xem</TooltipContent>
+          <TooltipContent>Chi tiết</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger>
