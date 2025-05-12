@@ -75,7 +75,7 @@ const ViewInventoryDialog: React.FC<ViewInventoryDialogProps> = ({
           </DialogHeader>
 
           <div className='grid grid-cols-2 gap-6'>
-            {/* Ô 1: Tồn kho */}
+            {/* 1*/}
             <section className='rounded-2xl bg-gray-50 p-5 shadow-sm border border-gray-200 space-y-3'>
               <h3 className='text-lg font-semibold text-[#1E3A8A]'>
                 Thông tin tồn kho
@@ -96,7 +96,7 @@ const ViewInventoryDialog: React.FC<ViewInventoryDialogProps> = ({
               </div>
             </section>
 
-            {/* Ô 2: Sản phẩm */}
+            {/* 2*/}
             <section className='rounded-2xl bg-gray-50 p-5 shadow-sm border border-gray-200 space-y-3'>
               <h3 className='text-lg font-semibold text-[#1E3A8A]'>
                 Thông tin sản phẩm
@@ -121,7 +121,7 @@ const ViewInventoryDialog: React.FC<ViewInventoryDialogProps> = ({
               </div>
             </section>
 
-            {/* Ô 3: Lô */}
+            {/* 3*/}
             <section className='rounded-2xl bg-gray-50 p-5 shadow-sm border border-gray-200 space-y-3'>
               <h3 className='text-lg font-semibold text-[#1E3A8A]'>
                 Thông tin lô
@@ -178,7 +178,7 @@ const ViewInventoryDialog: React.FC<ViewInventoryDialogProps> = ({
               </div>
             </section>
 
-            {/* Ô dài cuối: Thông tin tạo */}
+            {/* --- */}
             <section className='col-span-2 rounded-2xl bg-gray-50 p-5 shadow-sm border border-gray-200'>
               <h3 className='text-lg font-semibold text-[#1E3A8A] mb-3'>
                 Thông tin tạo

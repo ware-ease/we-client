@@ -12,7 +12,6 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { z } from 'zod';
 
-// 🧪 Validate bằng Zod
 const InventoryCountSchema = z.object({
   status: z.number(),
   code: z.string().min(1, 'Mã phiếu là bắt buộc'),
@@ -47,17 +46,13 @@ const CheckInventoryCreate = () => {
   const currentWarehouse = useCurrentWarehouse();
 
   const { data: inventoryData, isLoading } = useWarehousesInventories(
-    true, // Assuming first param enables the query
-    (warehouseId as string) ? (warehouseId as string) : '' // Pass warehouseId based on onlyCurrentWarehouse
+    true,
+    (warehouseId as string) ?? ''
   );
-
-  // const { data: inventoryData, isLoading } = useWarehousesInventories(
-  //   currentWarehouse?.id ?? ''
-  // );
 
   const { formData, handleChange } = useFormData<InventoryCount>({
     code: '',
-    date: '',
+    date: new Date().toISOString().split('T')[0],
     startTime: '',
     endTime: '',
     note: '',
@@ -98,123 +93,114 @@ const CheckInventoryCreate = () => {
   };
 
   return (
-    <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-8 bg-gray-50 rounded-lg shadow-lg'>
-      <div className='text-center mb-8'>
-        <h1 className='text-4xl font-semibold text-primary'>
-          Tạo Biên bản Kiểm kê
+    <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
+      <div className='w-full max-w-4xl bg-white rounded-xl shadow-lg p-6'>
+        <h1 className='text-2xl font-bold text-gray-800 mb-6'>
+          Tạo biên bản kiểm kê
         </h1>
-        <p className='text-lg text-gray-600'>
-          Nhập thông tin kiểm kê chi tiết dưới đây
-        </p>
-      </div>
 
-      {/* Mã phiếu và Ngày kiểm kê */}
-      <div className='space-y-8'>
-        <div className='bg-white p-6 rounded-lg shadow-sm'>
-          <h2 className='text-xl font-semibold text-primary mb-4'>
-            Thông tin cơ bản
-          </h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            <div className='flex flex-col'>
-              <div className='text-sm text-gray-600'>Mã phiếu</div>
+        <div className='space-y-4'>
+          {/* Basic Info */}
+          <div className='grid grid-cols-2 gap-4'>
+            <div>
+              <label className='block text-sm font-medium text-gray-700'>
+                Mã phiếu
+              </label>
               <Input
                 name='code'
                 value={formData.code}
                 onChange={handleChange}
-                required
-                className='border-gray-300 focus:ring-2 focus:ring-primary'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
               />
             </div>
-            <div className='flex flex-col'>
-              <div className='text-sm text-gray-600'>Ngày kiểm kê</div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700'>
+                Ngày kiểm kê
+              </label>
               <Input
                 name='date'
-                value={formData.date}
                 type='date'
+                value={formData.date}
                 onChange={handleChange}
-                required
-                className='border-gray-300 focus:ring-2 focus:ring-primary'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
               />
             </div>
-          </div>
-        </div>
-
-        {/* Thời gian kiểm kê */}
-        <div className='bg-white p-6 rounded-lg shadow-sm'>
-          <h2 className='text-xl font-semibold text-primary mb-4'>
-            Thời gian kiểm kê
-          </h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            <div className='flex flex-col'>
-              <div className='text-sm text-gray-600'>Thời gian bắt đầu</div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700'>
+                Thời gian bắt đầu
+              </label>
               <Input
                 name='startTime'
-                value={formData.startTime}
                 type='time'
+                value={formData.startTime}
                 onChange={handleChange}
-                className='border-gray-300 focus:ring-2 focus:ring-primary'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
               />
             </div>
-            <div className='flex flex-col'>
-              <div className='text-sm text-gray-600'>Thời gian kết thúc</div>
+            <div>
+              <label className='block text-sm font-medium text-gray-700'>
+                Thời gian kết thúc
+              </label>
               <Input
                 name='endTime'
-                value={formData.endTime}
                 type='time'
+                value={formData.endTime}
                 onChange={handleChange}
-                className='border-gray-300 focus:ring-2 focus:ring-primary'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
               />
             </div>
-          </div>
-        </div>
-
-        {/* Kho kiểm kê và Ghi chú */}
-        <div className='bg-white p-6 rounded-lg shadow-sm'>
-          <h2 className='text-xl font-semibold text-primary mb-4'>
-            Thông tin khác
-          </h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            <div className='flex flex-col'>
-              <div className='text-sm text-gray-600'>Kho kiểm kê</div>
-              <Input
-                value={currentWarehouse?.name ?? ''}
-                disabled
-                className='border-gray-300'
-              />
-            </div>
-            <div className='flex flex-col'>
-              <div className='text-sm text-gray-600'>Ghi chú</div>
-              <Input
+            <div>
+              <label className='block text-sm font-medium text-gray-700'>
+                Ghi chú
+              </label>
+              <textarea
                 name='note'
                 value={formData.note}
                 onChange={handleChange}
-                className='border-gray-300 focus:ring-2 focus:ring-primary'
+                placeholder='Điền ghi chú...'
+                className='mt-1 w-full text-sm p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 h-24'
               />
             </div>
+            {currentWarehouse && (
+              <div>
+                <label className='block text-sm font-medium text-gray-700'>
+                  Kho kiểm kê
+                </label>
+                <Input
+                  value={currentWarehouse.name}
+                  readOnly
+                  className='mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100'
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Table */}
+          <div>
+            <h2 className='text-lg font-semibold text-gray-800 mb-4'>
+              Chọn tồn kho cần kiểm kê
+            </h2>
+            {isLoading ? (
+              <div>Đang tải danh sách tồn kho...</div>
+            ) : (
+              <CustomInventoryCheckTable
+                initialData={[]}
+                inventories={inventoryData?.inventories || []}
+                onDataChange={setData}
+              />
+            )}
+          </div>
+
+          {/* Submit */}
+          <div className='flex justify-end space-x-4'>
+            <Button
+              onClick={handleSubmit}
+              className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
+            >
+              Tạo biên bản kiểm kê
+            </Button>
           </div>
         </div>
-      </div>
-
-      {/* Table phần kiểm kê */}
-      <div className='mt-8'>
-        {isLoading ? (
-          <div>Đang tải danh sách tồn kho...</div>
-        ) : (
-          <CustomInventoryCheckTable
-            initialData={[]}
-            inventories={inventoryData?.inventories || []}
-            onDataChange={setData}
-          />
-        )}
-      </div>
-      {/* Nút submit */}
-      <div className='flex w-full justify-end mt-8'>
-        <Button
-          onClick={handleSubmit}
-          className='bg-primary text-white hover:bg-primary-dark'
-        >
-          Tạo biên bản kiểm kê
-        </Button>
       </div>
     </div>
   );
