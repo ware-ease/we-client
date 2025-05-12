@@ -3,11 +3,11 @@ import { ColumnDef } from '@tanstack/react-table';
 import React from 'react';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import { Batch } from '@/types/batch';
+import { Inventory } from '@/types/warehouse';
 
-export const columns: ColumnDef<Batch>[] = [
+export const columns: ColumnDef<Inventory>[] = [
   {
-    accessorKey: 'code',
+    accessorKey: 'batch.code',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Mã lô' />
     ),
@@ -16,12 +16,12 @@ export const columns: ColumnDef<Batch>[] = [
     },
   },
   {
-    accessorKey: 'inboundDate',
+    accessorKey: 'batch.inboundDate',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Ngày nhập kho' />
     ),
     cell: ({ row }) =>
-      new Date(row.getValue('inboundDate')).toLocaleDateString('vi-VN'),
+      new Date(row.original.batch.inboundDate).toLocaleDateString('vi-VN'),
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue?.from && !filterValue?.to) return true;
       const rowDate = new Date(row.getValue(columnId));
@@ -46,13 +46,13 @@ export const columns: ColumnDef<Batch>[] = [
     },
   },
   {
-    accessorKey: 'expDate',
+    accessorKey: 'batch.expDate',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Hạn sử dụng' />
     ),
     cell: ({ row }) => {
-      return new Date(row.getValue('expDate')) > new Date('01/01/0001')
-        ? new Date(row.getValue('expDate')).toLocaleDateString('vi-VN')
+      return new Date(row.original.batch.expDate) > new Date('01/01/0001')
+        ? new Date(row.original.batch.expDate).toLocaleDateString('vi-VN')
         : 'Không có';
     },
     filterFn: (row, columnId, filterValue) => {
@@ -79,7 +79,7 @@ export const columns: ColumnDef<Batch>[] = [
     },
   },
   {
-    accessorKey: 'name',
+    accessorKey: 'batch.name',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Nhập từ phiếu' />
     ),
@@ -88,7 +88,7 @@ export const columns: ColumnDef<Batch>[] = [
     },
   },
   {
-    accessorKey: 'thisWarehouseQuantity',
+    accessorKey: 'currentQuantity',
     header: ({ column }) => (
       <DataTableColumnHeader
         column={column}
@@ -101,8 +101,12 @@ export const columns: ColumnDef<Batch>[] = [
   },
 ];
 
-const ProductBatchTable: React.FC<{ batches: Batch[] }> = ({ batches }) => {
-  return <CustomDataTable columns={columns} data={batches}></CustomDataTable>;
+const ProductBatchTable: React.FC<{ inventories: Inventory[] }> = ({
+  inventories,
+}) => {
+  return (
+    <CustomDataTable columns={columns} data={inventories}></CustomDataTable>
+  );
 };
 
 export default ProductBatchTable;

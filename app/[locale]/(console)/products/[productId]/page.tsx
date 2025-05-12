@@ -1,6 +1,5 @@
 'use client';
 import { useProduct } from '@/hooks/queries/productQueries';
-import { useBatchesByProductId } from '@/hooks/queries/batchQueries';
 import { useWarehouses } from '@/hooks/queries/accountQueries';
 import { useWarehousesInventoriesByProductID } from '@/hooks/queries/warehouseQueries';
 import { useParams, useSearchParams } from 'next/navigation';
@@ -9,7 +8,6 @@ import { Check, FileText, Loader2, Pencil, X } from 'lucide-react';
 import { Product } from '@/types/product';
 import { Link, useRouter } from '@/lib/i18n/routing';
 import ProductBatchTable from '@/components/custom-table/batch/BatchProductTable';
-import { Batch } from '@/types/batch';
 import Loading from '@/components/app/Loading';
 
 const ProductDetail = () => {
@@ -17,15 +15,11 @@ const ProductDetail = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const productIdStr = Array.isArray(productId) ? productId[0] : productId;
-  const [currentWarehouseBatches, setCurrentWarehouseBatches] = useState<
-    Batch[]
-  >([]);
   const {
     data: product,
     isLoading: isProductLoading,
     error: productError,
   } = useProduct(productIdStr || '');
-  const { data: batches } = useBatchesByProductId(productIdStr || '');
   const { data: warehouses } = useWarehouses();
 
   // Current warehouse state
@@ -37,12 +31,6 @@ const ProductDetail = () => {
     currentWarehouseId || '',
     productIdStr || ''
   );
-
-  // const { data: stockCard } = useWarehousesStockCardByProductID(
-  //   currentWarehouseId !== undefined,
-  //   currentWarehouseId || '',
-  //   productIdStr || ''
-  // );
 
   // Product edit modal state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -62,23 +50,6 @@ const ProductDetail = () => {
         : 0,
     [inventories]
   );
-
-  useEffect(() => {
-    const inventoryMap = new Map<string, number>();
-    inventories?.forEach((inv) => {
-      inventoryMap.set(inv.batchId || '', inv.currentQuantity);
-    });
-    const filteredBatches = batches
-      ?.map((batch) => {
-        const thisWarehouseQuantity = inventoryMap.get(batch.id);
-        if (thisWarehouseQuantity !== undefined && thisWarehouseQuantity > 0) {
-          return { ...batch, thisWarehouseQuantity };
-        }
-        return null;
-      })
-      .filter((batch): batch is Batch => batch !== null);
-    setCurrentWarehouseBatches(filteredBatches || []);
-  }, [batches, inventories]);
 
   // Sync currentWarehouseId with searchParams
   useEffect(() => {
@@ -247,7 +218,7 @@ const ProductDetail = () => {
         {isPending ? (
           <Loading />
         ) : (
-          <ProductBatchTable batches={currentWarehouseBatches} />
+          <ProductBatchTable inventories={inventories || []} />
         )}
       </div>
 
