@@ -13,7 +13,6 @@ const Login = () => {
   const t = useTranslations();
   const router = useRouter();
   const { handleLogin } = useAuth();
-
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 

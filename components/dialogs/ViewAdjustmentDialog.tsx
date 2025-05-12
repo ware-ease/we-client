@@ -45,7 +45,9 @@ export function ViewAdjustmentDialog({
               Phiếu Điều Chỉnh Tồn Kho
             </h2>
             <div className='text-sm text-gray-600'>
-              <p>{/* <strong>Số phiếu:</strong> {adjustment.code} */}</p>
+              <p>
+                <strong>Số phiếu:</strong> {adjustment.code}
+              </p>
               <p>
                 <strong>Ngày:</strong>{' '}
                 {new Date(adjustment.date || '').toLocaleDateString('vi-VN')}
@@ -117,13 +119,13 @@ export function ViewAdjustmentDialog({
                         {index + 1}
                       </td>
                       <td className='border border-gray-200 p-2'>
-                        {detail.product?.sku || 'N/A'}
+                        {detail.batch?.product?.sku || 'N/A'}
                       </td>
                       <td className='border border-gray-200 p-2'>
-                        {detail.product?.name || 'N/A'}
+                        {detail.batch?.product?.name || 'N/A'}
                       </td>
                       <td className='border border-gray-200 p-2'>
-                        {detail.product?.unit || 'N/A'}
+                        {detail.batch?.product?.unit || 'N/A'}
                       </td>
                       <td className='border border-gray-200 p-2 text-right'>
                         {detail.newQuantity ||
@@ -184,10 +186,10 @@ export function ViewAdjustmentDialog({
                 />
               </div>
               <div className='text-right'>
-                {/* <p>
+                <p>
                   <strong className='font-normal'>Số phiếu:</strong>{' '}
                   {adjustment.code}
-                </p> */}
+                </p>
                 <p>
                   <strong className='font-normal'>Ngày:</strong>{' '}
                   {new Date(adjustment.date || '').toLocaleDateString('vi-VN')}
@@ -249,13 +251,13 @@ export function ViewAdjustmentDialog({
                       {index + 1}
                     </td>
                     <td className='border-r border-t border-black p-2'>
-                      {detail.product?.sku || 'N/A'}
+                      {detail.batch?.product?.sku || 'N/A'}
                     </td>
                     <td className='border-r border-t border-black p-2'>
-                      {detail.product?.name || 'N/A'}
+                      {detail.batch?.product?.name || 'N/A'}
                     </td>
                     <td className='border-r border-t border-black p-2'>
-                      {detail.product?.unit || 'N/A'}
+                      {detail.batch?.product?.unit || 'N/A'}
                     </td>
                     <td className='border-r border-t border-black p-2'>
                       {detail.newQuantity || 0 - (detail.changeInQuantity || 0)}

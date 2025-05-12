@@ -60,27 +60,27 @@ export const columns: ColumnDef<Supplier>[] = [
   //     title: 'Địa chỉ',
   //   },
   // },
-  // {
-  //   accessorKey: 'status',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='Trạng thái' />
-  //   ),
-  //   cell: ({ row }) => {
-  //     const status = row.getValue('status');
-  //     return (
-  //       <span
-  //         className={`bg-${
-  //           status ? 'green-500' : 'red-500'
-  //         } font-medium text-white flex items-center justify-center rounded-xl py-1 text-xs`}
-  //       >
-  //         {status ? 'Đang hoạt động' : 'Ngưng hoạt động'}
-  //       </span>
-  //     );
-  //   },
-  //   meta: {
-  //     title: 'Trạng thái',
-  //   },
-  // },
+  {
+    accessorKey: 'status',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Trạng thái' />
+    ),
+    cell: ({ row }) => {
+      const status = row.getValue('status');
+      return (
+        <span
+          className={`bg-${
+            status ? 'green-500' : 'red-500'
+          } font-medium text-white flex items-center justify-center rounded-xl py-1 text-xs`}
+        >
+          {status ? 'Đang hoạt động' : 'Ngưng hoạt động'}
+        </span>
+      );
+    },
+    meta: {
+      title: 'Trạng thái',
+    },
+  },
   {
     accessorKey: 'createdTime',
     header: ({ column }) => (

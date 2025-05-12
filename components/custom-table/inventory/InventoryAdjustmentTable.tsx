@@ -5,7 +5,6 @@ import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import { Link } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
-import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useWarehouseInventoryAdjustments } from '@/hooks/queries/warehouseQueries'; // Assuming this exists
 import { InventoryAdjustment } from '@/types/warehouse';
 import {
@@ -15,6 +14,7 @@ import {
 } from '@/components/shadcn-base/Tooltip';
 import CreatedByUI from '@/components/app/CreatedByUI';
 import { ViewAdjustmentDialog } from '@/components/dialogs/ViewAdjustmentDialog';
+import { useSearchParams } from 'next/navigation';
 
 export const columns: ColumnDef<InventoryAdjustment>[] = [
   {
@@ -57,7 +57,7 @@ export const columns: ColumnDef<InventoryAdjustment>[] = [
     },
   },
   {
-    accessorKey: 'warehouse.name',
+    accessorKey: 'warehouseName',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Kho điều chỉnh' />
     ),
@@ -127,15 +127,12 @@ export const columns: ColumnDef<InventoryAdjustment>[] = [
     ),
     cell: ({ row }) => (
       <div className='flex space-x-1 items-center'>
-        {/* Add actions like view or edit if needed */}
-        <Link href={`inventories/adjustments/${row.original.id}`}>
-          <Tooltip>
-            <TooltipTrigger>
-              <ViewAdjustmentDialog adjustment={row.original} />
-            </TooltipTrigger>
-            <TooltipContent>Chi tiết</TooltipContent>
-          </Tooltip>
-        </Link>
+        <Tooltip>
+          <TooltipTrigger>
+            <ViewAdjustmentDialog adjustment={row.original} />
+          </TooltipTrigger>
+          <TooltipContent>Chi tiết</TooltipContent>
+        </Tooltip>
       </div>
     ),
   },
@@ -148,12 +145,12 @@ interface InventoryAdjustmentTableProps {
 const InventoryAdjustmentTable: React.FC<InventoryAdjustmentTableProps> = ({
   onlyCurrentWarehouse = false,
 }) => {
-  const currentWarehouse = useCurrentWarehouse();
+  const searchParams = useSearchParams();
 
   // Fetch inventory data using useWarehousesInventories
   const { data } = useWarehouseInventoryAdjustments(
     true, // Assuming first param enables the query
-    onlyCurrentWarehouse && currentWarehouse?.id ? currentWarehouse.id : '' // Pass warehouseId based on onlyCurrentWarehouse
+    onlyCurrentWarehouse ? (searchParams.get('warehouseId') as string) : '' // Pass warehouseId based on onlyCurrentWarehouse
   );
 
   return (

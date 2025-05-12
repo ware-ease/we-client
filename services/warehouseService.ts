@@ -97,7 +97,7 @@ export const getWarehouseInventoryAdjustments = async (
     {}
   );
 
-  return response.data.data;
+  return response.data.data.records;
 };
 
 export const createWarehouse = async (

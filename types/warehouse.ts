@@ -47,6 +47,7 @@ export interface PutAwayGood extends Base {
 }
 
 export interface InventoryAdjustment extends Base {
+  code?: string;
   type?: number;
   date?: string;
   reason?: string;
