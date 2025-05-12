@@ -8,13 +8,13 @@ import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useWarehouseInventoryAdjustments } from '@/hooks/queries/warehouseQueries'; // Assuming this exists
 import { InventoryAdjustment } from '@/types/warehouse';
-import { Eye } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
 import CreatedByUI from '@/components/app/CreatedByUI';
+import { ViewAdjustmentDialog } from '@/components/dialogs/ViewAdjustmentDialog';
 
 export const columns: ColumnDef<InventoryAdjustment>[] = [
   {
@@ -131,7 +131,7 @@ export const columns: ColumnDef<InventoryAdjustment>[] = [
         <Link href={`inventories/adjustments/${row.original.id}`}>
           <Tooltip>
             <TooltipTrigger>
-              <Eye className='text-blue-500' size={20} />
+              <ViewAdjustmentDialog adjustment={row.original} />
             </TooltipTrigger>
             <TooltipContent>Chi tiết</TooltipContent>
           </Tooltip>

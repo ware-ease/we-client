@@ -1,5 +1,6 @@
 import { Base } from './base/base-type';
 import { Batch } from './batch';
+import { Product } from './product';
 
 export interface Warehouse extends Base {
   id: string;
@@ -62,6 +63,8 @@ export interface InventoryAdjustmentDetail extends Base {
   newQuantity?: number;
   locationId?: string;
   inventoryId?: string;
+  product?: Product;
+  batch?: Batch;
 }
 
 export interface StockCard {
