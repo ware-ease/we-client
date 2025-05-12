@@ -7,23 +7,34 @@ import { Link, usePathname } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
 import { Batch } from '@/types/batch';
 import { useBatches } from '@/hooks/queries/batchQueries';
+import ExpireDateUI from '@/components/app/ExpireDateUI';
 
 export const columns: ColumnDef<Batch>[] = [
   {
     accessorKey: 'code',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Mã phiếu' />
+      <DataTableColumnHeader column={column} title='Mã lô' />
     ),
     meta: {
-      title: 'Mã phiếu',
+      title: 'Mã lô',
     },
   },
   {
-    accessorKey: 'date',
+    accessorKey: 'product.sku',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Ngày thực hiện' />
+      <DataTableColumnHeader column={column} title='SKU' />
     ),
-    cell: ({ row }) => new Date(row.getValue('date')).toLocaleString('vi-VN'),
+    meta: {
+      title: 'SKU',
+    },
+  },
+  {
+    accessorKey: 'inboundDate',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Ngày nhập kho' />
+    ),
+    cell: ({ row }) =>
+      new Date(row.original.inboundDate).toLocaleDateString('vi-VN'),
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue?.from && !filterValue?.to) return true;
       const rowDate = new Date(row.getValue(columnId));
@@ -43,44 +54,48 @@ export const columns: ColumnDef<Batch>[] = [
       return true;
     },
     meta: {
-      title: 'Ngày thực hiện',
+      title: 'Ngày nhập kho',
       type: 'date',
     },
   },
   {
-    accessorKey: 'requestedWarehouseName',
+    accessorKey: 'expDate',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Kho nhận' />
+      <DataTableColumnHeader column={column} title='Hạn sử dụng' />
     ),
+    cell: ({ row }) => {
+      return <ExpireDateUI expDate={row.original.expDate} />;
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue?.from && !filterValue?.to) return true;
+      const rowDate = new Date(row.getValue(columnId));
+      const fromDate = filterValue.from ? new Date(filterValue.from) : null;
+      const toDate = filterValue.to ? new Date(filterValue.to) : null;
+
+      if (toDate) {
+        toDate.setHours(23, 59, 59, 999);
+      }
+
+      if (fromDate && toDate) {
+        return rowDate >= fromDate && rowDate <= toDate;
+      }
+      if (fromDate) return rowDate >= fromDate;
+      if (toDate) return rowDate <= toDate;
+
+      return true;
+    },
     meta: {
-      title: 'Kho nhận',
+      title: 'Hạn sử dụng',
+      type: 'date',
     },
   },
   {
-    accessorKey: 'goodRequestId',
+    accessorKey: 'name',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Yêu cầu' />
+      <DataTableColumnHeader column={column} title='Nhập từ phiếu' />
     ),
     meta: {
-      title: 'Yêu cầu',
-    },
-  },
-  {
-    accessorKey: 'shipperName',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Người giao hàng' />
-    ),
-    meta: {
-      title: 'Người giao hàng',
-    },
-  },
-  {
-    accessorKey: 'receiverName',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Người nhận hàng' />
-    ),
-    meta: {
-      title: 'Người nhận hàng',
+      title: 'Nhập từ phiếu',
     },
   },
   {
