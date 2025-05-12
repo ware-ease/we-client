@@ -7,7 +7,7 @@ import { Link } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { useWarehouseInventoryAdjustments } from '@/hooks/queries/warehouseQueries'; // Assuming this exists
-import { Inventory } from '@/types/warehouse';
+import { InventoryAdjustment } from '@/types/warehouse';
 import { Eye } from 'lucide-react';
 import {
   Tooltip,
@@ -16,7 +16,7 @@ import {
 } from '@/components/shadcn-base/Tooltip';
 import CreatedByUI from '@/components/app/CreatedByUI';
 
-export const columns: ColumnDef<Inventory>[] = [
+export const columns: ColumnDef<InventoryAdjustment>[] = [
   {
     id: 'stt',
     header: ({ column }) => (
@@ -151,15 +151,13 @@ const InventoryAdjustmentTable: React.FC<InventoryAdjustmentTableProps> = ({
   const currentWarehouse = useCurrentWarehouse();
 
   // Fetch inventory data using useWarehousesInventories
-  const { data, isSuccess } = useWarehouseInventoryAdjustments(
+  const { data } = useWarehouseInventoryAdjustments(
     true, // Assuming first param enables the query
     onlyCurrentWarehouse && currentWarehouse?.id ? currentWarehouse.id : '' // Pass warehouseId based on onlyCurrentWarehouse
   );
 
-  const tableData = isSuccess && data.inventories ? data.inventories : [];
-
   return (
-    <CustomDataTable columns={columns} data={tableData}>
+    <CustomDataTable columns={columns} data={data || []}>
       <Link href={'adjustment/create'}>
         <Button>Điều chỉnh</Button>
       </Link>

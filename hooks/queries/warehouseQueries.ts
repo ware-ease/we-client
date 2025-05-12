@@ -81,7 +81,7 @@ export const useWarehouseInventoryAdjustments = (
   id: string
 ) =>
   useQuery({
-    queryKey: ['adjustments', id],
+    queryKey: ['adjustments'],
     queryFn: () => getWarehouseInventoryAdjustments(id),
     enabled: enabled,
   });

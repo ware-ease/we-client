@@ -84,7 +84,7 @@ export function CustomDataTable<TData, TValue>({
         </div>
         <DataTableViewOptions table={table} />
       </div>
-      <div className='rounded-md border overflow-auto h-[calc(100vh-18.5rem)]'>
+      <div className='rounded-md border overflow-auto h-[calc(100vh-18.5rem)] max-w-[calc(100vw-18.5rem)]'>
         <Table>
           <TableHeader className='bg-slate-50'>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -1,6 +1,7 @@
 import { Product } from '@/types/product';
 import {
   Inventory,
+  InventoryAdjustment,
   Location,
   StockBook,
   StockCard,
@@ -90,7 +91,7 @@ export const getWarehouseStockBook = async (
 
 export const getWarehouseInventoryAdjustments = async (
   id: string
-): Promise<Warehouse> => {
+): Promise<InventoryAdjustment[]> => {
   const response = await axiosGet(
     `/inventory-adjustments` + baseFilters + '&warehouseId=' + id,
     {}

@@ -78,7 +78,7 @@ export const columns: ColumnDef<Account>[] = [
       };
 
       return (
-        <div className='flex flex-wrap gap-1'>
+        <div className='flex flex-wrap gap-1 items-center text-center'>
           {groups.map((group) => (
             <span
               key={group.id}
