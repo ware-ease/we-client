@@ -31,22 +31,24 @@ const WarehouseRequestCreate = () => {
   const { mutate } = useAddGoodRequest();
 
   const handleSubmit = () => {
-    const finalFormData = {
-      ...formData,
-      goodRequestDetails: mapGoodRequestDetails(data),
-      warehouseId: currentWarehouse?.id,
-      requestType: 2,
-    };
+    try {
+      const finalFormData = {
+        ...formData,
+        goodRequestDetails: mapGoodRequestDetails(data),
+        warehouseId: currentWarehouse?.id,
+        requestType: 2,
+      };
 
-    if (finalFormData.goodRequestDetails.length === 0) {
-      return;
-    }
+      if (finalFormData.goodRequestDetails.length === 0) {
+        return;
+      }
 
-    mutate(finalFormData, {
-      onSuccess: () => {
-        router.push(pathname.replace('/create', ''));
-      },
-    });
+      mutate(finalFormData, {
+        onSuccess: () => {
+          router.push(pathname.replace('/create', ''));
+        },
+      });
+    } catch {}
   };
 
   const handleWarehouseSelect = (value: string) => {

@@ -41,7 +41,7 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
           variant='outline'
           role='combobox'
           aria-expanded={open}
-          className='w-[200px] justify-between'
+          className='w-[200px] justify-between border-none'
         >
           {value
             ? requests

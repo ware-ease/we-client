@@ -37,7 +37,7 @@ export const mapGoodNoteDetails = (data: GoodNoteRow[]): GoodNoteDetail[] => {
         toast.error(`Số lượng không hợp lệ cho sản phẩm ${row.name}`);
         seenErrors.add(row.productId || '');
       }
-      return;
+      throw new Error();
     }
 
     // Check if quantity is integer for unitType === 0
@@ -46,13 +46,13 @@ export const mapGoodNoteDetails = (data: GoodNoteRow[]): GoodNoteDetail[] => {
         toast.error(`Số lượng phải là số nguyên cho sản phẩm ${row.name}`);
         seenErrors.add(row.productId || '');
       }
-      return;
+      throw new Error();
     }
 
-    if (!row.batch && row.isBatchManaged === true) {
-      toast.error(`Mã lô của sản phẩm ${row.name} không được để trống!`);
-      return;
-    }
+    // if (!row.batch && row.isBatchManaged === true) {
+    //   toast.error(`Mã lô của sản phẩm ${row.name} không được để trống!`);
+    //   throw new Error();
+    // }
 
     // Add valid row to result
     validDetails.push({
@@ -96,7 +96,7 @@ export const mapGoodRequestDetails = (
           toast.error(`Số lượng không hợp lệ cho sản phẩm ${name}`);
           seenErrors.add(productId);
         }
-        return acc;
+        throw new Error();
       }
 
       // Check if quantity is integer for unitType === 0
@@ -105,7 +105,7 @@ export const mapGoodRequestDetails = (
           toast.error(`Số lượng phải là số nguyên cho sản phẩm ${name}`);
           seenErrors.add(productId);
         }
-        return acc;
+        throw new Error();
       }
 
       // Aggregate quantity
@@ -115,4 +115,52 @@ export const mapGoodRequestDetails = (
       return acc;
     }, {} as Record<string, { productId: string; quantity: number }>)
   );
+};
+
+export interface GoodIssueDetail {
+  productId: string;
+  quantity: number;
+  note: string;
+}
+
+export const mapGoodIssueDetails = (data: GoodNoteRow[]): GoodIssueDetail[] => {
+  const validDetails: GoodIssueDetail[] = [];
+  const seenErrors = new Set<string>(); // Track productIds with errors to avoid duplicate toasts
+
+  data.forEach((row) => {
+    // Convert quantity to number
+    const quantity = Number(row.quantity);
+
+    // Check if quantity is valid
+    if (isNaN(quantity)) {
+      if (!seenErrors.has(row.productId || '')) {
+        toast.error(`Số lượng không hợp lệ cho sản phẩm ${row.name}`);
+        seenErrors.add(row.productId || '');
+      }
+      throw new Error();
+    }
+
+    // Check if quantity is integer for unitType === 0
+    if (row.unitType === 0 && !Number.isInteger(quantity)) {
+      if (!seenErrors.has(row.productId || '')) {
+        toast.error(`Số lượng phải là số nguyên cho sản phẩm ${row.name}`);
+        seenErrors.add(row.productId || '');
+      }
+      throw new Error();
+    }
+
+    // if (!row.batch && row.isBatchManaged === true) {
+    //   toast.error(`Mã lô của sản phẩm ${row.name} không được để trống!`);
+    //   throw new Error();
+    // }
+
+    // Add valid row to result
+    validDetails.push({
+      quantity,
+      note: row.note,
+      productId: row.productId || '',
+    });
+  });
+
+  return validDetails;
 };

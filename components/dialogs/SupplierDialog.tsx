@@ -38,7 +38,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
     email: '',
     phone: '',
     address: '',
-    // status: 'active',
+    status: true,
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -85,7 +85,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
           email: newSupplier.email,
           phone: newSupplier.phone ?? '',
           address: newSupplier.address ?? '',
-          status: newSupplier.status ?? false,
+          status: newSupplier.status ?? true,
         },
         {
           onSuccess: () => {
@@ -107,7 +107,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
             email: '',
             phone: '',
             address: '',
-            // status: 'active',
+            status: true,
           });
         },
         onError: () => {

@@ -34,7 +34,7 @@ const initialColumns: Column[] = [
   { header: 'Tên hàng', key: 'name', width: 200 },
   { header: 'ĐVT', key: 'unit', width: 85 },
   { header: 'Số lượng', key: 'quantity', width: 80 },
-  { header: 'Mã lô', key: 'batch', width: 80 },
+  // { header: 'Mã lô', key: 'batch', width: 80 },
   { header: 'NSX', key: 'mfgDate', width: 120 },
   { header: 'HSD', key: 'expDate', width: 120 },
   { header: 'Ghi chú', key: 'note', width: 200 },
@@ -122,7 +122,7 @@ const CustomRequestTable: React.FC<CustomTableProps> = ({
               />
             ),
             name: <div className='p-2 truncate'>{rowData.name}</div>,
-            unit: <div className='p-2 truncate'>{product?.unit}</div>,
+            unit: <div className='p-2 truncate'>{rowData.unit}</div>,
             quantity: (
               <input
                 type='number'

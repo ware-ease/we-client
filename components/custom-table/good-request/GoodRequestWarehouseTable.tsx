@@ -88,15 +88,15 @@ export const columns: ColumnDef<GoodRequest>[] = [
       title: 'Kho nhận yêu cầu',
     },
   },
-  {
-    accessorKey: 'note',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Ghi chú' />
-    ),
-    meta: {
-      title: 'Ghi chú',
-    },
-  },
+  // {
+  //   accessorKey: 'note',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Ghi chú' />
+  //   ),
+  //   meta: {
+  //     title: 'Ghi chú',
+  //   },
+  // },
   {
     accessorKey: 'goodNoteCount',
     header: ({ column }) => (

@@ -65,34 +65,36 @@ const ReceiptCreate = () => {
   const currentWarehouse = useCurrentWarehouse();
 
   const handleSubmit = () => {
-    const finalFormData = {
-      ...formData,
-      goodNoteDetails: mapGoodNoteDetails(data),
-      requestedWarehouseId: currentWarehouse?.id,
-    };
+    try {
+      const finalFormData = {
+        ...formData,
+        goodNoteDetails: mapGoodNoteDetails(data),
+        requestedWarehouseId: currentWarehouse?.id,
+      };
 
-    if (finalFormData.goodNoteDetails.length === 0) {
-      return;
-    }
+      if (finalFormData.goodNoteDetails.length === 0) {
+        return;
+      }
 
-    if (finalFormData.shipperName?.trim() === '') {
-      toast.error('Vui lòng điền tên người giao hàng');
-      return;
-    }
+      if (finalFormData.shipperName?.trim() === '') {
+        toast.error('Vui lòng điền tên người giao hàng');
+        return;
+      }
 
-    if (transferReqs?.find((r) => r.id === formData.goodRequestId)) {
-      mutateInternal(finalFormData, {
-        onSuccess: () => {
-          router.push(pathname.replace('/create', ''));
-        },
-      });
-    } else {
-      mutate(finalFormData, {
-        onSuccess: () => {
-          router.push(pathname.replace('/create', ''));
-        },
-      });
-    }
+      if (transferReqs?.find((r) => r.id === formData.goodRequestId)) {
+        mutateInternal(finalFormData, {
+          onSuccess: () => {
+            router.push(pathname.replace('/create', ''));
+          },
+        });
+      } else {
+        mutate(finalFormData, {
+          onSuccess: () => {
+            router.push(pathname.replace('/create', ''));
+          },
+        });
+      }
+    } catch {}
   };
 
   const handleRequestSelect = (value: string) => {
@@ -130,122 +132,151 @@ const ReceiptCreate = () => {
   }, [reqDetails]);
 
   return (
-    <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-6 bg-gray-50'>
-      {/* Header and Request ComboBox */}
-      <div className='flex items-center justify-between mb-6 bg-white p-6 rounded-lg shadow-sm'>
-        <h1 className='text-2xl font-bold text-gray-800'>Phiếu nhập kho</h1>
-        <div className='flex items-center space-x-4'>
-          <span className='text-sm text-gray-600 font-medium'>Yêu cầu từ:</span>
-          <div className='w-64'>
-            <RequestComboBox
-              value={formData.goodRequestId ?? ''}
-              requests={requests?.concat(
-                transferReqs?.filter((r) => r.status === 4) || []
-              )}
-              onChange={(value) => handleRequestSelect(value)}
-            />
+    <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
+      <div className='w-full max-w-4xl bg-white rounded-xl shadow-lg p-6'>
+        <div className='flex justify-between'>
+          <h1 className='text-2xl font-bold text-gray-800 mb-6'>
+            Phiếu nhập kho
+          </h1>
+          {/* Yêu cầu từ */}
+          <div>
+            <label
+              htmlFor='goodRequestId'
+              className='block text-sm font-medium text-gray-700'
+            >
+              Yêu cầu từ
+            </label>
+            <div className='mt-1'>
+              <RequestComboBox
+                value={formData.goodRequestId ?? ''}
+                requests={requests?.concat(
+                  transferReqs?.filter((r) => r.status === 4) || []
+                )}
+                onChange={(value) => handleRequestSelect(value)}
+              />
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* Form Fields */}
-      <div className='bg-white p-6 rounded-lg shadow-sm mb-6'>
-        <div className='grid grid-cols-3 gap-6'>
-          {/* Column 1 */}
-          <div className='flex flex-col space-y-4'>
+        <div className='space-y-4'>
+          {/* General Info Section */}
+          <div className='grid grid-cols-2 gap-4'>
+            {/* Mã phiếu */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='code'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Mã phiếu
               </label>
               <Input
+                id='code'
                 name='code'
-                value={'Hệ thống tự tạo'}
+                value='Hệ thống tự tạo'
                 disabled
                 onChange={handleChange}
-                className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
               />
             </div>
+            {/* Ngày tạo */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='date'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Ngày tạo
               </label>
               <Input
+                id='date'
                 name='date'
                 defaultValue={formData.date}
                 type='date'
-                // onChange={handleChange}
-                className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
                 required
               />
             </div>
-          </div>
-
-          {/* Column 2 */}
-          <div className='flex flex-col space-y-4'>
+            {/* Nhà cung cấp */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='supplierName'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Nhà cung cấp
               </label>
               <Input
+                id='supplierName'
                 value={supplierName}
                 disabled
-                className='w-full border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
               />
             </div>
+            {/* Người giao hàng */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='shipperName'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Người giao hàng
               </label>
               <Input
+                id='shipperName'
                 name='shipperName'
                 value={formData.shipperName}
                 onChange={handleChange}
-                className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
                 required
               />
             </div>
-          </div>
-
-          {/* Column 3 */}
-          <div className='flex flex-col space-y-4'>
+            {/* Kho nhập */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='warehouse'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Kho nhập
               </label>
               <Input
+                id='warehouse'
                 value={currentWarehouse?.name ?? ''}
                 disabled
-                className='w-full border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
               />
             </div>
+            {/* Người nhận hàng */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='receiverName'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Người nhận hàng
               </label>
               <Input
+                id='receiverName'
                 name='receiverName'
                 value={formData.receiverName}
                 disabled
-                className='w-full border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
               />
             </div>
           </div>
+
+          {/* Table Section */}
+          <div>
+            <h2 className='text-lg font-semibold text-gray-800 mb-4'>
+              Chi tiết nhập kho
+            </h2>
+            <CustomTable initialData={initialData} onDataChange={setData} />
+          </div>
+
+          {/* Form Actions */}
+          <div className='flex justify-end space-x-4'>
+            <Button
+              onClick={handleSubmit}
+              className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
+            >
+              Tạo phiếu
+            </Button>
+          </div>
         </div>
-      </div>
-
-      {/* Table */}
-      <div className='bg-white p-6 rounded-lg shadow-sm mb-6'>
-        <CustomTable initialData={initialData} onDataChange={setData} />
-      </div>
-
-      {/* Submit Button */}
-      <div className='flex justify-end'>
-        <Button
-          onClick={handleSubmit}
-          className='bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md'
-        >
-          Tạo phiếu
-        </Button>
       </div>
     </div>
   );

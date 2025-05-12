@@ -34,7 +34,7 @@ const initialColumns: Column[] = [
   { header: 'Tên hàng', key: 'name', width: 200 },
   { header: 'ĐVT', key: 'unit', width: 85 },
   { header: 'Số lượng', key: 'quantity', width: 80 },
-  { header: 'Mã lô', key: 'batch', width: 80 },
+  // { header: 'Mã lô', key: 'batch', width: 80 },
   { header: 'NSX', key: 'mfgDate', width: 120 },
   { header: 'HSD', key: 'expDate', width: 120 },
   { header: 'Ghi chú', key: 'note', width: 240 },
@@ -79,7 +79,6 @@ const CustomIssueTable: React.FC<CustomTableProps> = ({
     ) {
       setRows(
         initialData.map((rowData, index) => {
-          const product = products.find((p) => p.id === rowData.productId);
           const row: Row = {
             sku: (
               <ProductComboBox
@@ -90,7 +89,7 @@ const CustomIssueTable: React.FC<CustomTableProps> = ({
               />
             ),
             name: <div className='p-2 truncate'>{rowData.name}</div>,
-            unit: <div className='p-2 truncate'>{product?.unit}</div>,
+            unit: <div className='p-2 truncate'>{rowData.unit}</div>,
             quantity: (
               <input
                 type='number'
