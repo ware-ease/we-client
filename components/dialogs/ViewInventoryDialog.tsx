@@ -15,7 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/shadcn-base/Dialog';
-import { Label } from '@/components/shadcn-base/Label';
 import { Inventory } from '@/types/warehouse';
 import { Eye } from 'lucide-react';
 import React from 'react';
@@ -75,171 +74,140 @@ const ViewInventoryDialog: React.FC<ViewInventoryDialogProps> = ({
             </DialogTitle>
           </DialogHeader>
 
-          <div className='mt-4 space-y-6 text-sm text-gray-800'>
-            {/* --- THÔNG TIN TỒN KHO --- */}
-            <div className='pt-4 border-t border-gray-200'>
-              <h3 className='text-lg font-semibold text-gray-800 mb-3'>
+          <div className='grid grid-cols-2 gap-6'>
+            {/* Ô 1: Tồn kho */}
+            <section className='rounded-2xl bg-gray-50 p-5 shadow-sm border border-gray-200 space-y-3'>
+              <h3 className='text-lg font-semibold text-[#1E3A8A]'>
                 Thông tin tồn kho
               </h3>
-              <div className='grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md'>
-                <div>
-                  <Label className='text-sm text-gray-500'>Hiện có</Label>
-                  <p className='font-medium text-gray-700'>{currentQuantity}</p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Đã sắp xếp</Label>
-                  <p className='font-medium text-gray-700'>
-                    {arrangedQuantity ?? 'Chưa có thông tin'}
-                  </p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Chưa sắp xếp</Label>
-                  <p className='font-medium text-gray-700'>
-                    {notArrgangedQuantity ?? 'Chưa có thông tin'}
-                  </p>
-                </div>
+              <div className='space-y-2 text-sm text-gray-700'>
+                <p>
+                  <span className='text-gray-500'>Hiện có:</span>{' '}
+                  {currentQuantity}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Đã sắp xếp:</span>{' '}
+                  {arrangedQuantity ?? 'Chưa có thông tin'}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Chưa sắp xếp:</span>{' '}
+                  {notArrgangedQuantity ?? 'Chưa có thông tin'}
+                </p>
               </div>
-            </div>
+            </section>
 
-            {/* --- THÔNG TIN SẢN PHẨM --- */}
-            <div className='pt-4 border-t border-gray-200'>
-              <h3 className='text-lg font-semibold text-gray-800 mb-3'>
+            {/* Ô 2: Sản phẩm */}
+            <section className='rounded-2xl bg-gray-50 p-5 shadow-sm border border-gray-200 space-y-3'>
+              <h3 className='text-lg font-semibold text-[#1E3A8A]'>
                 Thông tin sản phẩm
               </h3>
-              <div className='grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md'>
-                <div>
-                  <Label className='text-sm text-gray-500'>Tên</Label>
-                  <p className='font-medium text-gray-700'>
-                    {batch.product?.name}
-                  </p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>SKU</Label>
-                  <p className='font-medium text-gray-700'>
-                    {batch.product?.sku}
-                  </p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Thương hiệu</Label>
-                  <p className='font-medium text-gray-700'>
-                    {batch.product?.brandName}
-                  </p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Đơn vị</Label>
-                  <p className='font-medium text-gray-700'>
-                    {batch.product?.unitName}
-                  </p>
-                </div>
+              <div className='space-y-2 text-sm text-gray-700'>
+                <p>
+                  <span className='text-gray-500'>Tên:</span>{' '}
+                  {batch.product?.name}
+                </p>
+                <p>
+                  <span className='text-gray-500'>SKU:</span>{' '}
+                  {batch.product?.sku}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Thương hiệu:</span>{' '}
+                  {batch.product?.brandName}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Đơn vị:</span>{' '}
+                  {batch.product?.unitName}
+                </p>
               </div>
-            </div>
+            </section>
 
-            {/* --- THÔNG TIN LÔ --- */}
-            <div className='pt-4 border-t border-gray-200'>
-              <h3 className='text-lg font-semibold text-gray-800mb-3'>
+            {/* Ô 3: Lô */}
+            <section className='rounded-2xl bg-gray-50 p-5 shadow-sm border border-gray-200 space-y-3'>
+              <h3 className='text-lg font-semibold text-[#1E3A8A]'>
                 Thông tin lô
               </h3>
-              <div className='grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md'>
-                <div>
-                  <Label className='text-sm text-gray-500'>Mã lô</Label>
-                  <p className='font-medium text-gray-700'>{batch.code}</p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Tên</Label>
-                  <p className='font-medium text-gray-700'>{batch.name}</p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>NSX</Label>
-                  <p className='font-medium text-gray-700'>{batch.mfgDate}</p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>HSD</Label>
-                  <p className='font-medium text-gray-700'>{batch.expDate}</p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Ngày nhập kho</Label>
-                  <p className='font-medium text-gray-700'>
-                    {batch.inboundDate}
-                  </p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Ngày tạo</Label>
-                  <p className='font-medium text-gray-700'>
-                    {formatDate(batch.createdTime)}
-                  </p>
-                </div>
+              <div className='space-y-2 text-sm text-gray-700'>
+                <p>
+                  <span className='text-gray-500'>Mã lô:</span> {batch.code}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Tên:</span> {batch.name}
+                </p>
+                <p>
+                  <span className='text-gray-500'>NSX:</span> {batch.mfgDate}
+                </p>
+                <p>
+                  <span className='text-gray-500'>HSD:</span> {batch.expDate}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Ngày nhập kho:</span>{' '}
+                  {batch.inboundDate}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Ngày tạo:</span>{' '}
+                  {formatDate(batch.createdTime)}
+                </p>
               </div>
-            </div>
+            </section>
 
-            {/* --- THÔNG TIN KHO --- */}
-            <div className='pt-4 border-t border-gray-200'>
-              <h3 className='text-lg font-semibold text-gray-800 mb-3'>
+            {/* Ô 4: Kho */}
+            <section className='rounded-2xl bg-gray-50 p-5 shadow-sm border border-gray-200 space-y-3'>
+              <h3 className='text-lg font-semibold text-[#1E3A8A]'>
                 Thông tin kho
               </h3>
-              <div className='grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-md'>
-                <div>
-                  <Label className='text-sm text-gray-500'>Tên</Label>
-                  <p className='font-medium text-gray-700'>{warehouse.name}</p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Điện thoại</Label>
-                  <p className='font-medium text-gray-700'>
-                    {warehouse.phone ?? 'Không có'}
-                  </p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Địa chỉ</Label>
-                  <p className='font-medium text-gray-700'>
-                    {warehouse.address}
-                  </p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Diện tích</Label>
-                  <p className='font-medium text-gray-700'>
-                    {warehouse.area} m²
-                  </p>
-                </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>
-                    Bắt đầu hoạt động
-                  </Label>
-                  <p className='font-medium text-gray-700'>
-                    {formatDate(warehouse.operateFrom)}
-                  </p>
-                </div>
+              <div className='space-y-2 text-sm text-gray-700'>
+                <p>
+                  <span className='text-gray-500'>Tên:</span> {warehouse.name}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Điện thoại:</span>{' '}
+                  {warehouse.phone ?? 'Không có'}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Địa chỉ:</span>{' '}
+                  {warehouse.address}
+                </p>
+                <p>
+                  <span className='text-gray-500'>Diện tích:</span>{' '}
+                  {warehouse.area} m²
+                </p>
+                <p>
+                  <span className='text-gray-500'>Bắt đầu hoạt động:</span>{' '}
+                  {formatDate(warehouse.operateFrom)}
+                </p>
               </div>
-            </div>
+            </section>
 
-            {/* --- THÔNG TIN TẠO --- */}
-            <div className='pt-4 border-t border-gray-200'>
-              <h3 className='text-lg font-semibold  text-gray-800 mb-3'>
+            {/* Ô dài cuối: Thông tin tạo */}
+            <section className='col-span-2 rounded-2xl bg-gray-50 p-5 shadow-sm border border-gray-200'>
+              <h3 className='text-lg font-semibold text-[#1E3A8A] mb-3'>
                 Thông tin tạo
               </h3>
-              <div className='grid grid-cols-2 gap-4 items-center bg-gray-50 p-4 rounded-md'>
+              <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-3'>
-                  <Avatar className='h-10 w-10'>
+                  <Avatar className='h-11 w-11'>
                     <AvatarImage src={inventory.createdByAvatarUrl} />
                     <AvatarFallback>
                       {inventory.createdByFullName?.[0] ?? '?'}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className='font-medium'>
+                    <p className='font-medium text-gray-800'>
                       {inventory.createdByFullName ?? 'Không rõ'}
                     </p>
-                    <p className='text-xs text-gray-500'>
+                    <p className='text-sm text-gray-500'>
                       {inventory.createdByGroup ?? 'Không có'}
                     </p>
                   </div>
                 </div>
-                <div>
-                  <Label className='text-sm text-gray-500'>Ngày tạo</Label>
-                  <p className='font-medium text-gray-700'>
+                <div className='text-sm text-gray-700'>
+                  <p className='text-gray-500'>Ngày tạo</p>
+                  <p className='font-medium'>
                     {formatDate(inventory.createdTime)}
                   </p>
                 </div>
               </div>
-            </div>
+            </section>
           </div>
 
           <DialogFooter className='mt-6 flex justify-end'>
