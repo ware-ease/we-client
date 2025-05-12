@@ -20,6 +20,13 @@ import { Unit } from '@/types/unit';
 import { Edit, Search, Trash2, X } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../shadcn-base/Select';
 import { DeleteDialog } from './DeleteDialog';
 
 interface UnitDialogProps {
@@ -43,6 +50,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
   const [editingUnit, setEditingUnit] = useState<string | null>(null);
   const [editedUnit, setEditedUnit] = useState<Partial<Unit>>({});
   const [unitToDelete, setUnitToDelete] = useState<Unit | null>(null);
+  const [unitValue, setUnitValue] = useState<string>('');
   const addUnitMutation = useAddUnit();
   const updateUnitMutation = useUpdateUnit();
   const deleteUnitMutation = useDeleteUnit();
@@ -148,16 +156,57 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
                 className='bg-white'
               />
             </div>
-            <div>
-              <Label>Type</Label>
-              <Input
-                value={newUnit.type}
-                onChange={(e) =>
-                  setNewUnit({ ...newUnit, type: parseInt(e.target.value) })
-                }
-                className='bg-white'
-              />
+            <div className='space-y-2'>
+              <div>
+                <Label>Loại</Label>
+                <Select
+                  onValueChange={(value) => {
+                    setNewUnit({ ...newUnit, type: parseInt(value) });
+                    setUnitValue(''); // reset lại giá trị khi đổi loại
+                  }}
+                  value={newUnit.type?.toString() ?? ''}
+                >
+                  <SelectTrigger className='bg-white'>
+                    <SelectValue placeholder='Chọn loại' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value='0'>Số nguyên</SelectItem>
+                    <SelectItem value='1'>Số thập phân</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {newUnit.type !== undefined && (
+                <div>
+                  <Label>Nhập giá trị</Label>
+                  <Input
+                    value={unitValue}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      const val = e.target.value;
+                      const isInteger = /^[0-9]*$/;
+                      const isDecimal = /^[0-9]*\.?[0-9]*$/;
+
+                      if (
+                        (newUnit.type === 0 &&
+                          (val === '' || isInteger.test(val))) ||
+                        (newUnit.type === 1 &&
+                          (val === '' || isDecimal.test(val)))
+                      ) {
+                        setUnitValue(val);
+                      }
+                    }}
+                    className='bg-white'
+                    type='text'
+                    placeholder={
+                      newUnit.type === 0
+                        ? 'Chỉ nhập số nguyên'
+                        : 'Nhập số thập phân'
+                    }
+                  />
+                </div>
+              )}
             </div>
+
             <div className='flex justify-end mt-3 space-x-2'>
               <Button onClick={handleSaveUnit}>
                 {newUnit.id ? 'Lưu thay đổi' : 'Lưu và chọn'}
