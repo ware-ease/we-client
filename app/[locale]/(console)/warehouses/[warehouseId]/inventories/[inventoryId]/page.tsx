@@ -3,7 +3,6 @@ import React from 'react';
 import { useParams } from 'next/navigation';
 import { useInventoryById } from '@/hooks/queries/inventoryQueries'; // Assumed hook
 import { useWarehouseById } from '@/hooks/queries/warehouseQueries'; // Assumed hook
-import PutawayDialog from '@/components/dialogs/PutAwayDialog';
 
 const InventoryDetail: React.FC = () => {
   const { warehouseId, inventoryId } = useParams<{
@@ -62,13 +61,6 @@ const InventoryDetail: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Putaway Dialog */}
-      <PutawayDialog
-        warehouse={warehouse}
-        inventory={inventory}
-        inventoryLocations={inventory.inventoryLocations || []}
-      />
     </div>
   );
 };
