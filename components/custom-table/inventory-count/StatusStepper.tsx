@@ -10,7 +10,6 @@ import { useUpdateInventoryCount } from '@/hooks/queries/inventoryCountQueries';
 import { cn } from '@/lib/utils/utils';
 import { InventoryCount } from '@/types/inventoryCount';
 import { CheckCircle, Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface StatusStepperProps {
@@ -63,7 +62,7 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
   const [countedQuantities, setCountedQuantities] = useState<
     Record<string, number>
   >({});
-  const router = useRouter();
+  // const router = useRouter();
 
   // Use the mutation hook to update inventory count
   const { mutate: updateInventoryCountMutate } = useUpdateInventoryCount();
@@ -71,9 +70,10 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
   const handleNextStep = async () => {
     if (currentStatus === 0) {
       setOpen(true); // Open dialog for "Chờ xử lý" step
-    } else if (currentStatus === 1) {
-      router.push(`/inventory-counts/adjustment?id=${inventoryCounts}`);
     }
+    // else if (currentStatus === 1) {
+    //   router.push(`/inventory-counts/adjustment?id=${inventoryCounts}`);
+    // }
   };
 
   const handleCountedQuantityChange = (

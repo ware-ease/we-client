@@ -32,3 +32,13 @@ export interface InventoryCountDetail extends Base {
   batchCode?: string;
   productName?: string;
 }
+export interface InventoryAdjutment extends Base {
+  date: string;
+  reason: string;
+  note: string;
+  documentType: 0;
+  relatedDocument: string;
+  warehouseId: string;
+  inventoryCountId: string;
+  inventoryCount?: InventoryCount;
+}
