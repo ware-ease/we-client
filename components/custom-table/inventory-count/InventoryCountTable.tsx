@@ -250,6 +250,7 @@ const InventoryCountTable = () => {
             )
           : []
       }
+      // data={isSuccess ? inventoryCounts : []}
     >
       <div className='w-full flex justify-between'>
         <div className='space-x-2'>
@@ -273,7 +274,7 @@ const InventoryCountTable = () => {
             )}
             onClick={() => toggleStatusFilter(0)}
           >
-            Chờ xử lý
+            Chưa kiểm kê
           </Button>
           <Button
             className={cn(
@@ -284,7 +285,7 @@ const InventoryCountTable = () => {
             )}
             onClick={() => toggleStatusFilter(1)}
           >
-            Đã đồng ý
+            Đã kiểm kê
           </Button>
           <Button
             className={cn(
@@ -295,9 +296,9 @@ const InventoryCountTable = () => {
             )}
             onClick={() => toggleStatusFilter(2)}
           >
-            Đã từ chối
+            Đã câng bằng
           </Button>
-          <Button
+          {/* <Button
             className={cn(
               'rounded-3xl text-green-500 border-2 border-green-500',
               statusParams.includes(3)
@@ -307,7 +308,7 @@ const InventoryCountTable = () => {
             onClick={() => toggleStatusFilter(3)}
           >
             Hoàn thành
-          </Button>
+          </Button> */}
         </div>
         <Link href={`${pathname}/create`}>
           <Button>Thêm</Button>

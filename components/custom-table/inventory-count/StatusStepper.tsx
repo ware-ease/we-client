@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from '@/components/shadcn-base/Dialog';
 import { useUpdateInventoryCount } from '@/hooks/queries/inventoryCountQueries';
+import { cn } from '@/lib/utils/utils';
 import { InventoryCount } from '@/types/inventoryCount';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -53,13 +54,15 @@ interface StatusStepperProps {
 //   createdByGroup?: string | null;
 // }
 
-const statusLabels = ['Chờ xử lý', 'Hoàn thành', 'Đã kiểm duyệt'];
+const statusLabels = ['Chưa kiểm kê', 'Đã kiểm kê ', 'Đã câng bằng'];
 
 const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState(status); // Track the current statu
-  const [countedQuantity, setCountedQuantity] = useState<number>(0); // Track the countedQuantity
+  const [currentStatus, setCurrentStatus] = useState(status);
+  const [countedQuantities, setCountedQuantities] = useState<
+    Record<string, number>
+  >({});
   const router = useRouter();
 
   // Use the mutation hook to update inventory count
@@ -74,10 +77,16 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
   };
 
   const handleCountedQuantityChange = (
+    productId: string,
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setCountedQuantity(Number(event.target.value)); // Update countedQuantity when user types
+    setCountedQuantities((prev) => ({
+      ...prev,
+      [productId]: Number(event.target.value), // Update countedQuantity for specific product
+    }));
   };
+  console.log(inventoryCounts);
+
   const confirmUpdateQuantity = async () => {
     setLoading(true);
     try {
@@ -91,34 +100,51 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
         return timeString.split(':').slice(0, 2).join(':'); // Lấy HH:mm
       };
 
-      const { inventoryCountDetails, ...cleanedInventoryCounts } =
-        inventoryCounts;
+      const { inventoryCountDetails } = inventoryCounts;
 
       const updatedData = {
-        ...cleanedInventoryCounts,
+        note: inventoryCounts.note,
+        date: inventoryCounts.date,
         startTime: formatToHHmm(inventoryCounts.startTime),
         endTime: formatToHHmm(inventoryCounts.endTime),
-        status: 1,
         inventoryCountDetails:
           inventoryCountDetails?.map((detail) => ({
-            ...detail,
-            countedQuantity,
-            createdByAvatarUrl: detail.createdByAvatarUrl ?? undefined,
-            createdByFullName: detail.createdByFullName ?? undefined,
-            createdByGroup: detail.createdByGroup ?? undefined,
+            id: detail.id,
+            countedQuantity: countedQuantities[detail.id || ''] ?? 0,
+            note: detail.note,
+            // accountId: detail.accountId,
+            inventoryId: detail.inventoryId,
+            errorTicketId: detail.errorTicketId,
           })) || [],
       };
 
-      await updateInventoryCountMutate({
-        id: inventoryCounts.id,
-        inventoryCount: updatedData,
-      });
-
-      const nextStatus = currentStatus + 1;
-      if (nextStatus < statusLabels.length) {
-        setCurrentStatus(nextStatus);
-        handleNextStep();
-      }
+      console.log('Updated data to be sent:', updatedData);
+      await updateInventoryCountMutate(
+        {
+          id: inventoryCounts.id,
+          inventoryCount: updatedData,
+        },
+        {
+          onSuccess: () => {
+            const nextStatus = currentStatus + 1;
+            if (nextStatus < statusLabels.length) {
+              setCurrentStatus(nextStatus);
+              //   if (nextStatus === 1) {
+              //     router.push(
+              //       `/inventory-counts/adjustment?id=${inventoryCounts.id}`
+              //     );
+              //   }
+            }
+            setOpen(false);
+          },
+          onError: (error) => {
+            console.error('Lỗi khi cập nhật inventory count:', error);
+          },
+          onSettled: () => {
+            setLoading(false);
+          },
+        }
+      );
     } catch (error) {
       console.error('Lỗi khi cập nhật inventory count:', error);
     } finally {
@@ -129,25 +155,56 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
 
   return (
     <div className='flex items-center space-x-2'>
-      {statusLabels.map((label, index) => (
-        <Button
-          key={index}
-          size='sm'
-          variant={index === currentStatus ? 'default' : 'outline'}
-          disabled={index < currentStatus}
-          onClick={() => index === currentStatus && handleNextStep()}
-          className={`transition-all duration-300 ${
-            index === currentStatus
-              ? 'font-semibold bg-blue-500 text-white'
-              : ''
-          }`}
-        >
-          {index < currentStatus ? (
-            <CheckCircle size={16} className='mr-1 text-green-500' />
-          ) : null}
-          {label}
-        </Button>
-      ))}
+      {statusLabels.map((label, index) => {
+        const isActive = index === currentStatus;
+        const isCompleted = index < currentStatus;
+
+        const getButtonStyle = (index: number) => {
+          if (index === 0) {
+            return cn(
+              'rounded-3xl text-yellow-500 border-2 border-yellow-500',
+              isActive
+                ? 'bg-yellow-500 text-white hover:bg-yellow-600'
+                : 'bg-white hover:bg-slate-50'
+            );
+          }
+          if (index === 1) {
+            return cn(
+              'rounded-3xl text-green-400 border-2 border-green-400',
+              isActive
+                ? 'bg-green-400 text-white hover:bg-green-500'
+                : 'bg-white hover:bg-slate-50'
+            );
+          }
+          if (index === 2) {
+            return cn(
+              'rounded-3xl text-red-500 border-2 border-red-500',
+              isActive
+                ? 'bg-red-500 text-white hover:bg-red-600'
+                : 'bg-white hover:bg-slate-50'
+            );
+          }
+          return 'rounded-3xl border';
+        };
+
+        return (
+          <Button
+            key={index}
+            size='sm'
+            disabled={!isActive}
+            onClick={() => isActive && handleNextStep()}
+            className={cn(
+              getButtonStyle(index),
+              'transition-all duration-300 flex items-center gap-1'
+            )}
+          >
+            {isCompleted && (
+              <CheckCircle size={16} className='text-green-500' />
+            )}
+            {label}
+          </Button>
+        );
+      })}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className='p-6 bg-white rounded-lg shadow-xl max-w-3xl max-h-[80vh] overflow-y-auto'>
           <DialogHeader>
@@ -300,8 +357,10 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
                       <td className='px-4 py-2'>
                         <input
                           type='number'
-                          value={countedQuantity}
-                          onChange={handleCountedQuantityChange}
+                          value={countedQuantities[detail.id || ''] || ''}
+                          onChange={(e) =>
+                            handleCountedQuantityChange(detail.id || '', e)
+                          }
                           className='w-full p-2.5 border border-gray-300 rounded-lg text-gray-700 bg-gray-50 focus:ring-2 focus:ring-blue-500'
                         />
                       </td>
