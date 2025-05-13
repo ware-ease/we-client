@@ -233,14 +233,10 @@ const ReportStockCard = () => {
                       {detail.description}
                     </td>
                     <td className='border border-gray-200 p-2 text-right'>
-                      {detail.import > 0
-                        ? detail.import.toLocaleString('vi-VN')
-                        : ''}
+                      {detail.import !== 0 ? detail.import : ''}
                     </td>
                     <td className='border border-gray-200 p-2 text-right'>
-                      {detail.export > 0
-                        ? detail.export.toLocaleString('vi-VN')
-                        : ''}
+                      {detail.export !== 0 ? detail.export : ''}
                     </td>
                     <td className='border border-gray-200 p-2 text-right'>
                       {detail.stock.toLocaleString('vi-VN')}
@@ -338,14 +334,10 @@ const ReportStockCard = () => {
                       {detail.description}
                     </td>
                     <td className='border border-black p-2 text-right'>
-                      {detail.import > 0
-                        ? detail.import.toLocaleString('vi-VN')
-                        : ''}
+                      {detail.import !== 0 ? detail.import : ''}
                     </td>
                     <td className='border border-black p-2 text-right'>
-                      {detail.export > 0
-                        ? detail.export.toLocaleString('vi-VN')
-                        : ''}
+                      {detail.export !== 0 ? detail.export : ''}
                     </td>
                     <td className='border border-black p-2 text-right'>
                       {detail.stock.toLocaleString('vi-VN')}
