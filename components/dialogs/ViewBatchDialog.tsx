@@ -59,7 +59,7 @@ const ViewBatchDialog: React.FC<ViewBatchDialogProps> = ({ batch }) => {
                 </div>
                 <div>
                   <Label className='text-sm text-gray-500'>Tên sản phẩm</Label>
-                  <p>{batch.productName || 'Không có tên sản phẩm'}</p>
+                  <p>{batch.product?.name || 'Không có tên sản phẩm'}</p>
                 </div>
                 <div>
                   <Label className='text-sm text-gray-500'>Ngày nhập</Label>
