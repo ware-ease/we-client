@@ -143,7 +143,11 @@ const IssueCreate = () => {
             <div className='mt-1'>
               <RequestComboBox
                 value={formData.goodRequestId ?? ''}
-                requests={requests?.concat(transferReqs || [])}
+                requests={requests?.concat(
+                  transferReqs?.filter(
+                    (r) => r.requestedWarehouseId === currentWarehouse?.id
+                  ) || []
+                )}
                 onChange={(value) => handleRequestSelect(value)}
               />
             </div>
