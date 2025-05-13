@@ -59,107 +59,125 @@ const WarehouseRequestCreate = () => {
   };
 
   return (
-    <div className='flex flex-col w-full min-h-[calc(100vh-3rem)] p-6 bg-gray-50'>
-      {/* Header */}
-      <div className='flex mb-6 bg-white p-6 rounded-lg shadow-sm'>
-        <h1 className='text-2xl font-bold text-gray-800'>Tạo yêu cầu</h1>
-      </div>
-
-      {/* Form Fields */}
-      <div className='bg-white p-6 rounded-lg shadow-sm mb-6'>
-        <div className='grid grid-cols-3 gap-6'>
-          {/* Column 1 */}
-          <div className='flex flex-col space-y-4'>
+    <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
+      <div className='w-full max-w-4xl bg-white rounded-xl shadow-lg p-6'>
+        <h1 className='text-2xl font-bold text-gray-800 mb-6'>
+          Tạo yêu cầu chuyển kho
+        </h1>
+        <div className='space-y-4'>
+          {/* General Info Section */}
+          <div className='grid grid-cols-2 gap-4'>
+            {/* Mã yêu cầu */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='code'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Mã yêu cầu
               </label>
               <Input
+                id='code'
                 name='code'
-                value={'Hệ thống tự tạo'}
-                onChange={handleChange}
-                className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+                value='Hệ thống tự tạo'
                 disabled
+                onChange={handleChange}
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
               />
             </div>
-          </div>
-
-          {/* Column 2 */}
-          <div className='flex flex-col space-y-4'>
+            {/* Loại yêu cầu */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='requestType'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Loại yêu cầu
               </label>
               <Input
+                id='requestType'
                 name='requestType'
-                value={'Chuyển'}
-                onChange={handleChange}
-                className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+                value='Chuyển'
                 disabled
+                onChange={handleChange}
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
               />
             </div>
+            {/* Kho yêu cầu */}
             {currentWarehouse && (
               <div>
-                <label className='block text-sm font-medium text-gray-700 mb-1'>
-                  {'Kho yêu cầu'}
+                <label
+                  htmlFor='requestingWarehouse'
+                  className='block text-sm font-medium text-gray-700'
+                >
+                  Kho yêu cầu
                 </label>
                 <Input
-                  name='requestType'
+                  id='requestingWarehouse'
+                  name='requestingWarehouse'
                   value={currentWarehouse?.name}
-                  onChange={handleChange}
-                  className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
                   disabled
+                  onChange={handleChange}
+                  className='mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
                 />
               </div>
             )}
-          </div>
-
-          {/* Column 3 */}
-          <div className='flex flex-col space-y-4'>
+            {/* Kho chuyển */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='requestedWarehouseId'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Kho chuyển
               </label>
-              <WarehouseComboBox
-                value={formData.requestedWarehouseId ?? ''}
-                onChange={(value) => handleWarehouseSelect(value)}
-              />
+              <div className='mt-1'>
+                <WarehouseComboBox
+                  value={formData.requestedWarehouseId ?? ''}
+                  onChange={(value) => handleWarehouseSelect(value)}
+                />
+              </div>
             </div>
+            {/* Diễn giải */}
             <div>
-              <label className='block text-sm font-medium text-gray-700 mb-1'>
+              <label
+                htmlFor='note'
+                className='block text-sm font-medium text-gray-700'
+              >
                 Diễn giải
               </label>
               <Input
+                id='note'
                 name='note'
                 value={formData.note}
                 onChange={handleChange}
-                className='w-full border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
                 required
               />
             </div>
           </div>
+
+          {/* Table Section */}
+          <div>
+            <h2 className='text-lg font-semibold text-gray-800 mb-4'>
+              Chi tiết yêu cầu
+            </h2>
+            {formData.requestedWarehouseId && (
+              <CustomRequestTable
+                warehouseId={formData.requestedWarehouseId}
+                isRequestDetails
+                onDataChange={setData}
+              />
+            )}
+          </div>
+
+          {/* Form Actions */}
+          <div className='flex justify-end space-x-4'>
+            <Button
+              onClick={handleSubmit}
+              className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
+            >
+              Tạo yêu cầu
+            </Button>
+          </div>
         </div>
-      </div>
-
-      {/* Table */}
-      <div className='bg-white p-6 rounded-lg shadow-sm mb-6'>
-        {formData.requestedWarehouseId && (
-          <CustomRequestTable
-            warehouseId={formData.requestedWarehouseId}
-            isRequestDetails
-            onDataChange={setData}
-          />
-        )}
-      </div>
-
-      {/* Submit Button */}
-      <div className='flex justify-end'>
-        <Button
-          onClick={handleSubmit}
-          className='bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-md'
-        >
-          Tạo yêu cầu
-        </Button>
       </div>
     </div>
   );

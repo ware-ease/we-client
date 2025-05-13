@@ -30,7 +30,7 @@ export interface RowData {
 }
 
 const initialColumns: Column[] = [
-  { header: 'Mã hàng', key: 'sku', width: 500 },
+  { header: 'Mã hàng', key: 'sku', width: 400 },
   { header: 'Tên hàng', key: 'name', width: 200 },
   { header: 'ĐVT', key: 'unit', width: 85 },
   { header: 'Số lượng', key: 'quantity', width: 80 },
