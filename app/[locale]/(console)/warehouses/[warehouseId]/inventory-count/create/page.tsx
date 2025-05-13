@@ -2,6 +2,7 @@
 import CustomInventoryCheckTable from '@/components/custom-table/CustomInventoryCheckTable';
 import { Button } from '@/components/shadcn-base/Button';
 import { Input } from '@/components/shadcn-base/Input';
+import { useAccounts } from '@/hooks/queries/accountQueries';
 import { useAddInventoryCount } from '@/hooks/queries/inventoryCountQueries';
 import { useWarehousesInventories } from '@/hooks/queries/warehouseQueries';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
@@ -36,6 +37,7 @@ type RowData = {
   countedQuantity: number;
   note?: string;
   errorTicketId?: string;
+  accountId: string;
 };
 
 const CheckInventoryCreate = () => {
@@ -49,7 +51,7 @@ const CheckInventoryCreate = () => {
     true,
     (warehouseId as string) ?? ''
   );
-
+  const { data: accountsData } = useAccounts();
   const { formData, handleChange } = useFormData<InventoryCount>({
     code: '',
     date: new Date().toISOString().split('T')[0],
@@ -72,6 +74,7 @@ const CheckInventoryCreate = () => {
         countedQuantity: parseFloat(row.countedQuantity.toString() || '0'),
         note: row.note,
         errorTicketId: row.errorTicketId || undefined,
+        accountId: row.accountId,
       })),
     };
 
@@ -83,8 +86,12 @@ const CheckInventoryCreate = () => {
 
     mutate(finalFormData, {
       onSuccess: () => {
-        toast.success('Tạo biên bản thành công');
-        router.push(pathname.replace('/create', ''));
+        router.push(
+          pathname.replace(
+            `/vi/wareohuses/${currentWarehouse?.id}/inventory-count`,
+            ''
+          )
+        );
       },
       onError: () => {
         toast.error('Tạo biên bản thất bại');
@@ -185,7 +192,8 @@ const CheckInventoryCreate = () => {
             ) : (
               <CustomInventoryCheckTable
                 inventories={inventoryData?.inventories || []}
-                onDataChange={setData}
+                onDataChange={(newData: RowData[]) => setData(newData)}
+                accounts={accountsData || []}
               />
             )}
           </div>

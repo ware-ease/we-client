@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
+import { Account } from '@/types/account';
 import { Inventory } from '@/types/warehouse';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import AccountComboBox from '../combo-boxes/AccountComboBox';
 import InventoryComboBox from '../combo-boxes/InventoryComboBox';
 import { Button } from '../shadcn-base/Button';
 
@@ -26,11 +28,13 @@ interface InventoryDetail {
 interface CustomInventoryCheckTableProps {
   initialData?: InventoryDetail[];
   inventories: Inventory[];
+  accounts: Account[];
   onDataChange: (data: InventoryDetail[]) => void;
 }
 
 const initialColumns: Column[] = [
   { header: 'Tên hàng (SKU)', key: 'inventoryId', width: 300 },
+  { header: 'Nhân viên', key: 'accountId', width: 200 },
   { header: 'Ghi chú', key: 'note', width: 200 },
   { header: 'Mã phiếu sự cố', key: 'errorTicketId', width: 100 },
 ];
@@ -38,6 +42,7 @@ const initialColumns: Column[] = [
 const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
   initialData = [],
   inventories,
+  accounts,
   onDataChange,
 }) => {
   const [rows, setRows] = useState<Row[]>([]);
@@ -56,6 +61,11 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
   const isAddButtonEnabled = useMemo(() => {
     return rows.length === 0 || selectedInventoryIds.length === rows.length;
   }, [rows, selectedInventoryIds]);
+
+  const getGroup3AccountId = () => {
+    const account = accounts.find((a) => a.groups?.some((g) => g.id === '3'));
+    return account?.id || '';
+  };
 
   const setInitialRows = () => {
     if (
@@ -82,6 +92,14 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
           );
 
           return {
+            accountId: (
+              <AccountComboBox
+                value={rowData.accountId || getGroup3AccountId()}
+                onChange={(value) => handleAccountSelect(index, value)}
+                accounts={accounts}
+              />
+            ),
+
             inventoryId: (
               <InventoryComboBox
                 value={rowData.inventoryId || ''}
@@ -114,14 +132,38 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
 
   useEffect(() => {
     const updatedData: InventoryDetail[] = rows.map((row, index) => ({
-      note: (row.note as any).props.value ?? '',
-      accountId: initialData[index]?.accountId || '',
-      inventoryId: (row.inventoryId as any).props.value ?? '',
+      note: row.note ? (row.note as any)?.props?.value ?? '' : '', // check null/undefined for note
+      accountId: row.accountId
+        ? (row.accountId as any)?.props?.value || ''
+        : '', // check null/undefined for accountId
+      inventoryId: row.inventoryId
+        ? (row.inventoryId as any)?.props?.value || ''
+        : '', // check null/undefined for inventoryId
       errorTicketId: initialData[index]?.errorTicketId || '',
       countedQuantity: 0,
     }));
+
     onDataChange(updatedData);
   }, [rows, onDataChange]);
+
+  const handleAccountSelect = (rowIndex: number, value: string) => {
+    setRows((prevRows) =>
+      prevRows.map((row, index) =>
+        index === rowIndex
+          ? {
+              ...row,
+              accountId: (
+                <AccountComboBox
+                  value={value}
+                  onChange={(v) => handleAccountSelect(index, v)}
+                  accounts={accounts}
+                />
+              ),
+            }
+          : row
+      )
+    );
+  };
 
   const handleInventorySelect = (
     rowIndex: number,
@@ -174,11 +216,39 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
     );
   };
 
+  const handleErrorTicketChange = (rowIndex: number, value: string) => {
+    setRows((prevRows) =>
+      prevRows.map((row, index) =>
+        index === rowIndex
+          ? {
+              ...row,
+              errorTicketId: (
+                <input
+                  type='text'
+                  className='w-full p-2'
+                  value={value}
+                  onChange={(e) => handleNoteChange(index, e.target.value)}
+                />
+              ),
+            }
+          : row
+      )
+    );
+  };
+
   const addRow = () => {
     const filteredInventories = inventories.filter(
       (i) => !selectedInventoryIds.includes(i.id)
     );
     const newRow: Row = {
+      accountId: (
+        <AccountComboBox
+          value={getGroup3AccountId()}
+          onChange={(value) => handleAccountSelect(rows.length, value)}
+          accounts={accounts} // Pass the accounts directly
+        />
+      ),
+
       inventoryId: (
         <InventoryComboBox
           value=''
@@ -264,6 +334,8 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
             {rows.map((row, i) => (
               <tr key={i} className='border-t'>
                 <td className='border px-3 py-2'>{row.inventoryId}</td>
+                <td className='border px-3 py-2'>{row.accountId}</td>
+
                 <td className='border px-3 py-2'>
                   <input
                     type='text'
@@ -276,9 +348,8 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
                 <td className='border px-3 py-2'>
                   <input
                     type='text'
-                    value={row.errorTicketId?.toString() || ''}
-                    onChange={(e) => handleNoteChange(i, e.target.value)}
-                    className='w-full border rounded px-2 py-1'
+                    className='w-full p-2'
+                    onChange={(e) => handleErrorTicketChange(i, e.target.value)}
                   />
                 </td>
                 <td className='text-center'>

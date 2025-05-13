@@ -29,4 +29,6 @@ export interface InventoryCountDetail extends Base {
   product?: Product;
   inventoryCount?: InventoryCount;
   accountId?: string;
+  batchCode?: string;
+  productName?: string;
 }

@@ -14,44 +14,44 @@ import { useState } from 'react';
 
 interface StatusStepperProps {
   status: number;
-  inventoryCounts: {
-    scheduleId?: string;
-    locationId?: string;
-    warehouseId?: string;
-    status?: number;
-    code?: string;
-    note?: string;
-    date?: string;
-    startTime?: string;
-    endTime?: string;
-    location?: Location;
-    inventoryCountDetailDTO?: InventoryCountDetailDTO[];
-    id?: string;
-    createdBy?: string;
-    createdTime?: string;
-    createdByAvatarUrl?: string;
-    createdByFullName?: string;
-    createdByGroup?: string;
-  };
+  inventoryCounts: InventoryCount;
+  //   {
+  //     scheduleId?: string;
+  //     locationId?: string;
+  //     warehouseId?: string;
+  //     status?: number;
+  //     code?: string;
+  //     note?: string;
+  //     date?: string;
+  //     startTime?: string;
+  //     endTime?: string;
+  //     location?: Location;
+  //     inventoryCountDetailDTO?: InventoryCountDetailDTO[];
+  //     id?: string;
+  //     createdBy?: string;
+  //     createdTime?: string;
+  //     createdByAvatarUrl?: string;
+  //     createdByFullName?: string;
+  //     createdByGroup?: string;
+  //   };
 }
-export interface InventoryCountDetailDTO {
-  id?: string;
-  accountId?: string;
-  inventoryId?: string;
-  batchId?: string;
-  batchCode?: string;
-  productName?: string;
-  expectedQuantity?: number;
-  countedQuantity?: number;
-  note?: string;
-  status?: number;
-  createdBy?: string;
-  createdTime?: string;
-  createdByAvatarUrl?: string | null;
-  createdByFullName?: string | null;
-  createdByGroup?: string | null;
-  inventoryCount?: InventoryCount;
-}
+// export interface InventoryCountDetailDTO {
+//   id?: string;
+//   accountId?: string;
+//   inventoryId?: string;
+//   batchId?: string;
+//   batchCode?: string;
+//   productName?: string;
+//   expectedQuantity?: number;
+//   countedQuantity?: number;
+//   note?: string;
+//   status?: number;
+//   createdBy?: string;
+//   createdTime?: string;
+//   createdByAvatarUrl?: string | null;
+//   createdByFullName?: string | null;
+//   createdByGroup?: string | null;
+// }
 
 const statusLabels = ['Chờ xử lý', 'Hoàn thành', 'Đã kiểm duyệt'];
 
@@ -64,7 +64,6 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
 
   // Use the mutation hook to update inventory count
   const { mutate: updateInventoryCountMutate } = useUpdateInventoryCount();
-  console.log(inventoryCounts);
 
   const handleNextStep = async () => {
     if (currentStatus === 0) {
@@ -92,23 +91,27 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
         return timeString.split(':').slice(0, 2).join(':'); // Lấy HH:mm
       };
 
-      const updatedInventoryCount: InventoryCount = {
-        ...inventoryCounts,
+      const { inventoryCountDetails, ...cleanedInventoryCounts } =
+        inventoryCounts;
+
+      const updatedData = {
+        ...cleanedInventoryCounts,
         startTime: formatToHHmm(inventoryCounts.startTime),
         endTime: formatToHHmm(inventoryCounts.endTime),
-        // inventoryCountDetails:
-        //   inventoryCounts.inventoryCountDetailDTO?.map((detail) => ({
-        //     ...detail,
-        //     countedQuantity,
-        //     createdByAvatarUrl: detail.createdByAvatarUrl ?? undefined,
-        //     createdByFullName: detail.createdByFullName ?? undefined,
-        //     createdByGroup: detail.createdByGroup ?? undefined,
-        //   })) || [],
+        status: 1,
+        inventoryCountDetails:
+          inventoryCountDetails?.map((detail) => ({
+            ...detail,
+            countedQuantity,
+            createdByAvatarUrl: detail.createdByAvatarUrl ?? undefined,
+            createdByFullName: detail.createdByFullName ?? undefined,
+            createdByGroup: detail.createdByGroup ?? undefined,
+          })) || [],
       };
 
       await updateInventoryCountMutate({
         id: inventoryCounts.id,
-        inventoryCount: updatedInventoryCount,
+        inventoryCount: updatedData,
       });
 
       const nextStatus = currentStatus + 1;
@@ -283,7 +286,7 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {inventoryCounts.inventoryCountDetailDTO?.map((detail) => (
+                  {inventoryCounts.inventoryCountDetails?.map((detail) => (
                     <tr key={detail.id} className='border-b'>
                       <td className='px-4 py-2 text-sm text-gray-700'>
                         {detail.productName || 'Không có thông tin'}
