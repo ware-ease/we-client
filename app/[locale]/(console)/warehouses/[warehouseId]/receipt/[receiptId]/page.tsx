@@ -14,8 +14,8 @@ import {
   useUpdateGoodReceiveNote,
 } from '@/hooks/queries/goodNoteQueries';
 import { toast } from 'react-toastify';
-import { GoodNoteSchema } from '@/lib/zod/schemas';
 import { usePathname } from '@/lib/i18n/routing';
+import { mapGoodNoteDetails } from '@/lib/utils/mapGoodDetails';
 
 const ReceiptDetail = () => {
   const pathname = usePathname();
@@ -73,21 +73,15 @@ const ReceiptDetail = () => {
   const handleSubmit = () => {
     const finalFormData = {
       ...formData,
-      goodNoteDetails: data.map((row) => ({
-        quantity: parseFloat(row.quantity.toString()),
-        note: row.note,
-        batchId: row.batch,
-      })),
+      goodNoteDetails: mapGoodNoteDetails(data),
     };
 
-    console.log(finalFormData);
+    if (finalFormData.goodNoteDetails.length === 0) {
+      return;
+    }
 
-    const result = GoodNoteSchema.safeParse(finalFormData);
-
-    if (!result.success) {
-      result.error.errors.forEach((err) => {
-        toast.error(err.message);
-      });
+    if (finalFormData.shipperName?.trim() === '') {
+      toast.error('Vui lòng điền tên người giao hàng');
       return;
     }
 

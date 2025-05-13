@@ -11,7 +11,6 @@ import {
 import { Link, usePathname } from '@/lib/i18n/routing';
 import { Button } from '../../shadcn-base/Button';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
-import { Edit } from 'lucide-react';
 import { ViewGoodNoteDialog } from '@/components/dialogs/ViewGoodNoteDialog';
 import {
   Tooltip,
@@ -174,7 +173,7 @@ export const columns: ColumnDef<GoodNote>[] = [
     ),
     cell: ({ row }) => (
       <div className='flex space-x-1 items-center'>
-        <Link href={`receipt/${row.original.id}`}>
+        {/* <Link href={`receipt/${row.original.id}`} className='flex items-center'>
           {row.original.status?.toString() === '0' && (
             <Tooltip>
               <TooltipTrigger>
@@ -183,7 +182,7 @@ export const columns: ColumnDef<GoodNote>[] = [
               <TooltipContent>Sửa</TooltipContent>
             </Tooltip>
           )}
-        </Link>
+        </Link> */}
         <Tooltip>
           <TooltipTrigger>
             <ViewGoodNoteDialog goodNote={row.original} />
