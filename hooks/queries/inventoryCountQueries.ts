@@ -1,11 +1,12 @@
 import {
+  createInventoryAdjustment,
   createInventoryCount,
   deleteInventoryCount,
   getAllInventoryCounts,
   getInventoryCountById,
   updateInventoryCount,
 } from '@/services/inventoryCountService';
-import { InventoryCount } from '@/types/inventoryCount';
+import { InventoryAdjutment, InventoryCount } from '@/types/inventoryCount';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 
@@ -81,6 +82,22 @@ export const useDeleteInventoryCount = () => {
     },
     onError: () => {
       toast.error('Không thể xóa inventory count.');
+    },
+  });
+};
+export const useAddInventoryCountAdjustment = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (inventoryAdjustment: InventoryAdjutment) =>
+      createInventoryAdjustment(inventoryAdjustment),
+    onSuccess: () => {
+      toast.success('Thêm inventory adjustment thành công!');
+      queryClient.invalidateQueries({
+        queryKey: ['inventoryAdjustments'],
+      });
+    },
+    onError: () => {
+      toast.error('Không thể thêm inventory adjustment.');
     },
   });
 };

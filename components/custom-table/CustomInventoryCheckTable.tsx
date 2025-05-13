@@ -36,7 +36,7 @@ const initialColumns: Column[] = [
   { header: 'Tên hàng (SKU)', key: 'inventoryId', width: 300 },
   { header: 'Nhân viên', key: 'accountId', width: 200 },
   { header: 'Ghi chú', key: 'note', width: 200 },
-  { header: 'Mã phiếu sự cố', key: 'errorTicketId', width: 100 },
+  // { header: 'Mã phiếu sự cố', key: 'errorTicketId', width: 100 },
 ];
 
 const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
@@ -216,25 +216,25 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
     );
   };
 
-  const handleErrorTicketChange = (rowIndex: number, value: string) => {
-    setRows((prevRows) =>
-      prevRows.map((row, index) =>
-        index === rowIndex
-          ? {
-              ...row,
-              errorTicketId: (
-                <input
-                  type='text'
-                  className='w-full p-2'
-                  value={value}
-                  onChange={(e) => handleNoteChange(index, e.target.value)}
-                />
-              ),
-            }
-          : row
-      )
-    );
-  };
+  // const handleErrorTicketChange = (rowIndex: number, value: string) => {
+  //   setRows((prevRows) =>
+  //     prevRows.map((row, index) =>
+  //       index === rowIndex
+  //         ? {
+  //             ...row,
+  //             errorTicketId: (
+  //               <input
+  //                 type='text'
+  //                 className='w-full p-2'
+  //                 value={value}
+  //                 onChange={(e) => handleNoteChange(index, e.target.value)}
+  //               />
+  //             ),
+  //           }
+  //         : row
+  //     )
+  //   );
+  // };
 
   const addRow = () => {
     const filteredInventories = inventories.filter(
@@ -345,13 +345,13 @@ const CustomInventoryCheckTable: React.FC<CustomInventoryCheckTableProps> = ({
                   />
                 </td>
 
-                <td className='border px-3 py-2'>
+                {/* <td className='border px-3 py-2'>
                   <input
                     type='text'
                     className='w-full p-2'
                     onChange={(e) => handleErrorTicketChange(i, e.target.value)}
                   />
-                </td>
+                </td> */}
                 <td className='text-center'>
                   <Button
                     variant='ghost'

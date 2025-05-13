@@ -40,5 +40,5 @@ export interface InventoryAdjutment extends Base {
   relatedDocument: string;
   warehouseId: string;
   inventoryCountId: string;
-  inventoryCount?: InventoryCount;
+  inventoryCount?: InventoryCount[];
 }

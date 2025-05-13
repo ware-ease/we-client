@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils/utils';
 import { InventoryCount } from '@/types/inventoryCount';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import InventoryCountAdjustmentDialog from '../../dialogs/InventoryCountAdjutmentDialog';
 
 interface StatusStepperProps {
   status: number;
@@ -53,11 +54,12 @@ interface StatusStepperProps {
 //   createdByGroup?: string | null;
 // }
 
-const statusLabels = ['Chưa kiểm kê', 'Đã kiểm kê ', 'Đã câng bằng'];
+const statusLabels = ['Chưa kiểm kê', 'Đã kiểm kê ', 'Đã cân bằng'];
 
 const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(status);
   const [countedQuantities, setCountedQuantities] = useState<
     Record<string, number>
@@ -66,15 +68,6 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
 
   // Use the mutation hook to update inventory count
   const { mutate: updateInventoryCountMutate } = useUpdateInventoryCount();
-
-  const handleNextStep = async () => {
-    if (currentStatus === 0) {
-      setOpen(true); // Open dialog for "Chờ xử lý" step
-    }
-    // else if (currentStatus === 1) {
-    //   router.push(`/inventory-counts/adjustment?id=${inventoryCounts}`);
-    // }
-  };
 
   const handleCountedQuantityChange = (
     productId: string,
@@ -85,7 +78,6 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
       [productId]: Number(event.target.value), // Update countedQuantity for specific product
     }));
   };
-  console.log(inventoryCounts);
 
   const confirmUpdateQuantity = async () => {
     setLoading(true);
@@ -118,7 +110,6 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
           })) || [],
       };
 
-      console.log('Updated data to be sent:', updatedData);
       await updateInventoryCountMutate(
         {
           id: inventoryCounts.id,
@@ -187,24 +178,49 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
           return 'rounded-3xl border';
         };
 
+        const handleButtonClick = (index: number) => {
+          if (index === 0) {
+            if (currentStatus === 0) {
+              setOpen(true);
+            }
+          } else if (index === 1) {
+            setOpenDialog(true);
+          } else if (index === 2) {
+            console.log('Status 2 clicked');
+          }
+        };
+
         return (
-          <Button
-            key={index}
-            size='sm'
-            disabled={!isActive}
-            onClick={() => isActive && handleNextStep()}
-            className={cn(
-              getButtonStyle(index),
-              'transition-all duration-300 flex items-center gap-1'
+          <div key={index}>
+            <Button
+              size='sm'
+              disabled={!isActive}
+              onClick={() => isActive && handleButtonClick(index)}
+              className={cn(
+                getButtonStyle(index),
+                'transition-all duration-300 flex items-center gap-1'
+              )}
+            >
+              {isCompleted && (
+                <CheckCircle size={16} className='text-green-500' />
+              )}
+              {label}
+            </Button>
+
+            {/*  */}
+
+            {openDialog && index === 1 && (
+              <InventoryCountAdjustmentDialog
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                onConfirm={confirmUpdateQuantity}
+                inventoryCounts={inventoryCounts}
+              />
             )}
-          >
-            {isCompleted && (
-              <CheckCircle size={16} className='text-green-500' />
-            )}
-            {label}
-          </Button>
+          </div>
         );
       })}
+
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className='p-6 bg-white rounded-lg shadow-xl max-w-3xl max-h-[80vh] overflow-y-auto'>
           <DialogHeader>

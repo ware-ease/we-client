@@ -1,4 +1,4 @@
-import { InventoryCount } from '../types/inventoryCount';
+import { InventoryAdjutment, InventoryCount } from '../types/inventoryCount';
 import {
   axiosDelete,
   axiosGet,
@@ -46,4 +46,11 @@ export const updateInventoryCount = async (
 // Xóa inventory count
 export const deleteInventoryCount = async (id: string): Promise<void> => {
   await axiosDelete(`/inventory-counts/${id}`, {});
+};
+
+export const createInventoryAdjustment = async (
+  data: InventoryAdjutment
+): Promise<InventoryAdjutment> => {
+  const response = await axiosPost('/inventory-counts/adjustment', data, {});
+  return response.data.data;
 };
