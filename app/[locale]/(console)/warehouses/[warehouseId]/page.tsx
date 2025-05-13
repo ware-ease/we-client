@@ -35,7 +35,6 @@ const UpdateWarehouse: React.FC = () => {
         { id: warehouse.id, data: formData },
         {
           onSuccess: () => {
-            toast.success('Cập nhật kho thành công!');
             router.refresh();
           },
           onError: () => {
@@ -51,10 +50,6 @@ const UpdateWarehouse: React.FC = () => {
       <div className='text-center mt-10 text-gray-600'>Không tìm thấy kho</div>
     );
   }
-
-  const formattedOperateFrom = warehouse.operateFrom
-    ? new Date(warehouse.operateFrom).toISOString().slice(0, 10)
-    : '';
 
   return (
     <div className='min-h-[93.5vh] bg-gray-50 p-6 flex justify-center'>
@@ -153,7 +148,7 @@ const UpdateWarehouse: React.FC = () => {
                 id='operateFrom'
                 name='operateFrom'
                 type='date'
-                value={formattedOperateFrom}
+                value={(formData.operateFrom || '').split('T')[0]}
                 onChange={handleChange}
                 className='w-full border rounded-lg px-4 py-2 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none'
               />

@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils/utils';
 import { Product } from '@/types/product';
 import { CustomDataTable2 } from '../base-data-table/CustomDataTable2';
 import ExpireDateUI from '@/components/app/ExpireDateUI';
+import ViewBatchDialog from '@/components/dialogs/ViewBatchDialog';
 
 interface ProductsView {
   id: string;
@@ -147,15 +148,12 @@ export const columns: ColumnDef<Inventory>[] = [
     ),
     cell: ({ row }) => (
       <div className='flex space-x-1 items-center'>
-        {/* Add actions like view or edit if needed */}
-        <Link href={`inventories/${row.original.id}`}>
-          <Tooltip>
-            <TooltipTrigger>
-              <Eye className='text-blue-500' size={20} />
-            </TooltipTrigger>
-            <TooltipContent>Chi tiết</TooltipContent>
-          </Tooltip>
-        </Link>
+        <Tooltip>
+          <TooltipTrigger>
+            <ViewBatchDialog batch={row.original.batch} />
+          </TooltipTrigger>
+          <TooltipContent>Chi tiết</TooltipContent>
+        </Tooltip>
       </div>
     ),
   },
