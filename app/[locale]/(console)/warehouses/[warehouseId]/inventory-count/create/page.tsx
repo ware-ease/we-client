@@ -15,7 +15,6 @@ import { z } from 'zod';
 
 const InventoryCountSchema = z.object({
   status: z.number(),
-  code: z.string().min(1, 'Mã phiếu là bắt buộc'),
   note: z.string().optional(),
   date: z.string().min(1, 'Ngày kiểm kê là bắt buộc'),
   startTime: z.string().optional(),
@@ -53,7 +52,6 @@ const CheckInventoryCreate = () => {
   );
   const { data: accountsData } = useAccounts();
   const { formData, handleChange } = useFormData<InventoryCount>({
-    code: '',
     date: new Date().toISOString().split('T')[0],
     startTime: '',
     endTime: '',

@@ -77,16 +77,16 @@ export const columns: ColumnDef<InventoryCount>[] = [
       type: 'date',
     },
   },
-  {
-    accessorKey: 'location',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Vị trí' />
-    ),
-    cell: ({ row }) => row.getValue('location') || 'N/A',
-    meta: {
-      title: 'Vị trí',
-    },
-  },
+  // {
+  //   accessorKey: 'location',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Vị trí' />
+  //   ),
+  //   cell: ({ row }) => row.getValue('location') || 'N/A',
+  //   meta: {
+  //     title: 'Vị trí',
+  //   },
+  // },
   {
     accessorKey: 'note',
     header: ({ column }) => (

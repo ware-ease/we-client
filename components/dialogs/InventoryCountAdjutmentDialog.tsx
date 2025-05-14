@@ -42,9 +42,6 @@ InventoryCountAdjustmentDialogProps) => {
     mutationFn: async () => {
       setLoading(true);
 
-      // 1. Cập nhật inventory count status
-      await updateInventoryCount(inventoryCounts.id as string, { status: 2 });
-
       // 2. Gửi dữ liệu điều chỉnh
       const inventoryAdjustment: InventoryAdjutment = {
         date: new Date().toISOString(),
@@ -65,7 +62,14 @@ InventoryCountAdjustmentDialogProps) => {
         inventoryCountId: inventoryAdjustment.inventoryCountId,
       });
 
-      return createInventoryAdjustment(inventoryAdjustment);
+      const result = await createInventoryAdjustment(inventoryAdjustment);
+
+      if (result) {
+        await updateInventoryCount(inventoryCounts.id as string, {
+          status: 2,
+        });
+      }
+      console.log(inventoryCounts.status);
     },
     onSuccess: () => {
       onClose();
