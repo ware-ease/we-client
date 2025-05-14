@@ -84,15 +84,7 @@ const CheckInventoryCreate = () => {
 
     mutate(finalFormData, {
       onSuccess: () => {
-        router.push(
-          pathname.replace(
-            `/vi/wareohuses/${currentWarehouse?.id}/inventory-count`,
-            ''
-          )
-        );
-      },
-      onError: () => {
-        toast.error('Tạo biên bản thất bại');
+        router.push(pathname.replace('/create', ''));
       },
     });
   };
@@ -190,7 +182,7 @@ const CheckInventoryCreate = () => {
             ) : (
               <CustomInventoryCheckTable
                 inventories={inventoryData?.inventories || []}
-                onDataChange={(newData: RowData[]) => setData(newData)}
+                onDataChange={setData}
                 accounts={accountsData || []}
               />
             )}
