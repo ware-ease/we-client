@@ -7,14 +7,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/shadcn-base/Dialog';
+import { useAddInventoryCountAdjustment } from '@/hooks/queries/inventoryCountQueries';
 import { getAllAccounts } from '@/services/accountService';
-import {
-  createInventoryAdjustment,
-  updateInventoryCount,
-} from '@/services/inventoryCountService';
 import { Account } from '@/types/account';
 import { InventoryAdjutment, InventoryCount } from '@/types/inventoryCount';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -24,15 +21,15 @@ interface InventoryCountAdjustmentDialogProps {
   onClose: () => void;
   inventoryCounts: InventoryCount;
   onConfirm: (data: any) => void;
+  onSuccessNextStep: () => void;
 }
 const InventoryCountAdjustmentDialog = ({
   open,
   onClose,
   inventoryCounts,
+  onSuccessNextStep,
 }: //   onConfirm,
 InventoryCountAdjustmentDialogProps) => {
-  const [loading, setLoading] = useState(false);
-
   const [adjustmentNote, setAdjustmentNote] = useState('');
 
   const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -49,53 +46,27 @@ InventoryCountAdjustmentDialogProps) => {
   const getAccountInfo = (accountId: string) => {
     return accounts.find((account) => account.id === accountId);
   };
-  const addInventoryAdjustmentMutation = useMutation({
-    mutationFn: async () => {
-      setLoading(true);
+  const { mutate: addInventoryAdjustment, isPending: loading } =
+    useAddInventoryCountAdjustment();
 
-      // 2. Gửi dữ liệu điều chỉnh
-      const inventoryAdjustment: InventoryAdjutment = {
-        date: new Date().toISOString(),
-        reason: adjustmentNote,
-        note: inventoryCounts?.note || '',
-        documentType: 0,
-        relatedDocument: '',
-        warehouseId: warehouseId,
-        inventoryCountId: inventoryCounts.id as string,
-      };
-      console.log('inventoryAdjustment:', {
-        date: inventoryAdjustment.date,
-        reason: inventoryAdjustment.reason,
-        note: inventoryAdjustment.note,
-        documentType: inventoryAdjustment.documentType,
-        relatedDocument: inventoryAdjustment.relatedDocument,
-        warehouseId: inventoryAdjustment.warehouseId,
-        inventoryCountId: inventoryAdjustment.inventoryCountId,
-      });
+  const handleSubmit = () => {
+    const payload: InventoryAdjutment = {
+      date: new Date().toISOString(),
+      reason: adjustmentNote,
+      note: inventoryCounts?.note || '',
+      documentType: 0,
+      relatedDocument: '',
+      warehouseId,
+      inventoryCountId: inventoryCounts.id as string,
+    };
 
-      const result = await createInventoryAdjustment(inventoryAdjustment);
-
-      if (result) {
-        const statuscount = await updateInventoryCount(
-          inventoryCounts.id as string,
-          {
-            status: 2,
-          }
-        );
-        console.log(statuscount);
-      }
-      console.log(inventoryCounts.status);
-    },
-    onSuccess: () => {
-      onClose();
-    },
-    onError: () => {
-      // xử lý lỗi nếu cần
-    },
-    onSettled: () => {
-      setLoading(false);
-    },
-  });
+    addInventoryAdjustment(payload, {
+      onSuccess: () => {
+        onClose();
+        onSuccessNextStep?.();
+      },
+    });
+  };
 
   //   const confirmAdjustment = async () => {
   //     setLoading(true);
@@ -324,7 +295,7 @@ InventoryCountAdjustmentDialogProps) => {
             Hủy
           </Button>
           <Button
-            onClick={() => addInventoryAdjustmentMutation.mutate()}
+            onClick={handleSubmit}
             disabled={loading}
             className='px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500'
           >

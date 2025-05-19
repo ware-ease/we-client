@@ -228,6 +228,12 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
                 onClose={() => setOpenDialog(false)}
                 onConfirm={confirmUpdateQuantity}
                 inventoryCounts={inventoryCounts}
+                onSuccessNextStep={() => {
+                  const nextStatus = currentStatus + 1;
+                  if (nextStatus < statusLabels.length) {
+                    setCurrentStatus(nextStatus);
+                  }
+                }}
               />
             )}
           </div>
