@@ -7,12 +7,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/shadcn-base/Dialog';
+import { getAllAccounts } from '@/services/accountService';
 import {
   createInventoryAdjustment,
   updateInventoryCount,
 } from '@/services/inventoryCountService';
+import { Account } from '@/types/account';
 import { InventoryAdjutment, InventoryCount } from '@/types/inventoryCount';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -37,7 +39,16 @@ InventoryCountAdjustmentDialogProps) => {
     setAdjustmentNote(e.target.value);
   };
   const { warehouseId } = useParams<{ warehouseId: string }>();
+  const { data: accountsData } = useQuery<Account[]>({
+    queryKey: ['accounts'],
+    queryFn: getAllAccounts,
+  });
 
+  const accounts = accountsData ?? [];
+
+  const getAccountInfo = (accountId: string) => {
+    return accounts.find((account) => account.id === accountId);
+  };
   const addInventoryAdjustmentMutation = useMutation({
     mutationFn: async () => {
       setLoading(true);
@@ -65,9 +76,13 @@ InventoryCountAdjustmentDialogProps) => {
       const result = await createInventoryAdjustment(inventoryAdjustment);
 
       if (result) {
-        await updateInventoryCount(inventoryCounts.id as string, {
-          status: 2,
-        });
+        const statuscount = await updateInventoryCount(
+          inventoryCounts.id as string,
+          {
+            status: 2,
+          }
+        );
+        console.log(statuscount);
       }
       console.log(inventoryCounts.status);
     },
@@ -248,6 +263,9 @@ InventoryCountAdjustmentDialogProps) => {
                     Mã lô
                   </th>
                   <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
+                    Nhân viên
+                  </th>
+                  <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
                     Số lượng dự kiến
                   </th>
                   <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
@@ -256,21 +274,29 @@ InventoryCountAdjustmentDialogProps) => {
                 </tr>
               </thead>
               <tbody>
-                {inventoryCounts.inventoryCountDetails?.map((detail) => (
-                  <tr key={detail.id} className='border-b'>
-                    <td className='px-4 py-2 text-sm text-gray-700'>
-                      {detail.productName || 'Không có thông tin'}
-                    </td>
-                    <td className='px-4 py-2 text-sm text-gray-700'>
-                      {detail.batchCode || 'Không có thông tin'}
-                    </td>
-                    <td className='px-4 py-2 text-sm text-gray-700'>
-                      {detail.expectedQuantity}
-                    </td>
-                    <td className='px-4 py-2 text-sm text-gray-700'>
-                      {detail.countedQuantity}
-                    </td>
-                    {/* <td className='px-4 py-2'>
+                {inventoryCounts.inventoryCountDetails?.map((detail) => {
+                  const account = getAccountInfo(detail.accountId || '');
+
+                  return (
+                    <tr key={detail.id} className='border-b'>
+                      <td className='px-4 py-2 text-sm text-gray-700'>
+                        {detail.productName || 'Không có thông tin'}
+                      </td>
+                      <td className='px-4 py-2 text-sm text-gray-700'>
+                        {detail.batchCode || 'Không có thông tin'}
+                      </td>
+                      <td className='px-4 py-2 text-sm text-gray-700'>
+                        {account
+                          ? `${account.profile.lastName} ${account.profile.firstName}`
+                          : 'Không có thông tin'}
+                      </td>
+                      <td className='px-4 py-2 text-sm text-gray-700'>
+                        {detail.expectedQuantity}
+                      </td>
+                      <td className='px-4 py-2 text-sm text-gray-700'>
+                        {detail.countedQuantity}
+                      </td>
+                      {/* <td className='px-4 py-2'>
                       <input
                         type='number'
                         value={countedQuantities[detail.id || ''] || ''}
@@ -280,8 +306,9 @@ InventoryCountAdjustmentDialogProps) => {
                         className='w-full p-2.5 border border-gray-300 rounded-lg text-gray-700 bg-gray-50 focus:ring-2 focus:ring-blue-500'
                       />
                     </td> */}
-                  </tr>
-                ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

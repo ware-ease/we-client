@@ -56,7 +56,12 @@ const AccountComboBox: React.FC<AccountComboBoxProps> = ({
           className='w-full justify-between border-none'
           ref={triggerRef}
         >
-          {selectedAccount ? selectedAccount.username : 'Chọn nhân viên'}
+          {selectedAccount
+            ? `${selectedAccount.profile?.lastName ?? ''} ${
+                selectedAccount.profile?.firstName ?? ''
+              }`.trim() || 'Chọn nhân viên'
+            : 'Chọn nhân viên'}
+
           <ChevronsUpDown className='opacity-50 h-4 w-4' />
         </Button>
       </PopoverTrigger>
@@ -78,7 +83,7 @@ const AccountComboBox: React.FC<AccountComboBoxProps> = ({
                     setOpen(false);
                   }}
                 >
-                  {acc.username}
+                  {`${acc.profile.lastName} ${acc.profile.firstName}`}
                   <Check
                     className={cn(
                       'ml-auto',

@@ -1,4 +1,5 @@
 import { Scheduler } from 'timers/promises';
+import { Account } from './account';
 import { Base } from './base/base-type';
 import { Product } from './product';
 
@@ -29,6 +30,7 @@ export interface InventoryCountDetail extends Base {
   product?: Product;
   inventoryCount?: InventoryCount;
   accountId?: string;
+  account?: Account;
   batchCode?: string;
   productName?: string;
 }

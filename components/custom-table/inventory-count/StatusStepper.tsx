@@ -8,7 +8,10 @@ import {
 } from '@/components/shadcn-base/Dialog';
 import { useUpdateInventoryCount } from '@/hooks/queries/inventoryCountQueries';
 import { cn } from '@/lib/utils/utils';
+import { getAllAccounts } from '@/services/accountService';
+import { Account } from '@/types/account';
 import { InventoryCount } from '@/types/inventoryCount';
+import { useQuery } from '@tanstack/react-query';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import InventoryCountAdjustmentDialog from '../../dialogs/InventoryCountAdjutmentDialog';
@@ -65,6 +68,16 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
     Record<string, number>
   >({});
   // const router = useRouter();
+  const { data: accountsData } = useQuery<Account[]>({
+    queryKey: ['accounts'],
+    queryFn: getAllAccounts,
+  });
+
+  const accounts = accountsData ?? [];
+
+  const getAccountInfo = (accountId: string) => {
+    return accounts.find((account) => account.id === accountId);
+  };
 
   // Use the mutation hook to update inventory count
   const { mutate: updateInventoryCountMutate } = useUpdateInventoryCount();
@@ -351,6 +364,9 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
                       Mã lô
                     </th>
                     <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
+                      Nhân viên
+                    </th>
+                    <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
                       Số lượng dự kiến
                     </th>
                     <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
@@ -359,29 +375,38 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {inventoryCounts.inventoryCountDetails?.map((detail) => (
-                    <tr key={detail.id} className='border-b'>
-                      <td className='px-4 py-2 text-sm text-gray-700'>
-                        {detail.productName || 'Không có thông tin'}
-                      </td>
-                      <td className='px-4 py-2 text-sm text-gray-700'>
-                        {detail.batchCode || 'Không có thông tin'}
-                      </td>
-                      <td className='px-4 py-2 text-sm text-gray-700'>
-                        {detail.expectedQuantity}
-                      </td>
-                      <td className='px-4 py-2'>
-                        <input
-                          type='number'
-                          value={countedQuantities[detail.id || ''] || ''}
-                          onChange={(e) =>
-                            handleCountedQuantityChange(detail.id || '', e)
-                          }
-                          className='w-full p-2.5 border border-gray-300 rounded-lg text-gray-700 bg-gray-50 focus:ring-2 focus:ring-blue-500'
-                        />
-                      </td>
-                    </tr>
-                  ))}
+                  {inventoryCounts.inventoryCountDetails?.map((detail) => {
+                    const account = getAccountInfo(detail.accountId || '');
+
+                    return (
+                      <tr key={detail.id} className='border-b'>
+                        <td className='px-4 py-2 text-sm text-gray-700'>
+                          {detail.productName || 'Không có thông tin'}
+                        </td>
+                        <td className='px-4 py-2 text-sm text-gray-700'>
+                          {detail.batchCode || 'Không có thông tin'}
+                        </td>
+                        <td className='px-4 py-2 text-sm text-gray-700'>
+                          {account
+                            ? `${account.profile.lastName} ${account.profile.firstName}`
+                            : 'Không có thông tin'}
+                        </td>
+                        <td className='px-4 py-2 text-sm text-gray-700'>
+                          {detail.expectedQuantity}
+                        </td>
+                        <td className='px-4 py-2'>
+                          <input
+                            type='number'
+                            value={countedQuantities[detail.id || ''] || ''}
+                            onChange={(e) =>
+                              handleCountedQuantityChange(detail.id || '', e)
+                            }
+                            className='w-full p-2.5 border border-gray-300 rounded-lg text-gray-700 bg-gray-50 focus:ring-2 focus:ring-blue-500'
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
