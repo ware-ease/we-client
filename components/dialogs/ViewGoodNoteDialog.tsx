@@ -147,6 +147,13 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                   <th className='border border-gray-200 p-2 text-left text-gray-700'>
                     Tên hàng
                   </th>
+                  {isExportNote ? (
+                    <td className='border border-gray-200 p-2 text-left text-gray-700 font-bold'>
+                      Mã lô
+                    </td>
+                  ) : (
+                    <></>
+                  )}
                   <th className='border border-gray-200 p-2 text-left text-gray-700'>
                     ĐVT
                   </th>
@@ -171,6 +178,13 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                       <td className='border border-gray-200 p-2'>
                         {detail.batch?.product?.name || 'N/A'}
                       </td>
+                      {isExportNote ? (
+                        <td className='border border-gray-200 p-2'>
+                          {detail.batch?.code || 'N/A'}
+                        </td>
+                      ) : (
+                        <></>
+                      )}
                       <td className='border border-gray-200 p-2'>
                         {detail.batch?.product?.unitName || 'N/A'}
                       </td>
@@ -300,6 +314,13 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                   <th className='border-r border-black p-2 font-normal'>
                     Tên hàng
                   </th>
+                  {isExportNote ? (
+                    <td className='border-r border-black p-2 font-normal'>
+                      Mã lô
+                    </td>
+                  ) : (
+                    <></>
+                  )}
                   <th className='border-r border-black p-2 font-normal'>ĐVT</th>
                   <th className='border-r border-black p-2 font-normal'>
                     Số lượng
@@ -319,6 +340,13 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                     <td className='border-r border-t border-black p-2'>
                       {detail.batch?.product?.name || 'N/A'}
                     </td>
+                    {isExportNote ? (
+                      <td className='border-r border-t border-black p-2'>
+                        {detail.batch?.code || 'N/A'}
+                      </td>
+                    ) : (
+                      <></>
+                    )}
                     <td className='border-r border-t border-black p-2'>
                       {detail.batch?.product?.unitName || 'N/A'}
                     </td>
