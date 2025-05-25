@@ -55,6 +55,7 @@ export interface InventoryAdjustment extends Base {
   relatedDocument?: string;
   warehouseId?: string;
   warehouse?: Warehouse;
+  warehouseName?: string;
   inventoryAdjustmentDetails: InventoryAdjustmentDetail[];
 }
 

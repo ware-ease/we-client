@@ -93,6 +93,12 @@ const InventoryComboBox: React.FC<InventoryComboBoxProps> = ({
                       onChange(currentValue === value ? '' : currentValue);
                       setOpen(false);
                     }}
+                    className={`${
+                      p.batch.expDate <= new Date().toISOString() &&
+                      p.batch.expDate > new Date('01-01-0001').toISOString()
+                        ? 'text-red-500 font-medium'
+                        : ''
+                    }`}
                   >
                     {fullInfo
                       ? `${p.batch.product?.name}, lô ${p.batch.code}, tồn kho: ${p.currentQuantity}`

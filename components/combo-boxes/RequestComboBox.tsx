@@ -44,9 +44,7 @@ const RequestComboBox: React.FC<RequestComboBoxProps> = ({
           className='w-[200px] justify-between border-none'
         >
           {value
-            ? requests
-                ?.filter((r) => r.requestedWarehouseId === warehouseId)
-                .find((req) => req.id === value)?.code
+            ? requests?.find((req) => req.id === value)?.code
             : 'Chọn yêu cầu'}
           <ChevronsUpDown className='opacity-50' />
         </Button>

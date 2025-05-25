@@ -417,7 +417,9 @@ const CustomRequestTable: React.FC<CustomTableProps> = ({
             <div className='p-2 truncate'>{selectedProduct?.name || ''}</div>
           ),
           unit: (
-            <div className='p-2 truncate'>{selectedProduct?.unit || ''}</div>
+            <div className='p-2 truncate'>
+              {selectedProduct?.unitName || ''}
+            </div>
           ),
           ...(isRequestDetails
             ? {}

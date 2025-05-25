@@ -13,6 +13,7 @@ export const statusMap = [
   { status: 1, label: 'Đã đồng ý', color: 'bg-green-400' },
   { status: 2, label: 'Đã từ chối', color: 'bg-red-500' },
   { status: 3, label: 'Hoàn thành', color: 'bg-green-500' },
+  { status: 4, label: 'Đã xuất', color: 'bg-orange-500' },
 ];
 
 export const requestTypeMap = [

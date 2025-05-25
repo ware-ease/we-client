@@ -102,6 +102,8 @@ const ReceiptCreate = () => {
       ?.concat(transferReqs || [])
       .find((req) => req.id === value);
 
+    console.log(req);
+
     setFormData((prevData) => ({
       ...prevData,
       goodRequestId: req?.id ?? '',

@@ -62,7 +62,7 @@ export function ViewAdjustmentDialog({
                 Thông tin điều chỉnh
               </h3>
               <p>
-                <strong>Kho:</strong> {adjustment.warehouseId}
+                <strong>Kho:</strong> {adjustment.warehouseName}
               </p>
               <p>
                 <strong>Lý do:</strong> {adjustment.reason || 'N/A'}
@@ -204,7 +204,7 @@ export function ViewAdjustmentDialog({
             <div className='mt-4'>
               <p>
                 <strong className='font-normal'>Kho:</strong>{' '}
-                {adjustment.warehouseId}
+                {adjustment.warehouseName}
               </p>
               <p>
                 <strong className='font-normal'>Lý do:</strong>{' '}
