@@ -552,6 +552,11 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
             </>
           )}
         </div>
+        {goodRequest.status === 2 && (
+          <div className='text-center font-bold mb-4 text-red-500'>
+            Yêu cầu đã bị từ chối với lí do: {goodRequest.statusNote}
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   );
