@@ -28,14 +28,14 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
   // Determine note type
   const isImportNote = goodNote.noteType === 0; // Nhập Kho
   const isExportNote = goodNote.noteType === 1; // Xuất Kho
-  const isInternalExportNote = goodNote.noteType === 2; // Xuất Nội Bộ
+  const isInternalExportNote = goodNote.code?.startsWith('PXNB'); // Xuất Nội Bộ
 
   // Set the title based on note type
   const noteTitle = isImportNote
     ? 'Phiếu Nhập Kho'
-    : isExportNote
-    ? 'Phiếu Xuất Kho'
-    : 'Phiếu Xuất Nội Bộ';
+    : isInternalExportNote
+    ? 'Phiếu Xuất Nội Bộ'
+    : 'Phiếu Xuất Kho';
 
   console.log(goodNote);
 
@@ -86,7 +86,7 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                   </p>
                   <p>
                     <strong>SĐT:</strong>{' '}
-                    {goodNote.goodRequest?.partner?.phone || 'N/A'}
+                    {goodNote.goodRequest?.requestedWarehouse?.phone || 'N/A'}
                   </p>
                 </div>
                 {/* Destination Warehouse */}
@@ -104,7 +104,7 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                   </p>
                   <p>
                     <strong>SĐT:</strong>{' '}
-                    {goodNote.goodRequest?.requestedWarehouse?.phone || 'N/A'}
+                    {goodNote.goodRequest?.warehouse?.phone || 'N/A'}
                   </p>
                 </div>
               </div>
@@ -261,7 +261,7 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                   </p>
                   <p>
                     <strong className='font-normal'>SĐT:</strong>{' '}
-                    {goodNote.goodRequest?.partner?.phone}
+                    {goodNote.goodRequest?.requestedWarehouse?.phone}
                   </p>
                   <p className='mt-2'>
                     <strong className='font-normal'>Kho nhận:</strong>{' '}
@@ -273,7 +273,7 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
                   </p>
                   <p>
                     <strong className='font-normal'>SĐT:</strong>{' '}
-                    {goodNote.goodRequest?.requestedWarehouse?.phone}
+                    {goodNote.goodRequest?.warehouse?.phone}
                   </p>
                 </>
               ) : (

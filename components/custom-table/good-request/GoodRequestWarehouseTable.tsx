@@ -224,7 +224,12 @@ export const columns: ColumnDef<GoodRequest>[] = [
                 <TooltipContent>Từ chối</TooltipContent>
               </Tooltip>
             )}
-          {row.original.status === 1 && (
+          {(
+            row.original.requestType === 2
+              ? row.original.status === 4 &&
+                row.original.warehouseId === warehouseId
+              : row.original.status === 1
+          ) ? (
             <Tooltip>
               <TooltipTrigger>
                 <CompleteRequestDialog
@@ -234,7 +239,7 @@ export const columns: ColumnDef<GoodRequest>[] = [
               </TooltipTrigger>
               <TooltipContent>Xác nhận hoàn thành</TooltipContent>
             </Tooltip>
-          )}
+          ) : null}
         </div>
       );
     },

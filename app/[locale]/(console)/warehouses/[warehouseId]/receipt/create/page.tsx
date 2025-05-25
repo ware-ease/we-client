@@ -10,17 +10,20 @@ import {
   getAllGoodReceiveRequests,
   getGoodRequestById,
 } from '@/services/goodRequestService';
-import { GoodReceiveNote } from '@/types/goodNote';
+import { GoodNote, GoodReceiveNote } from '@/types/goodNote';
 import useFormData from '@/hooks/useFormData';
 import {
   useAddGoodInternalReceiptNote,
   useAddGoodReceiveNote,
+  useGoodIssueNotes,
 } from '@/hooks/queries/goodNoteQueries';
 import { usePathname, useRouter } from '@/lib/i18n/routing';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useGoodTransferRequests } from '@/hooks/queries/goodRequests';
 import { mapGoodNoteDetails } from '@/lib/utils/mapGoodDetails';
 import { toast } from 'react-toastify';
+import CustomReceiveTransferTable from '@/components/custom-table/CustomReceiveTransferTable';
+import GoodNoteComboBox from '@/components/combo-boxes/GoodNoteComboBox';
 
 const ReceiptCreate = () => {
   const router = useRouter();
@@ -36,6 +39,8 @@ const ReceiptCreate = () => {
     goodRequestId: '',
     goodNoteDetails: [],
   });
+  const [isTransfer, setIsTransfer] = useState<boolean>(false);
+  const [selectedGoodNote, setSelectedGoodNote] = useState<GoodNote>({});
 
   useEffect(() => {
     setFormData((prev) => ({
@@ -52,6 +57,7 @@ const ReceiptCreate = () => {
     queryFn: getAllGoodReceiveRequests,
   });
   const { data: transferReqs } = useGoodTransferRequests();
+  const { data: goodNotes } = useGoodIssueNotes(true);
 
   const { data: reqDetails } = useQuery({
     queryKey: ['requestDetails', formData.goodRequestId],
@@ -72,7 +78,18 @@ const ReceiptCreate = () => {
         requestedWarehouseId: currentWarehouse?.id,
       };
 
-      if (finalFormData.goodNoteDetails.length === 0) {
+      const transferFormData = {
+        ...formData,
+        goodNoteDetails:
+          selectedGoodNote?.goodNoteDetails?.map((detail) => ({
+            quantity: detail.quantity || 0,
+            batchId: detail.batch?.id || '',
+            note: detail.note || '',
+          })) || [],
+        requestedWarehouseId: currentWarehouse?.id,
+      };
+
+      if (!isTransfer && finalFormData.goodNoteDetails.length === 0) {
         return;
       }
 
@@ -82,7 +99,7 @@ const ReceiptCreate = () => {
       }
 
       if (transferReqs?.find((r) => r.id === formData.goodRequestId)) {
-        mutateInternal(finalFormData, {
+        mutateInternal(transferFormData, {
           onSuccess: () => {
             router.push(pathname.replace('/create', ''));
           },
@@ -109,6 +126,13 @@ const ReceiptCreate = () => {
       goodRequestId: req?.id ?? '',
     }));
     setSupplierName(req?.partner?.name ?? '');
+    setIsTransfer(req?.code?.startsWith('YCC') || false);
+  };
+
+  const handleGoodNoteSelect = (value: string) => {
+    const gn = goodNotes?.find((gn) => gn.id === value);
+
+    setSelectedGoodNote(gn || {});
   };
 
   useEffect(() => {
@@ -262,11 +286,50 @@ const ReceiptCreate = () => {
           </div>
 
           {/* Table Section */}
+          {isTransfer && (
+            <div>
+              <GoodNoteComboBox
+                requestId={formData.goodRequestId || ''}
+                value={selectedGoodNote.id || ''}
+                onChange={(value) => handleGoodNoteSelect(value)}
+              />
+            </div>
+          )}
           <div>
             <h2 className='text-lg font-semibold text-gray-800 mb-4'>
               Chi tiết nhập kho
             </h2>
-            <CustomTable initialData={initialData} onDataChange={setData} />
+            {isTransfer ? (
+              <CustomReceiveTransferTable
+                initialData={
+                  selectedGoodNote?.goodNoteDetails?.map((detail, index) => ({
+                    id: detail.id || `${index}`,
+                    sku: detail.batch?.product?.sku || '',
+                    name: detail.batch?.product?.name || '',
+                    unit: detail.batch?.product?.unitName || '',
+                    quantity: detail.quantity || 0,
+                    batch: detail.batch?.code || '',
+                    mfgDate: detail.batch?.mfgDate
+                      ? new Date(detail.batch.mfgDate).toLocaleDateString(
+                          'vi-VN'
+                        )
+                      : '',
+                    expDate: detail.batch?.expDate
+                      ? new Date(detail.batch.expDate).toLocaleDateString(
+                          'vi-VN'
+                        )
+                      : '',
+                    note: detail.note || '',
+                    productId: detail.batch?.product?.id || undefined,
+                    isBatchManaged:
+                      detail.batch?.product?.isBatchManaged ?? false,
+                    unitType: detail.batch?.product?.unitType ?? 0,
+                  })) || []
+                }
+              />
+            ) : (
+              <CustomTable initialData={initialData} onDataChange={setData} />
+            )}
           </div>
 
           {/* Form Actions */}

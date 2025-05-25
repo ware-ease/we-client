@@ -119,19 +119,21 @@ const ProductComboBox: React.FC<ProductComboBoxProps> = ({
                 <Loading />
               )}
             </CommandGroup>
-            <div className='border-t border-gray-200'>
-              <ProductDialog>
-                <button className='w-full'>
-                  <div
-                    className='flex items-center px-2 py-1.5 text-white bg-blue-500 hover:bg-blue-700 text-sm'
-                    onClick={() => handleOnAdd()}
-                  >
-                    Thêm
-                    <Settings className='ml-auto h-4 w-4' />
-                  </div>
-                </button>
-              </ProductDialog>
-            </div>
+            {!fullInfo && (
+              <div className='border-t border-gray-200'>
+                <ProductDialog>
+                  <button className='w-full'>
+                    <div
+                      className='flex items-center px-2 py-1.5 text-white bg-blue-500 hover:bg-blue-700 text-sm'
+                      onClick={() => handleOnAdd()}
+                    >
+                      Thêm
+                      <Settings className='ml-auto h-4 w-4' />
+                    </div>
+                  </button>
+                </ProductDialog>
+              </div>
+            )}
           </CommandList>
         </Command>
       </PopoverContent>
