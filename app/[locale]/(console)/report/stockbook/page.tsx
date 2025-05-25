@@ -31,14 +31,6 @@ const ReportStockBook = () => {
     documentTitle: `The_Kho_${stockbook?.warehouseName || 'StockBook'}`,
   });
 
-  const formatDate = (date: string | undefined) => {
-    if (!date || typeof date !== 'string') return 'Không có';
-    const parsedDate = new Date(date);
-    return isNaN(parsedDate.getTime())
-      ? 'Không có'
-      : parsedDate.toLocaleDateString('vi-VN');
-  };
-
   const clearFilters = () => {
     setMonth('');
     setYear('');
@@ -199,7 +191,7 @@ const ReportStockBook = () => {
                 stockbook.details.map((detail, index) => (
                   <tr key={index} className='hover:bg-gray-50'>
                     <td className='border border-gray-200 p-2'>
-                      {formatDate(detail.date)}
+                      {detail.date}
                     </td>
                     <td className='border border-gray-200 p-2'>
                       {detail.sku || ''}
@@ -294,7 +286,7 @@ const ReportStockBook = () => {
             </p>
           </div>
 
-          <table className='w-full border border-black mt-4'>
+          <table className='border border-black mt-4 text-xs'>
             <thead>
               <tr className='text-left font-normal'>
                 <th className='border-r border-black p-2 font-normal'>Ngày</th>
@@ -323,9 +315,7 @@ const ReportStockBook = () => {
               {stockbook?.details && stockbook?.details.length > 0 ? (
                 stockbook.details.map((detail, index) => (
                   <tr key={index}>
-                    <td className='border border-black p-2'>
-                      {formatDate(detail.date)}
-                    </td>
+                    <td className='border border-black p-2'>{detail.date}</td>
                     <td className='border border-black p-2'>
                       {detail.sku || ''}
                     </td>

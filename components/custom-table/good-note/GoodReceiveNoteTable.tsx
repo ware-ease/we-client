@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
 import CreatedByUI from '@/components/app/CreatedByUI';
+import { useSearchParams } from 'next/navigation';
 
 export const columns: ColumnDef<GoodNote>[] = [
   {
@@ -202,6 +203,7 @@ const GoodReceiveNoteTable: React.FC<GoodReceiveNoteTableProps> = ({
   onlyCurrentWarehouse = false,
 }) => {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const currentWarehouse = useCurrentWarehouse();
 
   const { data, isSuccess } = useGoodReceiveNotes(
@@ -210,7 +212,7 @@ const GoodReceiveNoteTable: React.FC<GoodReceiveNoteTableProps> = ({
   const { data: currentWarehouseData, isSuccess: isCurrentWarehouseSuccess } =
     useCurrentWarehouseGoodReceiveNotes(
       onlyCurrentWarehouse && currentWarehouse?.id !== undefined,
-      currentWarehouse?.id ?? ''
+      searchParams.get('warehouseId') || currentWarehouse?.id || ''
     );
 
   const tableData = onlyCurrentWarehouse
