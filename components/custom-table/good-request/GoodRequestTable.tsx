@@ -3,7 +3,6 @@ import { ColumnDef } from '@tanstack/react-table';
 import React from 'react';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import { Edit } from 'lucide-react';
 import { GoodRequest } from '@/types/goodRequest';
 import { useGoodRequests } from '@/hooks/queries/goodRequests';
 import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
@@ -184,7 +183,7 @@ export const columns: ColumnDef<GoodRequest>[] = [
     ),
     cell: ({ row }) => (
       <div className='flex space-x-1 items-center'>
-        {row.original.status?.toString() === '0' && (
+        {/* {row.original.status?.toString() === '0' && (
           <Tooltip>
             <TooltipTrigger>
               <Link href={`requests/${row.original.id}`}>
@@ -193,7 +192,7 @@ export const columns: ColumnDef<GoodRequest>[] = [
             </TooltipTrigger>
             <TooltipContent>Sửa</TooltipContent>
           </Tooltip>
-        )}
+        )} */}
         <Tooltip>
           <TooltipTrigger>
             <ViewGoodRequestDialog goodRequest={row.original} />
