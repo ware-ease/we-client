@@ -216,7 +216,11 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
                     <div className='p-6'>
                       <div className='flex justify-between items-center mb-6'>
                         <h2 className='text-2xl font-semibold text-gray-800'>
-                          {requestTitle.replace('Yêu cầu', 'Phiếu')}
+                          {!isInternalExportRequest
+                            ? requestTitle.replace('Yêu cầu', 'Phiếu')
+                            : goodNote.code?.startsWith('PNNB')
+                            ? 'Phiếu Nhập Nội Bộ'
+                            : 'Phiếu Xuất Nội Bộ'}
                         </h2>
                         <div className='text-sm text-gray-600'>
                           <p>
@@ -412,7 +416,11 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
                       </div>
                     </div>
                     <div className='text-center text-xl font-bold mt-20 text-[#2F5597]'>
-                      {requestTitle.replace('Yêu cầu', 'Phiếu')}
+                      {!isInternalExportRequest
+                        ? requestTitle.replace('Yêu cầu', 'Phiếu')
+                        : goodNote.code?.startsWith('PNNB')
+                        ? 'Phiếu Nhập Nội Bộ'
+                        : 'Phiếu Xuất Nội Bộ'}
                     </div>
                     <div className='mt-4'>
                       {isInternalExportRequest ? (
