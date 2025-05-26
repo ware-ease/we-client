@@ -29,15 +29,16 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
   const isImportNote = goodNote.noteType === 0; // Nhập Kho
   const isExportNote = goodNote.noteType === 1; // Xuất Kho
   const isInternalExportNote = goodNote.code?.startsWith('PXNB'); // Xuất Nội Bộ
+  const isInternalImportNote = goodNote.code?.startsWith('PNNB');
 
   // Set the title based on note type
   const noteTitle = isImportNote
     ? 'Phiếu Nhập Kho'
     : isInternalExportNote
     ? 'Phiếu Xuất Nội Bộ'
+    : isInternalImportNote
+    ? 'Phiếu Nhập Nội Bộ'
     : 'Phiếu Xuất Kho';
-
-  console.log(goodNote);
 
   return (
     <Dialog>
@@ -69,7 +70,7 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
 
           {/* Info Section */}
           <div className='bg-gray-50 p-4 rounded-lg mb-6'>
-            {isInternalExportNote ? (
+            {isInternalExportNote || isInternalImportNote ? (
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 {/* Source Warehouse */}
                 <div>

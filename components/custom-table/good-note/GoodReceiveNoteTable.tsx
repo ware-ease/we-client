@@ -65,6 +65,11 @@ export const columns: ColumnDef<GoodNote>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Kho nhận' />
     ),
+    cell: ({ row }) => {
+      return row.original.code?.startsWith('PNNB')
+        ? row.original.goodRequest?.warehouse?.name
+        : row.original.goodRequest?.requestedWarehouse?.name;
+    },
     meta: {
       title: 'Kho nhận',
     },
