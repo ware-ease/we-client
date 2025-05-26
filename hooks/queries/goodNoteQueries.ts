@@ -90,7 +90,6 @@ export const useCurrentWarehouseGoodIssueNotes = (
   useQuery({
     queryKey: ['issueNotes'],
     queryFn: () => getAllCurrentWarehouseGoodIssueNotes(currentWarehouseId),
-    staleTime: 300000,
     enabled: enabled,
   });
 
