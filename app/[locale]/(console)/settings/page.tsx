@@ -129,12 +129,21 @@ const Settings = () => {
         },
       }));
 
-      toast.update(toastId, {
-        render: t('Toast.success'),
-        type: 'success',
-        isLoading: false,
-        autoClose: 3000,
-      });
+      const onlyAvatar: AccountUpdate = {
+        id: currentUser?.id || '',
+        email: currentUser?.email || '',
+        profile: {
+          firstName: currentUser?.profile?.firstName || '',
+          lastName: currentUser?.profile?.lastName || '',
+          phone: currentUser?.profile?.phone || '',
+          address: currentUser?.profile?.address || '',
+          sex: currentUser?.profile?.sex ?? true,
+          nationality: currentUser?.profile?.nationality || '',
+          avatarUrl: newAvatarUrl,
+        },
+      };
+
+      updateAccountMutation.mutate(onlyAvatar);
 
       if (preview) {
         setPreview(null);
