@@ -1,10 +1,5 @@
 import { Link } from '@/lib/i18n/routing';
-import {
-  FileChartColumn,
-  FileChartLine,
-  FileText,
-  Warehouse,
-} from 'lucide-react';
+import { FileChartLine, FileText } from 'lucide-react';
 import React from 'react';
 
 const WarehouseReport = () => {
@@ -20,12 +15,12 @@ const WarehouseReport = () => {
           Các loại báo cáo
         </h2>
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-          <CardLink
+          {/* <CardLink
             href='/report/inventory'
             icon={<Warehouse className='text-red-500 w-6 h-6' />}
             title='Báo cáo tồn kho'
             description='Quản lý tồn kho của kho hoặc toàn hệ thống'
-          />
+          /> */}
           <CardLink
             href='/report/stockcard'
             icon={<FileText className='text-orange-500 w-6 h-6' />}
@@ -38,12 +33,12 @@ const WarehouseReport = () => {
             title='Báo cáo xuất nhập tồn'
             description='Quản lý xuất nhập tồn theo kỳ'
           />
-          <CardLink
+          {/* <CardLink
             href='/report/adjustment'
             icon={<FileChartColumn className='text-yellow-500 w-6 h-6' />}
             title='Báo cáo kiểm hàng'
             description='Quản lý các thông tin khi kiểm kê, điều chỉnh'
-          />
+          /> */}
         </div>
       </section>
     </main>
