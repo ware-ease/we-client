@@ -26,7 +26,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       '/vi/settings',
       '/vi/home',
     ],
-    '3': ['/vi/home', '/vi/warehouses'],
+    '3': ['/vi/home', '/vi/tasks', '/vi/settings'],
   };
 
   // Check if the current pathname is allowed for the given groupId
