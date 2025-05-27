@@ -8,10 +8,8 @@ import {
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
 import { useBatches } from '@/hooks/queries/batchQueries';
-import { Link, usePathname } from '@/lib/i18n/routing';
 import { Batch } from '@/types/batch';
 import { ColumnDef } from '@tanstack/react-table';
-import { Button } from '../../shadcn-base/Button';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
 
@@ -179,15 +177,16 @@ export const columns: ColumnDef<Batch>[] = [
 ];
 
 const BatchTable = () => {
-  const pathname = usePathname();
+  // const pathname = usePathname();
   const { data, isSuccess } = useBatches();
   console.log(data);
 
   return (
     <CustomDataTable columns={columns} data={isSuccess ? data : []}>
-      <Link href={`${pathname}/create`}>
+      {/* <Link href={`${pathname}/create`}>
         <Button>Thêm</Button>
-      </Link>
+      </Link> */}
+      <div className='h-8'></div>
     </CustomDataTable>
   );
 };
