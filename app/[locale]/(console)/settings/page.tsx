@@ -145,6 +145,10 @@ const Settings = () => {
 
       updateAccountMutation.mutate(onlyAvatar);
 
+      if (updateAccountMutation.isSuccess) {
+        toast.done(toastId);
+      }
+
       if (preview) {
         setPreview(null);
       }
