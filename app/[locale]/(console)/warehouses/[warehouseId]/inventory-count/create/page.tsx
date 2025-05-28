@@ -99,17 +99,23 @@ const CheckInventoryCreate = () => {
         <div className='space-y-4'>
           {/* Basic Info */}
           <div className='grid grid-cols-2 gap-4'>
-            {/* <div>
-              <label className='block text-sm font-medium text-gray-700'>
-                Mã phiếu
+            {/* Mã yêu cầu */}
+            <div>
+              <label
+                htmlFor='code'
+                className='block text-sm font-medium text-gray-700'
+              >
+                Mã yêu cầu
               </label>
               <Input
+                id='code'
                 name='code'
-                value={formData.code}
+                value='Hệ thống tự tạo'
+                disabled
                 onChange={handleChange}
-                className='mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500'
+                className='mt-1 w-full p-2 border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed'
               />
-            </div> */}
+            </div>
             <div>
               <label className='block text-sm font-medium text-gray-700'>
                 Ngày kiểm kê

@@ -8,10 +8,7 @@ import {
 } from '@/components/shadcn-base/Dialog';
 import { useUpdateInventoryCount } from '@/hooks/queries/inventoryCountQueries';
 import { cn } from '@/lib/utils/utils';
-import { getAllAccounts } from '@/services/accountService';
-import { Account } from '@/types/account';
 import { InventoryCount } from '@/types/inventoryCount';
-import { useQuery } from '@tanstack/react-query';
 import { CheckCircle, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import InventoryCountAdjustmentDialog from '../../dialogs/InventoryCountAdjutmentDialog';
@@ -71,17 +68,6 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
   const [countedQuantities, setCountedQuantities] = useState<
     Record<string, number>
   >({});
-  // const router = useRouter();
-  const { data: accountsData } = useQuery<Account[]>({
-    queryKey: ['accounts'],
-    queryFn: getAllAccounts,
-  });
-
-  const accounts = accountsData ?? [];
-
-  const getAccountInfo = (accountId: string) => {
-    return accounts.find((account) => account.id === accountId);
-  };
 
   // Use the mutation hook to update inventory count
   const { mutate: updateInventoryCountMutate } = useUpdateInventoryCount();
@@ -135,6 +121,7 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
         {
           onSuccess: () => {
             setOpen(false);
+            window.location.reload();
           },
           onError: (error) => {
             console.error('Lỗi khi cập nhật inventory count:', error);
@@ -343,9 +330,9 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
                     <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
                       Mã lô
                     </th>
-                    <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
+                    {/* <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
                       Nhân viên
-                    </th>
+                    </th> */}
                     <th className='px-4 py-2 text-sm font-medium text-gray-700 border-b'>
                       Số lượng dự kiến
                     </th>
@@ -356,7 +343,7 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
                 </thead>
                 <tbody>
                   {inventoryCounts.inventoryCountDetails?.map((detail) => {
-                    const account = getAccountInfo(detail.accountId || '');
+                    // const account = detail.accountId || '';
 
                     return (
                       <tr key={detail.id} className='border-b'>
@@ -366,11 +353,11 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
                         <td className='px-4 py-2 text-sm text-gray-700'>
                           {detail.batchCode || 'Không có thông tin'}
                         </td>
-                        <td className='px-4 py-2 text-sm text-gray-700'>
+                        {/* <td className='px-4 py-2 text-sm text-gray-700'>
                           {account
                             ? `${account.profile.lastName} ${account.profile.firstName}`
                             : 'Không có thông tin'}
-                        </td>
+                        </td> */}
                         <td className='px-4 py-2 text-sm text-gray-700'>
                           {detail.expectedQuantity}
                         </td>
