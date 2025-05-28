@@ -57,7 +57,11 @@ interface StatusStepperProps {
 //   createdByGroup?: string | null;
 // }
 
-const statusLabels = ['Chưa kiểm kê', 'Đã kiểm kê ', 'Đã cân bằng'];
+const statusLabels = [
+  'Chưa kiểm kê',
+  // 'Đã kiểm kê ',
+  // 'Đã cân bằng'
+];
 
 const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
   const [open, setOpen] = useState(false);
@@ -130,15 +134,6 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
         },
         {
           onSuccess: () => {
-            const nextStatus = currentStatus + 1;
-            if (nextStatus < statusLabels.length) {
-              setCurrentStatus(nextStatus);
-              //   if (nextStatus === 1) {
-              //     router.push(
-              //       `/inventory-counts/adjustment?id=${inventoryCounts.id}`
-              //     );
-              //   }
-            }
             setOpen(false);
           },
           onError: (error) => {
@@ -172,35 +167,14 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
                 : 'bg-white hover:bg-slate-50'
             );
           }
-          if (index === 1) {
-            return cn(
-              'rounded-3xl text-yellow-500 border-2 border-yellow-500',
-              isActive
-                ? 'bg-yellow-500 text-white hover:bg-yellow-600'
-                : 'bg-white hover:bg-slate-50'
-            );
-          }
-          if (index === 2) {
-            return cn(
-              'rounded-3xl text-green-400 border-2 border-green-400',
-              isActive
-                ? 'bg-green-400 text-white hover:bg-green-500'
-                : 'bg-white hover:bg-slate-50'
-            );
-          }
           return 'rounded-3xl border';
         };
 
         const handleButtonClick = (index: number) => {
-          if (index === 0) {
+          if (index === 0)
             if (currentStatus === 0) {
               setOpen(true);
             }
-          } else if (index === 1) {
-            setOpenDialog(true);
-          } else if (index === 2) {
-            console.log('Status 2 clicked');
-          }
         };
 
         return (

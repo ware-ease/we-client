@@ -268,11 +268,11 @@ const InventoryCountTable = () => {
           <Button
             className={cn(
               'rounded-3xl text-red-500 border-2 border-red-500',
-              statusParams.includes(2)
+              statusParams.includes(0)
                 ? 'bg-red-500 text-white hover:bg-red-600'
                 : 'bg-white hover:bg-slate-50'
             )}
-            onClick={() => toggleStatusFilter(2)}
+            onClick={() => toggleStatusFilter(0)}
           >
             Chưa kiểm kê
           </Button>
@@ -280,22 +280,22 @@ const InventoryCountTable = () => {
           <Button
             className={cn(
               'rounded-3xl text-yellow-500 border-2 border-yellow-500',
-              statusParams.includes(0)
+              statusParams.includes(1)
                 ? 'bg-yellow-500 text-white hover:bg-yellow-600'
                 : 'bg-white hover:bg-slate-50'
             )}
-            onClick={() => toggleStatusFilter(0)}
+            onClick={() => toggleStatusFilter(1)}
           >
             Đã kiểm kê
           </Button>
           <Button
             className={cn(
               'rounded-3xl text-green-400 border-2 border-green-400',
-              statusParams.includes(1)
+              statusParams.includes(2)
                 ? 'bg-green-400 text-white hover:bg-green-400'
                 : 'bg-white hover:bg-slate-50'
             )}
-            onClick={() => toggleStatusFilter(1)}
+            onClick={() => toggleStatusFilter(2)}
           >
             Đã câng bằng
           </Button>
