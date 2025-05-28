@@ -149,7 +149,7 @@ export const columns: ColumnDef<InventoryCount>[] = [
       const createdTime = row.getValue('createdTime') as string;
       if (!createdTime) return 'N/A';
       const [datePart, timePart] = createdTime.split(' ');
-      const [day, month, year] = datePart.split('/');
+      const [month, day, year] = datePart.split('/'); // Đổi thứ tự: MM/DD/YYYY
       const formattedDate = new Date(`${year}-${month}-${day}T${timePart}`);
       return formattedDate.toLocaleString('vi-VN');
     },
@@ -160,7 +160,7 @@ export const columns: ColumnDef<InventoryCount>[] = [
       if (!createdTime) return false;
 
       const [datePart, timePart] = createdTime.split(' ');
-      const [day, month, year] = datePart.split('/');
+      const [month, day, year] = datePart.split('/'); // Đổi thứ tự: MM/DD/YYYY
       const rowDate = new Date(`${year}-${month}-${day}T${timePart}`);
 
       const fromDate = filterValue.from ? new Date(filterValue.from) : null;
@@ -177,6 +177,7 @@ export const columns: ColumnDef<InventoryCount>[] = [
       type: 'date',
     },
   },
+
   // {
   //   id: 'crud-actions',
   //   header: ({ column }) => (
