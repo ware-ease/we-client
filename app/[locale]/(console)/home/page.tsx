@@ -35,7 +35,7 @@ const Home = () => {
   const canSeeProducts = isAdmin || isWarehouseKeeper;
   const canSeeRequests = isAdmin || isSale;
   const canSeeDashboard = isAdmin || isWarehouseKeeper;
-  const canSeeAccounts = isAdmin || isWarehouseKeeper;
+  const canSeeAccounts = isAdmin;
   const canSeeSuppliers = isAdmin || isSale;
   const canSeeCustomers = isAdmin || isSale;
   const canSeeReport = isAdmin || isWarehouseKeeper;
