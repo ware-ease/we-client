@@ -5,6 +5,7 @@ import {
   FileText,
   Home,
   LayoutDashboardIcon,
+  ListTodo,
   LogOut,
   PackageMinus,
   PackageOpen,
@@ -154,6 +155,11 @@ export function AppSidebar() {
       title: 'Báo cáo',
       url: '/report',
       icon: FileText,
+    },
+    {
+      title: 'Nhiệm vụ',
+      url: '/tasks',
+      icon: ListTodo,
     },
   ];
 

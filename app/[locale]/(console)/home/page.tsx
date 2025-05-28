@@ -31,7 +31,7 @@ const Home = () => {
   const isWarehouseStaff = userGroups.includes('3');
   const isSale = userGroups.includes('4');
 
-  const canSeeWarehouses = isAdmin || isWarehouseKeeper || isWarehouseStaff;
+  const canSeeWarehouses = isAdmin || isWarehouseKeeper;
   const canSeeProducts = isAdmin || isWarehouseKeeper;
   const canSeeRequests = isAdmin || isSale;
   const canSeeDashboard = isAdmin || isWarehouseKeeper;
@@ -39,6 +39,7 @@ const Home = () => {
   const canSeeSuppliers = isAdmin || isSale;
   const canSeeCustomers = isAdmin || isSale;
   const canSeeReport = isAdmin || isWarehouseKeeper;
+  const canSeeTasks = isWarehouseStaff;
 
   return (
     <main className='flex flex-col w-full max-w-7xl mx-auto px-4 py-6 space-y-10'>
@@ -51,10 +52,21 @@ const Home = () => {
       </div>
 
       {/* Quản lý kho */}
-      {(canSeeWarehouses || canSeeProducts || canSeeRequests) && (
+      {(canSeeWarehouses ||
+        canSeeProducts ||
+        canSeeRequests ||
+        canSeeTasks) && (
         <section className='bg-gray-50 p-6 rounded-xl shadow-sm border space-y-4'>
           <h2 className='text-2xl font-semibold text-gray-800'>Quản lý kho</h2>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {canSeeTasks && (
+              <CardLink
+                href='/tasks'
+                icon={<Box className='text-red-500 w-6 h-6' />}
+                title='Nhiệm vụ'
+                description='Xem và thực hiện nhiệm vụ'
+              />
+            )}
             {canSeeWarehouses && (
               <CardLink
                 href='/warehouses'
