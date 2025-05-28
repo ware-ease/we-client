@@ -64,7 +64,7 @@ export const changePassword = (data: any) =>
 
 // Lấy danh sách task của nhân viên
 export const getAccountTasks = async (): Promise<{ tasks: AccountTask[] }> => {
-  const res = await fetch('/api/account-tasks');
+  const res = await fetch('/account-tasks');
   const data = await res.json();
   return { tasks: data };
 };
