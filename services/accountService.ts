@@ -63,8 +63,7 @@ export const changePassword = (data: any) =>
   axiosPut('/accounts/password', data, {});
 
 // Lấy danh sách task của nhân viên
-export const getAccountTasks = async (): Promise<{ tasks: AccountTask[] }> => {
-  const res = await fetch('/accounts/tasks');
-  const data = await res.json();
-  return { tasks: data };
+export const getAccountTasks = async (): Promise<AccountTask[]> => {
+  const res = await axiosGet('/accounts/tasks', {});
+  return res.data.data;
 };
