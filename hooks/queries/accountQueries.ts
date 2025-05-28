@@ -108,3 +108,10 @@ export const useWarehouses = () =>
     queryFn: getAllWarehouses,
     staleTime: 300000,
   });
+
+// export const useAccountTasks = () =>
+//   useQuery<Task[]>({
+//     queryKey: ['account-tasks'],
+//     queryFn: getAccountTasks,
+//     staleTime: 300000,
+//   });

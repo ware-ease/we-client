@@ -1,9 +1,9 @@
 'use client';
+import { Group } from '@/types/account';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../providers/AuthProvider';
 import Loading from './Loading';
-import { Group } from '@/types/account';
-import { usePathname, useRouter } from 'next/navigation';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       '/vi/settings',
       '/vi/home',
     ],
-    '3': ['/vi/home', '/vi/warehouses'],
+    '3': ['/vi/home', '/vi/warehouses', '/vi/tasks'],
   };
 
   // Check if the current pathname is allowed for the given groupId

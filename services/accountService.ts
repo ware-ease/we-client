@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { AccountTask } from '@/components/custom-table/task/InventoryCountTable';
 import { Permission } from '@/types/permission';
 import { Account, AccountUpdate, Group } from '../types/account';
 import {
@@ -60,3 +61,10 @@ export const deleteAccount = async (id: string): Promise<void> => {
 
 export const changePassword = (data: any) =>
   axiosPut('/accounts/password', data, {});
+
+// Lấy danh sách task của nhân viên
+export const getAccountTasks = async (): Promise<{ tasks: AccountTask[] }> => {
+  const res = await fetch('/api/account-tasks');
+  const data = await res.json();
+  return { tasks: data };
+};
