@@ -9,6 +9,7 @@ import { useWarehousesStockBook } from '@/hooks/queries/warehouseQueries';
 import { useRouter } from '@/lib/i18n/routing';
 import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
 import * as XLSX from 'xlsx-js-style'; // Import xlsx-js-style for styling
+import { ExportDialog } from '@/components/dialogs/ExportDialog';
 
 const ReportStockBook = () => {
   const searchParams = useSearchParams();
@@ -189,13 +190,16 @@ const ReportStockBook = () => {
               </button>
             </div>
             <div className='space-x-2'>
-              <button
-                onClick={handleExport} // Updated to use handleExport
-                className='flex items-center bg-green-600 text-white px-4 py-2 rounded-3xl hover:bg-green-700 transition-colors'
+              <ExportDialog
+                title='Sổ kho'
+                onConfirmExport={handleExport}
+                description='Bạn có muốn xuất sổ kho này thành file Excel?'
               >
-                <Download className='w-4 h-4 mr-2' />
-                Xuất
-              </button>
+                <button className='flex items-center bg-green-600 text-white px-4 py-2 rounded-3xl hover:bg-green-700 transition-colors'>
+                  <Download className='w-4 h-4 mr-2' />
+                  Xuất
+                </button>
+              </ExportDialog>
             </div>
           </div>
         </div>
