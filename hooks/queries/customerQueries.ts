@@ -17,7 +17,7 @@ export const useCustomers = () =>
 export const useAddCustomer = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (customer: { name: string; email: string }) =>
+    mutationFn: (customer: { name: string; phone: string }) =>
       createCustomer(customer),
     onSuccess: () => {
       toast.success('Thêm khách hàng thành công!');
@@ -38,12 +38,12 @@ export const useUpdateCustomer = () => {
     mutationFn: ({
       id,
       name,
-      email,
+      phone,
     }: {
       id: string;
       name: string;
-      email: string;
-    }) => updateCustomer(id, { name, email }),
+      phone: string;
+    }) => updateCustomer(id, { name, phone }),
     onSuccess: () => {
       toast.success('Cập nhật khách hàng thành công!');
       queryClient.invalidateQueries({ queryKey: ['customers'] });

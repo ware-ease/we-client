@@ -11,6 +11,7 @@ import {
 } from '@/components/shadcn-base/Dialog';
 import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
+import { useUpdateCustomer } from '@/hooks/queries/customerQueries';
 import { Customer } from '@/types/customer';
 import { Edit } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -25,12 +26,12 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
   customer,
 }) => {
   const t = useTranslations();
+  const { mutate: updateCustomer, isPending } = useUpdateCustomer();
+  const [open, setOpen] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: customer.name || '',
-    phone: customer.phone || '',
-    email: customer.email || '',
-    address: customer.address || '',
+    name: customer.name,
+    phone: customer.phone,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,18 +40,28 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
   };
 
   const handleUpdateClick = () => {
-    if (!formData.name || !formData.phone || !formData.email) {
-      toast.error('Please fill in all required fields.');
+    if (!formData.name || !formData.phone) {
+      toast.error('Vui lòng điền đầy đủ thông tin bắt buộc.');
       return;
     }
 
-    console.log('Updated customer data:', formData);
-    toast.success('Customer updated successfully!');
+    updateCustomer(
+      {
+        id: customer.id,
+        name: formData.name,
+        phone: formData.phone,
+      },
+      {
+        onSuccess: () => {
+          setOpen(false);
+        },
+      }
+    );
   };
 
   return (
     <div className='flex justify-end'>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Edit className='text-yellow-600 h-5 w-5 hover:cursor-pointer' />
         </DialogTrigger>
@@ -71,7 +82,6 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
           </DialogHeader>
 
           <div className='mt-4 space-y-6 text-sm text-gray-800'>
-            {/* --- THÔNG TIN KHÁCH HÀNG --- */}
             <div>
               <h3 className='text-base font-semibold text-gray-700 mb-2'>
                 Thông tin khách hàng
@@ -79,7 +89,7 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
               <div className='grid grid-cols-2 gap-4'>
                 <div>
                   <Label htmlFor='name' className='text-sm text-gray-500'>
-                    Tên khách hàng
+                    Tên khách hàng <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id='name'
@@ -92,7 +102,7 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
                 </div>
                 <div>
                   <Label htmlFor='phone' className='text-sm text-gray-500'>
-                    Số điện thoại
+                    Số điện thoại <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id='phone'
@@ -103,32 +113,6 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
                     className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
                   />
                 </div>
-                {/* <div> */}
-                {/* <Label htmlFor='email' className='text-sm text-gray-500'>
-                    Email
-                  </Label>
-                  <Input
-                    id='email'
-                    name='email'
-                    type='email'
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                  />
-                </div>
-                <div>
-                  <Label htmlFor='address' className='text-sm text-gray-500'>
-                    Địa chỉ
-                  </Label>
-                  <Input
-                    id='address'
-                    name='address'
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                  />
-                </div> */}
               </div>
             </div>
           </div>
@@ -143,10 +127,11 @@ const UpdateCustomerDialog: React.FC<UpdateCustomerDialogProps> = ({
               </Button>
             </DialogClose>
             <Button
-              className='px-4 py-2 transition-colors'
+              className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
               onClick={handleUpdateClick}
+              disabled={isPending}
             >
-              {t('Dialog.yes.update')}
+              {isPending ? 'Đang cập nhật...' : t('Dialog.yes.update')}
             </Button>
           </DialogFooter>
         </DialogContent>

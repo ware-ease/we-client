@@ -2,9 +2,9 @@ import { Customer } from '../types/customer';
 import {
   axiosDelete,
   axiosGet,
+  axiosPatch,
   axiosPost,
-  axiosPut,
-  baseFilters,
+  baseFilters
 } from './baseService';
 
 export const getAllCustomers = async (): Promise<Customer[]> => {
@@ -28,7 +28,7 @@ export const updateCustomer = async (
   id: string,
   customerData: Partial<Customer>
 ): Promise<Customer> => {
-  const response = await axiosPut(`/customers/${id}`, customerData, {});
+  const response = await axiosPatch(`/customers/${id}`, customerData, {});
   return response.data.data;
 };
 

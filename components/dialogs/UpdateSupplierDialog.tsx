@@ -1,5 +1,6 @@
 'use client';
 import { Button } from '@/components/shadcn-base/Button';
+import { Checkbox } from '@/components/shadcn-base/Checkbox';
 import {
   Dialog,
   DialogClose,
@@ -11,6 +12,7 @@ import {
 } from '@/components/shadcn-base/Dialog';
 import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
+import { useUpdateSupplier } from '@/hooks/queries/supplierQueries';
 import { Supplier } from '@/types/supplier';
 import { Edit } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -25,12 +27,13 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
   supplier,
 }) => {
   const t = useTranslations();
+  const { mutate: updateSupplier, isPending } = useUpdateSupplier();
+  const [open, setOpen] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: supplier.name || '',
-    phone: supplier.phone || '',
-    email: supplier.email || '',
-    address: supplier.address || '',
+    name: supplier.name,
+    phone: supplier.phone,
+    status: supplier.status,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,19 +41,32 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleCheckboxChange = () => {
+    setFormData((prev) => ({ ...prev, status: !prev.status }));
+  };
+
   const handleUpdateClick = () => {
-    if (!formData.name || !formData.phone || !formData.email) {
-      toast.error('Please fill in all required fields.');
+    if (!formData.name || !formData.phone) {
+      toast.error('Vui lòng điền đầy đủ thông tin nhà cung cấp.');
       return;
     }
 
-    console.log('Updated supplier data:', formData);
-    toast.success('Supplier updated successfully!');
+    updateSupplier(
+      {
+        id: supplier.id,
+        ...formData,
+      },
+      {
+        onSuccess: () => {
+          setOpen(false);
+        },
+      }
+    );
   };
 
   return (
     <div className='flex justify-end'>
-      <Dialog>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Edit className='text-yellow-600 h-5 w-5 hover:cursor-pointer' />
         </DialogTrigger>
@@ -71,7 +87,6 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
           </DialogHeader>
 
           <div className='mt-4 space-y-6 text-sm text-gray-800'>
-            {/* --- THÔNG TIN NHÀ CUNG CẤP --- */}
             <div>
               <h3 className='text-base font-semibold text-gray-700 mb-2'>
                 Thông tin nhà cung cấp
@@ -79,7 +94,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
               <div className='grid grid-cols-2 gap-4'>
                 <div>
                   <Label htmlFor='name' className='text-sm text-gray-500'>
-                    Tên nhà cung cấp
+                    Tên nhà cung cấp <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id='name'
@@ -92,7 +107,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
                 </div>
                 <div>
                   <Label htmlFor='phone' className='text-sm text-gray-500'>
-                    Số điện thoại
+                    Số điện thoại <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id='phone'
@@ -104,33 +119,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
                     className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
                   />
                 </div>
-                {/* <div>
-                  <Label htmlFor='email' className='text-sm text-gray-500'>
-                    Email
-                  </Label>
-                  <Input
-                    id='email'
-                    name='email'
-                    type='email'
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                  />
-                </div>
-                <div>
-                  <Label htmlFor='address' className='text-sm text-gray-500'>
-                    Địa chỉ
-                  </Label>
-                  <Input
-                    id='address'
-                    name='address'
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                  />
-                </div> */}
-                {/* <div className='col-span-2 flex items-center space-x-2 mt-2'>
+                <div className='col-span-2 flex items-center space-x-2 mt-2'>
                   <Checkbox
                     id='status'
                     checked={formData.status}
@@ -139,7 +128,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
                   <Label htmlFor='status' className='text-sm text-gray-500'>
                     Hoạt động
                   </Label>
-                </div> */}
+                </div>
               </div>
             </div>
           </div>
@@ -154,10 +143,11 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
               </Button>
             </DialogClose>
             <Button
-              className='px-4 py-2 transition-colors'
+              className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
               onClick={handleUpdateClick}
+              disabled={isPending}
             >
-              {t('Dialog.yes.update')}
+              {isPending ? 'Đang cập nhật...' : t('Dialog.yes.update')}
             </Button>
           </DialogFooter>
         </DialogContent>

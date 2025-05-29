@@ -13,19 +13,28 @@ import {
 } from '@/components/shadcn-base/Dialog';
 import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
+import { useAddSupplier } from '@/hooks/queries/supplierQueries';
+import { Supplier } from '@/types/supplier';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { TranslatedMessage } from '../app/TranslatedMessage';
 
+type SupplierFormData = {
+  name: string;
+  phone: string;
+  status: boolean;
+};
+
 const AddSupplierDialog = () => {
   const t = useTranslations();
-  const [formData, setFormData] = useState({
+  const { mutate: addSupplier, isPending } = useAddSupplier();
+  const [open, setOpen] = useState(false);
+
+  const [formData, setFormData] = useState<SupplierFormData>({
     name: '',
     phone: '',
-    email: '',
-    address: '',
-    status: true, // Mặc định là active
+    status: true,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,17 +47,25 @@ const AddSupplierDialog = () => {
   };
 
   const handleSubmit = () => {
-    if (!formData.name || !formData.phone || !formData.email) {
+    if (!formData.name || !formData.phone) {
       toast.error('Vui lòng điền đầy đủ thông tin nhà cung cấp.');
       return;
     }
 
-    console.log('Supplier submitted:', formData);
-    toast.success('Nhà cung cấp đã được thêm thành công!');
+    addSupplier(formData as Supplier, {
+      onSuccess: () => {
+        setFormData({
+          name: '',
+          phone: '',
+          status: true,
+        });
+        setOpen(false);
+      },
+    });
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className='px-4 py-2 rounded-lg'>
           <TranslatedMessage tKey='Management.create' />
@@ -71,7 +88,6 @@ const AddSupplierDialog = () => {
         </DialogHeader>
 
         <div className='mt-4 space-y-6 text-sm text-gray-800'>
-          {/* --- THÔNG TIN NHÀ CUNG CẤP --- */}
           <div>
             <h3 className='text-base font-semibold text-gray-700 mb-2'>
               Thông tin nhà cung cấp
@@ -79,7 +95,7 @@ const AddSupplierDialog = () => {
             <div className='grid grid-cols-2 gap-4'>
               <div>
                 <Label htmlFor='name' className='text-sm text-gray-500'>
-                  Tên nhà cung cấp
+                  Tên nhà cung cấp <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id='name'
@@ -92,7 +108,7 @@ const AddSupplierDialog = () => {
               </div>
               <div>
                 <Label htmlFor='phone' className='text-sm text-gray-500'>
-                  Số điện thoại
+                  Số điện thoại <span className="text-red-500">*</span>
                 </Label>
                 <Input
                   id='phone'
@@ -101,32 +117,6 @@ const AddSupplierDialog = () => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
-                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                />
-              </div>
-              <div>
-                <Label htmlFor='email' className='text-sm text-gray-500'>
-                  Email
-                </Label>
-                <Input
-                  id='email'
-                  name='email'
-                  type='email'
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                />
-              </div>
-              <div>
-                <Label htmlFor='address' className='text-sm text-gray-500'>
-                  Địa chỉ
-                </Label>
-                <Input
-                  id='address'
-                  name='address'
-                  value={formData.address}
-                  onChange={handleInputChange}
                   className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
                 />
               </div>
@@ -156,8 +146,9 @@ const AddSupplierDialog = () => {
           <Button
             className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
             onClick={handleSubmit}
+            disabled={isPending}
           >
-            {t('Dialog.yes.create')}
+            {isPending ? 'Đang thêm...' : t('Dialog.yes.create')}
           </Button>
         </DialogFooter>
       </DialogContent>

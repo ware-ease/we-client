@@ -11,20 +11,23 @@ import {
 } from '@/components/shadcn-base/Dialog';
 import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
+import { useAddCustomer } from '@/hooks/queries/customerQueries';
+import { Customer } from '@/types/customer';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { TranslatedMessage } from '../app/TranslatedMessage';
 
+type CustomerFormData = Pick<Customer, 'name' | 'phone'>;
+
 const AddCustomerDialog = () => {
   const t = useTranslations();
+  const { mutate: addCustomer, isPending } = useAddCustomer();
+  const [open, setOpen] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CustomerFormData>({
     name: '',
     phone: '',
-    email: '',
-    address: '',
-    status: 'active',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,17 +36,25 @@ const AddCustomerDialog = () => {
   };
 
   const handleSubmit = () => {
-    if (!formData.name || !formData.phone || !formData.email) {
-      toast.error('Please fill in all required fields.');
+    if (!formData.name || !formData.phone) {
+      toast.error('Vui lòng điền đầy đủ thông tin bắt buộc.');
       return;
     }
 
-    console.log('Submitted customer data:', formData);
-    toast.success('Customer added successfully!');
+    // Call the API to add customer
+    addCustomer(formData, {
+      onSuccess: () => {
+        setFormData({
+          name: '',
+          phone: '',
+        });
+        setOpen(false);
+      },
+    });
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className='px-4 py-2 rounded-lg'>
           <TranslatedMessage tKey='Management.create' />
@@ -70,7 +81,7 @@ const AddCustomerDialog = () => {
           <div className='grid grid-cols-2 gap-4'>
             <div>
               <Label className='text-sm text-gray-500' htmlFor='name'>
-                Tên khách hàng
+                Tên khách hàng <span className="text-red-500">*</span>
               </Label>
               <Input
                 id='name'
@@ -83,39 +94,13 @@ const AddCustomerDialog = () => {
             </div>
             <div>
               <Label className='text-sm text-gray-500' htmlFor='phone'>
-                Số điện thoại
+                Số điện thoại<span className="text-red-500">*</span>
               </Label>
               <Input
                 id='phone'
                 name='phone'
+                required
                 value={formData.phone}
-                onChange={handleInputChange}
-                required
-                className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-              />
-            </div>
-            <div>
-              <Label className='text-sm text-gray-500' htmlFor='email'>
-                Email
-              </Label>
-              <Input
-                id='email'
-                name='email'
-                type='email'
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-              />
-            </div>
-            <div>
-              <Label className='text-sm text-gray-500' htmlFor='address'>
-                Địa chỉ
-              </Label>
-              <Input
-                id='address'
-                name='address'
-                value={formData.address}
                 onChange={handleInputChange}
                 className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
               />
@@ -134,8 +119,9 @@ const AddCustomerDialog = () => {
           <Button
             className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors'
             onClick={handleSubmit}
+            disabled={isPending}
           >
-            {t('Dialog.yes.create')}
+            {isPending ? 'Đang thêm...' : t('Dialog.yes.create')}
           </Button>
         </DialogFooter>
       </DialogContent>
