@@ -8,6 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import { useWarehousesStockBook } from '@/hooks/queries/warehouseQueries';
 import { useRouter } from '@/lib/i18n/routing';
 import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
+import * as XLSX from 'xlsx-js-style'; // Import xlsx-js-style for styling
 
 const ReportStockBook = () => {
   const searchParams = useSearchParams();
@@ -42,7 +43,6 @@ const ReportStockBook = () => {
     router.push(`/report/stockbook?warehouseId=${newWarehouseId}`);
   };
 
-  // Generate month and year options
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: (i + 1).toString(),
     label: `Tháng ${i + 1}`,
@@ -52,6 +52,124 @@ const ReportStockBook = () => {
     value: (2020 + i).toString(),
     label: (2020 + i).toString(),
   }));
+
+  const handleExport = () => {
+    if (!stockbook?.details || stockbook.details.length === 0) {
+      alert('Không có dữ liệu để xuất.');
+      return;
+    }
+
+    const exportData = [
+      ['SỔ KHO'],
+      ['Tháng', `${month}/${year}`],
+      ['Tên kho', stockbook?.warehouseName || ''],
+      ['Địa chỉ', stockbook?.address || ''],
+      ['Người phụ trách', stockbook?.inCharge || ''],
+      [],
+      [
+        'Ngày',
+        'Mã hàng',
+        'Tên hàng',
+        'Mã lô',
+        'Chứng từ',
+        'Diễn giải',
+        'Nhập',
+        'Xuất',
+        'Tồn đầu kỳ',
+        'Tồn cuối kỳ',
+      ],
+      ...stockbook.details.map((detail) => [
+        detail.date || '',
+        detail.sku || '',
+        detail.productName || '',
+        detail.batchCode || '',
+        detail.code || '',
+        detail.description || '',
+        detail.import > 0 ? detail.import.toLocaleString('vi-VN') : '',
+        detail.export > 0 ? detail.export.toLocaleString('vi-VN') : '',
+        detail.openingStock.toLocaleString('vi-VN'),
+        detail.closingStock.toLocaleString('vi-VN'),
+      ]),
+    ];
+
+    const styles = {
+      title: {
+        font: { name: 'Times New Roman', sz: 16, bold: true },
+        alignment: { horizontal: 'center' },
+      },
+      header: {
+        font: { name: 'Times New Roman', sz: 12, bold: true },
+        fill: { fgColor: { rgb: 'E6E6FA' } },
+        border: {
+          top: { style: 'thin', color: { rgb: '000000' } },
+          bottom: { style: 'thin', color: { rgb: '000000' } },
+          left: { style: 'thin', color: { rgb: '000000' } },
+          right: { style: 'thin', color: { rgb: '000000' } },
+        },
+      },
+      cell: {
+        font: { name: 'Times New Roman', sz: 11 },
+        border: {
+          top: { style: 'thin', color: { rgb: '000000' } },
+          bottom: { style: 'thin', color: { rgb: '000000' } },
+          left: { style: 'thin', color: { rgb: '000000' } },
+          right: { style: 'thin', color: { rgb: '000000' } },
+        },
+      },
+    };
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet(exportData);
+
+    const ensureCellExists = (cellAddress: string) => {
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: '', t: 's' };
+      }
+    };
+
+    ensureCellExists('A1');
+    worksheet['A1'].s = styles.title;
+
+    worksheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 9 } }];
+
+    const headerRow = 7;
+    ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'].forEach((col) => {
+      const cellAddress = `${col}${headerRow}`;
+      ensureCellExists(cellAddress);
+      worksheet[cellAddress].s = styles.header;
+    });
+
+    const dataStartRow = 8;
+    stockbook.details.forEach((_, index) => {
+      const row = dataStartRow + index;
+      ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'].forEach((col) => {
+        const cellAddress = `${col}${row}`;
+        ensureCellExists(cellAddress);
+        worksheet[cellAddress].s = styles.cell;
+      });
+    });
+
+    const wscols = [
+      { wch: 15 }, // Ngày
+      { wch: 15 }, // Mã hàng
+      { wch: 20 }, // Tên hàng
+      { wch: 15 }, // Mã lô
+      { wch: 15 }, // Chứng từ
+      { wch: 30 }, // Diễn giải
+      { wch: 10 }, // Nhập
+      { wch: 10 }, // Xuất
+      { wch: 15 }, // Tồn đầu kỳ
+      { wch: 15 }, // Tồn cuối kỳ
+    ];
+    worksheet['!cols'] = wscols;
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'StockBook');
+
+    XLSX.writeFile(
+      workbook,
+      `The_Kho_${stockbook?.warehouseName || 'StockBook'}_${month}_${year}.xlsx`
+    );
+  };
 
   return (
     <div className='p-6'>
@@ -72,7 +190,7 @@ const ReportStockBook = () => {
             </div>
             <div className='space-x-2'>
               <button
-                onClick={() => handlePrint()}
+                onClick={handleExport} // Updated to use handleExport
                 className='flex items-center bg-green-600 text-white px-4 py-2 rounded-3xl hover:bg-green-700 transition-colors'
               >
                 <Download className='w-4 h-4 mr-2' />
@@ -229,7 +347,7 @@ const ReportStockBook = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan={8}
+                    colSpan={10} // Updated to 10 columns
                     className='border border-gray-200 p-2 text-center text-gray-600'
                   >
                     Không có giao dịch
@@ -350,7 +468,7 @@ const ReportStockBook = () => {
               ) : (
                 <tr>
                   <td
-                    colSpan={8}
+                    colSpan={10} // Updated to 10 columns
                     className='border border-black p-2 text-center'
                   >
                     Không có giao dịch

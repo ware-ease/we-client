@@ -13,6 +13,7 @@ import {
 import { useRouter } from '@/lib/i18n/routing';
 import ProductComboBox from '@/components/combo-boxes/ProductComboBox';
 import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
+import * as XLSX from 'xlsx-js-style'; // Use xlsx-js-style for styling
 
 const ReportStockCard = () => {
   const searchParams = useSearchParams();
@@ -64,7 +65,6 @@ const ReportStockCard = () => {
       end.setHours(23, 59, 59, 99);
       inboundDatePass = inboundDatePass && inboundDate <= end;
     }
-
     return inboundDatePass;
   });
 
@@ -89,6 +89,105 @@ const ReportStockCard = () => {
     );
   };
 
+  const handleExport = () => {
+    if (!filteredDetails || filteredDetails.length === 0) {
+      alert('Không có dữ liệu để xuất.');
+      return;
+    }
+
+    const exportData = [
+      ['THẺ KHO'], // Row 1: Title
+      ['Kho', data?.warehouseName || ''], // Row 2
+      ['Mã hàng', data?.productCode || ''], // Row 3
+      ['Tên hàng', data?.productName || ''], // Row 4
+      ['Đơn vị tính', data?.unitName || ''], // Row 5
+      [], // Row 6: Empty row for spacing
+      ['Ngày', 'Chứng từ', 'Diễn giải', 'Nhập', 'Xuất', 'Tồn', 'Ghi chú'], // Row 7: Headers
+      ...filteredDetails.map((detail) => [
+        formatDate(detail.date),
+        detail.code || '',
+        detail.description || '',
+        detail.import !== 0 ? detail.import : '',
+        detail.export !== 0 ? detail.export : '',
+        detail.stock.toLocaleString('vi-VN'),
+        detail.note || '',
+      ]),
+    ];
+
+    const styles = {
+      title: {
+        font: { name: 'Times New Roman', sz: 16, bold: true },
+        alignment: { horizontal: 'center' },
+      },
+      header: {
+        font: { name: 'Times New Roman', sz: 12, bold: true },
+        fill: { fgColor: { rgb: 'E6E6FA' } },
+        border: {
+          top: { style: 'thin', color: { rgb: '000000' } },
+          bottom: { style: 'thin', color: { rgb: '000000' } },
+          left: { style: 'thin', color: { rgb: '000000' } },
+          right: { style: 'thin', color: { rgb: '000000' } },
+        },
+      },
+      cell: {
+        font: { name: 'Times New Roman', sz: 11 },
+        border: {
+          top: { style: 'thin', color: { rgb: '000000' } },
+          bottom: { style: 'thin', color: { rgb: '000000' } },
+          left: { style: 'thin', color: { rgb: '000000' } },
+          right: { style: 'thin', color: { rgb: '000000' } },
+        },
+      },
+    };
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.aoa_to_sheet(exportData);
+
+    const ensureCellExists = (cellAddress: string) => {
+      if (!worksheet[cellAddress]) {
+        worksheet[cellAddress] = { v: '', t: 's' };
+      }
+    };
+
+    ensureCellExists('A1');
+    worksheet['A1'].s = styles.title;
+    worksheet['!merges'] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }];
+
+    const headerRow = 7;
+    ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach((col) => {
+      const cellAddress = `${col}${headerRow}`;
+      ensureCellExists(cellAddress);
+      worksheet[cellAddress].s = styles.header;
+    });
+
+    const dataStartRow = 8;
+    filteredDetails.forEach((_, index) => {
+      const row = dataStartRow + index;
+      ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach((col) => {
+        const cellAddress = `${col}${row}`;
+        ensureCellExists(cellAddress);
+        worksheet[cellAddress].s = styles.cell;
+      });
+    });
+
+    const wscols = [
+      { wch: 15 }, // Ngày
+      { wch: 15 }, // Chứng từ
+      { wch: 30 }, // Diễn giải
+      { wch: 10 }, // Nhập
+      { wch: 10 }, // Xuất
+      { wch: 10 }, // Tồn
+      { wch: 20 }, // Ghi chú
+    ];
+    worksheet['!cols'] = wscols;
+
+    // Append the worksheet to the workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'StockCard');
+
+    // Generate and download the Excel file
+    XLSX.writeFile(workbook, `The_Kho_${data?.productCode || 'Report'}.xlsx`);
+  };
+
   return (
     <div className='p-6'>
       <div className='bg-white border border-gray-200 shadow-md rounded-xl p-6 mb-4'>
@@ -106,7 +205,7 @@ const ReportStockCard = () => {
             </div>
             <div className='space-x-2'>
               <button
-                onClick={() => handlePrint()}
+                onClick={handleExport}
                 className='flex items-center bg-green-600 text-white px-4 py-2 rounded-3xl hover:bg-green-700 transition-colors'
               >
                 <Download className='w-4 h-4 mr-2' />
@@ -305,7 +404,6 @@ const ReportStockCard = () => {
             THẺ KHO
           </div>
 
-          {/* Table */}
           <table className='w-full border border-black mt-4'>
             <thead>
               <tr className='text-left font-normal'>
