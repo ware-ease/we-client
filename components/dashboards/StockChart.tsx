@@ -1,7 +1,16 @@
 'use client';
 
-import * as React from 'react';
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { useGetDashboardHistogram } from '@/hooks/queries/dashboardQueries';
+import { useMemo, useState } from 'react';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import {
   Card,
   CardContent,
@@ -9,150 +18,25 @@ import {
   CardHeader,
   CardTitle,
 } from '../shadcn-base/Card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '../shadcn-base/Chart';
 
-export const description =
-  'A bar chart showing export and import quantities per day for a specific warehouse';
+interface DailyRecord {
+  date: string;
+  putIn: number;
+  takeOut: number;
+}
 
-const chartData = [
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-  {
-    date: '2024-04-01',
-    khoA: { exported: 160, imported: 90 },
-    khoB: { exported: 130, imported: 70 },
-    khoC: { exported: 110, imported: 60 },
-  },
-];
+interface WarehouseData {
+  warehouseName: string;
+  totalPutIn: number;
+  totalTakeOut: number;
+  dailyRecords: DailyRecord[];
+}
+
+interface HistogramResponse {
+  status: number;
+  message: string;
+  data: WarehouseData[];
+}
 
 const chartConfig = {
   exported: {
@@ -163,48 +47,53 @@ const chartConfig = {
     label: 'Nhập kho',
     color: '#60A5FA', // Light blue
   },
-  khoA: {
-    label: 'Kho A',
+  'Kho Sài Gòn': {
+    label: 'Kho Sài Gòn',
   },
-  khoB: {
-    label: 'Kho B',
+  'Kho Tiền Giang': {
+    label: 'Kho Tiền Giang',
   },
-  khoC: {
-    label: 'Kho C',
+  'Kho Long An': {
+    label: 'Kho Long An',
   },
-} satisfies ChartConfig;
+};
 
-const warehouseKeys = ['khoA', 'khoB', 'khoC'] as const;
-type WarehouseKey = (typeof warehouseKeys)[number]; // 'khoA' | 'khoB' | 'khoC'
+const warehouseKeys = ['Kho Sài Gòn', 'Kho Tiền Giang', 'Kho Long An'] as const;
+type WarehouseKey = (typeof warehouseKeys)[number];
 
-export function StockChart() {
-  const [activeChart, setActiveChart] = React.useState<WarehouseKey>('khoA');
+export function StockCharts() {
+  const [activeChart, setActiveChart] = useState<WarehouseKey>('Kho Sài Gòn');
+  const { data: chartResponse, isLoading } = useGetDashboardHistogram();
 
-  const total = React.useMemo(() => {
-    return chartData.reduce(
-      (acc, data) => {
-        acc.khoA.exported += data.khoA.exported;
-        acc.khoA.imported += data.khoA.imported;
-        acc.khoB.exported += data.khoB.exported;
-        acc.khoB.imported += data.khoB.imported;
-        acc.khoC.exported += data.khoC.exported;
-        acc.khoC.imported += data.khoC.imported;
-        return acc;
-      },
-      {
-        khoA: { exported: 0, imported: 0 },
-        khoB: { exported: 0, imported: 0 },
-        khoC: { exported: 0, imported: 0 },
-      }
+  const total = useMemo(() => {
+    if (!chartResponse?.data) return {};
+    return chartResponse.data.reduce((acc: Record<string, { exported: number; imported: number }>, warehouse: WarehouseData) => {
+      acc[warehouse.warehouseName] = {
+        exported: warehouse.totalTakeOut,
+        imported: warehouse.totalPutIn,
+      };
+      return acc;
+    }, {});
+  }, [chartResponse]);
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
+          <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6'>
+            <CardTitle>Đang tải dữ liệu...</CardTitle>
+          </div>
+        </CardHeader>
+      </Card>
     );
-  }, []);
+  }
 
-  const [isClient, setIsClient] = React.useState(false);
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) return null;
+  const activeWarehouse = chartResponse?.data?.find((w: WarehouseData) => w.warehouseName === activeChart);
+  const chartData = activeWarehouse?.dailyRecords.map((record: DailyRecord) => ({
+    date: record.date,
+    exported: record.takeOut,
+    imported: record.putIn,
+  })) || [];
 
   return (
     <Card>
@@ -221,7 +110,7 @@ export function StockChart() {
         </div>
         <div className='flex'>
           {warehouseKeys.map((key) => {
-            const chartTotal = total[key];
+            const warehouseTotal = total[key] || { exported: 0, imported: 0 };
             return (
               <button
                 key={key}
@@ -233,8 +122,8 @@ export function StockChart() {
                   {chartConfig[key].label}
                 </span>
                 <span className='text-base leading-none font-bold sm:text-xl'>
-                  {chartTotal.exported.toLocaleString()} xuất /{' '}
-                  {chartTotal.imported.toLocaleString()} nhập
+                  {warehouseTotal.exported.toLocaleString()} xuất /{' '}
+                  {warehouseTotal.imported.toLocaleString()} nhập
                 </span>
               </button>
             );
@@ -243,69 +132,61 @@ export function StockChart() {
       </CardHeader>
 
       <CardContent className='px-2 sm:p-6'>
-        <ChartContainer
-          config={chartConfig}
-          className='aspect-auto h-[300px] w-full'
-        >
-          <BarChart
-            accessibilityLayer
-            data={chartData.map((data) => ({
-              date: data.date,
-              exported: data[activeChart].exported,
-              imported: data[activeChart].imported,
-            }))}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey='date'
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value);
-                return date.toLocaleDateString('vi-VN', {
-                  month: 'short',
-                  day: 'numeric',
-                });
+        <div className='aspect-[4/3] h-[300px] w-full'>
+          <ResponsiveContainer width='100%' height='100%'>
+            <BarChart
+              data={chartData}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
               }}
-            />
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) => `${value} mặt hàng`}
-            />
-            <ChartTooltip
-              content={
-                <ChartTooltipContent
-                  className='w-[150px]'
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString('vi-VN', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    });
-                  }}
-                />
-              }
-            />
-            <Bar
-              dataKey='exported'
-              fill={chartConfig.exported.color}
-              name='Xuất kho'
-            />
-            <Bar
-              dataKey='imported'
-              fill={chartConfig.imported.color}
-              name='Nhập kho'
-            />
-          </BarChart>
-        </ChartContainer>
+            >
+              <CartesianGrid vertical={false} strokeDasharray='3 3' />
+              <XAxis
+                dataKey='date'
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+                tickFormatter={(value) => value.split('/')[0]}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                tickFormatter={(value) => `${value.toLocaleString()}`}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'white',
+                  border: '1px solid #ccc',
+                  borderRadius: '6px',
+                }}
+                formatter={(value: number) => [`${value.toLocaleString()} mặt hàng`]}
+                labelFormatter={(label) => {
+                  const [day, month, year] = label.split('/');
+                  return `Ngày ${day} tháng ${month} năm ${year}`;
+                }}
+              />
+              <Bar
+                dataKey='exported'
+                name='Xuất kho'
+                fill={chartConfig.exported.color}
+                radius={[4, 4, 0, 0]}
+                maxBarSize={40}
+              />
+              <Bar
+                dataKey='imported'
+                name='Nhập kho'
+                fill={chartConfig.imported.color}
+                radius={[4, 4, 0, 0]}
+                maxBarSize={40}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </CardContent>
     </Card>
   );

@@ -2,7 +2,7 @@
 import { AreaCharts } from '@/components/dashboards/AreaChart';
 import BaseCard from '@/components/dashboards/BaseCard';
 import { PieCharts } from '@/components/dashboards/PieChart';
-import { StockChart } from '@/components/dashboards/StockChart';
+import { StockCharts } from '@/components/dashboards/StockChart';
 import { getDashboardCards } from '@/services/dashboardService';
 import {
   LucideArrowDownToLine,
@@ -100,7 +100,7 @@ const Dashboard = () => {
 
       {/* Biểu đồ tồn kho */}
       <div className='col-span-4'>
-        <StockChart />
+        <StockCharts />
       </div>
 
       {/* Biểu đồ khu vực */}

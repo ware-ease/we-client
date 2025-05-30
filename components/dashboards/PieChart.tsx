@@ -1,171 +1,140 @@
 'use client';
 
-import { getDashboardPieChart } from '@/services/dashboardService';
+import { useGetDashboardPieChart } from '@/hooks/queries/dashboardQueries';
 import { TrendingDown, TrendingUp } from 'lucide-react';
-import * as React from 'react';
-import { Label, Pie, PieChart } from 'recharts';
+import { useMemo } from 'react';
+import { Cell, Pie, PieChart } from 'recharts';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '../shadcn-base/Card';
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from '../shadcn-base/Chart';
 
-interface PieChartData {
+interface WarehouseData {
+  warehouse: string;
+  quantity: number;
+  percent: number;
+}
+
+interface PieChartResponse {
   status: number;
   message: string;
   data: {
-    warehouses: {
-      warehouse: string;
-      quantity: number;
-    }[];
     totalStock: number;
     changePercent: number;
+    warehouses: WarehouseData[];
   };
 }
 
-const chartConfig = {
-  inventory: {
-    label: 'Tồn kho',
-  },
-  warehouse1: {
-    label: 'Kho Sài Gòn',
-    color: '#1E3A8A', // Xanh dương đậm
-  },
-  warehouse2: {
-    label: 'Kho Tiền Giang',
-    color: '#60A5FA', // Xanh dương nhạt
-  },
-  warehouse3: {
-    label: 'Kho Long An',
-    color: '#DBEAFE', // Xanh dương rất nhạt
-  },
-} satisfies ChartConfig;
-
-// Add CSS variables for warehouse colors
-if (typeof document !== 'undefined') {
-  document.documentElement.style.setProperty('--color-warehouse-1', '#1E3A8A');
-  document.documentElement.style.setProperty('--color-warehouse-2', '#60A5FA');
-  document.documentElement.style.setProperty('--color-warehouse-3', '#DBEAFE');
+interface ChartData {
+  name: string;
+  value: number;
+  percent: number;
 }
 
-export function PieCharts() {
-  const [chartData, setChartData] = React.useState<PieChartData['data'] | null>(null);
-  const [isLoading, setIsLoading] = React.useState(true);
+interface PieChartProps {
+  warehouseId?: string;
+}
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getDashboardPieChart();
-        setChartData(response.data);
-      } catch (error) {
-        console.error('Error fetching pie chart data:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+const COLORS = ['#1E3A8A', '#60A5FA', '#DBEAFE'];
 
-    fetchData();
-  }, []);
+export function PieCharts({ warehouseId }: PieChartProps) {
+  const { data: chartResponse, isLoading } = useGetDashboardPieChart(warehouseId);
 
-  if (isLoading || !chartData) {
+  const chartData = useMemo(() => {
+    if (!chartResponse?.data?.warehouses) return [];
+    return chartResponse.data.warehouses.map((item: WarehouseData): ChartData => ({
+      name: item.warehouse,
+      value: item.quantity,
+      percent: item.percent,
+    }));
+  }, [chartResponse]);
+
+  const totalStock = chartResponse?.data?.totalStock || 0;
+  const changePercent = chartResponse?.data?.changePercent || 0;
+
+  if (isLoading) {
     return (
       <Card className='flex flex-col'>
-        <CardHeader className='items-center pb-0'>
-          <CardTitle>Phân bố hàng hóa tồn kho theo kho</CardTitle>
+        <CardHeader className='items-center pb-2'>
+          <CardTitle>Phân bố hàng hóa theo kho</CardTitle>
           <CardDescription>Đang tải dữ liệu...</CardDescription>
         </CardHeader>
       </Card>
     );
   }
 
-  const pieData = chartData.warehouses.map((item, index) => ({
-    warehouse: item.warehouse,
-    inventory: Math.max(0, item.quantity), // Ensure non-negative values for visualization
-    fill: `var(--color-warehouse-${index + 1})`,
-  }));
-
   return (
     <Card className='flex flex-col'>
-      <CardHeader className='items-center pb-0'>
-        <CardTitle>Phân bố hàng hóa tồn kho theo kho</CardTitle>
-        <CardDescription>Số liệu từ tháng 1 - tháng 6 năm 2024</CardDescription>
+      <CardHeader className='items-center pb-2'>
+        <CardTitle>Phân bố hàng hóa theo kho</CardTitle>
+        <CardDescription>
+          Tỷ lệ phân bố hàng hóa trong các kho
+        </CardDescription>
       </CardHeader>
-      <CardContent className='flex-1 pb-0'>
-        <ChartContainer
-          config={chartConfig}
-          className='mx-auto aspect-square max-h-[360px]'
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
+      <CardContent className='flex flex-col items-center gap-2'>
+        <div className='relative flex justify-center items-center h-[270px]'>
+          <div className='absolute inset-0 flex flex-col justify-center items-center'>
+            <span className='text-3xl font-bold'>{totalStock}</span>
+            <span className='text-sm text-gray-500'>Tổng tồn kho</span>
+          </div>
+          <PieChart width={400} height={260}>
             <Pie
-              data={pieData}
-              dataKey='inventory'
-              nameKey='warehouse'
-              innerRadius={50}
-              strokeWidth={3}
+              data={chartData}
+              cx={200}
+              cy={130}
+              innerRadius={70}
+              outerRadius={110}
+              fill='#8884d8'
+              paddingAngle={2}
+              dataKey='value'
+              nameKey='name'
             >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && 'cx' in viewBox && 'cy' in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor='middle'
-                        dominantBaseline='middle'
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className='fill-foreground text-3xl font-bold'
-                        >
-                          {chartData.totalStock.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className='fill-muted-foreground'
-                        >
-                          Tổng tồn kho
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
+              {chartData.map((entry: ChartData, index: number) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
             </Pie>
           </PieChart>
-        </ChartContainer>
+        </div>
+        <div className='w-full flex flex-col gap-2'>
+          {chartData.map((item: ChartData, index: number) => (
+            <div key={item.name} className='flex items-center justify-between'>
+              <div className='flex items-center gap-2'>
+                <div
+                  className='w-3 h-3 rounded-full'
+                  style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                />
+                <span className='text-sm text-gray-600'>{item.name}</span>
+              </div>
+              <div className='flex items-center gap-1'>
+                <span className='text-sm font-medium'>{item.value}</span>
+                <span className='text-sm text-gray-500'>({item.percent.toFixed(1)}%)</span>
+              </div>
+            </div>
+          ))}
+          <div className='flex items-center justify-center gap-2 text-sm pt-1'>
+            <span className='flex items-center gap-1'>
+              {changePercent > 0 ? (
+                <>
+                  <TrendingUp className='h-4 w-4 text-green-500' />
+                  <span className='text-green-600'>Tăng {changePercent}%</span>
+                </>
+              ) : (
+                <>
+                  <TrendingDown className='h-4 w-4 text-red-500' />
+                  <span className='text-red-600'>Giảm {Math.abs(changePercent)}%</span>
+                </>
+              )}
+            </span>
+            <span className='text-gray-500'>so với tháng trước</span>
+          </div>
+        </div>
       </CardContent>
-      <CardFooter className='flex-col gap-2 text-sm'>
-        <div className='flex items-center gap-2 leading-none font-medium'>
-          {chartData.changePercent >= 0
-            ? `Tổng tồn kho tăng ${chartData.changePercent}% trong 6 tháng đầu năm 2024`
-            : `Tổng tồn kho giảm ${Math.abs(
-                chartData.changePercent
-              )}% trong 6 tháng đầu năm 2024`}
-          {chartData.changePercent >= 0 ? (
-            <TrendingUp className='h-4 w-4' />
-          ) : (
-            <TrendingDown className='h-4 w-4' />
-          )}
-        </div>
-        <div className='text-muted-foreground leading-none'>
-          Hiển thị tổng số hàng hóa tồn kho của các kho trong 6 tháng qua
-        </div>
-      </CardFooter>
     </Card>
   );
 }
