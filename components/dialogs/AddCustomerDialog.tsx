@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { TranslatedMessage } from '../app/TranslatedMessage';
 
-type CustomerFormData = Pick<Customer, 'name' | 'phone'>;
+type CustomerFormData = Pick<Customer, 'name' | 'phone' | 'email'>;
 
 const AddCustomerDialog = () => {
   const t = useTranslations();
@@ -28,6 +28,7 @@ const AddCustomerDialog = () => {
   const [formData, setFormData] = useState<CustomerFormData>({
     name: '',
     phone: '',
+    email: '',
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +48,7 @@ const AddCustomerDialog = () => {
         setFormData({
           name: '',
           phone: '',
+          email: '',
         });
         setOpen(false);
       },
@@ -81,7 +83,7 @@ const AddCustomerDialog = () => {
           <div className='grid grid-cols-2 gap-4'>
             <div>
               <Label className='text-sm text-gray-500' htmlFor='name'>
-                Tên khách hàng <span className="text-red-500">*</span>
+                Tên khách hàng <span className='text-red-500'>*</span>
               </Label>
               <Input
                 id='name'
@@ -94,7 +96,7 @@ const AddCustomerDialog = () => {
             </div>
             <div>
               <Label className='text-sm text-gray-500' htmlFor='phone'>
-                Số điện thoại<span className="text-red-500">*</span>
+                Số điện thoại<span className='text-red-500'>*</span>
               </Label>
               <Input
                 id='phone'
