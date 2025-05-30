@@ -21,18 +21,18 @@ import {
 } from '../shadcn-base/Chart';
 
 const MONTHS = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  'Tháng 1',
+  'Tháng 2',
+  'Tháng 3',
+  'Tháng 4',
+  'Tháng 5',
+  'Tháng 6',
+  'Tháng 7',
+  'Tháng 8',
+  'Tháng 9',
+  'Tháng 10',
+  'Tháng 11',
+  'Tháng 12',
 ];
 
 const chartConfig = {
@@ -175,13 +175,12 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
             />
             <YAxis
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => `${value} mặt hàng`}
+              tickFormatter={(value) => `${value.toLocaleString()} mặt hàng`}
             />
             <ChartTooltip
               cursor={false}
@@ -222,7 +221,7 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
               )}
             </div>
             <div className='text-muted-foreground flex items-center gap-2 leading-none'>
-              Số liệu {chartData[0]?.month.slice(0, 3)} - {chartData[chartData.length - 1]?.month.slice(0, 3)} năm {new Date().getFullYear()}
+              Số liệu từ {chartData[0]?.month} đến {chartData[chartData.length - 1]?.month} năm {new Date().getFullYear()}
             </div>
           </div>
         </div>

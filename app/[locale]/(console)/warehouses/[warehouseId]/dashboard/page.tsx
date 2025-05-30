@@ -44,8 +44,9 @@ const WarehouseDashboard = () => {
     fetchData();
   }, [warehouseId]);
 
-  // console.log(cardData);
-  // console.log(warehouseId);
+  if (!warehouseId) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='grid gap-6 p-6 sm:grid-cols-2 lg:grid-cols-4'>
@@ -105,17 +106,15 @@ const WarehouseDashboard = () => {
       />
 
       <div className='col-span-4'>
-        <StockChart />
+        <StockChart warehouseId={warehouseId} />
       </div>
 
       <div className='col-span-2'>
-        <AreaCharts />
+        <AreaCharts warehouseId={warehouseId} />
       </div>
 
       <div className='col-span-2'>
-        <PieCharts
-        //warehouseId={warehouseId}
-        />
+        <PieCharts warehouseId={warehouseId} />
       </div>
     </div>
   );

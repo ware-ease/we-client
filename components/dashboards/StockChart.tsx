@@ -1,4 +1,4 @@
-'use client';
+/* eslint-disable @typescript-eslint/no-explicit-any */ 'use client';
 
 import { useGetDashboardHistogram } from '@/hooks/queries/dashboardQueries';
 import { useMemo, useState } from 'react';
@@ -32,11 +32,11 @@ interface WarehouseData {
   dailyRecords: DailyRecord[];
 }
 
-interface HistogramResponse {
-  status: number;
-  message: string;
-  data: WarehouseData[];
-}
+// interface HistogramResponse {
+//   status: number;
+//   message: string;
+//   data: WarehouseData[];
+// }
 
 const chartConfig = {
   exported: {
@@ -58,6 +58,36 @@ const chartConfig = {
   },
 };
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const [day, month, year] = label.split('/');
+    return (
+      <div className='rounded-lg border bg-white p-3 shadow-sm'>
+        <p className='mb-2 font-medium'>
+          Ngày {day} tháng {month} năm {year}
+        </p>
+        {payload.map((entry: any, index: number) => (
+          <div key={index} className='flex items-center gap-2 text-sm'>
+            <div
+              className='h-2 w-2 rounded-full'
+              style={{
+                backgroundColor: entry.color,
+              }}
+            />
+            <span className='text-muted-foreground'>
+              {entry.name === 'exported' ? 'Xuất kho:' : 'Nhập kho:'}
+            </span>
+            <span className='font-medium'>
+              {entry.value.toLocaleString()} mặt hàng
+            </span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 const warehouseKeys = ['Kho Sài Gòn', 'Kho Tiền Giang', 'Kho Long An'] as const;
 type WarehouseKey = (typeof warehouseKeys)[number];
 
@@ -67,13 +97,19 @@ export function StockCharts() {
 
   const total = useMemo(() => {
     if (!chartResponse?.data) return {};
-    return chartResponse.data.reduce((acc: Record<string, { exported: number; imported: number }>, warehouse: WarehouseData) => {
-      acc[warehouse.warehouseName] = {
-        exported: warehouse.totalTakeOut,
-        imported: warehouse.totalPutIn,
-      };
-      return acc;
-    }, {});
+    return chartResponse.data.reduce(
+      (
+        acc: Record<string, { exported: number; imported: number }>,
+        warehouse: WarehouseData
+      ) => {
+        acc[warehouse.warehouseName] = {
+          exported: warehouse.totalTakeOut,
+          imported: warehouse.totalPutIn,
+        };
+        return acc;
+      },
+      {}
+    );
   }, [chartResponse]);
 
   if (isLoading) {
@@ -88,12 +124,15 @@ export function StockCharts() {
     );
   }
 
-  const activeWarehouse = chartResponse?.data?.find((w: WarehouseData) => w.warehouseName === activeChart);
-  const chartData = activeWarehouse?.dailyRecords.map((record: DailyRecord) => ({
-    date: record.date,
-    exported: record.takeOut,
-    imported: record.putIn,
-  })) || [];
+  const activeWarehouse = chartResponse?.data?.find(
+    (w: WarehouseData) => w.warehouseName === activeChart
+  );
+  const chartData =
+    activeWarehouse?.dailyRecords.map((record: DailyRecord) => ({
+      date: record.date,
+      exported: record.takeOut,
+      imported: record.putIn,
+    })) || [];
 
   return (
     <Card>
@@ -115,7 +154,7 @@ export function StockCharts() {
               <button
                 key={key}
                 data-active={activeChart === key}
-                className='data-[active=true]:bg-muted/50 relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6'
+                className='data-[active=true]:bg-muted/50 relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l hover:bg-muted/30 transition-colors sm:border-t-0 sm:border-l sm:px-8 sm:py-6'
                 onClick={() => setActiveChart(key)}
               >
                 <span className='text-muted-foreground text-xs'>
@@ -159,27 +198,19 @@ export function StockCharts() {
                 tickFormatter={(value) => `${value.toLocaleString()}`}
               />
               <Tooltip
-                contentStyle={{
-                  backgroundColor: 'white',
-                  border: '1px solid #ccc',
-                  borderRadius: '6px',
-                }}
-                formatter={(value: number) => [`${value.toLocaleString()} mặt hàng`]}
-                labelFormatter={(label) => {
-                  const [day, month, year] = label.split('/');
-                  return `Ngày ${day} tháng ${month} năm ${year}`;
-                }}
+                content={<CustomTooltip />}
+                cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }}
               />
               <Bar
                 dataKey='exported'
-                name='Xuất kho'
+                name='exported'
                 fill={chartConfig.exported.color}
                 radius={[4, 4, 0, 0]}
                 maxBarSize={40}
               />
               <Bar
                 dataKey='imported'
-                name='Nhập kho'
+                name='imported'
                 fill={chartConfig.imported.color}
                 radius={[4, 4, 0, 0]}
                 maxBarSize={40}

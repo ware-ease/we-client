@@ -31,10 +31,12 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
   const addCustomerMutation = useAddCustomer();
   const updateCustomerMutation = useUpdateCustomer();
   const deleteCustomerMutation = useDeleteCustomer();
-  
+
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [filteredCustomers, setFilteredCustomers] = useState<Customer[] | undefined>(customers);
+  const [filteredCustomers, setFilteredCustomers] = useState<
+    Customer[] | undefined
+  >(customers);
   const [newCustomer, setNewCustomer] = useState<Partial<Customer>>({
     name: '',
     phone: '',
@@ -44,7 +46,6 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [editingCustomer, setEditingCustomer] = useState<string | null>(null);
   const [editedCustomer, setEditedCustomer] = useState<Partial<Customer>>({});
-  const [customerToDelete, setCustomerToDelete] = useState<string>('');
 
   useEffect(() => {
     setFilteredCustomers(customers);
@@ -242,16 +243,16 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
                             onClick={() => handleEditCustomer(customer)}
                           />
                           <DeleteDialog
-                            onConfirmDelete={() => deleteCustomerMutation.mutate(customer.id)}
+                            onConfirmDelete={() =>
+                              deleteCustomerMutation.mutate(customer.id)
+                            }
                             title='Xóa khách hàng'
                             description='Bạn có chắc chắn muốn xóa khách hàng này không?'
                             isLoading={deleteCustomerMutation.isPending}
                           >
                             <Trash2
                               className='text-red-600 h-4 w-4 cursor-pointer'
-                              onClick={() => {
-                                setCustomerToDelete(customer.id);
-                              }}
+                              onClick={() => {}}
                             />
                           </DeleteDialog>
                         </div>

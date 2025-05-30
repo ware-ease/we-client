@@ -18,15 +18,15 @@ interface WarehouseData {
   percent: number;
 }
 
-interface PieChartResponse {
-  status: number;
-  message: string;
-  data: {
-    totalStock: number;
-    changePercent: number;
-    warehouses: WarehouseData[];
-  };
-}
+// interface PieChartResponse {
+//   status: number;
+//   message: string;
+//   data: {
+//     totalStock: number;
+//     changePercent: number;
+//     warehouses: WarehouseData[];
+//   };
+// }
 
 interface ChartData {
   name: string;
