@@ -2,9 +2,9 @@ import { Supplier } from '../types/supplier';
 import {
   axiosDelete,
   axiosGet,
+  axiosPatch,
   axiosPost,
-  axiosPut,
-  baseFilters,
+  baseFilters
 } from './baseService';
 
 export const getAllSuppliers = async (): Promise<Supplier[]> => {
@@ -28,7 +28,7 @@ export const updateSupplier = async (
   id: string,
   supplierData: Supplier
 ): Promise<Supplier> => {
-  const response = await axiosPut(`/suppliers/${id}`, supplierData, {});
+  const response = await axiosPatch(`/suppliers/${id}`, supplierData, {});
   return response.data.data;
 };
 

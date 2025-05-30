@@ -17,7 +17,7 @@ import {
   useUpdateCustomer,
 } from '@/hooks/queries/customerQueries';
 import { Customer } from '@/types/customer';
-import { Check, Edit, Search, Trash2, X } from 'lucide-react';
+import { Edit, Search, Trash2, X } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { DeleteDialog } from './DeleteDialog';
@@ -31,20 +31,19 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
   const addCustomerMutation = useAddCustomer();
   const updateCustomerMutation = useUpdateCustomer();
   const deleteCustomerMutation = useDeleteCustomer();
+  
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [filteredCustomers, setFilteredCustomers] = useState<
-    Customer[] | undefined
-  >(customers);
-  const [newCustomer, setNewCustomer] = useState('');
-  const [newCustomerEmail, setNewCustomerEmail] = useState('');
-
-  const [editedEmail, setEditedEmail] = useState('');
+  const [filteredCustomers, setFilteredCustomers] = useState<Customer[] | undefined>(customers);
+  const [newCustomer, setNewCustomer] = useState<Partial<Customer>>({
+    name: '',
+    phone: '',
+  });
 
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [editingCustomer, setEditingCustomer] = useState<string | null>(null);
-  const [editedName, setEditedName] = useState('');
+  const [editedCustomer, setEditedCustomer] = useState<Partial<Customer>>({});
   const [customerToDelete, setCustomerToDelete] = useState<string>('');
 
   useEffect(() => {
@@ -65,20 +64,59 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
   };
 
   const handleEditCustomer = (customer: Customer) => {
-    setEditingCustomer(customer.id);
-    setEditedName(customer.name);
+    setNewCustomer(customer);
+    setShowForm(true);
   };
-  const handleSaveEdit = (id: string) => {
-    updateCustomerMutation.mutate({ id, name: editedName, email: editedEmail });
+
+  const handleSaveCustomer = () => {
+    if (!newCustomer.name?.trim() || !newCustomer.phone?.trim()) {
+      toast.error('Vui lòng nhập đầy đủ thông tin khách hàng.');
+      return;
+    }
+
+    if (newCustomer.id) {
+      updateCustomerMutation.mutate(
+        {
+          id: newCustomer.id,
+          name: newCustomer.name,
+          phone: newCustomer.phone,
+          email: newCustomer.email || 'default@example.com',
+        },
+        {
+          onSuccess: () => {
+            setShowForm(false);
+          },
+          onError: () => {
+            toast.error('Không thể cập nhật khách hàng.');
+          },
+        }
+      );
+    } else {
+      addCustomerMutation.mutate(
+        {
+          name: newCustomer.name,
+          phone: newCustomer.phone || '',
+          email: 'default@example.com',
+        },
+        {
+          onSuccess: () => {
+            setShowForm(false);
+            setNewCustomer({
+              name: '',
+              phone: '',
+            });
+          },
+          onError: () => {
+            toast.error('Không thể thêm khách hàng.');
+          },
+        }
+      );
+    }
   };
 
   const handleCancelEdit = () => {
     setEditingCustomer(null);
-    setEditedName('');
-  };
-
-  const handleConfirmDelete = () => {
-    deleteCustomerMutation.mutate(customerToDelete);
+    setEditedCustomer({});
   };
 
   return (
@@ -92,49 +130,52 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
           </DialogTitle>
         </DialogHeader>
 
-        {/* Form thêm khách hàng */}
         {showForm ? (
           <div className='border p-4 rounded-md bg-gray-50'>
-            <Label htmlFor='customer-name' className='text-red-600'>
-              Tên khách hàng *
-            </Label>
-            <Input
-              id='customer-name'
-              value={newCustomer}
-              onChange={(e) => setNewCustomer(e.target.value)}
-              placeholder='Nhập tên khách hàng...'
-              className='mt-1'
-            />
+            <div>
+              <Label htmlFor='customer-name' className='text-red-600'>
+                Tên khách hàng *
+              </Label>
+              <Input
+                id='customer-name'
+                value={newCustomer.name}
+                onChange={(e) =>
+                  setNewCustomer({ ...newCustomer, name: e.target.value })
+                }
+                placeholder='Nhập tên khách hàng...'
+                className='mt-1'
+              />
+            </div>
 
-            <Label htmlFor='customer-email' className='mt-2 text-red-600'>
-              Email khách hàng *
-            </Label>
-            <Input
-              id='customer-email'
-              value={newCustomerEmail}
-              onChange={(e) => setNewCustomerEmail(e.target.value)}
-              placeholder='Nhập email khách hàng...'
-              className='mt-1'
-            />
+            <div className='mt-2'>
+              <Label htmlFor='customer-phone' className='text-red-600'>
+                Số điện thoại *
+              </Label>
+              <Input
+                id='customer-phone'
+                value={newCustomer.phone}
+                onChange={(e) =>
+                  setNewCustomer({ ...newCustomer, phone: e.target.value })
+                }
+                placeholder='Nhập số điện thoại khách hàng...'
+                className='mt-1'
+              />
+            </div>
+
             <div className='flex justify-end mt-3 space-x-2'>
-              <Button
-                onClick={() => {
-                  if (!newCustomer || !newCustomerEmail) {
-                    toast.error('Vui lòng nhập đầy đủ thông tin khách hàng.');
-                    return;
-                  }
-                  addCustomerMutation.mutate({
-                    name: newCustomer,
-                    email: newCustomerEmail,
-                  });
-                  setNewCustomer('');
-                  setNewCustomerEmail('');
-                }}
-                disabled={addCustomerMutation.isPending}
-              >
-                {addCustomerMutation.isPending ? 'Đang lưu...' : 'Lưu và chọn'}
+              <Button onClick={handleSaveCustomer}>
+                {newCustomer.id ? 'Lưu thay đổi' : 'Thêm mới'}
               </Button>
-              <Button variant='secondary' onClick={() => setShowForm(false)}>
+              <Button
+                variant='secondary'
+                onClick={() => {
+                  setNewCustomer({
+                    name: '',
+                    phone: '',
+                  });
+                  setShowForm(false);
+                }}
+              >
                 Hủy
               </Button>
             </div>
@@ -148,7 +189,6 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
           </Button>
         )}
 
-        {/* Thanh tìm kiếm */}
         <div className='relative mt-3'>
           <Search className='absolute left-3 top-2.5 text-gray-400' size={16} />
           <Input
@@ -160,7 +200,6 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
           />
         </div>
 
-        {/* Danh sách khách hàng */}
         <div className='border rounded-md p-3 max-h-60 overflow-auto'>
           <h3 className='text-sm font-semibold text-gray-600'>
             Danh sách khách hàng
@@ -179,18 +218,14 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
                   {editingCustomer === customer.id ? (
                     <div className='flex items-center space-x-2 w-full'>
                       <Input
-                        value={editedName}
-                        onChange={(e) => setEditedName(e.target.value)}
-                        placeholder='Nhập tên khách hàng...'
-                      />
-                      <Input
-                        value={editedEmail}
-                        onChange={(e) => setEditedEmail(e.target.value)}
-                        placeholder='Nhập email khách hàng...'
-                      />
-                      <Check
-                        className='text-green-600 h-5 w-5 cursor-pointer'
-                        onClick={() => handleSaveEdit(customer.id)}
+                        value={editedCustomer.name || ''}
+                        onChange={(e) =>
+                          setEditedCustomer({
+                            ...editedCustomer,
+                            name: e.target.value,
+                          })
+                        }
+                        className='flex-1'
                       />
                       <X
                         className='text-gray-600 h-5 w-5 cursor-pointer'
@@ -207,9 +242,9 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
                             onClick={() => handleEditCustomer(customer)}
                           />
                           <DeleteDialog
-                            onConfirmDelete={handleConfirmDelete}
-                            title='Xóa thương hiệu'
-                            description='Bạn có chắc chắn muốn xóa thương hiệu này không?'
+                            onConfirmDelete={() => deleteCustomerMutation.mutate(customer.id)}
+                            title='Xóa khách hàng'
+                            description='Bạn có chắc chắn muốn xóa khách hàng này không?'
                             isLoading={deleteCustomerMutation.isPending}
                           >
                             <Trash2

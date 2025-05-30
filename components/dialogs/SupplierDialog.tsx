@@ -35,9 +35,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
   >(undefined);
   const [newSupplier, setNewSupplier] = useState<Partial<Supplier>>({
     name: '',
-    email: '',
     phone: '',
-    address: '',
     status: true,
   });
   const [searchTerm, setSearchTerm] = useState('');
@@ -72,7 +70,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
   };
 
   const handleSaveSupplier = () => {
-    if (!newSupplier.name?.trim() || !newSupplier.email?.trim()) {
+    if (!newSupplier.name?.trim() || !newSupplier.phone?.trim()) {
       toast.error('Vui lòng nhập thông tin nhà cung cấp hợp lệ.');
       return;
     }
@@ -82,14 +80,12 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
         {
           id: newSupplier.id,
           name: newSupplier.name,
-          email: newSupplier.email,
           phone: newSupplier.phone ?? '',
-          address: newSupplier.address ?? '',
           status: newSupplier.status ?? true,
         },
         {
           onSuccess: () => {
-            toast.success('Cập nhật nhà cung cấp thành công!');
+            // toast.success('Cập nhật nhà cung cấp thành công!');
             setShowForm(false);
           },
           onError: () => {
@@ -98,15 +94,17 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
         }
       );
     } else {
-      addSupplierMutation.mutate({ ...newSupplier } as Supplier, {
+      addSupplierMutation.mutate({
+        name: newSupplier.name || '',
+        phone: newSupplier.phone || '',
+        status: newSupplier.status ?? true
+      }, {
         onSuccess: () => {
-          toast.success('Thêm nhà cung cấp thành công!');
+          // toast.success('Thêm nhà cung cấp thành công!');
           setShowForm(false);
           setNewSupplier({
             name: '',
-            email: '',
             phone: '',
-            address: '',
             status: true,
           });
         },
@@ -126,7 +124,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
     if (!supplierToDelete) return;
     deleteSupplierMutation.mutate(supplierToDelete.id!, {
       onSuccess: () => {
-        toast.success('Xóa nhà cung cấp thành công!');
+        // toast.success('Xóa nhà cung cấp thành công!');
       },
       onError: () => toast.error('Không thể xóa nhà cung cấp.'),
     });
@@ -153,33 +151,13 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
                 className='bg-white'
               />
             </div>
-            <div>
-              <Label className='text-red-600'>Email *</Label>
-              <Input
-                type='email'
-                value={newSupplier.email}
-                onChange={(e) =>
-                  setNewSupplier({ ...newSupplier, email: e.target.value })
-                }
-                className='bg-white'
-              />
-            </div>
+
             <div>
               <Label>Số điện thoại</Label>
               <Input
                 value={newSupplier.phone}
                 onChange={(e) =>
                   setNewSupplier({ ...newSupplier, phone: e.target.value })
-                }
-                className='bg-white'
-              />
-            </div>
-            <div>
-              <Label>Địa chỉ</Label>
-              <Input
-                value={newSupplier.address}
-                onChange={(e) =>
-                  setNewSupplier({ ...newSupplier, address: e.target.value })
                 }
                 className='bg-white'
               />
@@ -203,16 +181,14 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
             </div> */}
             <div className='flex justify-end mt-3 space-x-2'>
               <Button onClick={handleSaveSupplier}>
-                {newSupplier.id ? 'Lưu thay đổi' : 'Lưu và chọn'}
+                {newSupplier.id ? 'Lưu thay đổi' : 'Thêm mới'}
               </Button>
               <Button
                 variant='secondary'
                 onClick={() => {
                   setNewSupplier({
                     name: '',
-                    email: '',
                     phone: '',
-                    address: '',
                     // status: 'active',
                   });
                   setShowForm(false);
