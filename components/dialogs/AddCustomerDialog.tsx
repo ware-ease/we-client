@@ -30,15 +30,56 @@ const AddCustomerDialog = () => {
     phone: '',
     email: '',
   });
+  const [errors, setErrors] = useState({
+    name: '',
+    phone: '',
+  }); // Track errors for name and phone only
+
+  // Helper function to validate phone
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^[0-9]{9,11}$/;
+    return phoneRegex.test(phone);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Truncate input if it exceeds 64 characters
+    const truncatedValue = value.length > 64 ? value.slice(0, 64) : value;
+
+    setFormData((prev) => ({ ...prev, [name]: truncatedValue }));
+
+    // Validate fields on change
+    const newErrors = { ...errors };
+    if (name === 'name') {
+      newErrors.name = !truncatedValue ? 'Tên khách hàng là bắt buộc.' : '';
+    } else if (name === 'phone') {
+      newErrors.phone = !validatePhone(truncatedValue)
+        ? 'Số điện thoại phải là số hợp lệ.'
+        : '';
+    }
+    setErrors(newErrors);
   };
 
   const handleSubmit = () => {
+    // Check required fields
     if (!formData.name || !formData.phone) {
       toast.error('Vui lòng điền đầy đủ thông tin bắt buộc.');
+      return;
+    }
+
+    // Validate all fields
+    const newErrors = {
+      name: !formData.name ? 'Tên khách hàng là bắt buộc.' : '',
+      phone: !validatePhone(formData.phone)
+        ? 'Số điện thoại phải là số hợp lệ.'
+        : '',
+    };
+
+    if (newErrors.name || newErrors.phone) {
+      setErrors(newErrors);
+      if (newErrors.name) toast.error(newErrors.name);
+      else if (newErrors.phone) toast.error(newErrors.phone);
       return;
     }
 
@@ -51,6 +92,7 @@ const AddCustomerDialog = () => {
           email: '',
         });
         setOpen(false);
+        setErrors({ name: '', phone: '' }); // Reset errors
       },
     });
   };
@@ -91,8 +133,13 @@ const AddCustomerDialog = () => {
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                className={`mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg ${
+                  errors.name ? 'border-red-500' : ''
+                }`}
               />
+              {errors.name && (
+                <p className='text-red-500 text-xs mt-1'>{errors.name}</p>
+              )}
             </div>
             <div>
               <Label className='text-sm text-gray-500' htmlFor='phone'>
@@ -104,8 +151,13 @@ const AddCustomerDialog = () => {
                 required
                 value={formData.phone}
                 onChange={handleInputChange}
-                className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                className={`mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg ${
+                  errors.phone ? 'border-red-500' : ''
+                }`}
               />
+              {errors.phone && (
+                <p className='text-red-500 text-xs mt-1'>{errors.phone}</p>
+              )}
             </div>
           </div>
         </div>

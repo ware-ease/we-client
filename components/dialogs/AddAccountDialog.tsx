@@ -50,6 +50,11 @@ const AddAccountDialog = () => {
     groupId: '',
     warehouseIds: [] as string[],
   });
+  const [errors, setErrors] = useState({
+    userName: '',
+    email: '',
+    phone: '',
+  }); // Track errors for multiple fields
 
   const { mutate: addAccount } = useAddAccount();
   const { data: groupsData } = useGroups();
@@ -58,12 +63,53 @@ const AddAccountDialog = () => {
   const groups = groupsData || [];
   const warehouses = warehousesData || [];
 
+  // Helper function to validate username
+  const validateUsername = (username: string): boolean => {
+    const usernameRegex = /^[a-zA-Z0-9]{3,16}$/;
+    return usernameRegex.test(username);
+  };
+
+  // Helper function to validate email
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  // Helper function to validate phone
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^[0-9]{9,11}$/;
+    return phoneRegex.test(phone);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Truncate input if it exceeds 64 characters (except for username, which has its own limit)
+    const truncatedValue =
+      name !== 'userName' && value.length > 64 ? value.slice(0, 64) : value;
+
+    setFormData((prev) => ({ ...prev, [name]: truncatedValue }));
+
+    // Validate fields on change
+    const newErrors = { ...errors };
+    if (name === 'userName') {
+      newErrors.userName = !validateUsername(truncatedValue)
+        ? 'Tên người dùng phải có từ 3-16 ký tự và chỉ chứa chữ cái và số.'
+        : '';
+    } else if (name === 'email') {
+      newErrors.email = !validateEmail(truncatedValue)
+        ? 'Email phải là địa chỉ email hợp lệ.'
+        : '';
+    } else if (name === 'phone') {
+      newErrors.phone = !validatePhone(truncatedValue)
+        ? 'Số điện thoại phải là số và có độ dài từ 9-11 ký tự.'
+        : '';
+    }
+    setErrors(newErrors);
   };
 
   const handleSubmit = () => {
+    // Check required fields
     if (
       !formData.userName ||
       !formData.email ||
@@ -72,8 +118,44 @@ const AddAccountDialog = () => {
       !formData.phone ||
       !formData.groupId
     ) {
-      toast.error('Please fill in all required fields.');
+      toast.error('Vui lòng điền đầy đủ các trường bắt buộc.');
       return;
+    }
+
+    // Validate all fields
+    const newErrors = {
+      userName: !validateUsername(formData.userName)
+        ? 'Tên người dùng phải có từ 3-16 ký tự và không chứa ký tự đặc biệt.'
+        : '',
+      email: !validateEmail(formData.email)
+        ? 'Email phải là địa chỉ email hợp lệ.'
+        : '',
+      phone: !validatePhone(formData.phone)
+        ? 'Số điện thoại phải là số hợp lệ.'
+        : '',
+    };
+
+    if (newErrors.userName || newErrors.email || newErrors.phone) {
+      setErrors(newErrors);
+      if (newErrors.userName) toast.error(newErrors.userName);
+      else if (newErrors.email) toast.error(newErrors.email);
+      else if (newErrors.phone) toast.error(newErrors.phone);
+      return;
+    }
+
+    // Validate length of other fields (should already be truncated)
+    const fieldsToCheck = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      phone: formData.phone,
+      address: formData.address,
+      nationality: formData.nationality,
+    };
+    for (const [fieldName, value] of Object.entries(fieldsToCheck)) {
+      if (value.length > 64) {
+        toast.error(`${fieldName} không được vượt quá 64 ký tự.`);
+        return;
+      }
     }
 
     const accountData: CreateAccount = {
@@ -108,6 +190,7 @@ const AddAccountDialog = () => {
           groupId: '',
           warehouseIds: [],
         });
+        setErrors({ userName: '', email: '', phone: '' }); // Reset errors
       },
     });
   };
@@ -151,8 +234,13 @@ const AddAccountDialog = () => {
                   value={formData.userName}
                   onChange={handleInputChange}
                   required
-                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                  className={`mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg ${
+                    errors.userName ? 'border-red-500' : ''
+                  }`}
                 />
+                {errors.userName && (
+                  <p className='text-red-500 text-xs mt-1'>{errors.userName}</p>
+                )}
               </div>
               <div>
                 <Label className='text-sm text-gray-500' htmlFor='email'>
@@ -165,8 +253,13 @@ const AddAccountDialog = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   required
-                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                  className={`mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg ${
+                    errors.email ? 'border-red-500' : ''
+                  }`}
                 />
+                {errors.email && (
+                  <p className='text-red-500 text-xs mt-1'>{errors.email}</p>
+                )}
               </div>
             </div>
           </div>
@@ -212,8 +305,13 @@ const AddAccountDialog = () => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
-                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                  className={`mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg ${
+                    errors.phone ? 'border-red-500' : ''
+                  }`}
                 />
+                {errors.phone && (
+                  <p className='text-red-500 text-xs mt-1'>{errors.phone}</p>
+                )}
               </div>
               <div>
                 <Label className='text-sm text-gray-500' htmlFor='nationality'>

@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/shadcn-base/Button';
-// import { Checkbox } from '@/components/shadcn-base/Checkbox';
 import {
   Dialog,
   DialogClose,
@@ -36,22 +35,60 @@ const AddSupplierDialog = () => {
     phone: '',
     status: true,
   });
+  const [errors, setErrors] = useState({
+    name: '',
+    phone: '',
+  }); // Track errors for name and phone
+
+  // Helper function to validate phone
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^[0-9]{9,11}$/;
+    return phoneRegex.test(phone);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Truncate input if it exceeds 64 characters
+    const truncatedValue = value.length > 64 ? value.slice(0, 64) : value;
+
+    setFormData((prev) => ({ ...prev, [name]: truncatedValue }));
+
+    // Validate fields on change
+    const newErrors = { ...errors };
+    if (name === 'name') {
+      newErrors.name = !truncatedValue ? 'Tên nhà cung cấp là bắt buộc.' : '';
+    } else if (name === 'phone') {
+      newErrors.phone = !validatePhone(truncatedValue)
+        ? 'Số điện thoại phải là số hợp lệ.'
+        : '';
+    }
+    setErrors(newErrors);
   };
 
-  // const handleCheckboxChange = () => {
-  //   setFormData((prev) => ({ ...prev, status: !prev.status }));
-  // };
-
   const handleSubmit = () => {
+    // Check required fields
     if (!formData.name || !formData.phone) {
       toast.error('Vui lòng điền đầy đủ thông tin nhà cung cấp.');
       return;
     }
 
+    // Validate all fields
+    const newErrors = {
+      name: !formData.name ? 'Tên nhà cung cấp là bắt buộc.' : '',
+      phone: !validatePhone(formData.phone)
+        ? 'Số điện thoại phải là số hợp lệ.'
+        : '',
+    };
+
+    if (newErrors.name || newErrors.phone) {
+      setErrors(newErrors);
+      if (newErrors.name) toast.error(newErrors.name);
+      else if (newErrors.phone) toast.error(newErrors.phone);
+      return;
+    }
+
+    // Call the API to add supplier
     addSupplier(formData as Supplier, {
       onSuccess: () => {
         setFormData({
@@ -60,6 +97,7 @@ const AddSupplierDialog = () => {
           status: true,
         });
         setOpen(false);
+        setErrors({ name: '', phone: '' }); // Reset errors
       },
     });
   };
@@ -103,8 +141,13 @@ const AddSupplierDialog = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   required
-                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                  className={`mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg ${
+                    errors.name ? 'border-red-500' : ''
+                  }`}
                 />
+                {errors.name && (
+                  <p className='text-red-500 text-xs mt-1'>{errors.name}</p>
+                )}
               </div>
               <div>
                 <Label htmlFor='phone' className='text-sm text-gray-500'>
@@ -117,19 +160,14 @@ const AddSupplierDialog = () => {
                   value={formData.phone}
                   onChange={handleInputChange}
                   required
-                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                  className={`mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg ${
+                    errors.phone ? 'border-red-500' : ''
+                  }`}
                 />
+                {errors.phone && (
+                  <p className='text-red-500 text-xs mt-1'>{errors.phone}</p>
+                )}
               </div>
-              {/* <div className='col-span-2 flex items-center space-x-2 mt-2'>
-                <Checkbox
-                  id='status'
-                  checked={formData.status}
-                  onCheckedChange={handleCheckboxChange}
-                />
-                <Label htmlFor='status' className='text-sm text-gray-500'>
-                  Hoạt động
-                </Label>
-              </div> */}
             </div>
           </div>
         </div>
