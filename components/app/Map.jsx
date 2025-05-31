@@ -58,7 +58,7 @@ const SearchControl = ({ onLocationSelect, onAddressFound }) => {
       provider,
       style: 'bar',
       showMarker: true,
-      showPopup: true,
+      showPopup: false,
       autoClose: true,
       retainZoomLevel: false,
       animateZoom: true,
@@ -69,6 +69,8 @@ const SearchControl = ({ onLocationSelect, onAddressFound }) => {
     map.addControl(searchControl);
 
     map.on('geosearch/showlocation', async (result) => {
+      if (!result.location) return;
+      
       const lat = result.location.y;
       const lng = result.location.x;
       if (onLocationSelect) onLocationSelect({ lat, lng });

@@ -12,6 +12,7 @@ import {
 } from '@/components/shadcn-base/Dialog';
 import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
+import { useAddWarehouse } from '@/hooks/queries/warehouseQueries';
 import { Warehouse } from '@/types/warehouse';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
@@ -20,21 +21,30 @@ import Map from '../app/Map';
 
 const AddWarehouseDialog = () => {
   const t = useTranslations();
+  const addWarehouse = useAddWarehouse();
+  const [open, setOpen] = useState(false);
 
-  const [formData, setFormData] = useState<Warehouse>({
+  const initialFormData: Warehouse = {
     id: '',
     name: '',
+    phone: '',
     address: '',
-    area: 0,
+    area: 1,
     operateFrom: '',
     latitude: 10.76,
     longitude: 106.66,
-  });
+  };
+
+  const [formData, setFormData] = useState<Warehouse>(initialFormData);
+
+  const resetForm = () => {
+    setFormData(initialFormData);
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setFormData((prev) => {
+    setFormData((prev: Warehouse) => {
       let parsedValue: string | number = value;
 
       switch (name) {
@@ -65,24 +75,26 @@ const AddWarehouseDialog = () => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Validate required fields
-    if (!formData.name || !formData.address) {
-      toast.error('Please fill in all required fields with valid values.');
+    if (!formData.name || !formData.address || !formData.phone) {
+      toast.error('Vui lòng điền đầy đủ thông tin bắt buộc');
       return;
     }
 
-    // Submit the form data to your API
-    console.log('Submitted Warehouse data:', formData);
-    toast.success('Warehouse created successfully!');
-    // Optionally: clear form or close the dialog after success
+    try {
+      await addWarehouse.mutateAsync(formData);
+      setOpen(false); // Đóng dialog
+      resetForm(); // Reset form
+    } catch (error) {
+      console.error('Error creating warehouse:', error);
+    }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className='px-4 py-2 rounded-lg'>
-          {/* <TranslatedMessage tKey='Management.createWarehouse' /> */}
+        <Button className='px-4 py-2 rounded-lg' onClick={() => setOpen(true)}>
           Tạo kho
         </Button>
       </DialogTrigger>
@@ -113,6 +125,20 @@ const AddWarehouseDialog = () => {
               </div>
 
               <div className='col-span-2'>
+                <Label htmlFor='phone' className='text-sm text-gray-500'>
+                  Số điện thoại
+                </Label>
+                <Input
+                  id='phone'
+                  name='phone'
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required
+                  className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                />
+              </div>
+
+              <div className='col-span-2'>
                 <Label htmlFor='address' className='text-sm text-gray-500'>
                   Địa chỉ
                 </Label>
@@ -127,11 +153,11 @@ const AddWarehouseDialog = () => {
               </div>
 
               <div>
-                <Label htmlFor='length' className='text-sm text-gray-500'>
+                <Label htmlFor='area' className='text-sm text-gray-500'>
                   Diện tích (m²)
                 </Label>
                 <Input
-                  id='length'
+                  id='area'
                   name='area'
                   type='number'
                   value={formData.area}
@@ -156,46 +182,6 @@ const AddWarehouseDialog = () => {
                 />
               </div>
 
-              {/* Map section */}
-              {/* Nếu có tọa độ, hiển thị input */}
-              {
-                // <>
-                //   <div>
-                //     <Label htmlFor='latitude' className='text-sm text-gray-500'>
-                //       Vĩ độ
-                //     </Label>
-                //     <Input
-                //       id='latitude'
-                //       name='latitude'
-                //       type='number'
-                //       step='0.000001'
-                //       value={formData.latitude}
-                //       onChange={handleInputChange}
-                //       // readOnly
-                //       className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                //     />
-                //   </div>
-
-                //   <div>
-                //     <Label
-                //       htmlFor='longitude'
-                //       className='text-sm text-gray-500'
-                //     >
-                //       Kinh độ
-                //     </Label>
-                //     <Input
-                //       id='longitude'
-                //       name='longitude'
-                //       type='number'
-                //       step='0.000001'
-                //       value={formData.longitude}
-                //       onChange={handleInputChange}
-                //       // readOnly
-                //       className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                //     />
-                //   </div>
-                // </>
-              }
               <div className='col-span-2'>
                 <Label className='text-sm text-gray-500'>
                   Vị trí trên bản đồ
@@ -205,8 +191,19 @@ const AddWarehouseDialog = () => {
                     className='h-[250px]'
                     latitude={formData.latitude}
                     longitude={formData.longitude}
-                    onLocationSelect={handleLocationSelect}
-                    onAddressFound={(address: string) => setFormData(prev => ({ ...prev, address }))}
+                    onLocationSelect={(coords: { lat: number; lng: number }) => {
+                      setFormData(prev => ({
+                        ...prev,
+                        latitude: coords.lat,
+                        longitude: coords.lng
+                      }));
+                    }}
+                    onAddressFound={(address: string) => {
+                      setFormData(prev => ({
+                        ...prev,
+                        address
+                      }));
+                    }}
                   />
                 </div>
               </div>
