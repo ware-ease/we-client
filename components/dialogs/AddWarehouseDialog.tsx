@@ -159,42 +159,42 @@ const AddWarehouseDialog = () => {
               {/* Map section */}
               {/* Nếu có tọa độ, hiển thị input */}
               {
-                <>
-                  <div>
-                    <Label htmlFor='latitude' className='text-sm text-gray-500'>
-                      Vĩ độ
-                    </Label>
-                    <Input
-                      id='latitude'
-                      name='latitude'
-                      type='number'
-                      step='0.000001'
-                      value={formData.latitude}
-                      onChange={handleInputChange}
-                      // readOnly
-                      className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                    />
-                  </div>
+                // <>
+                //   <div>
+                //     <Label htmlFor='latitude' className='text-sm text-gray-500'>
+                //       Vĩ độ
+                //     </Label>
+                //     <Input
+                //       id='latitude'
+                //       name='latitude'
+                //       type='number'
+                //       step='0.000001'
+                //       value={formData.latitude}
+                //       onChange={handleInputChange}
+                //       // readOnly
+                //       className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                //     />
+                //   </div>
 
-                  <div>
-                    <Label
-                      htmlFor='longitude'
-                      className='text-sm text-gray-500'
-                    >
-                      Kinh độ
-                    </Label>
-                    <Input
-                      id='longitude'
-                      name='longitude'
-                      type='number'
-                      step='0.000001'
-                      value={formData.longitude}
-                      onChange={handleInputChange}
-                      // readOnly
-                      className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
-                    />
-                  </div>
-                </>
+                //   <div>
+                //     <Label
+                //       htmlFor='longitude'
+                //       className='text-sm text-gray-500'
+                //     >
+                //       Kinh độ
+                //     </Label>
+                //     <Input
+                //       id='longitude'
+                //       name='longitude'
+                //       type='number'
+                //       step='0.000001'
+                //       value={formData.longitude}
+                //       onChange={handleInputChange}
+                //       // readOnly
+                //       className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
+                //     />
+                //   </div>
+                // </>
               }
               <div className='col-span-2'>
                 <Label className='text-sm text-gray-500'>
@@ -206,6 +206,7 @@ const AddWarehouseDialog = () => {
                     latitude={formData.latitude}
                     longitude={formData.longitude}
                     onLocationSelect={handleLocationSelect}
+                    onAddressFound={(address: string) => setFormData(prev => ({ ...prev, address }))}
                   />
                 </div>
               </div>

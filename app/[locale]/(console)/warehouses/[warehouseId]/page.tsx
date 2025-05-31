@@ -197,10 +197,10 @@ const UpdateWarehouse: React.FC = () => {
               <p>
                 <strong>Diện tích:</strong> {warehouse.area} m²
               </p>
-              <p>
+              {/* <p>
                 <strong>Tọa độ:</strong> ({warehouse.latitude},{' '}
                 {warehouse.longitude})
-              </p>
+              </p> */}
               <p>
                 <strong>Hoạt động từ:</strong>{' '}
                 {new Date(warehouse.operateFrom).toLocaleDateString('vi-VN')}
