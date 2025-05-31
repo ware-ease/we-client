@@ -40,10 +40,18 @@ export const getDashboardCards = async (warehouseId?: string) => {
   return response.data.data;
 };
 
-export const getDashboardHistogram = async (warehouseId?: string) => {
-  const url = warehouseId
+export const getDashboardHistogram = async (warehouseId?: string, params?: { month?: number; year?: number }) => {
+  let url = warehouseId
     ? `/dashboard/histogram?warehouseId=${warehouseId}`
     : `/dashboard/histogram`;
+
+  if (params?.month) {
+    url += `${url.includes('?') ? '&' : '?'}month=${params.month}`;
+  }
+  if (params?.year) {
+    url += `${url.includes('?') ? '&' : '?'}year=${params.year}`;
+  }
+
   const response = await axiosGet(url, {});
   return response.data;
 };

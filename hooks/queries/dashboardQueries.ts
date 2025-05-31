@@ -1,8 +1,8 @@
 import {
-    getDashboardCards,
-    getDashboardHistogram,
-    getDashboardLineChart,
-    getDashboardPieChart,
+  getDashboardCards,
+  getDashboardHistogram,
+  getDashboardLineChart,
+  getDashboardPieChart,
 } from '@/services/dashboardService';
 import { useQuery } from '@tanstack/react-query';
 
@@ -20,10 +20,13 @@ export const useGetDashboardPieChart = (warehouseId?: string) => {
   });
 };
 
-export const useGetDashboardHistogram = (warehouseId?: string) => {
+export const useGetDashboardHistogram = (
+  warehouseId?: string,
+  params?: { month?: number; year?: number }
+) => {
   return useQuery({
-    queryKey: ['dashboardHistogram', warehouseId],
-    queryFn: () => getDashboardHistogram(warehouseId),
+    queryKey: ['dashboardHistogram', warehouseId, params?.month, params?.year],
+    queryFn: () => getDashboardHistogram(warehouseId, params),
   });
 };
 

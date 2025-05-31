@@ -19,6 +19,13 @@ import {
   CardHeader,
   CardTitle,
 } from '../shadcn-base/Card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../shadcn-base/Select';
 
 interface DailyRecord {
   date: string;
@@ -84,10 +91,32 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+const MONTHS = [
+  { value: '1', label: 'Tháng 1' },
+  { value: '2', label: 'Tháng 2' },
+  { value: '3', label: 'Tháng 3' },
+  { value: '4', label: 'Tháng 4' },
+  { value: '5', label: 'Tháng 5' },
+  { value: '6', label: 'Tháng 6' },
+  { value: '7', label: 'Tháng 7' },
+  { value: '8', label: 'Tháng 8' },
+  { value: '9', label: 'Tháng 9' },
+  { value: '10', label: 'Tháng 10' },
+  { value: '11', label: 'Tháng 11' },
+  { value: '12', label: 'Tháng 12' },
+];
+
+const YEARS = Array.from({ length: 10 }, (_, i) => 2025 + i);
+
 export function StockChart({ warehouseId }: StockChartProps) {
-  const { data: chartResponse, isLoading } =
-    useGetDashboardHistogram(warehouseId);
+  const [selectedMonth, setSelectedMonth] = React.useState(new Date().getMonth() + 1);
+  const [selectedYear, setSelectedYear] = React.useState(2025);
   const [isClient, setIsClient] = React.useState(false);
+
+  const { data: chartResponse, isLoading } = useGetDashboardHistogram(warehouseId, {
+    month: selectedMonth,
+    year: selectedYear,
+  });
 
   const total = React.useMemo(() => {
     if (!chartResponse?.data?.[0]) return { putIn: 0, takeOut: 0 };
@@ -130,33 +159,77 @@ export function StockChart({ warehouseId }: StockChartProps) {
     <Card>
       <CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
         <div className='flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-6'>
+          <div className='flex items-center gap-4 mb-2'>
+            <Select
+              value={selectedMonth.toString()}
+              onValueChange={(value) => setSelectedMonth(parseInt(value))}
+            >
+              <SelectTrigger className='w-[140px]'>
+                <SelectValue placeholder='Chọn tháng' />
+              </SelectTrigger>
+              <SelectContent>
+                {MONTHS.map((month) => (
+                  <SelectItem key={month.value} value={month.value}>
+                    {month.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={selectedYear.toString()}
+              onValueChange={(value) => setSelectedYear(parseInt(value))}
+            >
+              <SelectTrigger className='w-[140px]'>
+                <SelectValue placeholder='Chọn năm' />
+              </SelectTrigger>
+              <SelectContent>
+                {YEARS.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    Năm {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
           <CardTitle>
             Số lượng hàng hóa xuất/nhập kho theo ngày -{' '}
             {warehouseData.warehouseName}
           </CardTitle>
           <CardDescription>
-            Hiển thị số lượng hàng hóa xuất kho và nhập kho theo ngày trong
-            tháng
+            Hiển thị số lượng hàng hóa xuất kho và nhập kho theo ngày trong tháng {selectedMonth} năm {selectedYear}
           </CardDescription>
         </div>
         <div className='flex sm:w-1/2 sm:flex-none'>
-          {Object.keys(chartConfig).map((key) => {
-            const chart = key as keyof typeof chartConfig;
-            if (!chart || total[chart] === 0) return null;
-            return (
-              <div
-                key={chart}
-                className='relative flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l hover:bg-muted/50 transition-colors sm:border-t-0 sm:border-l sm:px-8 sm:py-6'
-              >
-                <span className='text-muted-foreground text-xs'>
-                  {chartConfig[chart].label}
+          <div className='flex-1 flex items-center justify-center p-6'>
+            <div className='flex gap-12 w-full justify-center'>
+              <div className='flex flex-col'>
+                <span className='text-muted-foreground text-sm mb-2 flex items-center gap-2'>
+                  <div className='h-3 w-3 rounded-full' style={{ backgroundColor: chartConfig.takeOut.color }} />
+                  Xuất kho
                 </span>
-                <span className='text-lg leading-none font-bold sm:text-3xl'>
-                  {total[chart]?.toLocaleString()} mặt hàng
-                </span>
+                <div className='flex items-baseline gap-2'>
+                  <span className='text-4xl font-bold tabular-nums'>
+                    {total.takeOut.toLocaleString()}
+                  </span>
+                  <span className='text-muted-foreground'>mặt hàng</span>
+                </div>
               </div>
-            );
-          })}
+
+              <div className='flex flex-col border-l pl-12'>
+                <span className='text-muted-foreground text-sm mb-2 flex items-center gap-2'>
+                  <div className='h-3 w-3 rounded-full' style={{ backgroundColor: chartConfig.putIn.color }} />
+                  Nhập kho
+                </span>
+                <div className='flex items-baseline gap-2'>
+                  <span className='text-4xl font-bold tabular-nums'>
+                    {total.putIn.toLocaleString()}
+                  </span>
+                  <span className='text-muted-foreground'>mặt hàng</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </CardHeader>
 
