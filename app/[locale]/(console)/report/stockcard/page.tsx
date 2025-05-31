@@ -6,15 +6,13 @@ import { Button } from '@/components/shadcn-base/Button';
 import { Input } from '@/components/shadcn-base/Input';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import {
-  useWarehousesProducts,
-  useWarehousesStockCardByProductID,
-} from '@/hooks/queries/warehouseQueries';
+import { useWarehousesStockCardByProductID } from '@/hooks/queries/warehouseQueries';
 import { useRouter } from '@/lib/i18n/routing';
 import ProductComboBox from '@/components/combo-boxes/ProductComboBox';
 import WarehouseComboBox from '@/components/combo-boxes/WarehouseComboBox';
 import * as XLSX from 'xlsx-js-style'; // Use xlsx-js-style for styling
 import { ExportDialog } from '@/components/dialogs/ExportDialog';
+import { useProducts } from '@/hooks/queries/productQueries';
 
 const ReportStockCard = () => {
   const searchParams = useSearchParams();
@@ -29,10 +27,8 @@ const ReportStockCard = () => {
     (searchParams.get('productId') as string) || ''
   );
 
-  const { data: products } = useWarehousesProducts(
-    warehouseId !== undefined,
-    warehouseId
-  );
+  const { data: products } = useProducts();
+
   const { data } = useWarehousesStockCardByProductID(
     true,
     warehouseId,
