@@ -298,7 +298,7 @@ const InventoryCountTable = () => {
             )}
             onClick={() => toggleStatusFilter(2)}
           >
-            Đã câng bằng
+            Đã cân bằng
           </Button>
           {/* <Button
             className={cn(

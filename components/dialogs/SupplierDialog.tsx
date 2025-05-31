@@ -12,15 +12,13 @@ import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
 import {
   useAddSupplier,
-  useDeleteSupplier,
   useSuppliers,
   useUpdateSupplier,
 } from '@/hooks/queries/supplierQueries';
 import { Supplier } from '@/types/supplier';
-import { Edit, Search, Trash2, X } from 'lucide-react';
+import { Edit, Search, X } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { DeleteDialog } from './DeleteDialog';
 
 interface SupplierDialogProps {
   children: ReactNode;
@@ -42,13 +40,13 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [editingSupplier, setEditingSupplier] = useState<string | null>(null);
   const [editedSupplier, setEditedSupplier] = useState<Partial<Supplier>>({});
-  const [supplierToDelete, setSupplierToDelete] = useState<Supplier | null>(
-    null
-  );
+  // const [supplierToDelete, setSupplierToDelete] = useState<Supplier | null>(
+  //   null
+  // );
 
   const addSupplierMutation = useAddSupplier();
   const updateSupplierMutation = useUpdateSupplier();
-  const deleteSupplierMutation = useDeleteSupplier();
+  // const deleteSupplierMutation = useDeleteSupplier();
 
   useEffect(() => {
     setFilteredSuppliers(suppliers);
@@ -94,24 +92,27 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
         }
       );
     } else {
-      addSupplierMutation.mutate({
-        name: newSupplier.name || '',
-        phone: newSupplier.phone || '',
-        status: newSupplier.status ?? true
-      }, {
-        onSuccess: () => {
-          // toast.success('Thêm nhà cung cấp thành công!');
-          setShowForm(false);
-          setNewSupplier({
-            name: '',
-            phone: '',
-            status: true,
-          });
+      addSupplierMutation.mutate(
+        {
+          name: newSupplier.name || '',
+          phone: newSupplier.phone || '',
+          status: newSupplier.status ?? true,
         },
-        onError: () => {
-          toast.error('Không thể thêm nhà cung cấp.');
-        },
-      });
+        {
+          onSuccess: () => {
+            // toast.success('Thêm nhà cung cấp thành công!');
+            setShowForm(false);
+            setNewSupplier({
+              name: '',
+              phone: '',
+              status: true,
+            });
+          },
+          onError: () => {
+            toast.error('Không thể thêm nhà cung cấp.');
+          },
+        }
+      );
     }
   };
 
@@ -120,15 +121,15 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
     setEditedSupplier({});
   };
 
-  const handleDeleteSupplier = () => {
-    if (!supplierToDelete) return;
-    deleteSupplierMutation.mutate(supplierToDelete.id!, {
-      onSuccess: () => {
-        // toast.success('Xóa nhà cung cấp thành công!');
-      },
-      onError: () => toast.error('Không thể xóa nhà cung cấp.'),
-    });
-  };
+  // const handleDeleteSupplier = () => {
+  //   if (!supplierToDelete) return;
+  //   deleteSupplierMutation.mutate(supplierToDelete.id!, {
+  //     onSuccess: () => {
+  //       // toast.success('Xóa nhà cung cấp thành công!');
+  //     },
+  //     onError: () => toast.error('Không thể xóa nhà cung cấp.'),
+  //   });
+  // };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -257,7 +258,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
                             onClick={() => handleEditSupplier(supplier)}
                           />
 
-                          <DeleteDialog
+                          {/* <DeleteDialog
                             onConfirmDelete={handleDeleteSupplier}
                             title='Xóa nhà cung cấp'
                             description='Bạn có chắc chắn muốn xóa nhà cung cấp này không?'
@@ -269,7 +270,7 @@ const SupplierDialog = ({ children }: SupplierDialogProps) => {
                                 setSupplierToDelete(supplier);
                               }}
                             />
-                          </DeleteDialog>
+                          </DeleteDialog> */}
                         </div>
                       )}
                     </>

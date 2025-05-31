@@ -16,7 +16,7 @@ import {
   useUpdateCategory,
 } from '@/hooks/queries/categoryQueries';
 import { Category } from '@/types/category';
-import { Check, Edit, Search, Trash2, X } from 'lucide-react';
+import { Check, Edit, Search, Trash2 } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { DeleteDialog } from './DeleteDialog';
 
@@ -72,10 +72,10 @@ const CategoryDialog = ({ children }: CategoryDialogProps) => {
     setEditingCategory(null);
   };
 
-  const handleCancelEdit = () => {
-    setEditingCategory(null);
-    setEditedName('');
-  };
+  // const handleCancelEdit = () => {
+  //   setEditingCategory(null);
+  //   setEditedName('');
+  // };
 
   const handleConfirmDelete = () => {
     deleteCategoryMutation.mutate(categoryToDelete);
@@ -161,10 +161,10 @@ const CategoryDialog = ({ children }: CategoryDialogProps) => {
                         className='text-green-600 h-5 w-5 cursor-pointer'
                         onClick={() => handleSaveEdit(category.id ?? '')}
                       />
-                      <X
+                      {/* <X
                         className='text-gray-600 h-5 w-5 cursor-pointer'
                         onClick={handleCancelEdit}
-                      />
+                      /> */}
                     </div>
                   ) : (
                     <>

@@ -15,11 +15,11 @@ import {
   useUpdateBatch,
 } from '@/hooks/queries/batchQueries';
 import { Batch } from '@/types/batch';
-import { Edit, Search, Trash2, X } from 'lucide-react';
+import { DialogDescription } from '@radix-ui/react-dialog';
+import { Edit, Search, Trash2 } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { DeleteDialog } from './DeleteDialog';
-import { DialogDescription } from '@radix-ui/react-dialog';
 
 interface BatchDialogProps {
   children: ReactNode;
@@ -41,7 +41,7 @@ const BatchDialog = ({ children, productId }: BatchDialogProps) => {
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [editingBatch, setEditingBatch] = useState<string | null>(null);
+  const [editingBatch] = useState<string | null>(null);
   const [editedBatch, setEditedBatch] = useState<Partial<Batch>>({});
   const [batchToDelete, setBatchToDelete] = useState<Batch | null>(null);
   const addBatchMutation = useAddBatch();
@@ -92,10 +92,10 @@ const BatchDialog = ({ children, productId }: BatchDialogProps) => {
     }
   };
 
-  const handleCancelEdit = () => {
-    setEditingBatch(null);
-    setEditedBatch({});
-  };
+  // const handleCancelEdit = () => {
+  //   setEditingBatch(null);
+  //   setEditedBatch({});
+  // };
 
   const handleDeleteBatch = () => {
     if (!batchToDelete) return;
@@ -223,10 +223,10 @@ const BatchDialog = ({ children, productId }: BatchDialogProps) => {
                         className='text-green-600 h-5 w-5 cursor-pointer'
                         onClick={() => handleSaveEdit(batch.id)}
                       /> */}
-                      <X
+                      {/* <X
                         className='text-gray-600 h-5 w-5 cursor-pointer'
                         onClick={handleCancelEdit}
-                      />
+                      /> */}
                     </div>
                   ) : (
                     <>
