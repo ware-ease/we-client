@@ -9,13 +9,13 @@ export const useAddInventoryAdjustments = () => {
     mutationFn: (invAdj: InventoryAdjustment) =>
       createInventoryAdjustment(invAdj),
     onSuccess: () => {
-      toast.success('Thành công!');
+      toast.success('Điều chỉnh thành công!');
       queryClient.invalidateQueries({
         queryKey: ['adjustments'],
       });
     },
     onError: () => {
-      toast.error('Thất bại!');
+      toast.error('Điều chỉnh thất bại!');
     },
   });
 };

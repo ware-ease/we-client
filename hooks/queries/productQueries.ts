@@ -25,13 +25,13 @@ export const useAddProduct = () => {
   return useMutation({
     mutationFn: (product: ProductCreate) => createProduct(product),
     onSuccess: () => {
-      toast.success('Thành công!');
+      toast.success('Thêm sản phẩm thành công!');
       queryClient.invalidateQueries({
         queryKey: ['products'],
       });
     },
     onError: () => {
-      toast.error('Thất bại!');
+      toast.error('Thêm sản phẩm thất bại!');
     },
   });
 };

@@ -91,13 +91,13 @@ export const useAddWarehouse = () => {
   return useMutation({
     mutationFn: (w: Warehouse) => createWarehouse(w),
     onSuccess: () => {
-      toast.success('Thành công!');
+      toast.success('Thêm kho thành công!');
       queryClient.invalidateQueries({
         queryKey: ['warehouses'],
       });
     },
     onError: () => {
-      toast.error('Thất bại!');
+      toast.error('Thêm kho thất bại!');
     },
   });
 };

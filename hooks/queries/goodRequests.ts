@@ -49,13 +49,13 @@ export const useAddGoodRequest = () => {
   return useMutation({
     mutationFn: (grn: GoodRequest) => createGoodRequest(grn),
     onSuccess: () => {
-      toast.success('Thêm thành công!');
+      toast.success('Thêm yêu cầu thành công!');
       queryClient.invalidateQueries({ queryKey: ['requests'] });
       queryClient.invalidateQueries({ queryKey: ['issueRequests'] });
       queryClient.invalidateQueries({ queryKey: ['receiveRequests'] });
     },
     onError: () => {
-      toast.error('Không thể thêm.');
+      toast.error('Không thể thêm yêu cầu.');
     },
   });
 };
@@ -81,13 +81,13 @@ export const useConfirmGoodRequest = () => {
   return useMutation({
     mutationFn: (id: string) => confirmGoodRequest(id),
     onSuccess: () => {
-      toast.success('Đồng ý thành công!');
+      toast.success('Đồng ý yêu cầu thành công!');
       queryClient.invalidateQueries({ queryKey: ['requests'] });
       queryClient.invalidateQueries({ queryKey: ['issueRequests'] });
       queryClient.invalidateQueries({ queryKey: ['receiveRequests'] });
     },
     onError: () => {
-      toast.error('Không thể đồng ý.');
+      toast.error('Không thể đồng ý yêu cầu.');
     },
   });
 };
@@ -97,13 +97,13 @@ export const useDeclineGoodRequest = () => {
   return useMutation({
     mutationFn: (d: DeclineGoodRequest) => declineGoodRequest(d.id, d.reason),
     onSuccess: () => {
-      toast.success('Từ chối thành công!');
+      toast.success('Từ chối yêu cầu thành công!');
       queryClient.invalidateQueries({ queryKey: ['requests'] });
       queryClient.invalidateQueries({ queryKey: ['issueRequests'] });
       queryClient.invalidateQueries({ queryKey: ['receiveRequests'] });
     },
     onError: () => {
-      toast.error('Không thể từ chối.');
+      toast.error('Không thể từ chối yêu cầu.');
     },
   });
 };

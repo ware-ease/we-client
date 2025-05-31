@@ -185,6 +185,10 @@ const RequestCreate = () => {
           <div className='flex justify-end space-x-4'>
             <Button
               onClick={handleSubmit}
+              disabled={
+                formData.partnerId === '' ||
+                formData.requestedWarehouseId === ''
+              }
               className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
             >
               Tạo yêu cầu

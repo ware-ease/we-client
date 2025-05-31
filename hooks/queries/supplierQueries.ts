@@ -19,7 +19,7 @@ export const useAddSupplier = () => {
   return useMutation({
     mutationFn: (s: Supplier) => createSupplier(s),
     onSuccess: () => {
-      toast.success('Thành công!');
+      toast.success('Thêm nhà cung cấp thành công!');
       queryClient.invalidateQueries({
         queryKey: ['suppliers'],
       });
@@ -28,7 +28,7 @@ export const useAddSupplier = () => {
       });
     },
     onError: () => {
-      toast.error('Thất bại!');
+      toast.error('Thêm nhà cung cấp thất bại!');
     },
   });
 };

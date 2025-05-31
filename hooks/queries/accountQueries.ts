@@ -34,13 +34,13 @@ export const useAddAccount = () => {
   return useMutation({
     mutationFn: (a: CreateAccount) => createAccount(a),
     onSuccess: () => {
-      toast.success('Thành công!');
+      toast.success('Tạo tài khoản thành công!');
       queryClient.invalidateQueries({
         queryKey: ['accounts'],
       });
     },
     onError: () => {
-      toast.error('Thất bại!');
+      toast.error('Tạo tài khoản thất bại!');
     },
   });
 };
@@ -49,7 +49,7 @@ export const useUpdateAccount = () => {
   return useMutation({
     mutationFn: (a: AccountUpdate) => updateAccount(a),
     onSuccess: () => {
-      toast.success('Thành công!');
+      toast.success('Cập nhật tài khoản thành công!');
       queryClient.invalidateQueries({
         queryKey: ['user'],
       });
@@ -58,7 +58,7 @@ export const useUpdateAccount = () => {
       });
     },
     onError: () => {
-      toast.error('Thất bại!');
+      toast.error('Cập nhật tài khoản thất bại!');
     },
   });
 };
@@ -68,7 +68,7 @@ export const useUpdateAccountStatus = () => {
   return useMutation({
     mutationFn: (a: AccountStatusUpdate) => updateAccountStatus(a.id, a.status),
     onSuccess: () => {
-      toast.success('Thành công!');
+      toast.success('Cập nhật trạng thái thành công!');
       queryClient.invalidateQueries({
         queryKey: ['user'],
       });
@@ -77,7 +77,7 @@ export const useUpdateAccountStatus = () => {
       });
     },
     onError: () => {
-      toast.error('Thất bại!');
+      toast.error('Cập nhật trạng thái thất bại!');
       queryClient.invalidateQueries({
         queryKey: ['user'],
       });

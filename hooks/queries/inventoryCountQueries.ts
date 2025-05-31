@@ -35,13 +35,13 @@ export const useAddInventoryCount = () => {
     mutationFn: (inventoryCount: InventoryCount) =>
       createInventoryCount(inventoryCount),
     onSuccess: () => {
-      toast.success('Thêm inventory count thành công!');
+      toast.success('Thêm phiếu kiểm kê thành công!');
       queryClient.invalidateQueries({
         queryKey: ['inventoryCounts'],
       });
     },
     onError: () => {
-      toast.error('Không thể thêm inventory count.');
+      toast.error('Không thể thêm phiếu kiểm kê.');
     },
   });
 };
@@ -58,13 +58,13 @@ export const useUpdateInventoryCount = () => {
       inventoryCount: InventoryCount;
     }) => updateInventoryCount(id, inventoryCount),
     onSuccess: () => {
-      toast.success('Cập nhật inventory count thành công!');
+      toast.success('Cập nhật phiếu kiểm kê thành công!');
       queryClient.invalidateQueries({
         queryKey: ['inventoryCounts'],
       });
     },
     onError: () => {
-      toast.error('Không thể cập nhật inventory count.');
+      toast.error('Không thể cập nhật phiếu kiểm kê.');
     },
   });
 };
@@ -91,13 +91,13 @@ export const useAddInventoryCountAdjustment = () => {
     mutationFn: (inventoryAdjustment: InventoryAdjutment) =>
       createInventoryAdjustment(inventoryAdjustment),
     onSuccess: () => {
-      toast.success('Thêm inventory adjustment thành công!');
+      toast.success('Cân bằng thành công!');
       queryClient.invalidateQueries({
         queryKey: ['inventoryAdjustments'],
       });
     },
     onError: () => {
-      toast.error('Không thể thêm inventory adjustment.');
+      toast.error('Không thể cân bằng.');
     },
   });
 };
