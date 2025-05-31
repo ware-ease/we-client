@@ -12,12 +12,11 @@ import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
 import {
   useAddUnit,
-  useDeleteUnit,
   useUnits,
   useUpdateUnit,
 } from '@/hooks/queries/unitQueries';
 import { Unit } from '@/types/unit';
-import { Edit, Search, Trash2 } from 'lucide-react';
+import { Edit, Search } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
@@ -27,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../shadcn-base/Select';
-import { DeleteDialog } from './DeleteDialog';
 
 interface UnitDialogProps {
   children: ReactNode;
@@ -47,10 +45,10 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [unitToDelete, setUnitToDelete] = useState<Unit | null>(null);
+  // const [unitToDelete, setUnitToDelete] = useState<Unit | null>(null);
   const addUnitMutation = useAddUnit();
   const updateUnitMutation = useUpdateUnit();
-  const deleteUnitMutation = useDeleteUnit();
+  // const deleteUnitMutation = useDeleteUnit();
 
   useEffect(() => {
     setFilteredUnits(units);
@@ -109,15 +107,15 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
     }
   };
 
-  const handleDeleteUnit = () => {
-    if (!unitToDelete) return;
-    deleteUnitMutation.mutate(unitToDelete.id!, {
-      onSuccess: () => {
-        toast.success('Xóa đơn vị thành công!');
-      },
-      onError: () => toast.error('Không thể xóa đơn vị.'),
-    });
-  };
+  // const handleDeleteUnit = () => {
+  //   if (!unitToDelete) return;
+  //   deleteUnitMutation.mutate(unitToDelete.id!, {
+  //     onSuccess: () => {
+  //       toast.success('Xóa đơn vị thành công!');
+  //     },
+  //     onError: () => toast.error('Không thể xóa đơn vị.'),
+  //   });
+  // };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -222,7 +220,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
                         className='text-blue-600 h-4 w-4 cursor-pointer'
                         onClick={() => handleEditUnit(unit)}
                       />
-                      <DeleteDialog
+                      {/* <DeleteDialog
                         onConfirmDelete={handleDeleteUnit}
                         title='Xóa đơn vị'
                         description='Bạn có chắc chắn muốn xóa đơn vị này không?'
@@ -234,7 +232,7 @@ const UnitDialog = ({ children }: UnitDialogProps) => {
                             setUnitToDelete(unit);
                           }}
                         />
-                      </DeleteDialog>
+                      </DeleteDialog> */}
                     </div>
                   )}
                 </li>

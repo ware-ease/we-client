@@ -13,14 +13,12 @@ import { Label } from '@/components/shadcn-base/Label';
 import {
   useAddCustomer,
   useCustomers,
-  useDeleteCustomer,
   useUpdateCustomer,
 } from '@/hooks/queries/customerQueries';
 import { Customer } from '@/types/customer';
-import { Edit, Search, Trash2, X } from 'lucide-react';
+import { Edit, Search, X } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { DeleteDialog } from './DeleteDialog';
 
 interface CustomerDialogProps {
   children: ReactNode;
@@ -30,7 +28,7 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
   const { data: customers, isPending } = useCustomers();
   const addCustomerMutation = useAddCustomer();
   const updateCustomerMutation = useUpdateCustomer();
-  const deleteCustomerMutation = useDeleteCustomer();
+  // const deleteCustomerMutation = useDeleteCustomer();
 
   const [open, setOpen] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -242,7 +240,7 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
                             className='text-blue-600 h-4 w-4 cursor-pointer'
                             onClick={() => handleEditCustomer(customer)}
                           />
-                          <DeleteDialog
+                          {/* <DeleteDialog
                             onConfirmDelete={() =>
                               deleteCustomerMutation.mutate(customer.id)
                             }
@@ -254,7 +252,7 @@ const CustomerDialog = ({ children }: CustomerDialogProps) => {
                               className='text-red-600 h-4 w-4 cursor-pointer'
                               onClick={() => {}}
                             />
-                          </DeleteDialog>
+                          </DeleteDialog> */}
                         </div>
                       )}
                     </>

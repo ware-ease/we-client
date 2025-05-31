@@ -17,7 +17,7 @@ import {
   useUpdateBrand,
 } from '@/hooks/queries/brandQueries';
 import { Brand } from '@/types/brand';
-import { Check, Edit, Search, Trash2, X } from 'lucide-react';
+import { Check, Edit, Search, Trash2 } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { DeleteDialog } from './DeleteDialog';
 
@@ -94,10 +94,10 @@ const BrandDialog = ({ children }: BrandDialogProps) => {
     updateBrandMutation.mutate({ id, name: editedName });
   };
 
-  const handleCancelEdit = () => {
-    setEditingBrand(null);
-    setEditedName('');
-  };
+  // const handleCancelEdit = () => {
+  //   setEditingBrand(null);
+  //   setEditedName('');
+  // };
 
   const handleConfirmDelete = () => {
     deleteBrandMutation.mutate(brandToDelete);
@@ -188,10 +188,10 @@ const BrandDialog = ({ children }: BrandDialogProps) => {
                         className='text-green-600 h-5 w-5 cursor-pointer'
                         onClick={() => handleSaveEdit(brand.id)}
                       />
-                      <X
+                      {/* <X
                         className='text-gray-600 h-5 w-5 cursor-pointer'
                         onClick={handleCancelEdit}
-                      />
+                      /> */}
                     </div>
                   ) : (
                     <>

@@ -10,17 +10,12 @@ import {
 } from '@/components/shadcn-base/Dialog';
 import { Input } from '@/components/shadcn-base/Input';
 import { Label } from '@/components/shadcn-base/Label';
-import {
-  useAddProduct,
-  useDeleteProduct,
-  useProducts,
-} from '@/hooks/queries/productQueries';
+import { useAddProduct, useProducts } from '@/hooks/queries/productQueries';
 import { Product } from '@/types/product';
 import { ProductCreate } from '@/types/request/product';
-import { Search, Trash2 } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { ReactNode, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { DeleteDialog } from './DeleteDialog';
 interface ProductDialogProps {
   children: ReactNode;
 }
@@ -42,9 +37,9 @@ const ProductDialog = ({ children }: ProductDialogProps) => {
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
+  // const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const addProductMutation = useAddProduct();
-  const deleteProductMutation = useDeleteProduct();
+  // const deleteProductMutation = useDeleteProduct();
 
   useEffect(() => {
     setFilteredProducts(products);
@@ -85,15 +80,15 @@ const ProductDialog = ({ children }: ProductDialogProps) => {
     });
   };
 
-  const handleDeleteProduct = () => {
-    if (!productToDelete) return;
-    deleteProductMutation.mutate(productToDelete.id!, {
-      onSuccess: () => {
-        toast.success('Xóa sản phẩm thành công!');
-      },
-      onError: () => toast.error('Không thể xóa sản phẩm.'),
-    });
-  };
+  // const handleDeleteProduct = () => {
+  //   if (!productToDelete) return;
+  //   deleteProductMutation.mutate(productToDelete.id!, {
+  //     onSuccess: () => {
+  //       toast.success('Xóa sản phẩm thành công!');
+  //     },
+  //     onError: () => toast.error('Không thể xóa sản phẩm.'),
+  //   });
+  // };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -224,7 +219,7 @@ const ProductDialog = ({ children }: ProductDialogProps) => {
                   <span className='text-gray-700'>{product.name}</span>
                   {hoveredIndex === index && (
                     <div className='flex space-x-2'>
-                      <DeleteDialog
+                      {/* <DeleteDialog
                         onConfirmDelete={handleDeleteProduct}
                         title='Xóa sản phẩm'
                         description='Bạn có chắc chắn muốn xóa sản phẩm này không?'
@@ -236,7 +231,7 @@ const ProductDialog = ({ children }: ProductDialogProps) => {
                             setProductToDelete(product);
                           }}
                         />
-                      </DeleteDialog>
+                      </DeleteDialog> */}
                     </div>
                   )}
                 </li>
