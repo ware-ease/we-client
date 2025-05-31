@@ -45,12 +45,14 @@ export const useAddGoodReceiveNote = () => {
   return useMutation({
     mutationFn: (grn: GoodReceiveNote) => createGoodReceiveNote(grn),
     onSuccess: () => {
-      toast.success('Thêm thành công!');
+      toast.success('Thêm phiếu nhập kho thành công!');
       queryClient.invalidateQueries({ queryKey: ['receiveNotes'] });
     },
     onError: (res: AxiosError<ResponseErrorType>) => {
       console.log(res);
-      toast.error(res.response?.data?.message || 'Không thể thêm');
+      toast.error(
+        res.response?.data?.message || 'Không thể thêm phiếu nhập kho'
+      );
     },
   });
 };
@@ -98,12 +100,15 @@ export const useAddGoodIssueNote = () => {
   return useMutation({
     mutationFn: (grn: GoodNote) => createGoodIssueNote(grn),
     onSuccess: () => {
-      toast.success('Thêm thành công!');
+      toast.success('Thêm phiếu xuất kho thành công!');
       queryClient.invalidateQueries({ queryKey: ['issueNotes'] });
     },
     onError: (res: AxiosError<ResponseErrorType>) => {
       console.log(res);
-      toast.error(res.response?.data?.message || 'Không thể thêm');
+      toast.error(
+        res.response?.data?.message ||
+          'Không thể thêm phiếu xuất kho thành công'
+      );
     },
   });
 };
@@ -127,12 +132,14 @@ export const useAddGoodInternalReceiptNote = () => {
   return useMutation({
     mutationFn: (grn: GoodReceiveNote) => createGoodInternalReceiveNote(grn),
     onSuccess: () => {
-      toast.success('Thêm thành công!');
+      toast.success('Thêm phiếu nhập nội bộ thành công!');
       queryClient.invalidateQueries({ queryKey: ['receiveNotes'] });
     },
     onError: (res: AxiosError<ResponseErrorType>) => {
       console.log(res);
-      toast.error(res.response?.data?.message || 'Không thể thêm');
+      toast.error(
+        res.response?.data?.message || 'Không thể thêm phiếu nhập nội bộ'
+      );
     },
   });
 };
@@ -142,12 +149,13 @@ export const useAddGoodInternalIssueNote = () => {
   return useMutation({
     mutationFn: (grn: GoodNote) => createGoodInternalIssueNote(grn),
     onSuccess: () => {
-      toast.success('Thêm thành công!');
+      toast.success('Thêm phiếu xuất nội bộ thành công!');
       queryClient.invalidateQueries({ queryKey: ['issueNotes'] });
     },
     onError: (res: AxiosError<ResponseErrorType>) => {
-      console.log(res);
-      toast.error(res.response?.data?.message || 'Không thể thêm');
+      toast.error(
+        res.response?.data?.message || 'Không thể thêm phiếu xuất nội bộ'
+      );
     },
   });
 };
