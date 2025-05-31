@@ -395,7 +395,7 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
                     <div className='flex justify-between'>
                       <div className='w-1/2'>
                         <Image
-                          src='https://res.cloudinary.com/ddietgxw8/image/upload/v1748681691/TNTProjects_sfdj52.svg'
+                          src='https://res.cloudinary.com/ddietgxw8/image/upload/v1748696800/TNTProjects_qjf1jm.png'
                           alt='Company Logo'
                           width={1080}
                           height={1080}
