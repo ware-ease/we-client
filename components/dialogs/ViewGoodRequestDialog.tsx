@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import {
   Dialog,
@@ -9,7 +10,6 @@ import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { GoodRequest } from '@/types/goodRequest';
 import { Button } from '../shadcn-base/Button';
 import { RefObject, useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { useReactToPrint } from 'react-to-print';
 import {
   Carousel,
@@ -394,8 +394,8 @@ export function ViewGoodRequestDialog({ goodRequest }: GoodRequestDialogProps) {
                   >
                     <div className='flex justify-between'>
                       <div className='w-1/2'>
-                        <Image
-                          src='https://res.cloudinary.com/ddietgxw8/image/upload/v1748696800/TNTProjects_qjf1jm.png'
+                        <img
+                          src='/TNTProjects.svg'
                           alt='Company Logo'
                           width={1080}
                           height={1080}

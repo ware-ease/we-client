@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import {
   Dialog,
@@ -7,7 +8,6 @@ import {
 import { useRef } from 'react';
 import { GoodNote } from '@/types/goodNote';
 import { Eye } from 'lucide-react';
-import Image from 'next/image';
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { Button } from '../shadcn-base/Button';
 import { useReactToPrint } from 'react-to-print';
@@ -225,8 +225,8 @@ export function ViewGoodNoteDialog({ goodNote }: GoodNoteDialogProps) {
           <div className='p-24' style={{ fontFamily: 'Times New Roman' }}>
             <div className='flex justify-between'>
               <div className='w-1/2'>
-                <Image
-                  src='https://res.cloudinary.com/ddietgxw8/image/upload/v1748696800/TNTProjects_qjf1jm.png'
+                <img
+                  src='/TNTProjects.svg'
                   alt='Company Logo'
                   width={1080}
                   height={1080}
