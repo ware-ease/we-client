@@ -178,7 +178,7 @@ export function ViewAdjustmentDialog({
             <div className='flex justify-between'>
               <div className='w-1/2'>
                 <Image
-                  src='/TNTProjects.svg'
+                  src='https://res.cloudinary.com/ddietgxw8/image/upload/v1748681691/TNTProjects_sfdj52.svg'
                   alt='Company Logo'
                   width={1080}
                   height={1080}
