@@ -127,6 +127,7 @@ const CustomRequestTable: React.FC<CustomTableProps> = ({
               <input
                 type='number'
                 className='border-none w-full p-2'
+                min={0}
                 value={rowData.quantity}
                 onChange={(e) => handleQuantityChange(index, e.target.value)}
               />
@@ -251,6 +252,7 @@ const CustomRequestTable: React.FC<CustomTableProps> = ({
           <input
             type='number'
             className='border-none w-full p-2'
+            min={0}
             value={0}
             onChange={(e) =>
               handleQuantityChange(prevRows.length, e.target.value)
@@ -310,6 +312,7 @@ const CustomRequestTable: React.FC<CustomTableProps> = ({
                 <input
                   type='number'
                   className='border-none w-full p-2'
+                  min={0}
                   value={value}
                   onChange={(e) => handleQuantityChange(index, e.target.value)}
                 />
