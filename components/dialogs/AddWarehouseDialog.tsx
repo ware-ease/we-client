@@ -5,6 +5,7 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -82,12 +83,21 @@ const AddWarehouseDialog = () => {
       return;
     }
 
+    // Validate phone number format
+    const phoneRegex = /^[0-9]{10,11}$/;
+    if (!phoneRegex.test(formData.phone)) {
+      toast.error('Số điện thoại không hợp lệ. Vui lòng nhập 10-11 số.');
+      return;
+    }
+
     try {
       await addWarehouse.mutateAsync(formData);
+      toast.success('Tạo kho thành công!');
       setOpen(false); // Đóng dialog
       resetForm(); // Reset form
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating warehouse:', error);
+      toast.error(error.response?.data?.message || 'Có lỗi xảy ra khi tạo kho. Vui lòng thử lại.');
     }
   };
 
@@ -104,15 +114,18 @@ const AddWarehouseDialog = () => {
           <DialogTitle className='text-2xl font-semibold text-gray-800'>
             Tạo kho
           </DialogTitle>
+          <DialogDescription className="text-sm text-gray-500">
+            Nhập thông tin để tạo kho mới. Các trường có dấu * là bắt buộc.
+          </DialogDescription>
         </DialogHeader>
 
-        <div className='mt-4 px-2  space-y-6 text-sm text-gray-800 overflow-y-auto'>
+        <div className='mt-4 px-2 space-y-6 text-sm text-gray-800 overflow-y-auto'>
           {/* --- THÔNG TIN KHO --- */}
           <div>
             <div className='grid grid-cols-2 gap-4'>
               <div className='col-span-2'>
                 <Label htmlFor='name' className='text-sm text-gray-500'>
-                  Tên kho
+                  Tên kho *
                 </Label>
                 <Input
                   id='name'
@@ -126,7 +139,7 @@ const AddWarehouseDialog = () => {
 
               <div className='col-span-2'>
                 <Label htmlFor='phone' className='text-sm text-gray-500'>
-                  Số điện thoại
+                  Số điện thoại *
                 </Label>
                 <Input
                   id='phone'
@@ -140,7 +153,7 @@ const AddWarehouseDialog = () => {
 
               <div className='col-span-2'>
                 <Label htmlFor='address' className='text-sm text-gray-500'>
-                  Địa chỉ
+                  Địa chỉ *
                 </Label>
                 <Input
                   id='address'

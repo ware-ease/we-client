@@ -4,6 +4,7 @@ import { TrendingDown, TrendingUp } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import { useGetDashboardLineChart } from '@/hooks/queries/dashboardQueries';
+import { useWarehouses } from '@/hooks/queries/warehouseQueries';
 import { useMemo } from 'react';
 import {
   Card,
@@ -35,45 +36,19 @@ const MONTHS = [
   'Tháng 12',
 ];
 
-const chartConfig = {
-  'Kho Sài Gòn': {
-    label: 'Kho Sài Gòn',
-    color: '#1E3A8A', // Xanh dương đậm
-  },
-  'Kho Tiền Giang': {
-    label: 'Kho Tiền Giang',
-    color: '#60A5FA', // Xanh dương nhạt
-  },
-  'Kho Long An': {
-    label: 'Kho Long An',
-    color: '#DBEAFE',
-  },
-} satisfies ChartConfig;
-
-type WarehouseName = keyof typeof chartConfig;
-
 interface WarehouseData {
   month: number;
   quantity: number;
 }
 
 interface Warehouse {
-  warehouse: WarehouseName;
+  warehouse: string;
   data: WarehouseData[];
 }
 
-// interface ChartResponse {
-//   status: number;
-//   message: string;
-//   data: {
-//     warehouses: Warehouse[];
-//   };
-// }
-
 type ChartDataPoint = {
   month: string;
-} & {
-  [K in WarehouseName]: number;
+  [key: string]: string | number; // Allow both string and number values
 };
 
 interface AreaChartProps {
@@ -81,10 +56,53 @@ interface AreaChartProps {
 }
 
 export function AreaCharts({ warehouseId }: AreaChartProps) {
+  const { data: warehouses } = useWarehouses();
   const { data: chartResponse, isLoading } = useGetDashboardLineChart(warehouseId);
 
+  // Create dynamic chart config from warehouses
+  const chartConfig = useMemo(() => {
+    if (!warehouses) return {};
+    
+    // Bảng màu với nhiều tone xanh dương được tối ưu cho khả năng phân biệt
+    const blueColors = [
+      '#0A2472', // Navy Blue - Màu chủ đạo
+      '#1E40AF', // Royal Blue
+      '#2563EB', // Bright Blue
+      '#3B82F6', // Medium Blue
+      '#60A5FA', // Light Blue
+      '#2B4C76', // Steel Blue
+      '#1D4ED8', // Strong Blue
+      '#4A90E2', // Sky Blue
+      '#0F52BA', // Sapphire Blue
+      '#000080', // Classic Navy
+      '#4169E1', // Royal Light Blue
+      '#27408B', // Royal Dark Blue
+      '#0066CC', // True Blue
+      '#003366', // Dark Navy
+      '#5D8AA8', // Light Steel Blue
+    ].sort((a, b) => {
+      // Sắp xếp màu theo độ sáng để tạo gradient tự nhiên hơn
+      const getBrightness = (hex: string) => {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return (r * 299 + g * 587 + b * 114) / 1000;
+      };
+      return getBrightness(b) - getBrightness(a);
+    });
+
+    // Tạo gradient màu cho mỗi kho
+    return warehouses.reduce((acc, warehouse, index) => {
+      acc[warehouse.name] = {
+        label: warehouse.name,
+        color: blueColors[index % blueColors.length],
+      };
+      return acc;
+    }, {} as ChartConfig);
+  }, [warehouses]);
+
   const chartData = useMemo(() => {
-    if (!chartResponse?.data?.warehouses) return [];
+    if (!chartResponse?.data?.warehouses || !warehouses) return [];
 
     // Lấy tháng hiện tại
     const currentMonth = new Date().getMonth(); // 0-11
@@ -97,9 +115,7 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
       // Khởi tạo object với tháng và giá trị mặc định cho các kho
       const monthData: Partial<ChartDataPoint> = {
         month,
-        'Kho Sài Gòn': 0,
-        'Kho Tiền Giang': 0,
-        'Kho Long An': 0,
+        ...warehouses.reduce((acc, w) => ({ ...acc, [w.name]: 0 }), {}),
       };
 
       // Thêm dữ liệu từ mỗi kho
@@ -114,7 +130,7 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
     }).reverse(); // Đảo ngược để hiển thị theo thứ tự tăng dần
 
     return last5Months;
-  }, [chartResponse]);
+  }, [chartResponse, warehouses]);
 
   // Tính tổng tồn kho đầu kỳ và cuối kỳ để tính tỷ lệ tăng/giảm
   const totalInventoryChange = useMemo(() => {
@@ -126,12 +142,12 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
 
     // Tính tổng tồn kho của tất cả các kho trong tháng đầu và tháng cuối
     const startTotal = chartResponse?.data?.warehouses.reduce((sum: number, warehouse: Warehouse) => {
-      const value = firstMonth[warehouse.warehouse] || 0;
+      const value = Number(firstMonth[warehouse.warehouse]) || 0;
       return sum + value;
     }, 0) || 0;
 
     const endTotal = chartResponse?.data?.warehouses.reduce((sum: number, warehouse: Warehouse) => {
-      const value = lastMonth[warehouse.warehouse] || 0;
+      const value = Number(lastMonth[warehouse.warehouse]) || 0;
       return sum + value;
     }, 0) || 0;
 
@@ -157,20 +173,9 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex items-center gap-4">
-          {Object.entries(chartConfig).map(([key, config]) => (
-            <div key={key} className="flex items-center gap-2">
-              <div
-                className="h-3 w-3 rounded-full"
-                style={{ backgroundColor: config.color }}
-              />
-              <span className="text-sm text-muted-foreground">{config.label}</span>
-            </div>
-          ))}
-        </div>
         <ChartContainer
           config={chartConfig}
-          className='aspect-auto h-[310px] w-full'
+          className='aspect-auto h-[270px] w-full'
         >
           <AreaChart
             accessibilityLayer
@@ -216,6 +221,18 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
             ))}
           </AreaChart>
         </ChartContainer>
+
+        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+          {Object.entries(chartConfig).map(([key, config]) => (
+            <div key={key} className="flex items-center gap-2">
+              <div
+                className="h-3 w-3 rounded-full"
+                style={{ backgroundColor: config.color }}
+              />
+              <span className="text-sm text-muted-foreground truncate">{config.label}</span>
+            </div>
+          ))}
+        </div>
       </CardContent>
       <CardFooter>
         <div className='flex w-full items-start gap-2 text-sm'>

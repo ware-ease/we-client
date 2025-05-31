@@ -115,6 +115,7 @@ const Map = ({
   longitude,
 }) => {
   const [selectedPosition, setSelectedPosition] = useState(null);
+  const [map, setMap] = useState(null);
 
   const handleLocationSelect = (coords) => {
     setSelectedPosition(coords);
@@ -125,24 +126,41 @@ const Map = ({
   useEffect(() => {
     if (latitude && longitude) {
       setSelectedPosition({ lat: latitude, lng: longitude });
+      // Center map on new position if map is available
+      if (map) {
+        try {
+          map.setView([latitude, longitude], zoom);
+        } catch (error) {
+          console.error('Error setting map view:', error);
+        }
+      }
     }
-    // console.log(latitude, longitude);
-  }, [latitude, longitude]);
+  }, [latitude, longitude, map, zoom]);
+
+  // Ensure map is properly initialized
+  useEffect(() => {
+    if (map) {
+      // Force a map invalidation and redraw
+      setTimeout(() => {
+        map.invalidateSize();
+      }, 100);
+    }
+  }, [map]);
 
   return (
     <div className={`relative z-0 w-full ${className}`}>
       <MapContainer
-        center={selectedPosition || center} // Use selectedPosition for centering
+        center={selectedPosition ? [selectedPosition.lat, selectedPosition.lng] : center}
         zoom={zoom}
         scrollWheelZoom={true}
         style={{ height: '100%', width: '100%' }}
         doubleClickZoom={false}
+        whenCreated={setMap}
       >
         <TileLayer
           attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-        {/* <Marker position={center} icon={defaultIcon} /> */}
         <MapRefresher />
         <SearchControl 
           onLocationSelect={handleLocationSelect} 
@@ -153,7 +171,6 @@ const Map = ({
           onAddressFound={onAddressFound}
         />
 
-        {/* Render marker */}
         {selectedPosition && (
           <Marker
             position={[selectedPosition.lat, selectedPosition.lng]}

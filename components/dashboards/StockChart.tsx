@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */ 'use client';
 
 import { useGetDashboardHistogram } from '@/hooks/queries/dashboardQueries';
-import { useMemo, useState } from 'react';
+import { useWarehouses } from '@/hooks/queries/warehouseQueries';
+import { useEffect, useMemo, useState } from 'react';
 import {
   Bar,
   BarChart,
@@ -56,14 +57,6 @@ const chartConfig = {
   },
 };
 
-const warehouseOptions = [
-  { id: 'Kho Sài Gòn', label: 'Kho Sài Gòn' },
-  { id: 'Kho Tiền Giang', label: 'Kho Tiền Giang' },
-  { id: 'Kho Long An', label: 'Kho Long An' },
-] as const;
-
-type WarehouseKey = (typeof warehouseOptions)[number]['id'];
-
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const [day, month, year] = label.split('/');
@@ -112,14 +105,27 @@ const MONTHS = [
 const YEARS = Array.from({ length: 10 }, (_, i) => 2025 + i);
 
 export function StockCharts() {
-  const [activeWarehouseId, setActiveWarehouseId] = useState<WarehouseKey>('Kho Sài Gòn');
+  const { data: warehouses } = useWarehouses();
+  const [activeWarehouseId, setActiveWarehouseId] = useState<string>('');
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(2025);
 
-  const { data: chartResponse, isLoading } = useGetDashboardHistogram(undefined, {
+  // Set initial warehouse when data is loaded
+  useEffect(() => {
+    if (warehouses?.length && !activeWarehouseId) {
+      setActiveWarehouseId(warehouses[0].id);
+    }
+  }, [warehouses, activeWarehouseId]);
+
+  const { data: chartResponse, isLoading } = useGetDashboardHistogram(activeWarehouseId, {
     month: selectedMonth,
     year: selectedYear,
   });
+
+  // Get active warehouse name for display
+  const activeWarehouseName = useMemo(() => {
+    return warehouses?.find(w => w.id === activeWarehouseId)?.name || '';
+  }, [warehouses, activeWarehouseId]);
 
   const total = useMemo(() => {
     if (!chartResponse?.data) return {};
@@ -138,7 +144,7 @@ export function StockCharts() {
     );
   }, [chartResponse]);
 
-  if (isLoading) {
+  if (isLoading || !warehouses?.length) {
     return (
       <Card>
         <CardHeader className='flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row'>
@@ -151,7 +157,7 @@ export function StockCharts() {
   }
 
   const activeWarehouse = chartResponse?.data?.find(
-    (w: WarehouseData) => w.warehouseName === activeWarehouseId
+    (w: WarehouseData) => w.warehouseName === activeWarehouseName
   );
   const chartData =
     activeWarehouse?.dailyRecords.map((record: DailyRecord) => ({
@@ -160,7 +166,7 @@ export function StockCharts() {
       imported: record.putIn,
     })) || [];
 
-  const activeTotal = total[activeWarehouseId] || { exported: 0, imported: 0 };
+  const activeTotal = total[activeWarehouseName] || { exported: 0, imported: 0 };
 
   return (
     <Card>
@@ -170,15 +176,15 @@ export function StockCharts() {
             <div className='flex items-center gap-4 mb-4'>
               <Select
                 value={activeWarehouseId}
-                onValueChange={(value: WarehouseKey) => setActiveWarehouseId(value)}
+                onValueChange={(value: string) => setActiveWarehouseId(value)}
               >
                 <SelectTrigger className='w-[200px]'>
                   <SelectValue placeholder='Chọn kho' />
                 </SelectTrigger>
                 <SelectContent>
-                  {warehouseOptions.map((warehouse) => (
+                  {warehouses?.map((warehouse) => (
                     <SelectItem key={warehouse.id} value={warehouse.id}>
-                      {warehouse.label}
+                      {warehouse.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -218,7 +224,7 @@ export function StockCharts() {
             </div>
 
             <CardTitle>
-              Số lượng hàng hóa xuất/nhập kho theo ngày - {activeWarehouseId}
+              Số lượng hàng hóa xuất/nhập kho theo ngày - {activeWarehouseName}
             </CardTitle>
             <CardDescription>
               Hiển thị số lượng hàng hóa xuất kho và nhập kho theo ngày trong tháng {selectedMonth} năm {selectedYear}
