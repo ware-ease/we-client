@@ -157,6 +157,17 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        <div className="mb-4 flex items-center gap-4">
+          {Object.entries(chartConfig).map(([key, config]) => (
+            <div key={key} className="flex items-center gap-2">
+              <div
+                className="h-3 w-3 rounded-full"
+                style={{ backgroundColor: config.color }}
+              />
+              <span className="text-sm text-muted-foreground">{config.label}</span>
+            </div>
+          ))}
+        </div>
         <ChartContainer
           config={chartConfig}
           className='aspect-auto h-[310px] w-full'
@@ -169,7 +180,13 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
               right: 12,
             }}
           >
-            <CartesianGrid vertical={false} strokeDasharray='3 3' />
+            <CartesianGrid 
+              vertical={true} 
+              horizontal={true}
+              strokeDasharray='3 3'
+              stroke='#E2E8F0'
+              opacity={0.4}
+            />
             <XAxis
               dataKey='month'
               tickLine={false}
@@ -195,7 +212,6 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
                 fillOpacity={0.4}
                 stroke={chartConfig[warehouse.warehouse].color}
                 strokeWidth={2}
-                stackId='a'
               />
             ))}
           </AreaChart>
