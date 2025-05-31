@@ -57,12 +57,13 @@ interface AreaChartProps {
 
 export function AreaCharts({ warehouseId }: AreaChartProps) {
   const { data: warehouses } = useWarehouses();
-  const { data: chartResponse, isLoading } = useGetDashboardLineChart(warehouseId);
+  const { data: chartResponse, isLoading } =
+    useGetDashboardLineChart(warehouseId);
 
   // Create dynamic chart config from warehouses
   const chartConfig = useMemo(() => {
     if (!warehouses) return {};
-    
+
     // Bảng màu với nhiều tone xanh dương được tối ưu cho khả năng phân biệt
     const blueColors = [
       '#0A2472', // Navy Blue - Màu chủ đạo
@@ -141,15 +142,23 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
     const lastMonth = chartData[chartData.length - 1];
 
     // Tính tổng tồn kho của tất cả các kho trong tháng đầu và tháng cuối
-    const startTotal = chartResponse?.data?.warehouses.reduce((sum: number, warehouse: Warehouse) => {
-      const value = Number(firstMonth[warehouse.warehouse]) || 0;
-      return sum + value;
-    }, 0) || 0;
+    const startTotal =
+      chartResponse?.data?.warehouses.reduce(
+        (sum: number, warehouse: Warehouse) => {
+          const value = Number(firstMonth[warehouse.warehouse]) || 0;
+          return sum + value;
+        },
+        0
+      ) || 0;
 
-    const endTotal = chartResponse?.data?.warehouses.reduce((sum: number, warehouse: Warehouse) => {
-      const value = Number(lastMonth[warehouse.warehouse]) || 0;
-      return sum + value;
-    }, 0) || 0;
+    const endTotal =
+      chartResponse?.data?.warehouses.reduce(
+        (sum: number, warehouse: Warehouse) => {
+          const value = Number(lastMonth[warehouse.warehouse]) || 0;
+          return sum + value;
+        },
+        0
+      ) || 0;
 
     // Nếu startTotal = 0, chỉ tính % tăng nếu có endTotal > 0
     if (startTotal === 0) {
@@ -185,8 +194,8 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
               right: 12,
             }}
           >
-            <CartesianGrid 
-              vertical={true} 
+            <CartesianGrid
+              vertical={true}
               horizontal={true}
               strokeDasharray='3 3'
               stroke='#E2E8F0'
@@ -213,23 +222,25 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
                 key={warehouse.warehouse}
                 dataKey={warehouse.warehouse}
                 type='monotone'
-                fill={chartConfig[warehouse.warehouse].color}
+                fill={chartConfig[warehouse.warehouse]?.color ?? ''}
                 fillOpacity={0.4}
-                stroke={chartConfig[warehouse.warehouse].color}
+                stroke={chartConfig[warehouse.warehouse]?.color ?? ''}
                 strokeWidth={2}
               />
             ))}
           </AreaChart>
         </ChartContainer>
 
-        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <div className='mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3'>
           {Object.entries(chartConfig).map(([key, config]) => (
-            <div key={key} className="flex items-center gap-2">
+            <div key={key} className='flex items-center gap-2'>
               <div
-                className="h-3 w-3 rounded-full"
+                className='h-3 w-3 rounded-full'
                 style={{ backgroundColor: config.color }}
               />
-              <span className="text-sm text-muted-foreground truncate">{config.label}</span>
+              <span className='text-sm text-muted-foreground truncate'>
+                {config.label}
+              </span>
             </div>
           ))}
         </div>
@@ -244,7 +255,8 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
                 </span>
               ) : (
                 <span className='text-red-600'>
-                  Tồn kho giảm {Math.abs(parseFloat(totalInventoryChange))}% trong 5 tháng gần nhất
+                  Tồn kho giảm {Math.abs(parseFloat(totalInventoryChange))}%
+                  trong 5 tháng gần nhất
                 </span>
               )}
               {parseFloat(totalInventoryChange) >= 0 ? (
@@ -254,7 +266,9 @@ export function AreaCharts({ warehouseId }: AreaChartProps) {
               )}
             </div>
             <div className='text-muted-foreground flex items-center gap-2 leading-none'>
-              Số liệu từ {chartData[0]?.month} đến {chartData[chartData.length - 1]?.month} năm {new Date().getFullYear()}
+              Số liệu từ {chartData[0]?.month} đến{' '}
+              {chartData[chartData.length - 1]?.month} năm{' '}
+              {new Date().getFullYear()}
             </div>
           </div>
         </div>
