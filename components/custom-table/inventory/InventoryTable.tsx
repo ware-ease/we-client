@@ -1,24 +1,24 @@
 'use client';
-import { ColumnDef } from '@tanstack/react-table';
-import React, { useEffect, useState } from 'react';
-import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
-import { CustomDataTable } from '../base-data-table/CustomDataTable';
-import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
-import { Button } from '../../shadcn-base/Button';
-import { useWarehousesInventories } from '@/hooks/queries/warehouseQueries'; // Assuming this exists
-import { Inventory } from '@/types/warehouse';
-import { Eye } from 'lucide-react';
+import ExpireDateUI from '@/components/app/ExpireDateUI';
+import ViewBatchDialog from '@/components/dialogs/ViewBatchDialog';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/shadcn-base/Tooltip';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useWarehousesInventories } from '@/hooks/queries/warehouseQueries'; // Assuming this exists
+import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
 import { cn } from '@/lib/utils/utils';
 import { Product } from '@/types/product';
+import { Inventory } from '@/types/warehouse';
+import { ColumnDef } from '@tanstack/react-table';
+import { Eye } from 'lucide-react';
+import { useParams, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { Button } from '../../shadcn-base/Button';
+import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
+import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import { CustomDataTable2 } from '../base-data-table/CustomDataTable2';
-import ExpireDateUI from '@/components/app/ExpireDateUI';
-import ViewBatchDialog from '@/components/dialogs/ViewBatchDialog';
 
 interface ProductsView {
   id: string;

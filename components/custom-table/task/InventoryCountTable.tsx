@@ -1,246 +1,15 @@
-// 'use client';
-
-// import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
-// import { cn } from '@/lib/utils/utils';
-// import { getAccountTasks } from '@/services/accountService';
-// import { ColumnDef } from '@tanstack/react-table';
-// import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-// import { useEffect, useState } from 'react';
-
-// import CreatedByUI from '@/components/app/CreatedByUI';
-// import { Button } from '../../shadcn-base/Button';
-// import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
-// import { CustomDataTable } from '../base-data-table/CustomDataTable';
-// import StatusStepper from './StatusStepper';
-
-// export interface AccountTask {
-//   id: string;
-//   status: number;
-//   expectedQuantity: number;
-//   countedQuantity: number;
-//   note: string;
-//   accountId: string;
-//   inventoryId: string;
-//   batchId: string;
-//   batchCode: string;
-//   productName: string;
-//   createdBy: string;
-//   createdTime: string;
-//   createdByAvatarUrl: string;
-//   createdByFullName: string;
-//   createdByGroup: string;
-// }
-
-// const columns: ColumnDef<AccountTask>[] = [
-//   // {
-//   //   id: 'stt',
-//   //   header: ({ column }) => (
-//   //     <DataTableColumnHeader column={column} title='STT' className='text-xs' />
-//   //   ),
-//   //   cell: ({ row }) => row.index + 1,
-//   //   meta: { title: 'STT' },
-//   // },
-//   {
-//     accessorKey: 'productName',
-//     header: ({ column }) => (
-//       <DataTableColumnHeader column={column} title='Sản phẩm' />
-//     ),
-//     cell: ({ row }) => row.getValue('productName') || 'N/A',
-//     meta: { title: 'Sản phẩm' },
-//   },
-//   {
-//     accessorKey: 'batchCode',
-//     header: ({ column }) => (
-//       <DataTableColumnHeader column={column} title='Lô hàng' />
-//     ),
-//     cell: ({ row }) => row.getValue('batchCode') || 'N/A',
-//     meta: { title: 'Lô hàng' },
-//   },
-//   {
-//     accessorKey: 'note',
-//     header: ({ column }) => (
-//       <DataTableColumnHeader column={column} title='Ghi chú' />
-//     ),
-//     cell: ({ row }) => row.getValue('note') || '—',
-//     meta: { title: 'Ghi chú' },
-//   },
-//   {
-//     accessorKey: 'status',
-//     header: ({ column }) => (
-//       <DataTableColumnHeader column={column} title='Trạng thái' />
-//     ),
-//     cell: ({ row }) => (
-//       <StatusStepper
-//         status={row.original.status}
-//         inventoryCounts={row.original}
-//       />
-//     ),
-//     filterFn: statusFilterFn,
-//     meta: { title: 'Trạng thái' },
-//   },
-//   {
-//     id: 'createdBy',
-//     accessorFn: ({ createdByFullName }) =>
-//       `${createdByFullName || 'Người bí ẩn'}`,
-//     header: ({ column }) => (
-//       <DataTableColumnHeader
-//         column={column}
-//         title='Tạo bởi'
-//         className='text-xs'
-//       />
-//     ),
-//     cell: ({ row }) => (
-//       <CreatedByUI
-//         fullName={row.original.createdByFullName || 'Ware Ease'}
-//         group={row.original.createdByGroup || 'Hệ thống'}
-//         avatarUrl={
-//           row.original.createdByAvatarUrl || 'https://github.com/shadcn.png'
-//         }
-//       />
-//     ),
-//     meta: { title: 'Tạo bởi' },
-//   },
-//   {
-//     accessorKey: 'createdTime',
-//     header: ({ column }) => (
-//       <DataTableColumnHeader column={column} title='Ngày tạo' />
-//     ),
-//     cell: ({ row }) => {
-//       const createdTime = row.getValue('createdTime') as string;
-//       if (!createdTime) return 'N/A';
-//       const [datePart, timePart] = createdTime.split(' ');
-//       const [day, month, year] = datePart.split('/');
-//       const formattedDate = new Date(`${year}-${month}-${day}T${timePart}`);
-//       return formattedDate.toLocaleString('vi-VN');
-//     },
-//     filterFn: (row, columnId, filterValue) => {
-//       if (!filterValue?.from && !filterValue?.to) return true;
-//       const createdTime = row.getValue(columnId) as string;
-//       if (!createdTime) return false;
-//       const [datePart, timePart] = createdTime.split(' ');
-//       const [day, month, year] = datePart.split('/');
-//       const rowDate = new Date(`${year}-${month}-${day}T${timePart}`);
-//       const fromDate = filterValue.from ? new Date(filterValue.from) : null;
-//       const toDate = filterValue.to ? new Date(filterValue.to) : null;
-//       if (toDate) toDate.setHours(23, 59, 59, 999);
-//       if (fromDate && toDate) return rowDate >= fromDate && rowDate <= toDate;
-//       if (fromDate) return rowDate >= fromDate;
-//       if (toDate) return rowDate <= toDate;
-//       return true;
-//     },
-//     meta: { title: 'Ngày tạo', type: 'date' },
-//   },
-// ];
-
-// const AccountTaskTable = () => {
-//   const pathname = usePathname();
-//   const searchParams = useSearchParams();
-//   const router = useRouter();
-
-//   const [accountTasks, setAccountTasks] = useState<AccountTask[]>([]);
-//   const statusParams = searchParams.get('status')
-//     ? searchParams.get('status')!.split(',').map(Number)
-//     : [];
-
-//   const toggleStatusFilter = (status: number) => {
-//     const newStatuses = statusParams.includes(status)
-//       ? statusParams.filter((s) => s !== status)
-//       : [...statusParams, status];
-
-//     const params = new URLSearchParams(searchParams.toString());
-//     if (newStatuses.length > 0) {
-//       params.set('status', newStatuses.join(','));
-//     } else {
-//       params.delete('status');
-//     }
-
-//     router.push(`${pathname}?${params.toString()}`);
-//   };
-
-//   const selectAllStatuses = () => {
-//     const params = new URLSearchParams(searchParams.toString());
-//     params.delete('status');
-//     router.push(`${pathname}?${params.toString()}`);
-//   };
-
-//   useEffect(() => {
-//     getAccountTasks().then((res) => {
-//       setAccountTasks(res);
-//       console.log('Fetched account tasks:', res);
-//     });
-//   }, []);
-
-//   const filteredData =
-//     statusParams.length > 0
-//       ? accountTasks.filter((task) => statusParams.includes(task.status))
-//       : accountTasks;
-
-//   return (
-//     <CustomDataTable columns={columns} data={filteredData}>
-//       <div className='w-full flex justify-between'>
-//         <div className='space-x-2'>
-//           <Button
-//             onClick={selectAllStatuses}
-//             className={cn(
-//               'rounded-3xl text-blue-500 border-2 border-blue-500',
-//               statusParams.length === 0
-//                 ? 'bg-blue-500 text-white hover:bg-blue-600'
-//                 : 'bg-white hover:bg-slate-50'
-//             )}
-//           >
-//             Tất cả
-//           </Button>
-//           <Button
-//             className={cn(
-//               'rounded-3xl text-red-500 border-2 border-red-500',
-//               statusParams.includes(2)
-//                 ? 'bg-red-500 text-white hover:bg-red-600'
-//                 : 'bg-white hover:bg-slate-50'
-//             )}
-//             onClick={() => toggleStatusFilter(2)}
-//           >
-//             Chưa kiểm kê
-//           </Button>
-//           <Button
-//             className={cn(
-//               'rounded-3xl text-green-400 border-2 border-green-400',
-//               statusParams.includes(1)
-//                 ? 'bg-green-400 text-white hover:bg-green-400'
-//                 : 'bg-white hover:bg-slate-50'
-//             )}
-//             onClick={() => toggleStatusFilter(0)}
-//           >
-//             Đã kiểm kê
-//           </Button>
-//           {/* <Button
-//             className={cn(
-//               'rounded-3xl text-green-400 border-2 border-green-400',
-//               statusParams.includes(1)
-//                 ? 'bg-green-400 text-white hover:bg-green-400'
-//                 : 'bg-white hover:bg-slate-50'
-//             )}
-//             onClick={() => toggleStatusFilter(1)}
-//           >
-//             Đã cân bằng
-//           </Button> */}
-//         </div>
-//       </div>
-//     </CustomDataTable>
-//   );
-// };
-
-// export default AccountTaskTable;
 'use client';
+
 import CreatedByUI from '@/components/app/CreatedByUI';
+import { ViewInventoryCountDialog } from '@/components/dialogs/ViewInventoryCountDialog';
 import { statusFilterFn } from '@/lib/tanstack-table/customFilterFn';
 import { getAccountTasks } from '@/services/accountService';
-import { InventoryCount } from '@/types/inventoryCount';
 import { ColumnDef } from '@tanstack/react-table';
-import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { DataTableColumnHeader } from '../base-data-table/ColumnHeader';
 import { CustomDataTable } from '../base-data-table/CustomDataTable';
 import StatusStepper from './StatusStepper';
+
 export interface AccountTask {
   id: string;
   status: number;
@@ -257,87 +26,40 @@ export interface AccountTask {
   createdByAvatarUrl: string;
   createdByFullName: string;
   createdByGroup: string;
+  code?: string;
+  date?: string;
+  startTime?: string;
+  endTime?: string;
+  warehouseId?: string;
 }
-export const columns: ColumnDef<InventoryCount>[] = [
+
+export const columns: ColumnDef<AccountTask>[] = [
   {
-    id: 'stt',
+    accessorKey: 'productName',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='STT' className='text-xs' />
+      <DataTableColumnHeader column={column} title='Sản phẩm' />
     ),
-    cell: ({ row }) => row.index + 1,
+    cell: ({ row }) => row.getValue('productName') || 'N/A',
     meta: {
-      title: 'STT',
+      title: 'Sản phẩm',
     },
   },
   {
-    accessorKey: 'code',
+    accessorKey: 'batchCode',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Mã số' />
+      <DataTableColumnHeader column={column} title='Lô hàng' />
     ),
+    cell: ({ row }) => row.getValue('batchCode') || 'N/A',
     meta: {
-      title: 'Mã số',
+      title: 'Lô hàng',
     },
   },
-  {
-    accessorKey: 'date',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Thời điểm kiểm kê' />
-    ),
-    cell: ({ row }) => {
-      const date = row.getValue('date') as string;
-      const startTime = row.original.startTime;
-      if (!date) return 'N/A';
-      const dateTime = new Date(date);
-      if (startTime) {
-        const [hours, minutes] = startTime.split(':');
-        dateTime.setHours(parseInt(hours), parseInt(minutes));
-      }
-      return dateTime.toLocaleString('vi-VN');
-    },
-    filterFn: (row, columnId, filterValue) => {
-      if (!filterValue?.from && !filterValue?.to) return true;
-      const rowDate = new Date(row.getValue(columnId));
-      const startTime = row.original.startTime;
-      if (startTime) {
-        const [hours, minutes] = startTime.split(':');
-        rowDate.setHours(parseInt(hours), parseInt(minutes));
-      }
-      const fromDate = filterValue.from ? new Date(filterValue.from) : null;
-      const toDate = filterValue.to ? new Date(filterValue.to) : null;
-
-      if (toDate) {
-        toDate.setHours(23, 59, 59, 999);
-      }
-
-      if (fromDate && toDate) {
-        return rowDate >= fromDate && rowDate <= toDate;
-      }
-      if (fromDate) return rowDate >= fromDate;
-      if (toDate) return rowDate <= toDate;
-
-      return true;
-    },
-    meta: {
-      title: 'Thời điểm kiểm kê',
-      type: 'date',
-    },
-  },
-  // {
-  //   accessorKey: 'location',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='Vị trí' />
-  //   ),
-  //   cell: ({ row }) => row.getValue('location') || 'N/A',
-  //   meta: {
-  //     title: 'Vị trí',
-  //   },
-  // },
   {
     accessorKey: 'note',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Ghi chú' />
     ),
-    cell: ({ row }) => row.getValue('note') || 'N/A',
+    cell: ({ row }) => row.getValue('note') || '—',
     meta: {
       title: 'Ghi chú',
     },
@@ -347,20 +69,17 @@ export const columns: ColumnDef<InventoryCount>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Trạng thái' />
     ),
-    cell: ({ row }) => {
-      return (
-        <StatusStepper
-          status={row.original.status!}
-          inventoryCounts={row.original}
-        />
-      );
-    },
+    cell: ({ row }) => (
+      <StatusStepper
+        status={row.original.status}
+        inventoryCounts={row.original}
+      />
+    ),
     filterFn: statusFilterFn,
     meta: {
       title: 'Trạng thái',
     },
   },
-
   {
     id: 'createdBy',
     accessorFn: ({ createdByFullName }) =>
@@ -394,24 +113,20 @@ export const columns: ColumnDef<InventoryCount>[] = [
       const createdTime = row.getValue('createdTime') as string;
       if (!createdTime) return 'N/A';
       const [datePart, timePart] = createdTime.split(' ');
-      const [month, day, year] = datePart.split('/'); // Đổi thứ tự: MM/DD/YYYY
+      const [month, day, year] = datePart.split('/');
       const formattedDate = new Date(`${year}-${month}-${day}T${timePart}`);
       return formattedDate.toLocaleString('vi-VN');
     },
     filterFn: (row, columnId, filterValue) => {
       if (!filterValue?.from && !filterValue?.to) return true;
-
       const createdTime = row.getValue(columnId) as string;
       if (!createdTime) return false;
-
       const [datePart, timePart] = createdTime.split(' ');
-      const [month, day, year] = datePart.split('/'); // Đổi thứ tự: MM/DD/YYYY
+      const [month, day, year] = datePart.split('/');
       const rowDate = new Date(`${year}-${month}-${day}T${timePart}`);
-
       const fromDate = filterValue.from ? new Date(filterValue.from) : null;
       const toDate = filterValue.to ? new Date(filterValue.to) : null;
       if (toDate) toDate.setHours(23, 59, 59, 999);
-
       if (fromDate && toDate) return rowDate >= fromDate && rowDate <= toDate;
       if (fromDate) return rowDate >= fromDate;
       if (toDate) return rowDate <= toDate;
@@ -422,43 +137,26 @@ export const columns: ColumnDef<InventoryCount>[] = [
       type: 'date',
     },
   },
-
-  // {
-  //   id: 'crud-actions',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title='Hành động'
-  //       className='text-xs'
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className='flex space-x-2 items-center'>
-  //       <Link href={`inventory-count/${row.original.id}`}>
-  //         <Edit className='text-yellow-500' size={20} />
-  //       </Link>
-  //     </div>
-  //   ),
-  // },
+  {
+    id: 'actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Thao tác' />
+    ),
+    cell: ({ row }) => (
+      <div className='flex items-center gap-2'>
+        <ViewInventoryCountDialog inventoryCount={row.original} />
+      </div>
+    ),
+    meta: {
+      title: 'Thao tác',
+    },
+  },
 ];
 
 //////////////////////////////////////////////
 const AccountTaskTable = () => {
-  const searchParams = useSearchParams();
-  // const currentWarehouse = useCurrentWarehouse();
-  // const warehouseId = currentWarehouse?.id;
-  // Parse status params as an array
-  const statusParams = searchParams.get('status')
-    ? searchParams.get('status')!.split(',').map(Number)
-    : [];
-
-  // const selectAllStatuses = () => {
-  //   const params = new URLSearchParams(searchParams.toString());
-  //   params.delete('status');
-  //   router.push(`${pathname}?${params.toString()}`);
-  // };
-
   const [accountTasks, setAccountTasks] = useState<AccountTask[]>([]);
+  
   useEffect(() => {
     getAccountTasks().then((res) => {
       setAccountTasks(res);
@@ -466,13 +164,8 @@ const AccountTaskTable = () => {
     });
   }, []);
 
-  const filteredData =
-    statusParams.length > 0
-      ? accountTasks.filter((task) => statusParams.includes(task.status))
-      : accountTasks;
-
   return (
-    <CustomDataTable columns={columns} data={filteredData}>
+    <CustomDataTable columns={columns} data={accountTasks}>
       <div className='w-full flex justify-between'>
         <div className='space-x-2'></div>
       </div>

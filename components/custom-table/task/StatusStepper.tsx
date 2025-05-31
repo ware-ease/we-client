@@ -56,8 +56,8 @@ interface StatusStepperProps {
 
 const statusLabels = [
   'Chưa kiểm kê',
-  // 'Đã kiểm kê ',
-  // 'Đã cân bằng'
+  'Đã kiểm kê ',
+  'Đã cân bằng'
 ];
 
 const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
@@ -121,7 +121,7 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
         {
           onSuccess: () => {
             setOpen(false);
-            window.location.reload();
+            // window.location.reload();
           },
           onError: (error) => {
             console.error('Lỗi khi cập nhật inventory count:', error);
@@ -151,6 +151,22 @@ const StatusStepper = ({ status, inventoryCounts }: StatusStepperProps) => {
               'rounded-3xl text-red-500 border-2 border-red-500',
               isActive
                 ? 'bg-red-500 text-white hover:bg-red-600'
+                : 'bg-white hover:bg-slate-50'
+            );
+          }
+          if (index === 1) {
+            return cn(
+              'rounded-3xl text-yellow-500 border-2 border-yellow-500',
+              isActive
+                ? 'bg-yellow-500 text-white hover:bg-yellow-600'
+                : 'bg-white hover:bg-slate-50'
+            );
+          }
+          if (index === 2) {
+            return cn(
+              'rounded-3xl text-green-400 border-2 border-green-400',
+              isActive
+                ? 'bg-green-400 text-white hover:bg-green-500'
                 : 'bg-white hover:bg-slate-50'
             );
           }

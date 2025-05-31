@@ -1,5 +1,6 @@
 'use client';
 import CreatedByUI from '@/components/app/CreatedByUI';
+import { ViewInventoryCountDialog } from '@/components/dialogs/ViewInventoryCountDialog';
 import { useInventoryCounts } from '@/hooks/queries/inventoryCountQueries';
 import { useCurrentWarehouse } from '@/hooks/useCurrentWarehouse';
 import { Link, usePathname, useRouter } from '@/lib/i18n/routing';
@@ -178,23 +179,20 @@ export const columns: ColumnDef<InventoryCount>[] = [
     },
   },
 
-  // {
-  //   id: 'crud-actions',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader
-  //       column={column}
-  //       title='Hành động'
-  //       className='text-xs'
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className='flex space-x-2 items-center'>
-  //       <Link href={`inventory-count/${row.original.id}`}>
-  //         <Edit className='text-yellow-500' size={20} />
-  //       </Link>
-  //     </div>
-  //   ),
-  // },
+  {
+    id: 'actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title='Thao tác' />
+    ),
+    cell: ({ row }) => (
+      <div className='flex items-center gap-2'>
+        <ViewInventoryCountDialog inventoryCount={row.original} />
+      </div>
+    ),
+    meta: {
+      title: 'Thao tác',
+    },
+  },
 ];
 
 //////////////////////////////////////////////
@@ -237,6 +235,7 @@ const InventoryCountTable = () => {
   );
 
   console.log(inventoryCounts);
+  // const tableData = isLoading
 
   return (
     <CustomDataTable
