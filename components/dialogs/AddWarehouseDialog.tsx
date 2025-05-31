@@ -68,13 +68,13 @@ const AddWarehouseDialog = () => {
     });
   };
 
-  const handleLocationSelect = (coords: { lat: number; lng: number }) => {
-    setFormData((prev) => ({
-      ...prev,
-      latitude: coords.lat,
-      longitude: coords.lng,
-    }));
-  };
+  // const handleLocationSelect = (coords: { lat: number; lng: number }) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     latitude: coords.lat,
+  //     longitude: coords.lng,
+  //   }));
+  // };
 
   const handleSubmit = async () => {
     // Validate required fields
@@ -95,9 +95,13 @@ const AddWarehouseDialog = () => {
       toast.success('Tạo kho thành công!');
       setOpen(false); // Đóng dialog
       resetForm(); // Reset form
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error('Error creating warehouse:', error);
-      toast.error(error.response?.data?.message || 'Có lỗi xảy ra khi tạo kho. Vui lòng thử lại.');
+      toast.error(
+        error.response?.data?.message ||
+          'Có lỗi xảy ra khi tạo kho. Vui lòng thử lại.'
+      );
     }
   };
 
@@ -114,7 +118,7 @@ const AddWarehouseDialog = () => {
           <DialogTitle className='text-2xl font-semibold text-gray-800'>
             Tạo kho
           </DialogTitle>
-          <DialogDescription className="text-sm text-gray-500">
+          <DialogDescription className='text-sm text-gray-500'>
             Nhập thông tin để tạo kho mới. Các trường có dấu * là bắt buộc.
           </DialogDescription>
         </DialogHeader>
@@ -204,17 +208,20 @@ const AddWarehouseDialog = () => {
                     className='h-[250px]'
                     latitude={formData.latitude}
                     longitude={formData.longitude}
-                    onLocationSelect={(coords: { lat: number; lng: number }) => {
-                      setFormData(prev => ({
+                    onLocationSelect={(coords: {
+                      lat: number;
+                      lng: number;
+                    }) => {
+                      setFormData((prev) => ({
                         ...prev,
                         latitude: coords.lat,
-                        longitude: coords.lng
+                        longitude: coords.lng,
                       }));
                     }}
                     onAddressFound={(address: string) => {
-                      setFormData(prev => ({
+                      setFormData((prev) => ({
                         ...prev,
-                        address
+                        address,
                       }));
                     }}
                   />

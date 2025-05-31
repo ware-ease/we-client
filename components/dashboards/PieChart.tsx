@@ -58,22 +58,24 @@ interface ChartData {
 }
 
 // Thêm interface cho activeShape props
-interface ActiveShapeProps {
-  cx: number;
-  cy: number;
-  midAngle: number;
-  innerRadius: number;
-  outerRadius: number;
-  startAngle: number;
-  endAngle: number;
-  fill: string;
-  value: number;
-  name: string;
-  percent: number;
-}
+// interface ActiveShapeProps {
+//   cx: number;
+//   cy: number;
+//   midAngle: number;
+//   innerRadius: number;
+//   outerRadius: number;
+//   startAngle: number;
+//   endAngle: number;
+//   fill: string;
+//   value: number;
+//   name: string;
+//   percent: number;
+// }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const renderActiveShape = (props: any) => {
-  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } =
+    props;
 
   return (
     <g>
@@ -92,13 +94,15 @@ const renderActiveShape = (props: any) => {
 };
 
 // Custom tooltip component
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
     return (
-      <div className="bg-white p-3 shadow-lg rounded-lg border">
-        <p className="font-medium mb-1">{data.name}</p>
-        <div className="text-sm text-gray-600">
+      <div className='bg-white p-3 shadow-lg rounded-lg border'>
+        <p className='font-medium mb-1'>{data.name}</p>
+        <div className='text-sm text-gray-600'>
           <p>Số lượng: {data.value.toLocaleString()} mặt hàng</p>
           <p>Tỷ lệ: {data.percent.toFixed(1)}%</p>
         </div>
@@ -114,20 +118,24 @@ interface PieChartProps {
 
 export function PieCharts({ warehouseId }: PieChartProps) {
   const [activeIndex, setActiveIndex] = useState<number>(-1);
-  const { data: chartResponse, isLoading } = useGetDashboardPieChart(warehouseId);
+  const { data: chartResponse, isLoading } =
+    useGetDashboardPieChart(warehouseId);
 
   const chartData = useMemo(() => {
     if (!chartResponse?.data?.warehouses) return [];
-    return chartResponse.data.warehouses.map((item: WarehouseData): ChartData => ({
-      name: item.warehouse,
-      value: item.quantity,
-      percent: item.percent,
-    }));
+    return chartResponse.data.warehouses.map(
+      (item: WarehouseData): ChartData => ({
+        name: item.warehouse,
+        value: item.quantity,
+        percent: item.percent,
+      })
+    );
   }, [chartResponse]);
 
   const totalStock = chartResponse?.data?.totalStock || 0;
   const changePercent = chartResponse?.data?.changePercent || 0;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
   };
@@ -147,9 +155,7 @@ export function PieCharts({ warehouseId }: PieChartProps) {
     <Card className='flex flex-col'>
       <CardHeader className='items-center pb-2'>
         <CardTitle>Phân bố hàng hóa theo kho</CardTitle>
-        <CardDescription>
-          Tỷ lệ phân bố hàng hóa trong các kho
-        </CardDescription>
+        <CardDescription>Tỷ lệ phân bố hàng hóa trong các kho</CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col items-center gap-2'>
         <div className='relative flex justify-center items-center h-[270px]'>
@@ -180,7 +186,7 @@ export function PieCharts({ warehouseId }: PieChartProps) {
                 />
               ))}
             </Pie>
-            <Tooltip 
+            <Tooltip
               content={<CustomTooltip />}
               wrapperStyle={{ outline: 'none' }}
             />
@@ -188,8 +194,8 @@ export function PieCharts({ warehouseId }: PieChartProps) {
         </div>
         <div className='w-full grid grid-cols-2 sm:grid-cols-3 gap-3 mt-4'>
           {chartData.map((item: ChartData, index: number) => (
-            <div 
-              key={item.name} 
+            <div
+              key={item.name}
               className={`flex items-center justify-between p-2 rounded-lg transition-colors duration-200 ${
                 activeIndex === index ? 'bg-gray-100' : 'bg-gray-50'
               }`}
@@ -201,11 +207,15 @@ export function PieCharts({ warehouseId }: PieChartProps) {
                   className='w-3 h-3 rounded-full flex-shrink-0'
                   style={{ backgroundColor: COLORS[index % COLORS.length] }}
                 />
-                <span className='text-sm text-gray-600 truncate'>{item.name}</span>
+                <span className='text-sm text-gray-600 truncate'>
+                  {item.name}
+                </span>
               </div>
               <div className='flex items-center gap-1 flex-shrink-0'>
                 <span className='text-sm font-medium'>{item.value}</span>
-                <span className='text-sm text-gray-500'>({item.percent.toFixed(1)}%)</span>
+                <span className='text-sm text-gray-500'>
+                  ({item.percent.toFixed(1)}%)
+                </span>
               </div>
             </div>
           ))}
@@ -220,7 +230,9 @@ export function PieCharts({ warehouseId }: PieChartProps) {
             ) : (
               <>
                 <TrendingDown className='h-4 w-4 text-red-500' />
-                <span className='text-red-600'>Giảm {Math.abs(changePercent)}%</span>
+                <span className='text-red-600'>
+                  Giảm {Math.abs(changePercent)}%
+                </span>
               </>
             )}
           </span>
