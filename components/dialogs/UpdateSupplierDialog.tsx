@@ -1,6 +1,6 @@
 'use client';
 import { Button } from '@/components/shadcn-base/Button';
-import { Checkbox } from '@/components/shadcn-base/Checkbox';
+// import { Checkbox } from '@/components/shadcn-base/Checkbox';
 import {
   Dialog,
   DialogClose,
@@ -41,9 +41,9 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCheckboxChange = () => {
-    setFormData((prev) => ({ ...prev, status: !prev.status }));
-  };
+  // const handleCheckboxChange = () => {
+  //   setFormData((prev) => ({ ...prev, status: !prev.status }));
+  // };
 
   const handleUpdateClick = () => {
     if (!formData.name || !formData.phone) {
@@ -94,7 +94,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
               <div className='grid grid-cols-2 gap-4'>
                 <div>
                   <Label htmlFor='name' className='text-sm text-gray-500'>
-                    Tên nhà cung cấp <span className="text-red-500">*</span>
+                    Tên nhà cung cấp <span className='text-red-500'>*</span>
                   </Label>
                   <Input
                     id='name'
@@ -107,7 +107,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
                 </div>
                 <div>
                   <Label htmlFor='phone' className='text-sm text-gray-500'>
-                    Số điện thoại <span className="text-red-500">*</span>
+                    Số điện thoại <span className='text-red-500'>*</span>
                   </Label>
                   <Input
                     id='phone'
@@ -119,7 +119,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
                     className='mt-1 border-gray-300 focus:border-blue-500 focus:ring-blue-500 rounded-lg'
                   />
                 </div>
-                <div className='col-span-2 flex items-center space-x-2 mt-2'>
+                {/* <div className='col-span-2 flex items-center space-x-2 mt-2'>
                   <Checkbox
                     id='status'
                     checked={formData.status}
@@ -128,7 +128,7 @@ const UpdateSupplierDialog: React.FC<UpdateSupplierDialogProps> = ({
                   <Label htmlFor='status' className='text-sm text-gray-500'>
                     Hoạt động
                   </Label>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
