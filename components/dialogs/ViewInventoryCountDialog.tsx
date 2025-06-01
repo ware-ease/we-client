@@ -158,7 +158,7 @@ export function ViewInventoryCountDialog({
                           {index + 1}
                         </td>
                         <td className='border border-gray-200 p-2'>
-                          {product?.sku || '-'}
+                          {product?.sku || detail.productSku || '-'}
                         </td>
                         <td className='border border-gray-200 p-2'>
                           {product?.name || detail.productName || '-'}
