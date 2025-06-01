@@ -35,23 +35,13 @@ export interface AccountTask {
 
 export const columns: ColumnDef<AccountTask>[] = [
   {
-    accessorKey: 'productName',
+    accessorKey: 'code',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Sản phẩm' />
+      <DataTableColumnHeader column={column} title='Mã phiếu' />
     ),
-    cell: ({ row }) => row.getValue('productName') || 'N/A',
+    cell: ({ row }) => row.getValue('code') || 'N/A',
     meta: {
-      title: 'Sản phẩm',
-    },
-  },
-  {
-    accessorKey: 'batchCode',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Lô hàng' />
-    ),
-    cell: ({ row }) => row.getValue('batchCode') || 'N/A',
-    meta: {
-      title: 'Lô hàng',
+      title: 'Mã phiếu',
     },
   },
   {
@@ -156,7 +146,7 @@ export const columns: ColumnDef<AccountTask>[] = [
 //////////////////////////////////////////////
 const AccountTaskTable = () => {
   const [accountTasks, setAccountTasks] = useState<AccountTask[]>([]);
-  
+
   useEffect(() => {
     getAccountTasks().then((res) => {
       setAccountTasks(res);

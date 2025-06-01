@@ -11,7 +11,7 @@ import { useWarehouseById } from '@/hooks/queries/warehouseQueries';
 import { InventoryCount } from '@/types/inventoryCount';
 import { Product } from '@/types/product';
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
-import { Eye, Loader2 } from 'lucide-react';
+import { Eye } from 'lucide-react';
 import { useMemo, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { Button } from '../shadcn-base/Button';
@@ -32,7 +32,7 @@ export function ViewInventoryCountDialog({
   );
 
   // Fetch all products
-  const { data: products, isLoading: isLoadingProducts } = useProducts();
+  const { data: products } = useProducts();
 
   // Create products map for quick lookup
   const productsMap = useMemo(() => {
@@ -45,14 +45,6 @@ export function ViewInventoryCountDialog({
     contentRef,
     documentTitle: `InventoryCount_${inventoryCount.code}`,
   });
-
-  if (isLoadingProducts) {
-    return (
-      <div className='flex items-center justify-center'>
-        <Loader2 className='h-4 w-4 animate-spin' />
-      </div>
-    );
-  }
 
   // Check if user has permission to print (status !== 3)
   const canPrint = !currentUser?.groups?.some((group) => group.id === '3');
