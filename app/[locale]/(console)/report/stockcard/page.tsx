@@ -1,10 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import React, { useRef, useState } from 'react';
 import { Download, Printer } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 import { Button } from '@/components/shadcn-base/Button';
 import { Input } from '@/components/shadcn-base/Input';
-import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { useWarehousesStockCardByProductID } from '@/hooks/queries/warehouseQueries';
 import { useRouter } from '@/lib/i18n/routing';
@@ -368,7 +368,7 @@ const ReportStockCard = () => {
           <div className='mb-6 w-full'>
             <div className='flex justify-between'>
               <div className='w-1/2'>
-                <Image
+                <img
                   src='/TNTProjects.svg'
                   alt='Company Logo'
                   width={1080}
