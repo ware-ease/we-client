@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import { useAuth } from '@/components/providers/AuthProvider';
 import {
-    Dialog,
-    DialogContent,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogTrigger,
 } from '@/components/shadcn-base/Dialog';
 import { useProducts } from '@/hooks/queries/productQueries';
 import { useWarehouseById } from '@/hooks/queries/warehouseQueries';
@@ -11,7 +12,6 @@ import { InventoryCount } from '@/types/inventoryCount';
 import { Product } from '@/types/product';
 import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 import { Eye, Loader2 } from 'lucide-react';
-import Image from 'next/image';
 import { useMemo, useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
 import { Button } from '../shadcn-base/Button';
@@ -27,15 +27,17 @@ export function ViewInventoryCountDialog({
   const { currentUser } = useAuth();
 
   // Fetch warehouse information
-  const { data: warehouse } = useWarehouseById(inventoryCount.warehouseId || '');
-  
+  const { data: warehouse } = useWarehouseById(
+    inventoryCount.warehouseId || ''
+  );
+
   // Fetch all products
   const { data: products, isLoading: isLoadingProducts } = useProducts();
 
   // Create products map for quick lookup
   const productsMap = useMemo(() => {
     if (!products) return new Map<string, Product>();
-    return new Map(products.map(product => [product.id, product]));
+    return new Map(products.map((product) => [product.id, product]));
   }, [products]);
 
   // Function to handle printing
@@ -46,14 +48,14 @@ export function ViewInventoryCountDialog({
 
   if (isLoadingProducts) {
     return (
-      <div className="flex items-center justify-center">
-        <Loader2 className="h-4 w-4 animate-spin" />
+      <div className='flex items-center justify-center'>
+        <Loader2 className='h-4 w-4 animate-spin' />
       </div>
     );
   }
 
   // Check if user has permission to print (status !== 3)
-  const canPrint = !currentUser?.groups?.some(group => group.id === '3');
+  const canPrint = !currentUser?.groups?.some((group) => group.id === '3');
 
   return (
     <Dialog>
@@ -78,7 +80,9 @@ export function ViewInventoryCountDialog({
               </p>
               <p>
                 <strong>Ngày:</strong>{' '}
-                {new Date(inventoryCount.date || '').toLocaleDateString('vi-VN')}
+                {new Date(inventoryCount.date || '').toLocaleDateString(
+                  'vi-VN'
+                )}
               </p>
             </div>
           </div>
@@ -90,8 +94,7 @@ export function ViewInventoryCountDialog({
                 {warehouse?.name}
               </h3>
               <p>
-                <strong>Địa chỉ kho:</strong>{' '}
-                {warehouse?.address || '-'}
+                <strong>Địa chỉ kho:</strong> {warehouse?.address || '-'}
               </p>
               <p>
                 <strong>SĐT:</strong> {warehouse?.phone || '-'}
@@ -212,7 +215,7 @@ export function ViewInventoryCountDialog({
             <div className='p-24' style={{ fontFamily: 'Times New Roman' }}>
               <div className='flex justify-between'>
                 <div className='w-1/2'>
-                  <Image
+                  <img
                     src='https://res.cloudinary.com/ddietgxw8/image/upload/v1748681691/TNTProjects_sfdj52.svg'
                     alt='Company Logo'
                     width={1080}
@@ -227,7 +230,9 @@ export function ViewInventoryCountDialog({
                   </p>
                   <p>
                     <strong className='font-normal'>Ngày:</strong>{' '}
-                    {new Date(inventoryCount.date || '').toLocaleDateString('vi-VN')}
+                    {new Date(inventoryCount.date || '').toLocaleDateString(
+                      'vi-VN'
+                    )}
                   </p>
                 </div>
               </div>
@@ -268,15 +273,21 @@ export function ViewInventoryCountDialog({
               <table className='w-full mt-4 border border-black'>
                 <thead>
                   <tr className='text-left font-normal'>
-                    <th className='border-r border-black p-2 font-normal'>STT</th>
+                    <th className='border-r border-black p-2 font-normal'>
+                      STT
+                    </th>
                     <th className='border-r border-black p-2 font-normal'>
                       Mã hàng
                     </th>
                     <th className='border-r border-black p-2 font-normal'>
                       Tên hàng
                     </th>
-                    <th className='border-r border-black p-2 font-normal'>Mã lô</th>
-                    <th className='border-r border-black p-2 font-normal'>ĐVT</th>
+                    <th className='border-r border-black p-2 font-normal'>
+                      Mã lô
+                    </th>
+                    <th className='border-r border-black p-2 font-normal'>
+                      ĐVT
+                    </th>
                     <th className='border-r border-black p-2 font-normal'>
                       SL dự kiến
                     </th>
@@ -290,40 +301,42 @@ export function ViewInventoryCountDialog({
                   </tr>
                 </thead>
                 <tbody>
-                  {inventoryCount.inventoryCountDetails?.map((detail, index) => {
-                    const product = productsMap.get(detail.productId || '');
-                    return (
-                      <tr key={index}>
-                        <td className='border-r border-t border-black p-2'>
-                          {index + 1}
-                        </td>
-                        <td className='border-r border-t border-black p-2'>
-                          {product?.sku || '-'}
-                        </td>
-                        <td className='border-r border-t border-black p-2'>
-                          {product?.name || detail.productName || '-'}
-                        </td>
-                        <td className='border-r border-t border-black p-2'>
-                          {detail.batchCode || '-'}
-                        </td>
-                        <td className='border-r border-t border-black p-2'>
-                          {product?.unitName || '-'}
-                        </td>
-                        <td className='border-r border-t border-black p-2 text-right'>
-                          {detail.expectedQuantity || 0}
-                        </td>
-                        <td className='border-r border-t border-black p-2 text-right'>
-                          {detail.countedQuantity || 0}
-                        </td>
-                        <td className='border-r border-t border-black p-2'>
-                          {detail.createdByFullName || '-'}
-                        </td>
-                        <td className='border-t border-black p-2'>
-                          {detail.note || ''}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {inventoryCount.inventoryCountDetails?.map(
+                    (detail, index) => {
+                      const product = productsMap.get(detail.productId || '');
+                      return (
+                        <tr key={index}>
+                          <td className='border-r border-t border-black p-2'>
+                            {index + 1}
+                          </td>
+                          <td className='border-r border-t border-black p-2'>
+                            {product?.sku || '-'}
+                          </td>
+                          <td className='border-r border-t border-black p-2'>
+                            {product?.name || detail.productName || '-'}
+                          </td>
+                          <td className='border-r border-t border-black p-2'>
+                            {detail.batchCode || '-'}
+                          </td>
+                          <td className='border-r border-t border-black p-2'>
+                            {product?.unitName || '-'}
+                          </td>
+                          <td className='border-r border-t border-black p-2 text-right'>
+                            {detail.expectedQuantity || 0}
+                          </td>
+                          <td className='border-r border-t border-black p-2 text-right'>
+                            {detail.countedQuantity || 0}
+                          </td>
+                          <td className='border-r border-t border-black p-2'>
+                            {detail.createdByFullName || '-'}
+                          </td>
+                          <td className='border-t border-black p-2'>
+                            {detail.note || ''}
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )}
                 </tbody>
               </table>
 
@@ -350,4 +363,4 @@ export function ViewInventoryCountDialog({
       </DialogContent>
     </Dialog>
   );
-} 
+}
