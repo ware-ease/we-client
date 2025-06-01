@@ -29,7 +29,7 @@ const RequestCreate = () => {
     goodRequestDetails: [],
   });
 
-  const { mutate } = useAddGoodRequest();
+  const { mutate, isPending } = useAddGoodRequest();
 
   const handleSubmit = () => {
     try {
@@ -187,7 +187,8 @@ const RequestCreate = () => {
               onClick={handleSubmit}
               disabled={
                 formData.partnerId === '' ||
-                formData.requestedWarehouseId === ''
+                formData.requestedWarehouseId === '' ||
+                isPending
               }
               className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
             >

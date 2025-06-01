@@ -26,7 +26,7 @@ const InventoryAdjustmentCreate = () => {
   });
   const currentWarehouse = useCurrentWarehouse();
 
-  const { mutate } = useAddInventoryAdjustments();
+  const { mutate, isPending } = useAddInventoryAdjustments();
 
   const handleSubmit = () => {
     console.log(data);
@@ -179,6 +179,7 @@ const InventoryAdjustmentCreate = () => {
           <div className='flex justify-end space-x-4'>
             <button
               onClick={handleSubmit}
+              disabled={isPending}
               className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
             >
               Tạo

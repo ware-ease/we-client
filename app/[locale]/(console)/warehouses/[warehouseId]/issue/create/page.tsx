@@ -58,8 +58,8 @@ const IssueCreate = () => {
     enabled: !!formData.goodRequestId,
   });
 
-  const { mutate } = useAddGoodIssueNote();
-  const { mutate: mutateInternal } = useAddGoodInternalIssueNote();
+  const { mutate, isPending: isAddPending } = useAddGoodIssueNote();
+  const { mutate: mutateInternal, isPending } = useAddGoodInternalIssueNote();
 
   const currentWarehouse = useCurrentWarehouse();
 
@@ -272,6 +272,7 @@ const IssueCreate = () => {
           <div className='flex justify-end space-x-4'>
             <Button
               onClick={handleSubmit}
+              disabled={isPending || isAddPending}
               className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
             >
               Tạo phiếu

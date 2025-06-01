@@ -65,8 +65,8 @@ const ReceiptCreate = () => {
     enabled: !!formData.goodRequestId,
   });
 
-  const { mutate } = useAddGoodReceiveNote();
-  const { mutate: mutateInternal } = useAddGoodInternalReceiptNote();
+  const { mutate, isPending: isAddPending } = useAddGoodReceiveNote();
+  const { mutate: mutateInternal, isPending } = useAddGoodInternalReceiptNote();
 
   const currentWarehouse = useCurrentWarehouse();
 
@@ -336,6 +336,7 @@ const ReceiptCreate = () => {
           <div className='flex justify-end space-x-4'>
             <Button
               onClick={handleSubmit}
+              disabled={isPending || isAddPending}
               className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
             >
               Tạo phiếu

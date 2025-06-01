@@ -43,7 +43,7 @@ const CheckInventoryCreate = () => {
   const { warehouseId } = useParams();
   const router = useRouter();
   const pathname = usePathname();
-  const { mutate } = useAddInventoryCount();
+  const { mutate, isPending } = useAddInventoryCount();
   const currentWarehouse = useCurrentWarehouse();
 
   const { data: inventoryData, isLoading } = useWarehousesInventories(
@@ -198,6 +198,7 @@ const CheckInventoryCreate = () => {
           <div className='flex justify-end space-x-4'>
             <Button
               onClick={handleSubmit}
+              disabled={isPending}
               className='px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700'
             >
               Tạo biên bản kiểm kê
