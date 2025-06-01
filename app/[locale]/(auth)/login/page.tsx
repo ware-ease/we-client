@@ -68,9 +68,9 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div className='flex justify-end w-full'>
+          {/* <div className='flex justify-end w-full'>
             <div>{t('Login.forgot')}</div>
-          </div>
+          </div> */}
           <div className='flex justify-center gap-4 w-full'>
             <Button
               className='font-semibold w-full rounded-xl h-12 text-md'
