@@ -34,6 +34,7 @@ export interface InventoryCountDetail extends Base {
   batchCode?: string;
   productName?: string;
   productSku?: string;
+  unitName?: string;
 }
 export interface InventoryAdjutment extends Base {
   date: string;

@@ -167,7 +167,7 @@ export function ViewInventoryCountDialog({
                           {detail.batchCode || '-'}
                         </td>
                         <td className='border border-gray-200 p-2'>
-                          {product?.unitName || '-'}
+                          {product?.unitName || detail.unitName || '-'}
                         </td>
                         <td className='border border-gray-200 p-2 text-right'>
                           {detail.expectedQuantity || 0}
