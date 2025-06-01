@@ -71,7 +71,7 @@ const Login = () => {
           {/* <div className='flex justify-end w-full'>
             <div>{t('Login.forgot')}</div>
           </div> */}
-          <div className='flex justify-center gap-4 w-full'>
+          <div className='flex justify-center gap-4 w-full mt-6'>
             <Button
               className='font-semibold w-full rounded-xl h-12 text-md'
               onClick={() => handleLoginClick()}
